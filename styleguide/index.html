@@ -1,0 +1,1262 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/styleguide/" rel="canonical"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Documentation Style Guide - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../css/timeago.css" rel="stylesheet"/>
+<link href="../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#documentation-style-guide">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href=".." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Documentation Style Guide
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../chapters/architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../chapters/compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../chapters/security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../chapters/hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../chapters/operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../chapters/performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../chapters/sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href=".." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../chapters/references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="documentation-style-guide">Documentation Style Guide<a class="headerlink" href="#documentation-style-guide" title="Permanent link">¶</a></h1>
+<p>This style guide governs all content in the SAP on Microsoft Azure Enterprise Architecture Handbook. Authors must follow these standards without exception. Deviations require a documented justification in the pull request.</p>
+<hr/>
+<h2 id="writing-standards">Writing Standards<a class="headerlink" href="#writing-standards" title="Permanent link">¶</a></h2>
+<h3 id="tone-and-register">Tone and Register<a class="headerlink" href="#tone-and-register" title="Permanent link">¶</a></h3>
+<p>Write in a direct, technical register. This handbook is a reference for enterprise architects, not a tutorial for beginners. Do not explain concepts that belong in SAP or Microsoft documentation; instead, reference them and explain the architectural decision or integration concern.</p>
+<p>Avoid:</p>
+<ul>
+<li>Marketing language ("powerful", "seamless", "best-in-class", "industry-leading")</li>
+<li>Hedge words without substance ("generally", "typically", "usually") unless qualified with specific conditions</li>
+<li>Filler phrases ("It is worth noting that", "As mentioned above", "In today's modern enterprise")</li>
+<li>Passive constructions where an active voice is clearer</li>
+</ul>
+<p>Prefer:</p>
+<ul>
+<li>Declarative statements: "Deploy the HANA database tier in a dedicated subnet."</li>
+<li>Conditional statements with explicit conditions: "If SAP HANA scale-out is required, use Azure NetApp Files with NFS 4.1."</li>
+<li>Imperative voice for design guidance: "Configure UltraDisk for HANA log volumes."</li>
+</ul>
+<h3 id="tense">Tense<a class="headerlink" href="#tense" title="Permanent link">¶</a></h3>
+<p>Use present tense for architecture descriptions and design guidance. Use past tense only when describing a decision that was made and is being documented after the fact (in ADR entries). Use future tense only when describing migration phases or planned states.</p>
+<h3 id="person">Person<a class="headerlink" href="#person" title="Permanent link">¶</a></h3>
+<p>Use second person ("you", "your") sparingly and only in validation checklists or procedural steps. Use third person or impersonal constructions everywhere else.</p>
+<p>Correct: "The landing zone subscription must have diagnostic settings enabled."
+Avoid: "You should enable diagnostic settings on your landing zone subscription."</p>
+<h3 id="precision">Precision<a class="headerlink" href="#precision" title="Permanent link">¶</a></h3>
+<p>Every claim must be verifiable. If a statement references a specific SAP Note, Azure documentation page, or Well-Architected Framework pillar, cite it. Unsupported assertions will be rejected in review.</p>
+<hr/>
+<h2 id="heading-hierarchy">Heading Hierarchy<a class="headerlink" href="#heading-hierarchy" title="Permanent link">¶</a></h2>
+<p>Every chapter file uses the following heading levels. Do not skip levels.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a># Chapter Title                          ← H1, one per file, matches nav entry
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>## Section Title                         ← H2, major sections within a chapter
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>### Subsection Title                     ← H3, subsections within a section
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>#### Detail Heading                      ← H4, used sparingly for tables/figures
+</span></code></pre></div>
+<p>H1 is reserved for the chapter title. There is exactly one H1 per file.</p>
+<p>H2 sections must map to the required chapter structure defined in this handbook. The required H2 sections for every chapter are:</p>
+<ul>
+<li>Architecture Overview</li>
+<li>SAP Architecture Mapping</li>
+<li>Azure Architecture Mapping</li>
+<li>Design Decisions</li>
+<li>SAP Notes Mapping</li>
+<li>Microsoft References</li>
+<li>Azure Well-Architected Mapping</li>
+<li>Landing Zone Mapping</li>
+<li>Security Considerations</li>
+<li>Operations Considerations</li>
+<li>Cost Considerations</li>
+<li>Performance Considerations</li>
+<li>Mermaid Diagrams</li>
+<li>Validation Checklist</li>
+<li>Anti-Patterns</li>
+<li>Troubleshooting Notes</li>
+</ul>
+<p>Do not reorder these sections. Do not rename them. Adding additional H2 sections between required sections is permitted when the content warrants it; document the addition in the pull request.</p>
+<p>H3 and H4 headings must be sentence case, not title case.</p>
+<p>Correct: <code>### Network security group rule design</code>
+Avoid: <code>### Network Security Group Rule Design</code></p>
+<hr/>
+<h2 id="mermaid-diagram-standards">Mermaid Diagram Standards<a class="headerlink" href="#mermaid-diagram-standards" title="Permanent link">¶</a></h2>
+<h3 id="when-to-use-each-diagram-type">When to Use Each Diagram Type<a class="headerlink" href="#when-to-use-each-diagram-type" title="Permanent link">¶</a></h3>
+<p><strong><code>flowchart</code></strong> — Use for decision flows, traffic flows, deployment sequences, and component relationships where direction matters.</p>
+<p>Use when:
+- Showing data or traffic flow between components (left-right: <code>LR</code>)
+- Showing a deployment or provisioning sequence (top-bottom: <code>TD</code>)
+- Showing conditional logic in an architecture decision</p>
+<p><strong><code>sequenceDiagram</code></strong> — Use for protocol-level interactions, authentication flows, and time-ordered message exchanges between specific actors.</p>
+<p>Use when:
+- Documenting an Azure Active Directory / Entra ID authentication flow
+- Documenting SAP RFC, IDOC, or API call sequences
+- Documenting backup or replication sequences where order is critical</p>
+<p><strong><code>graph</code></strong> with C4-style conventions — Use for context and container diagrams when showing system boundaries, external actors, and the relationships between bounded systems.</p>
+<p>Use when:
+- Documenting a landing zone boundary and its integrations
+- Showing the relationship between SAP systems (ECC, BW, PI/PO) in a landscape overview
+- Showing hub-spoke network topology at a conceptual level</p>
+<p><strong><code>classDiagram</code></strong> — Use only for data model documentation. Not applicable to infrastructure chapters.</p>
+<p><strong><code>gantt</code></strong> — Use only for migration phase timelines. Not applicable to architecture chapters.</p>
+<h3 id="diagram-placement">Diagram Placement<a class="headerlink" href="#diagram-placement" title="Permanent link">¶</a></h3>
+<p>Every diagram must be placed inside a fenced code block with the <code>mermaid</code> language identifier.</p>
+<p>Every diagram must be preceded by an H4 heading that names the diagram.</p>
+<p>Every diagram must be followed by a plain-text paragraph that describes what the diagram shows and calls out any non-obvious design element. Do not let a diagram stand without explanation.</p>
+<h3 id="diagram-naming-convention">Diagram Naming Convention<a class="headerlink" href="#diagram-naming-convention" title="Permanent link">¶</a></h3>
+<p>Name diagrams using the pattern: <code>[chapter-topic]-[diagram-type]-[sequence]</code></p>
+<p>Examples:
+- <code>hana-storage-layout-flowchart-01</code>
+- <code>networking-hub-spoke-topology-graph-01</code>
+- <code>security-entra-auth-sequence-01</code></p>
+<p>Reference the name in the caption paragraph: "Diagram <code>hana-storage-layout-flowchart-01</code> shows..."</p>
+<h3 id="diagram-quality-rules">Diagram Quality Rules<a class="headerlink" href="#diagram-quality-rules" title="Permanent link">¶</a></h3>
+<ul>
+<li>Use subgraphs to represent subnet or resource group boundaries.</li>
+<li>Label every edge in a flowchart with the protocol, port, or relationship type.</li>
+<li>Do not use default node shapes for every component; use cylinders for databases, rounded rectangles for services, rectangles for VMs, and parallelograms for external actors.</li>
+<li>Maximum diagram width: keep node count below 20 per diagram. Split complex architectures into multiple diagrams, each focused on one concern (network, compute, storage, identity).</li>
+<li>All node labels must use double quotes if they contain spaces or special characters.</li>
+</ul>
+<h3 id="mermaid-flowchart-template">Mermaid Flowchart Template<a class="headerlink" href="#mermaid-flowchart-template" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>flowchart LR
+    subgraph hub["Hub VNet (Connectivity Subscription)"]
+        fw["Azure Firewall\nPremium"]
+        er["ExpressRoute Gateway"]
+    end
+    subgraph spoke["SAP Spoke VNet (SAP Subscription)"]
+        subgraph app_subnet["Application Subnet (10.x.x.0/24)"]
+            ascs["SAP ASCS/ERS\nVM-1 / VM-2"]
+            app["SAP Application Server\nVM-3..N"]
+        end
+        subgraph db_subnet["Database Subnet (10.x.x.0/24)"]
+            hana["SAP HANA\nScaleUp / ScaleOut"]
+        end
+    end
+    er --&gt;|"BGP/ExpressRoute"| fw
+    fw --&gt;|"RFC 3300"| ascs
+    ascs --&gt;|"HANA SQL\nTCP 30015"| hana</code></pre>
+<hr/>
+<h2 id="table-formatting-rules">Table Formatting Rules<a class="headerlink" href="#table-formatting-rules" title="Permanent link">¶</a></h2>
+<h3 id="general-rules">General Rules<a class="headerlink" href="#general-rules" title="Permanent link">¶</a></h3>
+<ul>
+<li>Use Markdown pipe tables. Do not use HTML tables.</li>
+<li>Every table must have a header row.</li>
+<li>Align columns using consistent spacing.</li>
+<li>Table captions go above the table as bold text.</li>
+<li>Do not merge cells. If content requires merged cells, restructure the information.</li>
+</ul>
+<h3 id="required-table-formats">Required Table Formats<a class="headerlink" href="#required-table-formats" title="Permanent link">¶</a></h3>
+<h4 id="design-decisions-table">Design Decisions Table<a class="headerlink" href="#design-decisions-table" title="Permanent link">¶</a></h4>
+<p>Every chapter must include a Design Decisions table with the following columns. Column order is fixed.</p>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>SAP/Azure Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[Architecture decision being made]</td>
+<td>[Comma-separated list of options evaluated]</td>
+<td>[The selected option]</td>
+<td>[Technical rationale, no marketing language]</td>
+<td>[SAP Note ID or Azure doc URL]</td>
+</tr>
+</tbody>
+</table>
+<p>Rules:
+- Each row documents exactly one decision.
+- The Rationale column must state a technical reason, not a preference. "Preferred by Microsoft" is not a rationale. "Provides sub-millisecond latency required for HANA redo log writes" is.
+- The SAP/Azure Reference column must contain a link or SAP Note ID. Empty cells are not permitted.</p>
+<h4 id="sap-notes-mapping-table">SAP Notes Mapping Table<a class="headerlink" href="#sap-notes-mapping-table" title="Permanent link">¶</a></h4>
+<p>Every architecture chapter must include a SAP Notes Mapping table with the following columns. Column order is fixed.</p>
+<table>
+<thead>
+<tr>
+<th>SAP Note ID</th>
+<th>Purpose</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[Numeric SAP Note ID]</td>
+<td>[One-sentence description of what the note addresses]</td>
+<td>[How the note's guidance changes the architecture]</td>
+<td>[Specific component, tier, or configuration where the note applies]</td>
+</tr>
+</tbody>
+</table>
+<p>Rules:
+- Do not reference SAP Notes without describing their architecture impact.
+- Do not include SAP Notes that are purely operational (patch instructions, GUI procedures) unless they have a direct architecture implication.
+- SAP Note IDs must be plain integers in the ID column. Do not format them as links in this column; use the Where Applied column to reference the section of the document where the note's guidance is applied.</p>
+<h4 id="azure-well-architected-mapping-table">Azure Well-Architected Mapping Table<a class="headerlink" href="#azure-well-architected-mapping-table" title="Permanent link">¶</a></h4>
+<p>Every chapter must include an Azure Well-Architected Framework mapping with the following columns.</p>
+<table>
+<thead>
+<tr>
+<th>Pillar</th>
+<th>Relevant Guidance</th>
+<th>Implementation in This Chapter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reliability</td>
+<td>[WAF reliability principle]</td>
+<td>[How this chapter implements it]</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>[WAF security principle]</td>
+<td>[How this chapter implements it]</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>[WAF cost principle]</td>
+<td>[How this chapter implements it]</td>
+</tr>
+<tr>
+<td>Operational Excellence</td>
+<td>[WAF operational principle]</td>
+<td>[How this chapter implements it]</td>
+</tr>
+<tr>
+<td>Performance Efficiency</td>
+<td>[WAF performance principle]</td>
+<td>[How this chapter implements it]</td>
+</tr>
+</tbody>
+</table>
+<p>All five pillars must appear. Empty rows are not permitted.</p>
+<hr/>
+<h2 id="sap-notes-citation-format">SAP Notes Citation Format<a class="headerlink" href="#sap-notes-citation-format" title="Permanent link">¶</a></h2>
+<p>SAP Notes are cited in two contexts: in tables and in prose.</p>
+<h3 id="in-tables">In Tables<a class="headerlink" href="#in-tables" title="Permanent link">¶</a></h3>
+<p>In the SAP Notes Mapping table, place the numeric ID alone in the ID column.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>| 2382421 | Network configuration for SAP HANA | Requires dedicated storage subnet with no internet routing | HANA subnet design |
+</span></code></pre></div>
+<h3 id="in-prose">In Prose<a class="headerlink" href="#in-prose" title="Permanent link">¶</a></h3>
+<p>In body text, cite a SAP Note as follows:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>SAP Note 2382421 (Network Configuration for SAP HANA) requires that the storage network for HANA scale-out be isolated in a dedicated subnet.
+</span></code></pre></div>
+<p>Format: <code>SAP Note [ID] ([Title])</code> on first reference in a section. Subsequent references in the same section may use <code>SAP Note [ID]</code> without the title.</p>
+<p>Do not hyperlink SAP Note IDs. SAP Note URLs require authentication and are not stable for external linking. Authors must verify Note availability in their SAP Support Portal.</p>
+<p>Do not invent SAP Note IDs. Every SAP Note cited must be verified against the SAP Support Portal prior to merge.</p>
+<hr/>
+<h2 id="azure-service-naming-conventions">Azure Service Naming Conventions<a class="headerlink" href="#azure-service-naming-conventions" title="Permanent link">¶</a></h2>
+<p>Use official Azure service names as they appear in the Azure Portal and Microsoft Learn documentation. Do not use internal Microsoft codenames, deprecated names, or abbreviations that are not universally recognized.</p>
+<table>
+<thead>
+<tr>
+<th>Correct</th>
+<th>Avoid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microsoft Entra ID</td>
+<td>Azure Active Directory, AAD, Azure AD</td>
+</tr>
+<tr>
+<td>Azure Virtual Network</td>
+<td>VNet (in prose; acceptable as an abbreviation in diagrams)</td>
+</tr>
+<tr>
+<td>Azure Monitor</td>
+<td>OMS (deprecated), Log Analytics (use as a sub-service name only)</td>
+</tr>
+<tr>
+<td>Azure Virtual Machines</td>
+<td>Azure VMs (acceptable abbreviation after first use)</td>
+</tr>
+<tr>
+<td>Azure NetApp Files</td>
+<td>ANF (acceptable abbreviation after first use)</td>
+</tr>
+<tr>
+<td>Azure ExpressRoute</td>
+<td>ExpressRoute (without "Azure" after first use)</td>
+</tr>
+<tr>
+<td>Azure Firewall Premium</td>
+<td>Azure Firewall (specify SKU on first use)</td>
+</tr>
+<tr>
+<td>Microsoft Defender for Cloud</td>
+<td>Azure Security Center (deprecated)</td>
+</tr>
+<tr>
+<td>Azure Private Endpoint</td>
+<td>Private Link Endpoint (incorrect)</td>
+</tr>
+<tr>
+<td>Azure Bastion</td>
+<td>Bastion Host (informal)</td>
+</tr>
+</tbody>
+</table>
+<p>On first use of any Azure service in a chapter, use the full official name. Subsequent uses may use an established abbreviation if it is defined inline at first use.</p>
+<p>Example: "Deploy Azure NetApp Files (ANF) for shared HANA storage. ANF supports NFS 4.1..."</p>
+<p>SAP product names follow SAP's official naming conventions. Use "SAP HANA" not "HANA" in formal references. Use "SAP S/4HANA" not "S4HANA" or "S/4". Use "SAP NetWeaver" not "NetWeaver" on first reference.</p>
+<hr/>
+<h2 id="code-block-standards">Code Block Standards<a class="headerlink" href="#code-block-standards" title="Permanent link">¶</a></h2>
+<p>All code blocks must specify a language identifier. Never use a bare triple-backtick block for infrastructure code.</p>
+<h3 id="bicep">Bicep<a class="headerlink" href="#bicep" title="Permanent link">¶</a></h3>
+<p>Language identifier: <code>bicep</code></p>
+<p>Rules:
+- Include a comment block at the top of every Bicep snippet stating what the snippet deploys and where it is used in the architecture.
+- Use symbolic names that reflect the resource's architectural role, not generic names.
+- Include <code>@description</code> decorators on all parameters.
+- Do not include hardcoded values that must be environment-specific (subscription IDs, tenant IDs, passwords). Use parameters with <code>@secure()</code> for secrets.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>// Deploys the HANA database subnet with NSG association
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>// Used in: HANA chapter, Database Subnet Design section
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>@description('Address prefix for the HANA database subnet')
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>param hanaSubnetPrefix string = '10.1.2.0/24'
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a>
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a>@description('Resource ID of the NSG to associate with the HANA subnet')
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a>param hanaSubnetNsgId string
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a>resource hanaSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-04-01' = {
+</span><span id="__span-3-11"><a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a>  name: 'snet-hana-db-prod-001'
+</span><span id="__span-3-12"><a href="#__codelineno-3-12" id="__codelineno-3-12" name="__codelineno-3-12"></a>  parent: spokeVnet
+</span><span id="__span-3-13"><a href="#__codelineno-3-13" id="__codelineno-3-13" name="__codelineno-3-13"></a>  properties: {
+</span><span id="__span-3-14"><a href="#__codelineno-3-14" id="__codelineno-3-14" name="__codelineno-3-14"></a>    addressPrefix: hanaSubnetPrefix
+</span><span id="__span-3-15"><a href="#__codelineno-3-15" id="__codelineno-3-15" name="__codelineno-3-15"></a>    networkSecurityGroup: {
+</span><span id="__span-3-16"><a href="#__codelineno-3-16" id="__codelineno-3-16" name="__codelineno-3-16"></a>      id: hanaSubnetNsgId
+</span><span id="__span-3-17"><a href="#__codelineno-3-17" id="__codelineno-3-17" name="__codelineno-3-17"></a>    }
+</span><span id="__span-3-18"><a href="#__codelineno-3-18" id="__codelineno-3-18" name="__codelineno-3-18"></a>    privateEndpointNetworkPolicies: 'Disabled'
+</span><span id="__span-3-19"><a href="#__codelineno-3-19" id="__codelineno-3-19" name="__codelineno-3-19"></a>  }
+</span><span id="__span-3-20"><a href="#__codelineno-3-20" id="__codelineno-3-20" name="__codelineno-3-20"></a>}
+</span></code></pre></div>
+<h3 id="powershell">PowerShell<a class="headerlink" href="#powershell" title="Permanent link">¶</a></h3>
+<p>Language identifier: <code>powershell</code></p>
+<p>Rules:
+- Use <code>#Requires -Modules</code> at the top of multi-command scripts.
+- Use <code>[CmdletBinding()]</code> and parameter blocks for any reusable script.
+- Include error handling with <code>try/catch</code> for any operation that could fail silently.
+- Do not use aliases (<code>gci</code>, <code>%</code>, <code>?</code>) in documentation code; use full cmdlet names.</p>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c"># Validates that diagnostic settings are enabled on all SAP-related VMs</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="c"># Used in: Operations chapter, Monitoring Validation section</span>
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="c">#Requires -Modules Az.Monitor, Az.Compute</span>
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="p">[</span><span class="k">CmdletBinding</span><span class="p">()]</span>
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="k">param</span><span class="p">(</span>
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a>    <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">)]</span>
+</span><span id="__span-4-9"><a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a>    <span class="no">[string]</span><span class="nv">$ResourceGroupName</span>
+</span><span id="__span-4-10"><a href="#__codelineno-4-10" id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="p">)</span>
+</span><span id="__span-4-11"><a href="#__codelineno-4-11" id="__codelineno-4-11" name="__codelineno-4-11"></a>
+</span><span id="__span-4-12"><a href="#__codelineno-4-12" id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="nv">$vms</span> <span class="p">=</span> <span class="nb">Get-AzVM</span> <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span>
+</span><span id="__span-4-13"><a href="#__codelineno-4-13" id="__codelineno-4-13" name="__codelineno-4-13"></a>
+</span><span id="__span-4-14"><a href="#__codelineno-4-14" id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="k">foreach</span> <span class="p">(</span><span class="nv">$vm</span> <span class="k">in</span> <span class="nv">$vms</span><span class="p">)</span> <span class="p">{</span>
+</span><span id="__span-4-15"><a href="#__codelineno-4-15" id="__codelineno-4-15" name="__codelineno-4-15"></a>    <span class="nv">$diagSettings</span> <span class="p">=</span> <span class="nb">Get-AzDiagnosticSetting</span> <span class="n">-ResourceId</span> <span class="nv">$vm</span><span class="p">.</span><span class="n">Id</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
+</span><span id="__span-4-16"><a href="#__codelineno-4-16" id="__codelineno-4-16" name="__codelineno-4-16"></a>    <span class="k">if</span> <span class="p">(</span><span class="o">-not</span> <span class="nv">$diagSettings</span><span class="p">)</span> <span class="p">{</span>
+</span><span id="__span-4-17"><a href="#__codelineno-4-17" id="__codelineno-4-17" name="__codelineno-4-17"></a>        <span class="nb">Write-Warning</span> <span class="s2">"VM </span><span class="p">$(</span><span class="nv">$vm</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span><span class="s2"> has no diagnostic settings configured."</span>
+</span><span id="__span-4-18"><a href="#__codelineno-4-18" id="__codelineno-4-18" name="__codelineno-4-18"></a>    <span class="p">}</span>
+</span><span id="__span-4-19"><a href="#__codelineno-4-19" id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="bash">Bash<a class="headerlink" href="#bash" title="Permanent link">¶</a></h3>
+<p>Language identifier: <code>bash</code></p>
+<p>Rules:
+- Begin every script with <code>#!/bin/bash</code> and <code>set -euo pipefail</code>.
+- Use <code>readonly</code> for constants.
+- Quote all variable expansions.
+- Do not use bash scripts for Azure resource management; use Azure CLI with Bicep or PowerShell.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="c1"># Checks HANA volume mount options on the database VM</span>
+</span><span id="__span-5-5"><a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="c1"># Used in: HANA chapter, Storage Mount Validation section</span>
+</span><span id="__span-5-6"><a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="nb">readonly</span><span class="w"> </span><span class="nv">EXPECTED_MOUNT_OPTIONS</span><span class="o">=</span><span class="s2">"rw,vers=4.1,hard,timeo=600,rsize=262144,wsize=262144"</span>
+</span><span id="__span-5-8"><a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a>
+</span><span id="__span-5-9"><a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a>check_mount<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+</span><span id="__span-5-10"><a href="#__codelineno-5-10" id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">mount_point</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
+</span><span id="__span-5-11"><a href="#__codelineno-5-11" id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w">    </span><span class="nb">local</span><span class="w"> </span>actual_options
+</span><span id="__span-5-12"><a href="#__codelineno-5-12" id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="w">    </span><span class="nv">actual_options</span><span class="o">=</span><span class="k">$(</span>grep<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">mount_point</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>/proc/mounts<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'{print $4}'</span><span class="k">)</span>
+</span><span id="__span-5-13"><a href="#__codelineno-5-13" id="__codelineno-5-13" name="__codelineno-5-13"></a>
+</span><span id="__span-5-14"><a href="#__codelineno-5-14" id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">actual_options</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span>*<span class="s2">"vers=4.1"</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+</span><span id="__span-5-15"><a href="#__codelineno-5-15" id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"ERROR: </span><span class="si">${</span><span class="nv">mount_point</span><span class="si">}</span><span class="s2"> is not mounted with NFS 4.1. Actual: </span><span class="si">${</span><span class="nv">actual_options</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-5-16"><a href="#__codelineno-5-16" id="__codelineno-5-16" name="__codelineno-5-16"></a><span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+</span><span id="__span-5-17"><a href="#__codelineno-5-17" id="__codelineno-5-17" name="__codelineno-5-17"></a><span class="w">    </span><span class="k">fi</span>
+</span><span id="__span-5-18"><a href="#__codelineno-5-18" id="__codelineno-5-18" name="__codelineno-5-18"></a><span class="o">}</span>
+</span><span id="__span-5-19"><a href="#__codelineno-5-19" id="__codelineno-5-19" name="__codelineno-5-19"></a>
+</span><span id="__span-5-20"><a href="#__codelineno-5-20" id="__codelineno-5-20" name="__codelineno-5-20"></a>check_mount<span class="w"> </span><span class="s2">"/hana/data"</span>
+</span><span id="__span-5-21"><a href="#__codelineno-5-21" id="__codelineno-5-21" name="__codelineno-5-21"></a>check_mount<span class="w"> </span><span class="s2">"/hana/log"</span>
+</span><span id="__span-5-22"><a href="#__codelineno-5-22" id="__codelineno-5-22" name="__codelineno-5-22"></a>check_mount<span class="w"> </span><span class="s2">"/hana/shared"</span>
+</span></code></pre></div>
+<h3 id="yaml">YAML<a class="headerlink" href="#yaml" title="Permanent link">¶</a></h3>
+<p>Language identifier: <code>yaml</code></p>
+<p>Rules:
+- Include a comment at the top explaining the file's purpose and where it is used.
+- Use 2-space indentation. Do not use tabs.
+- Quote string values that contain special characters or could be misinterpreted as non-string types.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="c1"># Azure Monitor alert rule for HANA memory utilization</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="c1"># Used in: Operations chapter, HANA Alerting section</span>
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="c1"># Deploy via: az deployment group create</span>
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alert-hana-memory-high-prod</span>
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Microsoft.Insights/metricAlerts</span>
+</span><span id="__span-6-7"><a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="nt">properties</span><span class="p">:</span>
+</span><span id="__span-6-8"><a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"Alert</span><span class="nv"> </span><span class="s">when</span><span class="nv"> </span><span class="s">HANA</span><span class="nv"> </span><span class="s">VM</span><span class="nv"> </span><span class="s">memory</span><span class="nv"> </span><span class="s">utilization</span><span class="nv"> </span><span class="s">exceeds</span><span class="nv"> </span><span class="s">90%</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">5</span><span class="nv"> </span><span class="s">minutes"</span>
+</span><span id="__span-6-9"><a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="w">  </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</span><span id="__span-6-10"><a href="#__codelineno-6-10" id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-6-11"><a href="#__codelineno-6-11" id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="w">  </span><span class="nt">evaluationFrequency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PT1M</span>
+</span><span id="__span-6-12"><a href="#__codelineno-6-12" id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="w">  </span><span class="nt">windowSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PT5M</span>
+</span><span id="__span-6-13"><a href="#__codelineno-6-13" id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="w">  </span><span class="nt">criteria</span><span class="p">:</span>
+</span><span id="__span-6-14"><a href="#__codelineno-6-14" id="__codelineno-6-14" name="__codelineno-6-14"></a><span class="w">    </span><span class="s">'odata.type'</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria</span>
+</span><span id="__span-6-15"><a href="#__codelineno-6-15" id="__codelineno-6-15" name="__codelineno-6-15"></a><span class="w">    </span><span class="nt">allOf</span><span class="p">:</span>
+</span><span id="__span-6-16"><a href="#__codelineno-6-16" id="__codelineno-6-16" name="__codelineno-6-16"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HighMemoryUtilization</span>
+</span><span id="__span-6-17"><a href="#__codelineno-6-17" id="__codelineno-6-17" name="__codelineno-6-17"></a><span class="w">        </span><span class="nt">metricName</span><span class="p">:</span><span class="w"> </span><span class="s">"Percentage</span><span class="nv"> </span><span class="s">Memory"</span>
+</span><span id="__span-6-18"><a href="#__codelineno-6-18" id="__codelineno-6-18" name="__codelineno-6-18"></a><span class="w">        </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GreaterThan</span>
+</span><span id="__span-6-19"><a href="#__codelineno-6-19" id="__codelineno-6-19" name="__codelineno-6-19"></a><span class="w">        </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span>
+</span><span id="__span-6-20"><a href="#__codelineno-6-20" id="__codelineno-6-20" name="__codelineno-6-20"></a><span class="w">        </span><span class="nt">timeAggregation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Average</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="admonition-usage">Admonition Usage<a class="headerlink" href="#admonition-usage" title="Permanent link">¶</a></h2>
+<p>MkDocs Material supports admonitions with the <code>!!! type "Title"</code> syntax. Use admonitions sparingly and only when the content genuinely requires emphasis beyond normal prose.</p>
+<h3 id="types-and-when-to-use-them">Types and When to Use Them<a class="headerlink" href="#types-and-when-to-use-them" title="Permanent link">¶</a></h3>
+<p><strong><code>note</code></strong> — Supplementary information that clarifies a statement but is not critical to the architecture. Use for cross-references, clarifications, and context.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>!!! note "SAP Note applicability"
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>    SAP Note 2382421 applies to HANA 2.0 SPS 04 and later. For earlier SPS levels, consult SAP Note 2235581.
+</span></code></pre></div>
+<p><strong><code>tip</code></strong> — A proven practice or optimization that is not mandatory but significantly improves the architecture. Use sparingly.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a>!!! tip "ANF capacity pool sizing"
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>    Provision the ANF capacity pool at 20% above the calculated HANA data volume size to accommodate online HANA data backups without impacting performance.
+</span></code></pre></div>
+<p><strong><code>warning</code></strong> — A configuration or design choice that will cause a verifiable problem if not followed. Must be specific. Do not use for general cautions.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a>!!! warning "NFS mount options for HANA log volumes"
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a>    If `nconnect=4` is not set on the NFS mount for HANA log volumes, throughput will be limited to a single TCP connection. This causes HANA redo log write latency to exceed the 250 µs threshold required for production workloads.
+</span></code></pre></div>
+<p><strong><code>danger</code></strong> — A configuration that will cause data loss, security breach, or production outage. Use only when the consequence is severe and the failure mode is direct.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a>!!! danger "Do not enable public endpoints on HANA VMs"
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a>    Enabling a public IP on a HANA database VM bypasses all hub-spoke network controls and exposes the HANA SQL port (30015) directly to the internet. This violates the SAP security baseline and Azure landing zone policy.
+</span></code></pre></div>
+<p><strong><code>info</code></strong> — Reference pointers to external documentation. Use when a section requires significant background that is documented elsewhere.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a>!!! info "Azure Well-Architected Framework: Reliability pillar"
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a>    The reliability guidance in this section aligns with the Azure Well-Architected Framework Reliability pillar. See [Reliability design principles](https://learn.microsoft.com/azure/well-architected/reliability/principles) for the full framework.
+</span></code></pre></div>
+<h3 id="admonition-rules">Admonition Rules<a class="headerlink" href="#admonition-rules" title="Permanent link">¶</a></h3>
+<ul>
+<li>Do not use admonitions as a substitute for writing clear prose. If a point can be made in a sentence, make it in a sentence.</li>
+<li>Do not stack multiple admonitions consecutively without prose between them.</li>
+<li>Admonition titles must be specific. Do not use generic titles like "Note", "Important", or "Warning" as the title text when the type already conveys that.</li>
+<li>Maximum one <code>danger</code> admonition per section. If a section has multiple danger-level concerns, consolidate them or restructure the section.</li>
+</ul>
+<hr/>
+<h2 id="decision-table-format">Decision Table Format<a class="headerlink" href="#decision-table-format" title="Permanent link">¶</a></h2>
+<p>The Design Decisions table is specified in the Table Formatting Rules section. Additional formatting rules for decision tables:</p>
+<ul>
+<li>Each decision row must be self-contained. A reader must understand the decision without reading the prose around it.</li>
+<li>The Options Considered column must list at least two options. A decision with only one option is not a decision; it is a constraint, and should be documented as such in prose.</li>
+<li>The Rationale column must address why the rejected options were not chosen, not only why the chosen option was selected.</li>
+<li>Decisions that reference a SAP Note must include the Note ID in the SAP/Azure Reference column. Decisions that reference an Azure architecture pattern must include the Microsoft Learn URL.</li>
+<li>Do not document implementation details in the Decision table. The table documents what was decided and why; implementation goes in the section body.</li>
+</ul>
+<p>Example row:</p>
+<p>| Storage type for HANA data and log volumes | Azure Managed Disk (Premium SSD v2), Azure NetApp Files with NFS 4.1, Azure Managed Disk (UltraDisk) | Azure NetApp Files with NFS 4.1 | ANF provides consistent sub-millisecond latency for HANA log I/O at all volume sizes without the per-VM IOPS ceiling imposed by Premium SSD v2. UltraDisk was rejected due to lack of shared volume support required for HANA scale-out. | SAP Note 2382421; <a href="https://learn.microsoft.com/azure/azure-netapp-files/azure-netapp-files-solution-architectures">ANF HANA sizing guide</a> |</p>
+<hr/>
+<h2 id="anti-pattern-block-format">Anti-Pattern Block Format<a class="headerlink" href="#anti-pattern-block-format" title="Permanent link">¶</a></h2>
+<p>Every chapter must include an Anti-Patterns section. Anti-patterns are documented in a consistent format: a named anti-pattern, a description of the problematic configuration, the failure mode it produces, and the correct approach.</p>
+<p>Use the following structure for each anti-pattern:</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="gu">### Anti-pattern: [Name of the anti-pattern]</span>
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>
+</span><span id="__span-12-3"><a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="gs">**Configuration:**</span> [Description of the incorrect configuration]
+</span><span id="__span-12-4"><a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a>
+</span><span id="__span-12-5"><a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="gs">**Failure mode:**</span> [The specific, verifiable problem this causes]
+</span><span id="__span-12-6"><a href="#__codelineno-12-6" id="__codelineno-12-6" name="__codelineno-12-6"></a>
+</span><span id="__span-12-7"><a href="#__codelineno-12-7" id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="gs">**Correct approach:**</span> [The correct configuration and why it avoids the failure]
+</span><span id="__span-12-8"><a href="#__codelineno-12-8" id="__codelineno-12-8" name="__codelineno-12-8"></a>
+</span><span id="__span-12-9"><a href="#__codelineno-12-9" id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="gs">**Reference:**</span> [SAP Note ID or Azure documentation URL]
+</span></code></pre></div>
+<p>Rules:
+- The Failure mode must describe a concrete, observable problem: service disruption, latency breach, security exposure, compliance violation. "Not recommended" is not a failure mode.
+- The Correct approach must be specific enough to act on.
+- Every anti-pattern must have a reference.
+- Anti-patterns are not the place to document general best practices. Document only configurations that architects or engineers have actually deployed incorrectly in SAP on Azure environments.</p>
+<p>Example:</p>
+<h3 id="anti-pattern-placing-hana-data-and-log-volumes-on-the-same-anf-capacity-pool-as-sap-transport-directories">Anti-pattern: Placing HANA data and log volumes on the same ANF capacity pool as SAP transport directories<a class="headerlink" href="#anti-pattern-placing-hana-data-and-log-volumes-on-the-same-anf-capacity-pool-as-sap-transport-directories" title="Permanent link">¶</a></h3>
+<p><strong>Configuration:</strong> A single ANF capacity pool is used for HANA data volumes, HANA log volumes, and SAP transport directories (/usr/sap/trans).</p>
+<p><strong>Failure mode:</strong> Burst I/O from transport imports saturates the capacity pool throughput limit (which scales with pool size), causing HANA log write latency to exceed the 250 µs threshold. This triggers HANA savepoint stalls and can cause production system unavailability during transport windows.</p>
+<p><strong>Correct approach:</strong> Deploy HANA data and log volumes in a dedicated ANF capacity pool with a QoS type set to Manual. Provision transport directory volumes in a separate capacity pool. Manual QoS allows HANA log volumes to be allocated a guaranteed throughput independent of other volumes in the pool.</p>
+<p><strong>Reference:</strong> SAP Note 2382421; <a href="https://learn.microsoft.com/azure/azure-netapp-files/performance-benchmarks-linux">ANF performance considerations for HANA</a></p>
+<hr/>
+<h2 id="file-naming-conventions">File Naming Conventions<a class="headerlink" href="#file-naming-conventions" title="Permanent link">¶</a></h2>
+<h3 id="chapter-files">Chapter Files<a class="headerlink" href="#chapter-files" title="Permanent link">¶</a></h3>
+<p>Chapter files reside in <code>docs/chapters/</code>. File names use lowercase hyphenated identifiers that match the chapter topic exactly as it appears in <code>mkdocs.yml</code>.</p>
+<p>Pattern: <code>docs/chapters/[topic].md</code></p>
+<p>Examples:
+- <code>docs/chapters/landing-zone.md</code>
+- <code>docs/chapters/high-availability.md</code>
+- <code>docs/chapters/sap-notes-index.md</code></p>
+<p>Do not use underscores, camelCase, or abbreviations in file names.</p>
+<h3 id="asset-files">Asset Files<a class="headerlink" href="#asset-files" title="Permanent link">¶</a></h3>
+<p>Images and diagrams exported as static files reside in <code>docs/assets/</code>. Images use the pattern:</p>
+<p><code>docs/assets/[chapter-topic]-[description]-[sequence].[ext]</code></p>
+<p>Examples:
+- <code>docs/assets/networking-hub-spoke-topology-01.png</code>
+- <code>docs/assets/hana-storage-layout-02.svg</code></p>
+<p>Prefer SVG for architecture diagrams. Use PNG only when SVG is not supported by the toolchain.</p>
+<h3 id="adr-files">ADR Files<a class="headerlink" href="#adr-files" title="Permanent link">¶</a></h3>
+<p>Architecture Decision Records reside in <code>docs/adrs/</code>. ADR files use a zero-padded sequence number followed by a short title.</p>
+<p>Pattern: <code>docs/adrs/[NNNN]-[short-title].md</code></p>
+<p>Examples:
+- <code>docs/adrs/0001-storage-type-for-hana-volumes.md</code>
+- <code>docs/adrs/0042-hub-spoke-vs-vwan.md</code></p>
+<h3 id="configuration-files">Configuration Files<a class="headerlink" href="#configuration-files" title="Permanent link">¶</a></h3>
+<p>MkDocs configuration: <code>mkdocs.yml</code> in the repository root.
+Custom CSS: <code>docs/overrides/stylesheets/extra.css</code>
+Custom hooks: <code>docs/hooks/</code></p>
+<hr/>
+<h2 id="cross-reference-standards">Cross-Reference Standards<a class="headerlink" href="#cross-reference-standards" title="Permanent link">¶</a></h2>
+<p>Cross-references to other chapters use MkDocs relative link syntax.</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a>See [<span class="nt">Landing Zone</span>](<span class="na">../chapters/landing-zone.md</span>) for subscription structure.
+</span></code></pre></div>
+<p>Cross-references to specific sections within a chapter append the anchor.</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a>See [<span class="nt">HANA storage design</span>](<span class="na">../chapters/hana.md#storage-considerations</span>) for ANF capacity pool sizing guidance.
+</span></code></pre></div>
+<p>Anchors are derived from the heading text using MkDocs anchor generation rules: lowercase, spaces replaced with hyphens, special characters removed.</p>
+<p>Do not use bare URLs for cross-references to internal content. Do not use absolute paths. Relative paths ensure link validity across deployment environments.</p>
+<hr/>
+<h2 id="validation-checklist-format">Validation Checklist Format<a class="headerlink" href="#validation-checklist-format" title="Permanent link">¶</a></h2>
+<p>Every chapter must end with a Validation Checklist section. The checklist contains verifiable binary items that confirm the architecture described in the chapter has been correctly implemented.</p>
+<p>Rules:
+- Each item must be verifiable by a command, a portal check, or an automated policy. Do not include items that require subjective judgment.
+- Each item must be specific to the chapter's content. Do not include generic items ("Ensure monitoring is configured") without referencing the specific resource and metric.
+- Items are formatted as Markdown task list items: <code>- [ ] [Item text]</code>
+- The checklist must cover at minimum: network configuration, identity and access, monitoring and alerting, backup configuration, and compliance with the relevant SAP Notes cited in the chapter.</p>
+<p>Example:</p>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="gu">## Validation Checklist</span>
+</span><span id="__span-15-2"><a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a>
+</span><span id="__span-15-3"><a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="k">- [ ]</span> ANF capacity pool for HANA volumes is provisioned with Manual QoS.
+</span><span id="__span-15-4"><a href="#__codelineno-15-4" id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="k">- [ ]</span> HANA log volume throughput allocation is at minimum 250 MB/s per SAP Note 2382421.
+</span><span id="__span-15-5"><a href="#__codelineno-15-5" id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="k">- [ ]</span> NFS mount options include <span class="sb">`vers=4.1,nconnect=4,hard,timeo=600`</span> on all HANA volume mount points.
+</span><span id="__span-15-6"><a href="#__codelineno-15-6" id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="k">- [ ]</span> NSG on the HANA database subnet blocks all inbound traffic except from the application subnet on port 30015.
+</span><span id="__span-15-7"><a href="#__codelineno-15-7" id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="k">- [ ]</span> Azure Monitor alert is active for HANA VM memory utilization exceeding 90%.
+</span><span id="__span-15-8"><a href="#__codelineno-15-8" id="__codelineno-15-8" name="__codelineno-15-8"></a><span class="k">- [ ]</span> HANA backup to Azure Blob Storage is configured and last backup timestamp is within the RPO window.
+</span><span id="__span-15-9"><a href="#__codelineno-15-9" id="__codelineno-15-9" name="__codelineno-15-9"></a><span class="k">- [ ]</span> Private Endpoint is used for all Azure storage accounts accessed by HANA backups; no public endpoint is enabled.
+</span></code></pre></div>
+<hr/>
+<h2 id="prohibited-patterns">Prohibited Patterns<a class="headerlink" href="#prohibited-patterns" title="Permanent link">¶</a></h2>
+<p>The following patterns are prohibited in all handbook content and will be rejected in pull request review.</p>
+<ul>
+<li>Sentences that begin with "It is important to..."</li>
+<li>Use of "leverage" as a synonym for "use"</li>
+<li>Use of "utilize" when "use" is sufficient</li>
+<li>Use of "seamless", "powerful", "robust", "scalable", "enterprise-grade", "best-in-class"</li>
+<li>Unsourced performance claims ("HANA on Azure achieves X IOPS")</li>
+<li>References to specific pricing without a date and a link to the Azure pricing calculator</li>
+<li>Screenshots of the Azure Portal (use diagrams or code instead; screenshots become stale)</li>
+<li>Placeholder text of any kind ("TBD", "TODO", "Coming soon", "Under construction")</li>
+<li>External links to non-Microsoft, non-SAP sources without documented justification in the pull request</li>
+</ul>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../js/timeago.min.js"></script>
+<script src="../js/timeago_mkdocs_material.js"></script>
+<script src="../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

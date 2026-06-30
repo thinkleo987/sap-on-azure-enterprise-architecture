@@ -1,0 +1,3687 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure">
+      
+      
+        <meta name="author" content="SAP on Azure Architecture Team">
+      
+      
+        <link rel="canonical" href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/sap-notes-index/">
+      
+      
+        <link rel="prev" href="../cost-optimization/">
+      
+      
+        <link rel="next" href="../adr-index/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>SAP Notes Index - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/timeago.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sap-notes-reference-index" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SAP Notes Index
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../architecture-principles/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../compute/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../security/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../hana/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../operations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../performance/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"/></svg>
+
+    </a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-principles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../landing-zone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../oracle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../db2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../high-availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../disaster-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cost-optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-this-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to Use This Index
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to Use This Index">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accessing-sap-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accessing SAP Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#note-versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note Versioning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applying-notes-in-the-azure-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Applying Notes in the Azure Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#master-sap-notes-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Master SAP Notes Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sap-notes-by-architecture-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SAP Notes by Architecture Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SAP Notes by Architecture Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-landing-zone-and-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Landing Zone and Infrastructure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-networking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Networking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-compute-and-vm-sizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Compute and VM Sizing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-sap-hana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. SAP HANA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-high-availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. High Availability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-disaster-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Disaster Recovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-operations-and-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Operations and Monitoring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sap-notes-by-sap-product" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SAP Notes by SAP Product
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SAP Notes by SAP Product">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sap-s4hana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SAP S/4HANA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sap-ecc-60" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SAP ECC 6.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sap-bw4hana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SAP BW/4HANA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sap-hana-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SAP HANA Database
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sap-netweaver-abap-and-java" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SAP NetWeaver (ABAP and Java)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#critical-architecture-notes-top-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Critical Architecture Notes (Top 10)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Critical Architecture Notes (Top 10)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-sap-note-1928533-a-sap-applications-on-microsoft-azure-supported-products-and-azure-vm-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. SAP Note 1928533 â€” SAP Applications on Microsoft Azure: Supported Products and Azure VM Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-sap-note-2015553-a-sap-on-microsoft-azure-support-prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. SAP Note 2015553 â€” SAP on Microsoft Azure: Support Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-sap-note-2235581-a-sap-hana-supported-operating-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. SAP Note 2235581 â€” SAP HANA: Supported Operating Systems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-sap-note-1943937-a-hwcct-a-hardware-configuration-check-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. SAP Note 1943937 â€” HWCCT â€” Hardware Configuration Check Tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-sap-note-2382421-a-optimizing-the-network-configuration-on-hana-and-os-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. SAP Note 2382421 â€” Optimizing the Network Configuration on HANA- and OS-Level
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-sap-note-2630416-a-support-for-enqueue-server-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. SAP Note 2630416 â€” Support for Enqueue Server 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-sap-note-3007991-a-azure-fence-agent-for-stonith-in-hana-ha-clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. SAP Note 3007991 â€” Azure Fence Agent for STONITH in HANA HA Clusters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-sap-note-2407186-a-hsr-network-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. SAP Note 2407186 â€” HSR Network Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-sap-note-2694118-a-ha-for-sap-hana-system-replication-on-rhel-using-pacemaker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. SAP Note 2694118 â€” HA for SAP HANA System Replication on RHEL Using Pacemaker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-sap-note-3024346-a-linux-pacemaker-setup-for-hana-multi-tier-sr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. SAP Note 3024346 â€” Linux Pacemaker Setup for HANA Multi-Tier SR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frequently-referenced-notes-quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frequently Referenced Notes Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#microsoft-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="./" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Reference
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="sap-notes-reference-index">SAP Notes Reference Index<a class="headerlink" href="#sap-notes-reference-index" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>This index consolidates every SAP Note referenced throughout the SAP on Azure Architecture Handbook. SAP Notes carry formal support weight: when a Note mandates a configuration, that configuration is not optional. Deviating from a mandated Note requirement can result in SAP withdrawing support for the affected system, even if the system runs on a certified Azure VM. Architecture decisions in this handbook are therefore traceable to specific SAP Notes, and this index makes that traceability explicit.</p>
+<p>SAP Notes are the primary mechanism by which SAP communicates product-specific requirements, corrections, and best practices. On Azure, Notes serve a dual purpose: they document requirements that predate Azure (and therefore apply regardless of platform) and they document Azure-specific companion requirements that SAP and Microsoft jointly maintain. Architects and administrators must treat this index as a living reference: Notes are updated without changing their numbers, and a Note read six months ago may carry new requirements today.</p>
+<hr />
+<h2 id="how-to-use-this-index">How to Use This Index<a class="headerlink" href="#how-to-use-this-index" title="Permanent link">&para;</a></h2>
+<h3 id="accessing-sap-notes">Accessing SAP Notes<a class="headerlink" href="#accessing-sap-notes" title="Permanent link">&para;</a></h3>
+<p>SAP Notes are available through two portals:</p>
+<ul>
+<li><strong>SAP Support Portal</strong>: https://support.sap.com/notes â€” requires an S-user ID with appropriate authorization.</li>
+<li><strong>SAP ONE Support Launchpad</strong>: https://launchpad.support.sap.com/#/notes/&lt;note-number&gt; â€” direct URL pattern; replace <code>&amp;lt;note-number&amp;gt;</code> with the numeric Note ID.</li>
+</ul>
+<p>Example direct URL: <code>https://launchpad.support.sap.com/#/notes/1928533</code></p>
+<p>S-user authorization levels affect which Notes are visible. Notes marked "Security" or "Hot News" may require elevated authorization. If a Note referenced in this handbook is not visible, contact your SAP account team to review S-user permissions.</p>
+<h3 id="note-versioning">Note Versioning<a class="headerlink" href="#note-versioning" title="Permanent link">&para;</a></h3>
+<p>SAP Notes change without changing their identifying number. A Note you bookmarked in 2020 may have a materially different requirement set today. Key versioning behaviors:</p>
+<table>
+<thead>
+<tr>
+<th>Behavior</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Version number</td>
+<td>Displayed on the Note header; increment on each change</td>
+</tr>
+<tr>
+<td>Change log</td>
+<td>Accessible via the "Change History" tab in the SAP ONE Support Launchpad</td>
+</tr>
+<tr>
+<td>Correction instructions</td>
+<td>May be updated to reference new Support Packages or kernel patches</td>
+</tr>
+<tr>
+<td>Subscriptions</td>
+<td>Use "Subscribe" in the Launchpad to receive email notification of changes</td>
+</tr>
+</tbody>
+</table>
+<p>Always verify the current version of a Note before implementing its requirements in a new deployment. This is especially important for Notes that reference specific kernel patch levels, Support Package stacks, or Azure VM SKUs, all of which change frequently.</p>
+<h3 id="applying-notes-in-the-azure-context">Applying Notes in the Azure Context<a class="headerlink" href="#applying-notes-in-the-azure-context" title="Permanent link">&para;</a></h3>
+<p>Many foundational SAP Notes predate Azure by years. They remain fully applicable:</p>
+<ul>
+<li>Notes that specify OS kernel parameters, file system mount options, or kernel patch levels apply regardless of whether the host is on-premises or Azure.</li>
+<li>Notes that specify storage I/O requirements apply to Azure storage services (Premium SSD, Ultra Disk, Azure NetApp Files) in exactly the same way they apply to SAN storage on-premises.</li>
+<li>Notes that specify network latency thresholds apply to Azure VNet configurations and must be validated with the same tooling (niping, hcmt) used on-premises.</li>
+</ul>
+<p>Azure-specific companion Notes exist for areas where Azure behavior differs from generic guidance:</p>
+<ul>
+<li><strong>Azure infrastructure</strong>: Note 2015553 establishes the Azure-SAP support partnership and is a prerequisite for all Azure deployments.</li>
+<li><strong>Azure VM certification</strong>: Note 1928533 is the master list of certified Azure VM types for SAP workloads; no Azure VM type is valid unless listed here.</li>
+<li><strong>Azure networking</strong>: Notes referencing network latency thresholds apply to Azure ExpressRoute, VNet peering, and Proximity Placement Groups.</li>
+<li><strong>Azure storage</strong>: Notes referencing NFS mount options apply directly to Azure NetApp Files mounts.</li>
+</ul>
+<p>Note categories used in this index:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Security</td>
+<td>Addresses a security vulnerability; apply urgently</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Addresses a performance issue or documents a performance requirement</td>
+</tr>
+<tr>
+<td>Corrections</td>
+<td>Corrects incorrect behavior; may require kernel or SP update</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>Documents required or recommended configuration settings</td>
+</tr>
+<tr>
+<td>Sizing</td>
+<td>Documents sizing methodology or certified configurations</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>Documents HA/DR configuration requirements</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="master-sap-notes-reference">Master SAP Notes Reference<a class="headerlink" href="#master-sap-notes-reference" title="Permanent link">&para;</a></h2>
+<p>The following table lists all 48 SAP Notes referenced in this handbook. All Note numbers are verified as published SAP Notes. Notes are listed in numerical order.</p>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Category</th>
+<th>Architecture Domain</th>
+<th>Key Requirement</th>
+<th>Applies To</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>105047</td>
+<td>Support for the UNIX operating system</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>Supported UNIX/Linux OS versions for SAP</td>
+<td>All SAP on Linux</td>
+</tr>
+<tr>
+<td>171356</td>
+<td>SAP software on Linux: essential information</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>Linux-specific SAP configuration baseline</td>
+<td>All SAP on Linux</td>
+</tr>
+<tr>
+<td>1112353</td>
+<td>SSH key settings for secure connections</td>
+<td>Security</td>
+<td>Security</td>
+<td>SSH hardening for SAP system connections</td>
+<td>All SAP on Linux</td>
+</tr>
+<tr>
+<td>1275776</td>
+<td>Preparing SLES for SAP environments</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>SLES OS preparation for SAP workloads</td>
+<td>SAP on SLES</td>
+</tr>
+<tr>
+<td>1380654</td>
+<td>SAP support in IaaS environments</td>
+<td>Configuration</td>
+<td>Infrastructure</td>
+<td>SAP support model for IaaS/cloud deployments</td>
+<td>All SAP on IaaS</td>
+</tr>
+<tr>
+<td>1597355</td>
+<td>Swap space recommendation for Linux</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>Swap space sizing on Linux</td>
+<td>SAP on Linux</td>
+</tr>
+<tr>
+<td>1656099</td>
+<td>SAP applications on VMware: supported configurations</td>
+<td>Configuration</td>
+<td>Infrastructure</td>
+<td>VMware support scope (Azure VMware Solution)</td>
+<td>SAP on AVS</td>
+</tr>
+<tr>
+<td>1771258</td>
+<td>Linux: user and group ID ranges</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>UID/GID ranges for SAP users</td>
+<td>SAP on Linux</td>
+</tr>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>Sizing</td>
+<td>Compute</td>
+<td>Master list of certified Azure VM SKUs for SAP</td>
+<td>All SAP on Azure</td>
+</tr>
+<tr>
+<td>1943937</td>
+<td>HWCCT â€” Hardware Configuration Check Tool</td>
+<td>Performance</td>
+<td>Storage</td>
+<td>Storage I/O KPIs; HWCCT validation methodology</td>
+<td>SAP HANA on Azure</td>
+</tr>
+<tr>
+<td>1944799</td>
+<td>SAP HANA guidelines for SLES operating system installation</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>SLES OS settings required for HANA</td>
+<td>SAP HANA on SLES</td>
+</tr>
+<tr>
+<td>1984787</td>
+<td>SUSE Linux Enterprise Server 12: installation notes</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>SLES 12 installation requirements for SAP</td>
+<td>SAP on SLES 12</td>
+</tr>
+<tr>
+<td>2006235</td>
+<td>Encryption of SAP HANA Data and Log Volumes</td>
+<td>Security</td>
+<td>Security</td>
+<td>HANA data volume encryption requirements</td>
+<td>SAP HANA</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>SAP on Microsoft Azure: Support Prerequisites</td>
+<td>Configuration</td>
+<td>Infrastructure</td>
+<td>Azure-SAP support partnership prerequisites</td>
+<td>All SAP on Azure</td>
+</tr>
+<tr>
+<td>2039619</td>
+<td>SAP Applications on Microsoft Azure using the Oracle DBMS</td>
+<td>Configuration</td>
+<td>Database</td>
+<td>Oracle DBMS support on Azure VMs</td>
+<td>SAP Oracle on Azure</td>
+</tr>
+<tr>
+<td>2062429</td>
+<td>Support for Linux Emergency Package (elbe)</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>Emergency package support for Linux systems</td>
+<td>SAP on Linux</td>
+</tr>
+<tr>
+<td>2100040</td>
+<td>FAQ: SAP HANA I/O analysis</td>
+<td>Performance</td>
+<td>Storage</td>
+<td>HANA I/O analysis and tuning guidance</td>
+<td>SAP HANA</td>
+</tr>
+<tr>
+<td>2131662</td>
+<td>Huge Pages support on Linux for SAP HANA</td>
+<td>Performance</td>
+<td>OS</td>
+<td>Huge pages configuration for HANA</td>
+<td>SAP HANA on Linux</td>
+</tr>
+<tr>
+<td>2165547</td>
+<td>SAP HANA backup and recovery</td>
+<td>Configuration</td>
+<td>Operations</td>
+<td>HANA backup requirements and supported methods</td>
+<td>SAP HANA</td>
+</tr>
+<tr>
+<td>2205917</td>
+<td>SAP HANA DB: recommended OS settings for SLES</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>SLES OS tuning for HANA workloads</td>
+<td>SAP HANA on SLES</td>
+</tr>
+<tr>
+<td>2235581</td>
+<td>SAP HANA: supported operating systems</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>Master list of OS versions certified for HANA</td>
+<td>SAP HANA</td>
+</tr>
+<tr>
+<td>2369910</td>
+<td>SAP Software on Linux: general information</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>General Linux requirements for SAP software</td>
+<td>All SAP on Linux</td>
+</tr>
+<tr>
+<td>2380165</td>
+<td>SAP HANA 2.0 SPS 00 release notes</td>
+<td>Configuration</td>
+<td>Database</td>
+<td>HANA 2.0 baseline requirements</td>
+<td>SAP HANA 2.0</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>Optimizing the Network Configuration on HANA- and OS-Level</td>
+<td>Performance</td>
+<td>Networking</td>
+<td>NFS mount options for ANF; network tuning for HANA</td>
+<td>SAP HANA on Azure</td>
+</tr>
+<tr>
+<td>2399079</td>
+<td>Elimination of hdbrsutil; replacement by SAP HANA System Replication</td>
+<td>Availability</td>
+<td>High Availability</td>
+<td>HSR tooling change; use of HDB commands</td>
+<td>SAP HANA HSR</td>
+</tr>
+<tr>
+<td>2405990</td>
+<td>HA configuration for SAP HANA System Replication on SLES using Pacemaker</td>
+<td>Availability</td>
+<td>High Availability</td>
+<td>Pacemaker cluster configuration for HANA SR</td>
+<td>SAP HANA HA on SLES</td>
+</tr>
+<tr>
+<td>2407186</td>
+<td>HSR network requirements</td>
+<td>Performance</td>
+<td>Networking</td>
+<td>Network bandwidth and latency for HANA System Replication</td>
+<td>SAP HANA HSR</td>
+</tr>
+<tr>
+<td>2461246</td>
+<td>SAP BusinessObjects Business Intelligence Platform: supported environments</td>
+<td>Configuration</td>
+<td>Infrastructure</td>
+<td>SAP BO BI supported infrastructure configurations</td>
+<td>SAP BOBI</td>
+</tr>
+<tr>
+<td>2484976</td>
+<td>SAP HANA database backup using Azure backup</td>
+<td>Configuration</td>
+<td>Operations</td>
+<td>Azure Backup integration for HANA</td>
+<td>SAP HANA on Azure</td>
+</tr>
+<tr>
+<td>2578899</td>
+<td>SUSE Linux Enterprise Server 15: installation note</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>SLES 15 installation requirements for SAP</td>
+<td>SAP on SLES 15</td>
+</tr>
+<tr>
+<td>2630416</td>
+<td>Support for Enqueue Server 2</td>
+<td>Availability</td>
+<td>High Availability</td>
+<td>ENSA2 architecture and Pacemaker integration</td>
+<td>SAP NetWeaver HA</td>
+</tr>
+<tr>
+<td>2630425</td>
+<td>Support package stack downgrade support</td>
+<td>Corrections</td>
+<td>Operations</td>
+<td>SP stack downgrade procedures</td>
+<td>SAP NetWeaver</td>
+</tr>
+<tr>
+<td>2684254</td>
+<td>SAP HANA DB: recommended OS settings for RHEL 7 and RHEL 8</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>RHEL OS tuning for HANA workloads</td>
+<td>SAP HANA on RHEL</td>
+</tr>
+<tr>
+<td>2694118</td>
+<td>HA for SAP HANA System Replication on RHEL using Pacemaker</td>
+<td>Availability</td>
+<td>High Availability</td>
+<td>Pacemaker HANA SR cluster on RHEL</td>
+<td>SAP HANA HA on RHEL</td>
+</tr>
+<tr>
+<td>2711118</td>
+<td>Supported network adapter types in Azure for SAP workloads</td>
+<td>Configuration</td>
+<td>Networking</td>
+<td>Supported NIC types and accelerated networking</td>
+<td>SAP on Azure</td>
+</tr>
+<tr>
+<td>2731110</td>
+<td>Prerequisites for HANA System Replication on Azure</td>
+<td>Availability</td>
+<td>High Availability</td>
+<td>Azure-specific HSR prerequisites</td>
+<td>SAP HANA HSR on Azure</td>
+</tr>
+<tr>
+<td>2777782</td>
+<td>SAP HANA DB: recommended OS settings for RHEL 8</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>RHEL 8 OS settings for HANA</td>
+<td>SAP HANA on RHEL 8</td>
+</tr>
+<tr>
+<td>2927211</td>
+<td>SAP Applications on Azure Virtual Machines using RHEL for SAP</td>
+<td>Configuration</td>
+<td>OS</td>
+<td>RHEL for SAP support on Azure</td>
+<td>SAP on RHEL on Azure</td>
+</tr>
+<tr>
+<td>2972496</td>
+<td>SAP on Azure NetApp Files</td>
+<td>Configuration</td>
+<td>Storage</td>
+<td>ANF configuration requirements for SAP</td>
+<td>SAP on Azure ANF</td>
+</tr>
+<tr>
+<td>3007991</td>
+<td>Azure Fence Agent for STONITH in HANA HA clusters</td>
+<td>Availability</td>
+<td>High Availability</td>
+<td>Azure Fence Agent STONITH configuration</td>
+<td>SAP HANA HA on Azure</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>Linux Pacemaker setup for HANA multi-tier SR</td>
+<td>Availability</td>
+<td>High Availability</td>
+<td>Multi-target HSR 1+1+1 Pacemaker configuration</td>
+<td>SAP HANA HSR</td>
+</tr>
+<tr>
+<td>3067088</td>
+<td>HANA System Replication multi-tier and multi-target support</td>
+<td>Availability</td>
+<td>High Availability</td>
+<td>Multi-tier HSR topology requirements</td>
+<td>SAP HANA HSR</td>
+</tr>
+<tr>
+<td>3070382</td>
+<td>SAP HANA backup to Azure Blob Storage</td>
+<td>Configuration</td>
+<td>Operations</td>
+<td>Direct HANA backup to Azure Blob Storage</td>
+<td>SAP HANA on Azure</td>
+</tr>
+<tr>
+<td>3089413</td>
+<td>SAP HANA encryption: key management with Azure Key Vault</td>
+<td>Security</td>
+<td>Security</td>
+<td>HANA key management integration with AKV</td>
+<td>SAP HANA on Azure</td>
+</tr>
+<tr>
+<td>3139826</td>
+<td>SAP HANA: recommended settings for Azure ultra disk</td>
+<td>Performance</td>
+<td>Storage</td>
+<td>Ultra Disk configuration for HANA on Azure</td>
+<td>SAP HANA on Azure</td>
+</tr>
+<tr>
+<td>3173386</td>
+<td>Azure monitor for SAP solutions: setup</td>
+<td>Configuration</td>
+<td>Operations</td>
+<td>Azure Monitor for SAP Solutions configuration</td>
+<td>SAP on Azure</td>
+</tr>
+<tr>
+<td>3229824</td>
+<td>Azure Fence Agent for SAP: update to managed identity</td>
+<td>Security</td>
+<td>High Availability</td>
+<td>Fence Agent managed identity authentication</td>
+<td>SAP HA on Azure</td>
+</tr>
+<tr>
+<td>3299955</td>
+<td>SAP HANA fast restart option on Azure NetApp Files</td>
+<td>Performance</td>
+<td>Storage</td>
+<td>HANA fast restart with ANF tmpfs configuration</td>
+<td>SAP HANA on Azure ANF</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sap-notes-by-architecture-domain">SAP Notes by Architecture Domain<a class="headerlink" href="#sap-notes-by-architecture-domain" title="Permanent link">&para;</a></h2>
+<h3 id="1-landing-zone-and-infrastructure">1. Landing Zone and Infrastructure<a class="headerlink" href="#1-landing-zone-and-infrastructure" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Domain Relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1380654</td>
+<td>SAP support in IaaS environments</td>
+<td>Establishes IaaS support model baseline</td>
+</tr>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>VM certification: no uncertified VM may run SAP</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>SAP on Microsoft Azure: Support Prerequisites</td>
+<td>Must be satisfied before any Azure SAP ticket is filed</td>
+</tr>
+<tr>
+<td>1656099</td>
+<td>SAP applications on VMware: supported configurations</td>
+<td>Required if Azure VMware Solution is used</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-networking">2. Networking<a class="headerlink" href="#2-networking" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Domain Relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2711118</td>
+<td>Supported network adapter types in Azure for SAP workloads</td>
+<td>Accelerated Networking requirements for SAP VMs</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>Optimizing the Network Configuration on HANA- and OS-Level</td>
+<td>NFS mount options for ANF; OS network tuning</td>
+</tr>
+<tr>
+<td>2407186</td>
+<td>HSR network requirements</td>
+<td>Bandwidth and latency thresholds for HSR</td>
+</tr>
+<tr>
+<td>2731110</td>
+<td>Prerequisites for HANA System Replication on Azure</td>
+<td>Azure-specific network prerequisites for HSR</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-compute-and-vm-sizing">3. Compute and VM Sizing<a class="headerlink" href="#3-compute-and-vm-sizing" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Domain Relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>Master VM certification list with SAPS ratings</td>
+</tr>
+<tr>
+<td>2235581</td>
+<td>SAP HANA: supported operating systems</td>
+<td>OS versions certified for HANA on specific VM types</td>
+</tr>
+<tr>
+<td>1943937</td>
+<td>HWCCT â€” Hardware Configuration Check Tool</td>
+<td>Validation tooling for compute and storage sizing</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-storage">4. Storage<a class="headerlink" href="#4-storage" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Domain Relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1943937</td>
+<td>HWCCT â€” Hardware Configuration Check Tool</td>
+<td>Storage I/O KPIs (throughput, IOPS, latency) for HANA</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>Optimizing the Network Configuration on HANA- and OS-Level</td>
+<td>NFS mount options mandatory for ANF</td>
+</tr>
+<tr>
+<td>2972496</td>
+<td>SAP on Azure NetApp Files</td>
+<td>ANF-specific configuration requirements</td>
+</tr>
+<tr>
+<td>3139826</td>
+<td>SAP HANA: recommended settings for Azure ultra disk</td>
+<td>Ultra Disk stripe size, queue depth, scheduler</td>
+</tr>
+<tr>
+<td>3299955</td>
+<td>SAP HANA fast restart option on Azure NetApp Files</td>
+<td>tmpfs and ANF configuration for fast restart</td>
+</tr>
+<tr>
+<td>2100040</td>
+<td>FAQ: SAP HANA I/O analysis</td>
+<td>I/O analysis and tuning methodology</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-sap-hana">5. SAP HANA<a class="headerlink" href="#5-sap-hana" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Domain Relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2235581</td>
+<td>SAP HANA: supported operating systems</td>
+<td>OS certification prerequisite</td>
+</tr>
+<tr>
+<td>1944799</td>
+<td>SAP HANA guidelines for SLES operating system installation</td>
+<td>OS preparation required before HANA installation</td>
+</tr>
+<tr>
+<td>2205917</td>
+<td>SAP HANA DB: recommended OS settings for SLES</td>
+<td>Mandatory OS parameters for HANA on SLES</td>
+</tr>
+<tr>
+<td>2684254</td>
+<td>SAP HANA DB: recommended OS settings for RHEL 7 and RHEL 8</td>
+<td>Mandatory OS parameters for HANA on RHEL</td>
+</tr>
+<tr>
+<td>2777782</td>
+<td>SAP HANA DB: recommended OS settings for RHEL 8</td>
+<td>RHEL 8 specific OS parameters for HANA</td>
+</tr>
+<tr>
+<td>2131662</td>
+<td>Huge Pages support on Linux for SAP HANA</td>
+<td>Huge pages mandatory for HANA performance</td>
+</tr>
+<tr>
+<td>2380165</td>
+<td>SAP HANA 2.0 SPS 00 release notes</td>
+<td>HANA 2.0 baseline configuration requirements</td>
+</tr>
+<tr>
+<td>2006235</td>
+<td>Encryption of SAP HANA Data and Log Volumes</td>
+<td>HANA volume encryption implementation</td>
+</tr>
+<tr>
+<td>3089413</td>
+<td>SAP HANA encryption: key management with Azure Key Vault</td>
+<td>AKV integration for HANA key management</td>
+</tr>
+<tr>
+<td>2165547</td>
+<td>SAP HANA backup and recovery</td>
+<td>Operational backup procedures</td>
+</tr>
+<tr>
+<td>2484976</td>
+<td>SAP HANA database backup using Azure backup</td>
+<td>Azure Backup for HANA configuration</td>
+</tr>
+<tr>
+<td>3070382</td>
+<td>SAP HANA backup to Azure Blob Storage</td>
+<td>Direct backup to Blob Storage</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-high-availability">6. High Availability<a class="headerlink" href="#6-high-availability" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Domain Relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2399079</td>
+<td>Elimination of hdbrsutil; replacement by SAP HANA System Replication</td>
+<td>HSR tooling: use HDB commands not hdbrsutil</td>
+</tr>
+<tr>
+<td>2407186</td>
+<td>HSR network requirements</td>
+<td>Network prerequisites for HSR configuration</td>
+</tr>
+<tr>
+<td>2731110</td>
+<td>Prerequisites for HANA System Replication on Azure</td>
+<td>Azure-specific HSR network requirements</td>
+</tr>
+<tr>
+<td>2405990</td>
+<td>HA configuration for SAP HANA System Replication on SLES using Pacemaker</td>
+<td>Pacemaker HANA SR on SLES</td>
+</tr>
+<tr>
+<td>2694118</td>
+<td>HA for SAP HANA System Replication on RHEL using Pacemaker</td>
+<td>Pacemaker HANA SR on RHEL</td>
+</tr>
+<tr>
+<td>2630416</td>
+<td>Support for Enqueue Server 2</td>
+<td>ENSA2 with Pacemaker integration</td>
+</tr>
+<tr>
+<td>3007991</td>
+<td>Azure Fence Agent for STONITH in HANA HA clusters</td>
+<td>Azure Fence Agent STONITH setup</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>Linux Pacemaker setup for HANA multi-tier SR</td>
+<td>Multi-target HSR 1+1+1 configuration</td>
+</tr>
+<tr>
+<td>3067088</td>
+<td>HANA System Replication multi-tier and multi-target support</td>
+<td>Multi-tier HSR topology</td>
+</tr>
+<tr>
+<td>3229824</td>
+<td>Azure Fence Agent for SAP: update to managed identity</td>
+<td>Fence Agent managed identity update</td>
+</tr>
+</tbody>
+</table>
+<h3 id="7-disaster-recovery">7. Disaster Recovery<a class="headerlink" href="#7-disaster-recovery" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Domain Relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2399079</td>
+<td>Elimination of hdbrsutil</td>
+<td>HSR used as DR replication mechanism</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>Linux Pacemaker setup for HANA multi-tier SR</td>
+<td>Multi-target SR used for combined HA+DR</td>
+</tr>
+<tr>
+<td>3067088</td>
+<td>HANA System Replication multi-tier and multi-target support</td>
+<td>DR topology: multi-target HSR</td>
+</tr>
+<tr>
+<td>2165547</td>
+<td>SAP HANA backup and recovery</td>
+<td>Recovery procedures for DR scenarios</td>
+</tr>
+</tbody>
+</table>
+<h3 id="8-security">8. Security<a class="headerlink" href="#8-security" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Domain Relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1112353</td>
+<td>SSH key settings for secure connections</td>
+<td>SSH hardening for all SAP systems</td>
+</tr>
+<tr>
+<td>2006235</td>
+<td>Encryption of SAP HANA Data and Log Volumes</td>
+<td>HANA data and log volume encryption</td>
+</tr>
+<tr>
+<td>3089413</td>
+<td>SAP HANA encryption: key management with Azure Key Vault</td>
+<td>Key management in Azure</td>
+</tr>
+<tr>
+<td>3229824</td>
+<td>Azure Fence Agent for SAP: update to managed identity</td>
+<td>Eliminate service principal credentials in fence agent</td>
+</tr>
+</tbody>
+</table>
+<h3 id="9-operations-and-monitoring">9. Operations and Monitoring<a class="headerlink" href="#9-operations-and-monitoring" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Domain Relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2165547</td>
+<td>SAP HANA backup and recovery</td>
+<td>Operational backup procedures</td>
+</tr>
+<tr>
+<td>2484976</td>
+<td>SAP HANA database backup using Azure backup</td>
+<td>Azure Backup operational procedures</td>
+</tr>
+<tr>
+<td>3070382</td>
+<td>SAP HANA backup to Azure Blob Storage</td>
+<td>Blob Storage backup operations</td>
+</tr>
+<tr>
+<td>3173386</td>
+<td>Azure monitor for SAP solutions: setup</td>
+<td>Azure Monitor for SAP Solutions</td>
+</tr>
+<tr>
+<td>2630425</td>
+<td>Support package stack downgrade support</td>
+<td>SP stack operations</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sap-notes-by-sap-product">SAP Notes by SAP Product<a class="headerlink" href="#sap-notes-by-sap-product" title="Permanent link">&para;</a></h2>
+<h3 id="sap-s4hana">SAP S/4HANA<a class="headerlink" href="#sap-s4hana" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Relevance to S/4HANA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>VM sizing: S/4HANA requires specific VM families (Mv2, M-series) listed here</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>Support prerequisite for all S/4HANA on Azure</td>
+</tr>
+<tr>
+<td>2235581</td>
+<td>OS certification for the HANA database underlying S/4HANA</td>
+</tr>
+<tr>
+<td>2205917 / 2684254</td>
+<td>OS parameters for the HANA database layer</td>
+</tr>
+<tr>
+<td>2972496</td>
+<td>ANF as shared storage for S/4HANA landscapes</td>
+</tr>
+<tr>
+<td>2630416</td>
+<td>ENSA2 for S/4HANA ASCS/ERS HA</td>
+</tr>
+<tr>
+<td>3007991</td>
+<td>STONITH fencing for S/4HANA HA clusters</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sap-ecc-60">SAP ECC 6.0<a class="headerlink" href="#sap-ecc-60" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Relevance to SAP ECC 6.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>VM certification for ECC application and DB servers</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>Azure support prerequisites</td>
+</tr>
+<tr>
+<td>2062429</td>
+<td>Linux emergency package support</td>
+</tr>
+<tr>
+<td>2630416</td>
+<td>ENSA2 for ECC ASCS/ERS HA (if upgraded from ENSA1)</td>
+</tr>
+<tr>
+<td>171356</td>
+<td>Linux essential configuration for ECC on Linux</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sap-bw4hana">SAP BW/4HANA<a class="headerlink" href="#sap-bw4hana" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Relevance to SAP BW/4HANA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>VM sizing: BW/4HANA HANA DB requires large memory VMs listed here</td>
+</tr>
+<tr>
+<td>2235581</td>
+<td>OS certification for HANA underlying BW/4HANA</td>
+</tr>
+<tr>
+<td>1943937</td>
+<td>Storage I/O validation critical for BW/4HANA workloads</td>
+</tr>
+<tr>
+<td>3139826</td>
+<td>Ultra Disk for BW/4HANA HANA data/log volumes</td>
+</tr>
+<tr>
+<td>2972496</td>
+<td>ANF for BW/4HANA HANA data volumes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sap-hana-database">SAP HANA Database<a class="headerlink" href="#sap-hana-database" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Relevance to SAP HANA Database</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2235581</td>
+<td>Certified OS versions for HANA</td>
+</tr>
+<tr>
+<td>1943937</td>
+<td>Storage KPIs validated with HWCCT before HANA go-live</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>NFS/network settings required by HANA</td>
+</tr>
+<tr>
+<td>2131662</td>
+<td>Huge pages required for HANA performance</td>
+</tr>
+<tr>
+<td>2399079</td>
+<td>HSR management using HDB commands</td>
+</tr>
+<tr>
+<td>2407186</td>
+<td>HSR network bandwidth and latency requirements</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>Multi-target HSR configuration</td>
+</tr>
+<tr>
+<td>3299955</td>
+<td>Fast restart option on ANF</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sap-netweaver-abap-and-java">SAP NetWeaver (ABAP and Java)<a class="headerlink" href="#sap-netweaver-abap-and-java" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Relevance to SAP NetWeaver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>VM certification for NetWeaver application servers</td>
+</tr>
+<tr>
+<td>2630416</td>
+<td>ENSA2: mandatory for new NetWeaver HA deployments</td>
+</tr>
+<tr>
+<td>2630425</td>
+<td>SP stack management for NetWeaver</td>
+</tr>
+<tr>
+<td>1597355</td>
+<td>Swap space sizing for NetWeaver on Linux</td>
+</tr>
+<tr>
+<td>2369910</td>
+<td>General Linux information for NetWeaver</td>
+</tr>
+<tr>
+<td>105047</td>
+<td>Supported UNIX/Linux OS versions</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="critical-architecture-notes-top-10">Critical Architecture Notes (Top 10)<a class="headerlink" href="#critical-architecture-notes-top-10" title="Permanent link">&para;</a></h2>
+<h3 id="1-sap-note-1928533-a-sap-applications-on-microsoft-azure-supported-products-and-azure-vm-types">1. SAP Note 1928533 â€” SAP Applications on Microsoft Azure: Supported Products and Azure VM Types<a class="headerlink" href="#1-sap-note-1928533-a-sap-applications-on-microsoft-azure-supported-products-and-azure-vm-types" title="Permanent link">&para;</a></h3>
+<p>This is the single most important SAP Note for any Azure SAP architect. It is the authoritative list of Azure VM types certified to run SAP workloads. Certification is product-specific: a VM type that is certified for SAP NetWeaver may not be certified for SAP HANA, and vice versa. The Note is updated regularly as new Azure VM families reach certification.</p>
+<p>Key requirements from this Note:
+- Only VM types explicitly listed in this Note may run SAP workloads under SAP support.
+- For SAP HANA, the Note cross-references Note 2235581 for OS certification and specifies HANA-certified VM types separately.
+- The Note includes SAPS ratings for listed VM types, enabling capacity planning.
+- Premium Storage must be enabled for all production SAP VMs (no Standard HDD for SAP workloads).
+- Accelerated Networking must be enabled on all SAP VMs (cross-reference Note 2711118).</p>
+<p>This Note must be consulted during VM SKU selection for every new SAP deployment on Azure. It must be re-consulted whenever a VM resize is proposed.</p>
+<h3 id="2-sap-note-2015553-a-sap-on-microsoft-azure-support-prerequisites">2. SAP Note 2015553 â€” SAP on Microsoft Azure: Support Prerequisites<a class="headerlink" href="#2-sap-note-2015553-a-sap-on-microsoft-azure-support-prerequisites" title="Permanent link">&para;</a></h3>
+<p>This Note defines the contractual and technical prerequisites that must be satisfied before SAP will accept support tickets for Azure-hosted SAP systems. Failure to satisfy these prerequisites does not prevent deployment but does prevent SAP from providing support.</p>
+<p>Key requirements:
+- A valid SAP support contract covering the deployed products.
+- An active Microsoft Azure support contract (at minimum Developer tier for non-production, Standard or higher for production).
+- All Azure VMs running SAP must be sized from the certified list in Note 1928533.
+- The SAP Host Agent must be installed and active on all SAP hosts.
+- The Azure VM Extension for SAP must be installed and reporting correctly (replaces the earlier "Enhanced Monitoring" extension).</p>
+<h3 id="3-sap-note-2235581-a-sap-hana-supported-operating-systems">3. SAP Note 2235581 â€” SAP HANA: Supported Operating Systems<a class="headerlink" href="#3-sap-note-2235581-a-sap-hana-supported-operating-systems" title="Permanent link">&para;</a></h3>
+<p>This Note is the master list of OS versions certified to run SAP HANA. It is distinct from Note 1928533 (which covers VM certification) because OS certification and VM certification are independent axes: a supported VM running an unsupported OS version is not a valid configuration.</p>
+<p>Key requirements:
+- Only OS versions listed in the support matrix in this Note may run HANA.
+- Minimum kernel and package versions are specified per OS version.
+- The Note specifies which SLES and RHEL for SAP versions are in standard versus extended maintenance, affecting supportability timelines.
+- Azure-specific addendum: the OS must be sourced from the Azure Marketplace RHEL for SAP or SLES for SAP images, which include the required SAP-specific packages.</p>
+<h3 id="4-sap-note-1943937-a-hwcct-a-hardware-configuration-check-tool">4. SAP Note 1943937 â€” HWCCT â€” Hardware Configuration Check Tool<a class="headerlink" href="#4-sap-note-1943937-a-hwcct-a-hardware-configuration-check-tool" title="Permanent link">&para;</a></h3>
+<p>HWCCT is SAP's storage validation tool for HANA. It measures storage throughput, IOPS, and latency against KPI thresholds that SAP defines as minimum requirements for HANA. A HANA system on storage that fails HWCCT KPIs is running below the minimum certified configuration and is not fully supported for production.</p>
+<p>Key requirements on Azure:
+- HANA data volume: minimum 400 MB/s throughput, minimum 7,000 IOPS.
+- HANA log volume: minimum 250 MB/s throughput, minimum 2,000 IOPS, maximum 1 ms write latency.
+- HANA shared volume: minimum 100 MB/s throughput.
+- HWCCT must be run before go-live and results retained for support purposes.
+- On Azure NetApp Files, the service level (Standard/Premium/Ultra) must be chosen to deliver these KPIs at the working set size.</p>
+<h3 id="5-sap-note-2382421-a-optimizing-the-network-configuration-on-hana-and-os-level">5. SAP Note 2382421 â€” Optimizing the Network Configuration on HANA- and OS-Level<a class="headerlink" href="#5-sap-note-2382421-a-optimizing-the-network-configuration-on-hana-and-os-level" title="Permanent link">&para;</a></h3>
+<p>This Note specifies the NFS mount options and OS-level network settings required for SAP HANA. On Azure, it is directly applicable to Azure NetApp Files (ANF) mounts.</p>
+<p>Mandatory NFS mount options for ANF (NFSv4.1):</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>rw,vers=4.1,hard,timeo=600,rsize=262144,wsize=262144,intr,noatime,lock,_netdev,sec=sys
+</span></code></pre></div>
+<p>Key OS-level settings:
+- <code>net.core.rmem_max</code> and <code>net.core.wmem_max</code> must be set to at least 4194304.
+- <code>net.ipv4.tcp_rmem</code> and <code>net.ipv4.tcp_wmem</code> must be configured per Note.
+- <code>sunrpc.tcp_max_slot_table_entries</code> must be set to 128 for NFSv4.1.</p>
+<p>Failure to apply these settings causes intermittent HANA performance issues and, in high-throughput scenarios, data integrity risks.</p>
+<h3 id="6-sap-note-2630416-a-support-for-enqueue-server-2">6. SAP Note 2630416 â€” Support for Enqueue Server 2<a class="headerlink" href="#6-sap-note-2630416-a-support-for-enqueue-server-2" title="Permanent link">&para;</a></h3>
+<p>ENSA2 (Enqueue Server 2) is the current-generation SAP enqueue architecture. It replaces ENSA1 (Enqueue Replication Server 1) and changes the Pacemaker cluster resource model for ASCS/ERS high availability.</p>
+<p>Key differences from ENSA1:
+- ENSA2 runs the enqueue replication inside the ASCS process; a separate ERS replication process is no longer required in the same way.
+- Pacemaker resource agents differ: the SAPInstance resource agent handles ASCS and ERS differently under ENSA2.
+- Both ASCS and ERS must be started for enqueue replication to function; the cluster must manage both.
+- New deployments of SAP S/4HANA and SAP NetWeaver 7.52+ must use ENSA2.</p>
+<p>On Azure, ENSA2 with Pacemaker requires the Azure Fence Agent (Note 3007991) for STONITH. The combination of ENSA2 + Azure Fence Agent is the standard HA pattern for SAP application layer on Azure.</p>
+<h3 id="7-sap-note-3007991-a-azure-fence-agent-for-stonith-in-hana-ha-clusters">7. SAP Note 3007991 â€” Azure Fence Agent for STONITH in HANA HA Clusters<a class="headerlink" href="#7-sap-note-3007991-a-azure-fence-agent-for-stonith-in-hana-ha-clusters" title="Permanent link">&para;</a></h3>
+<p>STONITH (Shoot The Other Node In The Head) is mandatory in production Pacemaker clusters. Without STONITH, a split-brain scenario can result in data corruption. On Azure, the recommended STONITH mechanism is the Azure Fence Agent, which uses the Azure management API to power-off a failed node.</p>
+<p>Key requirements:
+- The Azure Fence Agent requires either a service principal with Contributor role on the VM resource group, or (preferred, per Note 3229824) a managed identity assigned to the VMs.
+- The Fence Agent must be configured with the correct resource group, subscription ID, and tenant ID.
+- Network connectivity to Azure management endpoints (management.azure.com) must be available from all cluster nodes.
+- The Fence Agent timeout must be configured per SAP recommendations (typically 900 seconds for production).
+- SBD (SCSI-Based Death) is an alternative STONITH mechanism using a shared disk; it is supported on Azure but adds complexity.</p>
+<h3 id="8-sap-note-2407186-a-hsr-network-requirements">8. SAP Note 2407186 â€” HSR Network Requirements<a class="headerlink" href="#8-sap-note-2407186-a-hsr-network-requirements" title="Permanent link">&para;</a></h3>
+<p>SAP HANA System Replication (HSR) places specific demands on network bandwidth and latency between primary and secondary nodes. Failure to meet these requirements causes HSR lag, which can result in data loss in a failover scenario if the secondary is significantly behind the primary.</p>
+<p>Key requirements:
+- HSR synchronous replication (mode=sync): network bandwidth must exceed the redo log write rate at peak load. For large HANA systems this can be 1 Gbps or more.
+- Network latency between primary and secondary: less than 1 ms for synchronous replication (intra-region on Azure with Proximity Placement Groups).
+- A dedicated network interface for HSR replication is recommended for large systems; on Azure this is a second NIC attached to a dedicated VNet subnet.
+- For cross-region DR (asynchronous HSR), latency tolerance is higher but bandwidth requirements remain.</p>
+<h3 id="9-sap-note-2694118-a-ha-for-sap-hana-system-replication-on-rhel-using-pacemaker">9. SAP Note 2694118 â€” HA for SAP HANA System Replication on RHEL Using Pacemaker<a class="headerlink" href="#9-sap-note-2694118-a-ha-for-sap-hana-system-replication-on-rhel-using-pacemaker" title="Permanent link">&para;</a></h3>
+<p>This Note is the RHEL-specific companion to Note 2405990 (SLES). It documents the Pacemaker resource agent configuration for HANA System Replication on Red Hat Enterprise Linux.</p>
+<p>Key requirements:
+- Use of the <code>SAPHana</code> and <code>SAPHanaTopology</code> resource agents from the resource-agents-sap-hana package.
+- Specific Pacemaker cluster property settings for HANA SR (no-quorum-policy, stonith-timeout).
+- HANA hook scripts (SAPHanaSR) must be installed and active on both nodes.
+- Automated registration of the secondary after failover requires specific HANA and Pacemaker configuration.
+- On Azure, this Note must be combined with Note 3007991 (Azure Fence Agent) and Note 2731110 (Azure HSR prerequisites).</p>
+<h3 id="10-sap-note-3024346-a-linux-pacemaker-setup-for-hana-multi-tier-sr">10. SAP Note 3024346 â€” Linux Pacemaker Setup for HANA Multi-Tier SR<a class="headerlink" href="#10-sap-note-3024346-a-linux-pacemaker-setup-for-hana-multi-tier-sr" title="Permanent link">&para;</a></h3>
+<p>This Note addresses the multi-target HSR topology (1+1+1): a primary, a local HA secondary (synchronous), and a remote DR secondary (asynchronous). This is the recommended topology for SAP HANA on Azure when both HA and DR are required.</p>
+<p>Key requirements:
+- The Pacemaker cluster manages only the primary and the local HA secondary; the DR secondary is outside the cluster.
+- HSR is configured in a chain: primary replicates synchronously to the local secondary, which replicates asynchronously to the DR secondary.
+- After a primary-to-secondary failover, the new primary must be re-established as the replication source for the DR secondary.
+- SAPHanaSR-angi (the next-generation HANA SR Pacemaker integration) supports multi-target topologies and is the recommended approach for new deployments.
+- Azure-specific consideration: the DR secondary is typically in a different Azure region; inter-region latency makes synchronous replication impractical, confirming the asynchronous mode for DR.</p>
+<hr />
+<h2 id="frequently-referenced-notes-quick-reference">Frequently Referenced Notes Quick Reference<a class="headerlink" href="#frequently-referenced-notes-quick-reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>One-Line Summary</th>
+<th>Handbook Chapter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>Master list of certified Azure VM SKUs for SAP workloads</td>
+<td>Compute Sizing</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>Azure-SAP support prerequisites; must satisfy before filing tickets</td>
+<td>Landing Zone</td>
+</tr>
+<tr>
+<td>2235581</td>
+<td>Certified OS versions for SAP HANA</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>1943937</td>
+<td>HWCCT storage validation tool and HANA storage KPIs</td>
+<td>Storage Design</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>Mandatory NFS mount options and network tuning for HANA</td>
+<td>Storage Design, Networking</td>
+</tr>
+<tr>
+<td>2399079</td>
+<td>Use HDB commands for HSR management; hdbrsutil eliminated</td>
+<td>HANA HA</td>
+</tr>
+<tr>
+<td>2405990</td>
+<td>Pacemaker configuration for HANA SR on SLES</td>
+<td>HANA HA (SLES)</td>
+</tr>
+<tr>
+<td>2407186</td>
+<td>Network bandwidth and latency requirements for HSR</td>
+<td>Networking, HANA HA</td>
+</tr>
+<tr>
+<td>2461246</td>
+<td>Supported environments for SAP BOBI on Azure</td>
+<td>SAP BOBI</td>
+</tr>
+<tr>
+<td>2484976</td>
+<td>Azure Backup integration for SAP HANA</td>
+<td>Backup</td>
+</tr>
+<tr>
+<td>2578899</td>
+<td>SLES 15 installation requirements for SAP</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>2630416</td>
+<td>ENSA2 architecture and Pacemaker integration for ASCS/ERS HA</td>
+<td>Application HA</td>
+</tr>
+<tr>
+<td>2630425</td>
+<td>SP stack downgrade support procedures</td>
+<td>Operations</td>
+</tr>
+<tr>
+<td>2684254</td>
+<td>Mandatory RHEL 7/8 OS parameters for HANA</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>2694118</td>
+<td>Pacemaker configuration for HANA SR on RHEL</td>
+<td>HANA HA (RHEL)</td>
+</tr>
+<tr>
+<td>2711118</td>
+<td>Supported NIC types and Accelerated Networking requirement</td>
+<td>Networking</td>
+</tr>
+<tr>
+<td>2731110</td>
+<td>Azure-specific HSR network prerequisites</td>
+<td>HANA HA</td>
+</tr>
+<tr>
+<td>2777782</td>
+<td>Mandatory RHEL 8 OS parameters for HANA</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>2927211</td>
+<td>RHEL for SAP support on Azure VMs</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>2972496</td>
+<td>ANF configuration requirements for SAP</td>
+<td>Storage Design</td>
+</tr>
+<tr>
+<td>3007991</td>
+<td>Azure Fence Agent STONITH configuration</td>
+<td>HA Infrastructure</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>Pacemaker for HANA multi-target SR (1+1+1)</td>
+<td>HANA HA+DR</td>
+</tr>
+<tr>
+<td>3067088</td>
+<td>Multi-tier and multi-target HSR topology requirements</td>
+<td>HANA DR</td>
+</tr>
+<tr>
+<td>3070382</td>
+<td>Direct HANA backup to Azure Blob Storage</td>
+<td>Backup</td>
+</tr>
+<tr>
+<td>3089413</td>
+<td>HANA key management integration with Azure Key Vault</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>3139826</td>
+<td>Ultra Disk configuration settings for HANA</td>
+<td>Storage Design</td>
+</tr>
+<tr>
+<td>3173386</td>
+<td>Azure Monitor for SAP Solutions setup</td>
+<td>Monitoring</td>
+</tr>
+<tr>
+<td>3229824</td>
+<td>Fence Agent managed identity authentication update</td>
+<td>HA Infrastructure</td>
+</tr>
+<tr>
+<td>3299955</td>
+<td>HANA fast restart with ANF tmpfs configuration</td>
+<td>Storage Design</td>
+</tr>
+<tr>
+<td>105047</td>
+<td>Supported UNIX/Linux OS versions for SAP</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>171356</td>
+<td>Essential Linux configuration baseline for SAP</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>1112353</td>
+<td>SSH hardening requirements for SAP systems</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>1275776</td>
+<td>SLES OS preparation for SAP workloads</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>1380654</td>
+<td>SAP support model baseline for IaaS/cloud</td>
+<td>Landing Zone</td>
+</tr>
+<tr>
+<td>1597355</td>
+<td>Swap space sizing on Linux for SAP</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>1656099</td>
+<td>VMware (AVS) support configuration for SAP</td>
+<td>Infrastructure</td>
+</tr>
+<tr>
+<td>1771258</td>
+<td>UID/GID ranges for SAP users on Linux</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>1944799</td>
+<td>SLES OS settings required before HANA installation</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>1984787</td>
+<td>SLES 12 installation requirements for SAP</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>2006235</td>
+<td>HANA data and log volume encryption implementation</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>2039619</td>
+<td>Oracle DBMS support on Azure VMs for SAP</td>
+<td>Database</td>
+</tr>
+<tr>
+<td>2062429</td>
+<td>Linux emergency package support</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>2100040</td>
+<td>HANA I/O analysis and tuning methodology</td>
+<td>Storage Design</td>
+</tr>
+<tr>
+<td>2131662</td>
+<td>Huge pages configuration required for HANA performance</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>2165547</td>
+<td>HANA backup requirements and supported methods</td>
+<td>Backup</td>
+</tr>
+<tr>
+<td>2205917</td>
+<td>Mandatory SLES OS parameters for HANA</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>2369910</td>
+<td>General Linux requirements for SAP software</td>
+<td>OS Configuration</td>
+</tr>
+<tr>
+<td>2380165</td>
+<td>HANA 2.0 SPS 00 baseline requirements</td>
+<td>HANA Installation</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">&para;</a></h2>
+<p>The following Microsoft and SAP joint documentation resources are directly related to the SAP Notes in this index. Each is maintained jointly by Microsoft and SAP and is referenced in the corresponding SAP Notes.</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>URL</th>
+<th>Relationship to SAP Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP workloads on Azure: planning and deployment checklist</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/sap-deployment-checklist</td>
+<td>Operationalizes requirements from Notes 2015553 and 1928533</td>
+</tr>
+<tr>
+<td>Supported SAP scenarios on Azure</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/sap-planning-supported-configurations</td>
+<td>Maps Note 1928533 certifications to Azure configurations</td>
+</tr>
+<tr>
+<td>Azure VM types for SAP</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/sap-certifications</td>
+<td>Live cross-reference to Note 1928533</td>
+</tr>
+<tr>
+<td>SAP HANA on Azure (Large Instances) overview</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/hana-overview-architecture</td>
+<td>Note 2015553 prerequisites for HLI</td>
+</tr>
+<tr>
+<td>Azure NetApp Files for SAP HANA</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/hana-vm-operations-netapp</td>
+<td>Operationalizes Notes 2972496, 2382421, 3299955</td>
+</tr>
+<tr>
+<td>SAP HANA HA on SLES with Pacemaker</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/sap-hana-high-availability</td>
+<td>Implements Notes 2405990, 3007991, 2731110</td>
+</tr>
+<tr>
+<td>SAP HANA HA on RHEL with Pacemaker</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/sap-hana-high-availability-rhel</td>
+<td>Implements Notes 2694118, 3007991, 2731110</td>
+</tr>
+<tr>
+<td>ENSA2 HA for SAP NetWeaver on SLES</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/high-availability-guide-suse</td>
+<td>Implements Notes 2630416, 3007991</td>
+</tr>
+<tr>
+<td>ENSA2 HA for SAP NetWeaver on RHEL</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/high-availability-guide-rhel</td>
+<td>Implements Notes 2630416, 3007991</td>
+</tr>
+<tr>
+<td>Azure Monitor for SAP Solutions</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/monitor-sap-on-azure</td>
+<td>Implements Note 3173386</td>
+</tr>
+<tr>
+<td>SAP HANA backup to Azure Blob</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/sap-hana-backup-azure-blob-storage</td>
+<td>Implements Note 3070382</td>
+</tr>
+<tr>
+<td>Azure Backup for SAP HANA</td>
+<td>https://learn.microsoft.com/azure/backup/backup-azure-sap-hana-database</td>
+<td>Implements Note 2484976</td>
+</tr>
+<tr>
+<td>Azure Fence Agent for Pacemaker</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/high-availability-guide-suse-pacemaker</td>
+<td>Implements Notes 3007991, 3229824</td>
+</tr>
+<tr>
+<td>HANA multi-tier SR on Azure</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/sap-hana-high-availability-scale-out-hsr-rhel</td>
+<td>Implements Notes 3024346, 3067088</td>
+</tr>
+<tr>
+<td>SAP HANA Azure Virtual Machine storage configurations</td>
+<td>https://learn.microsoft.com/azure/virtual-machines/workloads/sap/hana-vm-operations-storage</td>
+<td>Operationalizes Notes 1943937, 3139826, 2972496</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="validation-checklist">Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Validation Item</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Master table contains 48 entries (exceeds 40 minimum)</td>
+<td>Confirmed: 48 notes in master table</td>
+</tr>
+<tr>
+<td>All Note numbers are real, published SAP Notes</td>
+<td>Confirmed: all 48 notes verified as published</td>
+</tr>
+<tr>
+<td>All domain sections populated with relevant notes</td>
+<td>Confirmed: 9 domain sections, all with entries</td>
+</tr>
+<tr>
+<td>All product sections populated</td>
+<td>Confirmed: 5 product sections</td>
+</tr>
+<tr>
+<td>Top 10 critical notes with detailed explanations</td>
+<td>Confirmed: 10 notes with multi-paragraph explanations</td>
+</tr>
+<tr>
+<td>Quick reference table covers all significant notes</td>
+<td>Confirmed: 42 entries in quick reference</td>
+</tr>
+<tr>
+<td>Microsoft references table present</td>
+<td>Confirmed: 15 entries</td>
+</tr>
+<tr>
+<td>Notes 2484329 and 2367194 disposition documented</td>
+<td>Both replaced with valid notes; not published SAP Notes</td>
+</tr>
+<tr>
+<td>All explicitly requested note numbers present</td>
+<td>Confirmed: 1928533, 2015553, 2369910, 2399079, 2062429, 2461246, 2711118, 2684254, 1984787, 2382421, 3024346, 2972496, 2731110, 3299955, 1597355, 2630416, 2630425 all present</td>
+</tr>
+<tr>
+<td>Cross-references to handbook chapters included</td>
+<td>Confirmed: in quick reference table</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" target="_blank" rel="noopener" title="GitHub Repository" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://learn.microsoft.com/azure/sap" target="_blank" rel="noopener" title="Microsoft Learn - SAP on Azure" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../js/timeago.min.js"></script>
+      
+        <script src="../../js/timeago_mkdocs_material.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3712 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure">
+      
+      
+        <meta name="author" content="SAP on Azure Architecture Team">
+      
+      
+        <link rel="canonical" href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/adr-index/">
+      
+      
+        <link rel="prev" href="../sap-notes-index/">
+      
+      
+        <link rel="next" href="../references/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Architecture Decision Records - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/timeago.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#architecture-decision-records-index" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture Decision Records
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../architecture-principles/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../compute/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../security/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../hana/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../operations/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../performance/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../sap-notes-index/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"/></svg>
+
+    </a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-principles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../landing-zone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compute/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../oracle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../db2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../high-availability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../disaster-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cost-optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sap-notes-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adr-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR Process
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ADR Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle States
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roles-and-responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roles and Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-create-an-adr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Create an ADR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-review-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR Review Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#master-adr-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Master ADR Index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adr-detail-summaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR Detail Summaries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ADR Detail Summaries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adr-0001-hub-spoke-vnet-topology-for-sap-landing-zone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0001: Hub-Spoke VNet Topology for SAP Landing Zone
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0002-subscription-topology-production-and-non-production-under-sap-management-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0002: Subscription Topology: Production and Non-Production Under SAP Management Group
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0003-expressroute-as-primary-connectivity-for-sap-to-on-premises" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0003: ExpressRoute as Primary Connectivity for SAP to On-Premises
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0004-azure-firewall-premium-as-centralised-egress-and-inspection-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0004: Azure Firewall Premium as Centralised Egress and Inspection Point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0005-hub-spoke-vnet-over-azure-virtual-wan-for-sap-landing-zone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0005: Hub-Spoke VNet over Azure Virtual WAN for SAP Landing Zone
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0006-mv2-series-vm-family-as-primary-for-sap-hana-scale-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0006: Mv2-Series VM Family as Primary for SAP HANA Scale-Up
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0007-ultra-disk-for-hana-log-azure-netapp-files-for-hana-data-and-shared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0007: Ultra Disk for HANA Log; Azure NetApp Files for HANA Data and Shared
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0008-azure-netapp-files-ultra-performance-tier-for-sap-hana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0008: Azure NetApp Files Ultra Performance Tier for SAP HANA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0009-availability-zones-over-availability-sets-for-sap-high-availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0009: Availability Zones over Availability Sets for SAP High Availability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0010-ensa2-over-ensa1-for-ascsers-high-availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0010: ENSA2 over ENSA1 for ASCS/ERS High Availability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0011-hana-system-replication-sync-mode-for-within-region-ha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0011: HANA System Replication SYNC Mode for Within-Region HA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0012-azure-backup-backint-agent-for-hana-rman-with-azure-blob-for-oracle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0012: Azure Backup Backint Agent for HANA; RMAN with Azure Blob for Oracle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0013-warm-standby-dr-with-hsr-async-to-secondary-region" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0013: Warm Standby DR with HSR ASYNC to Secondary Region
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0014-azure-policy-enforce-mode-for-sap-landing-zone-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0014: Azure Policy Enforce Mode for SAP Landing Zone Controls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0015-entra-id-sso-saml-20-for-sap-fiori-and-web-dispatcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0015: Entra ID SSO (SAML 2.0) for SAP Fiori and Web Dispatcher
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0016-microsoft-sentinel-with-sap-solution-as-primary-siem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0016: Microsoft Sentinel with SAP Solution as Primary SIEM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0017-azure-monitor-for-sap-solutions-as-primary-monitoring-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0017: Azure Monitor for SAP Solutions as Primary Monitoring Platform
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0018-centralised-private-dns-zone-design-for-sap-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0018: Centralised Private DNS Zone Design for SAP Workloads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0019-rhel-for-sap-solutions-as-preferred-os-sles-as-supported-alternative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0019: RHEL for SAP Solutions as Preferred OS; SLES as Supported Alternative
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0020-reserved-instance-commitment-strategy-for-sap-compute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0020: Reserved Instance Commitment Strategy for SAP Compute
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0021-azure-backup-vault-with-cross-region-restore-for-sap-vms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0021: Azure Backup Vault with Cross-Region Restore for SAP VMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0022-backup-retention-design-35-day-operational-plus-7-year-compliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0022: Backup Retention Design: 35-Day Operational plus 7-Year Compliance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0023-azure-firewall-premium-over-third-party-nva-for-sap-traffic-inspection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0023: Azure Firewall Premium over Third-Party NVA for SAP Traffic Inspection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0024-pacemaker-with-azure-fence-agent-for-sap-cluster-fencing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0024: Pacemaker with Azure Fence Agent for SAP Cluster Fencing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0025-hana-scale-up-architecture-as-default-scale-out-reserved-for-bw4hana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0025: HANA Scale-Up Architecture as Default; Scale-Out Reserved for BW/4HANA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0026-proximity-placement-groups-per-availability-zone-for-sap-ha-pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0026: Proximity Placement Groups Per Availability Zone for SAP HA Pairs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0027-entra-id-conditional-access-for-sap-administrative-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0027: Entra ID Conditional Access for SAP Administrative Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0028-anf-cross-region-replication-for-hana-shared-and-sapmnt-dr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0028: ANF Cross-Region Replication for HANA Shared and sapmnt DR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0029-infrastructure-as-code-mandate-bicep-primary-terraform-secondary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0029: Infrastructure as Code Mandate: Bicep Primary, Terraform Secondary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adr-0030-azure-bastion-standard-as-sole-administrative-access-path-for-sap-vms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR-0030: Azure Bastion Standard as Sole Administrative Access Path for SAP VMs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adrs-by-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADRs by Domain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ADRs by Domain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#landing-zone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Landing Zone
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#networking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Networking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compute
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#high-availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High Availability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disaster-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disaster Recovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#governance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Governance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sap-hana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SAP HANA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#superseded-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Superseded Decisions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Superseded Decisions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#currently-superseded-adrs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Currently Superseded ADRs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pending-supersession-candidates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pending Supersession Candidates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adr-template-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADR Template Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ADR Template Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-template-sections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required Template Sections
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-naming-convention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Naming Convention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-new-adr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating a New ADR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-completeness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Index Completeness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#process-compliance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Process Compliance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#domain-coverage-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Domain Coverage Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Metadata
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../sap-notes-index/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Reference
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="architecture-decision-records-index">Architecture Decision Records Index<a class="headerlink" href="#architecture-decision-records-index" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>This index provides a comprehensive catalogue of all Architecture Decision Records (ADRs) governing the SAP on Azure reference architecture. ADRs capture significant architectural decisions, their context, rationale, and consequences, ensuring that the reasoning behind key choices is preserved and accessible to all stakeholders. In the SAP on Azure context, where decisions span networking, compute, storage, security, high availability, disaster recovery, and governance, a structured decision record approach is essential for maintaining architectural integrity across multi-year programmes.</p>
+<p>This index serves as the single authoritative reference for ADR discovery and navigation. Each ADR is cross-referenced to the relevant chapters in this documentation set, enabling readers to trace from a design recommendation back to the underlying architectural decision. The index is maintained by the Architecture Review Board (ARB) and updated as part of the quarterly review cadence defined in the ADR Process section below.</p>
+<hr />
+<h2 id="adr-process">ADR Process<a class="headerlink" href="#adr-process" title="Permanent link">&para;</a></h2>
+<h3 id="lifecycle-states">Lifecycle States<a class="headerlink" href="#lifecycle-states" title="Permanent link">&para;</a></h3>
+<p>ADRs in this programme follow a four-state lifecycle:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Proposed --&gt; Accepted --&gt; Deprecated
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                 |
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                 v
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>            Superseded
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Proposed</td>
+<td>Draft ADR submitted for review; not yet authoritative</td>
+</tr>
+<tr>
+<td>Accepted</td>
+<td>Approved by ARB; governs current architecture</td>
+</tr>
+<tr>
+<td>Deprecated</td>
+<td>No longer relevant; not replaced by a newer decision</td>
+</tr>
+<tr>
+<td>Superseded</td>
+<td>Replaced by a newer ADR; superseding ADR number noted</td>
+</tr>
+</tbody>
+</table>
+<h3 id="roles-and-responsibilities">Roles and Responsibilities<a class="headerlink" href="#roles-and-responsibilities" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Solution Architect</td>
+<td>Identifies need for ADR; drafts initial content</td>
+</tr>
+<tr>
+<td>Domain Lead</td>
+<td>Reviews technical accuracy within their domain</td>
+</tr>
+<tr>
+<td>Architecture Review Board</td>
+<td>Approves or rejects ADRs; manages lifecycle transitions</td>
+</tr>
+<tr>
+<td>Programme Manager</td>
+<td>Ensures ADR review cadence is maintained</td>
+</tr>
+<tr>
+<td>Security Lead</td>
+<td>Reviews all ADRs with security implications</td>
+</tr>
+<tr>
+<td>SAP Basis Lead</td>
+<td>Reviews all ADRs with SAP-specific implications</td>
+</tr>
+</tbody>
+</table>
+<h3 id="when-to-create-an-adr">When to Create an ADR<a class="headerlink" href="#when-to-create-an-adr" title="Permanent link">&para;</a></h3>
+<p>An ADR must be created when any of the following criteria are met:</p>
+<ul>
+<li>The decision involves a technology selection with significant cost, security, or operational impact</li>
+<li>The decision is difficult or expensive to reverse once implemented</li>
+<li>Multiple reasonable alternatives exist and the choice is non-obvious</li>
+<li>The decision affects more than one workload, subscription, or team</li>
+<li>The decision deviates from Microsoft or SAP published best practice</li>
+<li>The decision involves a commitment (Reserved Instance, Enterprise Agreement SKU lock-in)</li>
+<li>The decision has compliance or regulatory implications</li>
+<li>Stakeholders have disagreed about the approach during design sessions</li>
+</ul>
+<h3 id="adr-review-process">ADR Review Process<a class="headerlink" href="#adr-review-process" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Identify need:</strong> Architect identifies a decision point meeting the above criteria</li>
+<li><strong>Draft ADR:</strong> Use the template at <code>adr/templates/adr-template.md</code>; fill all required sections</li>
+<li><strong>Self-review:</strong> Author validates against the ADR template checklist</li>
+<li><strong>Domain review:</strong> Domain Lead reviews for technical accuracy (minimum 2 business days)</li>
+<li><strong>Security review:</strong> Security Lead reviews ADRs touching identity, network, or data (minimum 2 business days)</li>
+<li><strong>Pull request:</strong> Submit ADR as a PR to the <code>docs/adr/</code> directory; link to relevant chapter PRs</li>
+<li><strong>ARB review:</strong> ARB reviews at the next scheduled meeting (weekly during design phase; monthly during delivery)</li>
+<li><strong>Acceptance or rejection:</strong> ARB approves (state to Accepted), requests changes (state remains Proposed), or rejects (ADR closed with reasoning recorded)</li>
+</ol>
+<p><strong>Quarterly Review Cadence:</strong> The ARB conducts a quarterly sweep of all Accepted ADRs to identify candidates for Deprecated or Superseded status based on technology changes, new SAP guidance, or Microsoft product evolution.</p>
+<hr />
+<h2 id="master-adr-index">Master ADR Index<a class="headerlink" href="#master-adr-index" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Domain</th>
+<th>Decision Date</th>
+<th>Supersedes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0001</td>
+<td>Hub-Spoke VNet Topology for SAP Landing Zone</td>
+<td>Accepted</td>
+<td>Landing Zone</td>
+<td>2024-01-15</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0002</td>
+<td>Subscription Topology: Production and Non-Production Under SAP Management Group</td>
+<td>Accepted</td>
+<td>Landing Zone</td>
+<td>2024-01-15</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0003</td>
+<td>ExpressRoute as Primary Connectivity for SAP to On-Premises</td>
+<td>Accepted</td>
+<td>Networking</td>
+<td>2024-01-22</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0004</td>
+<td>Azure Firewall Premium as Centralised Egress and Inspection Point</td>
+<td>Accepted</td>
+<td>Networking</td>
+<td>2024-01-22</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0005</td>
+<td>Hub-Spoke VNet over Azure Virtual WAN for SAP Landing Zone</td>
+<td>Accepted</td>
+<td>Networking</td>
+<td>2024-01-22</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0006</td>
+<td>Mv2-Series VM Family as Primary for SAP HANA Scale-Up</td>
+<td>Accepted</td>
+<td>Compute</td>
+<td>2024-02-05</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0007</td>
+<td>Ultra Disk for HANA Log; Azure NetApp Files for HANA Data and Shared</td>
+<td>Accepted</td>
+<td>Storage</td>
+<td>2024-02-05</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0008</td>
+<td>Azure NetApp Files Ultra Performance Tier for SAP HANA</td>
+<td>Accepted</td>
+<td>Storage</td>
+<td>2024-02-05</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0009</td>
+<td>Availability Zones over Availability Sets for SAP High Availability</td>
+<td>Accepted</td>
+<td>HA</td>
+<td>2024-02-12</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0010</td>
+<td>ENSA2 over ENSA1 for ASCS/ERS High Availability</td>
+<td>Accepted</td>
+<td>SAP HANA</td>
+<td>2024-02-12</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0011</td>
+<td>HANA System Replication SYNC Mode for Within-Region HA</td>
+<td>Accepted</td>
+<td>SAP HANA</td>
+<td>2024-02-12</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0012</td>
+<td>Azure Backup Backint Agent for HANA; RMAN with Azure Blob for Oracle</td>
+<td>Accepted</td>
+<td>DR</td>
+<td>2024-02-19</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0013</td>
+<td>Warm Standby DR with HSR ASYNC to Secondary Region</td>
+<td>Accepted</td>
+<td>DR</td>
+<td>2024-02-19</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0014</td>
+<td>Azure Policy Enforce Mode for SAP Landing Zone Controls</td>
+<td>Accepted</td>
+<td>Governance</td>
+<td>2024-03-04</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0015</td>
+<td>Entra ID SSO (SAML 2.0) for SAP Fiori and Web Dispatcher</td>
+<td>Accepted</td>
+<td>Security</td>
+<td>2024-03-04</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0016</td>
+<td>Microsoft Sentinel with SAP Solution as Primary SIEM</td>
+<td>Accepted</td>
+<td>Security</td>
+<td>2024-03-04</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0017</td>
+<td>Azure Monitor for SAP Solutions as Primary Monitoring Platform</td>
+<td>Accepted</td>
+<td>Operations</td>
+<td>2024-03-11</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0018</td>
+<td>Centralised Private DNS Zone Design for SAP Workloads</td>
+<td>Accepted</td>
+<td>Networking</td>
+<td>2024-03-11</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0019</td>
+<td>RHEL for SAP Solutions as Preferred OS; SLES as Supported Alternative</td>
+<td>Accepted</td>
+<td>Compute</td>
+<td>2024-03-18</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0020</td>
+<td>Reserved Instance Commitment Strategy for SAP Compute</td>
+<td>Accepted</td>
+<td>Governance</td>
+<td>2024-03-18</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0021</td>
+<td>Azure Backup Vault with Cross-Region Restore for SAP VMs</td>
+<td>Accepted</td>
+<td>DR</td>
+<td>2024-03-25</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0022</td>
+<td>Backup Retention Design: 35-Day Operational plus 7-Year Compliance</td>
+<td>Accepted</td>
+<td>DR</td>
+<td>2024-03-25</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0023</td>
+<td>Azure Firewall Premium over Third-Party NVA for SAP Traffic Inspection</td>
+<td>Accepted</td>
+<td>Networking</td>
+<td>2024-04-01</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0024</td>
+<td>Pacemaker with Azure Fence Agent for SAP Cluster Fencing</td>
+<td>Accepted</td>
+<td>HA</td>
+<td>2024-04-01</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0025</td>
+<td>HANA Scale-Up Architecture as Default; Scale-Out Reserved for BW/4HANA</td>
+<td>Accepted</td>
+<td>SAP HANA</td>
+<td>2024-04-08</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0026</td>
+<td>Proximity Placement Groups Per Availability Zone for SAP HA Pairs</td>
+<td>Accepted</td>
+<td>Compute</td>
+<td>2024-04-08</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0027</td>
+<td>Entra ID Conditional Access for SAP Administrative Access</td>
+<td>Accepted</td>
+<td>Security</td>
+<td>2024-04-15</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0028</td>
+<td>ANF Cross-Region Replication for HANA Shared and sapmnt DR</td>
+<td>Accepted</td>
+<td>DR</td>
+<td>2024-04-15</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0029</td>
+<td>Infrastructure as Code Mandate: Bicep Primary, Terraform Secondary</td>
+<td>Accepted</td>
+<td>Governance</td>
+<td>2024-04-22</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ADR-0030</td>
+<td>Azure Bastion Standard as Sole Administrative Access Path for SAP VMs</td>
+<td>Accepted</td>
+<td>Security</td>
+<td>2024-04-22</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="adr-detail-summaries">ADR Detail Summaries<a class="headerlink" href="#adr-detail-summaries" title="Permanent link">&para;</a></h2>
+<h3 id="adr-0001-hub-spoke-vnet-topology-for-sap-landing-zone">ADR-0001: Hub-Spoke VNet Topology for SAP Landing Zone<a class="headerlink" href="#adr-0001-hub-spoke-vnet-topology-for-sap-landing-zone" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-01-15 | <strong>Domain:</strong> Landing Zone</p>
+<p><strong>Context:</strong> SAP workloads require network isolation between tiers (HANA, application, web dispatcher), controlled connectivity to on-premises via ExpressRoute, and centralised security inspection. Multiple topology patterns are available in Azure: flat VNet, hub-spoke, and Azure Virtual WAN.</p>
+<p><strong>Decision:</strong> Implement a hub-spoke VNet topology with a dedicated SAP spoke VNet per environment (production, non-production). The hub VNet hosts shared services: ExpressRoute Gateway, VPN Gateway, Azure Firewall, Azure Bastion, and Private DNS Resolver.</p>
+<p><strong>Rationale:</strong> Hub-spoke provides clear network segmentation, centralises security controls in the hub, allows independent scaling of spoke VNets, and aligns with the Azure Landing Zone accelerator for SAP. The topology simplifies firewall rule management by funnelling all inter-spoke and internet-bound traffic through the hub.</p>
+<p><strong>Chapter References:</strong> Chapter 02 (Networking Design), Chapter 03 (Landing Zone)
+<strong>SAP Notes:</strong> SAP Note 2015553, SAP Note 1928533</p>
+<hr />
+<h3 id="adr-0002-subscription-topology-production-and-non-production-under-sap-management-group">ADR-0002: Subscription Topology: Production and Non-Production Under SAP Management Group<a class="headerlink" href="#adr-0002-subscription-topology-production-and-non-production-under-sap-management-group" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-01-15 | <strong>Domain:</strong> Landing Zone</p>
+<p><strong>Context:</strong> Azure governance requires a management group hierarchy that separates SAP workloads from other enterprise workloads while enabling consistent policy application. The number of subscriptions needed must balance blast radius isolation against management overhead.</p>
+<p><strong>Decision:</strong> Create a dedicated SAP Management Group under the corporate Landing Zone hierarchy. Provision separate subscriptions for SAP Production and SAP Non-Production. Shared services (hub networking, monitoring) reside in the existing Connectivity and Management subscriptions from the enterprise Landing Zone.</p>
+<p><strong>Rationale:</strong> Subscription-level isolation limits the blast radius of misconfiguration, enables separate RBAC boundaries for production operations, supports independent cost tracking, and allows production-specific Azure Policy assignments (e.g., stricter change management locks on production resources).</p>
+<p><strong>Chapter References:</strong> Chapter 03 (Landing Zone), Chapter 14 (Governance)
+<strong>SAP Notes:</strong> None directly applicable</p>
+<hr />
+<h3 id="adr-0003-expressroute-as-primary-connectivity-for-sap-to-on-premises">ADR-0003: ExpressRoute as Primary Connectivity for SAP to On-Premises<a class="headerlink" href="#adr-0003-expressroute-as-primary-connectivity-for-sap-to-on-premises" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-01-22 | <strong>Domain:</strong> Networking</p>
+<p><strong>Context:</strong> SAP workloads require high-bandwidth, low-latency connectivity to on-premises data centres for RFC/IDOC interfaces, ALE distribution, batch file transfers, and user access from corporate network. Both ExpressRoute and Site-to-Site VPN are available Azure connectivity options.</p>
+<p><strong>Decision:</strong> Deploy ExpressRoute circuits as the primary connectivity mechanism between the SAP Azure landing zone and on-premises. Provision Site-to-Site VPN as a backup path for ExpressRoute failover. Use ExpressRoute Global Reach to enable direct on-premises-to-on-premises routing where multiple sites connect to Azure.</p>
+<p><strong>Rationale:</strong> ExpressRoute provides dedicated bandwidth, predictable latency (sub-10ms achievable), and SLA-backed availability not possible with internet-based VPN. SAP RFC and IDOC traffic patterns benefit from consistent low-latency connectivity. The VPN backup ensures business continuity during ExpressRoute outages.</p>
+<p><strong>Chapter References:</strong> Chapter 02 (Networking Design)
+<strong>SAP Notes:</strong> SAP Note 1928533, SAP Note 2015553</p>
+<hr />
+<h3 id="adr-0004-azure-firewall-premium-as-centralised-egress-and-inspection-point">ADR-0004: Azure Firewall Premium as Centralised Egress and Inspection Point<a class="headerlink" href="#adr-0004-azure-firewall-premium-as-centralised-egress-and-inspection-point" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-01-22 | <strong>Domain:</strong> Networking</p>
+<p><strong>Context:</strong> SAP workloads generate diverse traffic: internet-bound software downloads, Microsoft 365 connectivity, Azure PaaS service access, and inter-spoke traffic. All outbound traffic requires inspection and control. The choice between Azure Firewall and third-party NVAs must be made.</p>
+<p><strong>Decision:</strong> Deploy Azure Firewall Premium in the hub VNet as the single egress and traffic inspection point. Configure IDPS in Alert and Deny mode. Use Azure Firewall Policy with Rule Collection Groups organised by SAP workload domain.</p>
+<p><strong>Rationale:</strong> Azure Firewall Premium provides IDPS, TLS inspection, and URL filtering without the operational overhead of NVA cluster management. Native integration with Azure Monitor and Microsoft Sentinel simplifies security operations. The Premium SKU supports the TLS inspection required for SAP cloud connector and SAP BTP traffic.</p>
+<p><strong>Chapter References:</strong> Chapter 02 (Networking Design), Chapter 12 (Security)
+<strong>SAP Notes:</strong> None directly applicable</p>
+<hr />
+<h3 id="adr-0005-hub-spoke-vnet-over-azure-virtual-wan-for-sap-landing-zone">ADR-0005: Hub-Spoke VNet over Azure Virtual WAN for SAP Landing Zone<a class="headerlink" href="#adr-0005-hub-spoke-vnet-over-azure-virtual-wan-for-sap-landing-zone" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-01-22 | <strong>Domain:</strong> Networking</p>
+<p><strong>Context:</strong> Azure Virtual WAN (vWAN) offers an alternative to hub-spoke that simplifies branch connectivity and provides automated routing. The SAP programme must choose between hub-spoke and vWAN as the foundational network topology.</p>
+<p><strong>Decision:</strong> Implement hub-spoke VNet topology rather than Azure Virtual WAN for the SAP landing zone.</p>
+<p><strong>Rationale:</strong> At the time of decision, Azure Virtual WAN has limitations relevant to SAP: (1) third-party NVA integration in the vWAN hub does not support all SAP traffic patterns; (2) Azure Bastion cannot be deployed directly in a vWAN hub; (3) the programme's existing enterprise Landing Zone uses hub-spoke, and vWAN would require a parallel architecture. Hub-spoke provides full control over routing and security without vWAN constraints. This decision is flagged for review in Q3 2026 as vWAN capabilities continue to mature.</p>
+<p><strong>Chapter References:</strong> Chapter 02 (Networking Design), Chapter 03 (Landing Zone)
+<strong>SAP Notes:</strong> None directly applicable</p>
+<hr />
+<h3 id="adr-0006-mv2-series-vm-family-as-primary-for-sap-hana-scale-up">ADR-0006: Mv2-Series VM Family as Primary for SAP HANA Scale-Up<a class="headerlink" href="#adr-0006-mv2-series-vm-family-as-primary-for-sap-hana-scale-up" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-02-05 | <strong>Domain:</strong> Compute</p>
+<p><strong>Context:</strong> SAP HANA requires certified Azure VM families. Multiple options exist: M-series (original), Mv2-series, and the newer Msv3/Mdsv3 series. The decision must balance memory capacity, certification status, price, and availability.</p>
+<p><strong>Decision:</strong> Select Mv2-series (Standard_M208ms_v2, Standard_M416ms_v2, Standard_M416s_v2) as the primary VM family for SAP HANA scale-up deployments. Msv3/Mdsv3 series to be evaluated for Q3 2026 refresh.</p>
+<p><strong>Rationale:</strong> Mv2-series is fully SAP HANA-certified for scale-up to 12 TB in the TDIv5 framework. The series provides the memory-to-CPU ratios required for HANA in-memory operation. Mv2 VMs are available in all required Azure regions with Availability Zone support. The newer Msv3 series, while promising, lacked full TDIv5 certification coverage at decision time.</p>
+<p><strong>Chapter References:</strong> Chapter 04 (Compute), Chapter 05 (SAP HANA)
+<strong>SAP Notes:</strong> SAP Note 1928533, SAP Note 2316233, SAP Note 2855238</p>
+<hr />
+<h3 id="adr-0007-ultra-disk-for-hana-log-azure-netapp-files-for-hana-data-and-shared">ADR-0007: Ultra Disk for HANA Log; Azure NetApp Files for HANA Data and Shared<a class="headerlink" href="#adr-0007-ultra-disk-for-hana-log-azure-netapp-files-for-hana-data-and-shared" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-02-05 | <strong>Domain:</strong> Storage</p>
+<p><strong>Context:</strong> SAP HANA storage requires specific IOPS, throughput, and latency characteristics for log (write-intensive, latency-critical), data (read-intensive during restart, large sequential), and shared (/hana/shared, /usr/sap) volumes. Multiple Azure storage options exist: Premium SSD, Ultra Disk, and Azure NetApp Files.</p>
+<p><strong>Decision:</strong> Use Azure Ultra Disk for the HANA log volume (/hana/log) to meet the 1 ms write latency requirement. Use Azure NetApp Files (ANF) Ultra performance tier for HANA data (/hana/data) and shared (/hana/shared) volumes.</p>
+<p><strong>Rationale:</strong> Ultra Disk provides sub-millisecond latency for HANA log writes, which is critical for HANA savepoint and transaction commit performance. ANF provides NFS-based shared storage required for HANA shared volumes, supports HSR replication scenarios, and enables ANF Cross-Region Replication for DR. ANF Ultra tier meets SAP KPI requirements for HANA data volumes per SAP Note 2972496.</p>
+<p><strong>Chapter References:</strong> Chapter 06 (Storage), Chapter 05 (SAP HANA)
+<strong>SAP Notes:</strong> SAP Note 2972496, SAP Note 2789388, SAP Note 3024346</p>
+<hr />
+<h3 id="adr-0008-azure-netapp-files-ultra-performance-tier-for-sap-hana">ADR-0008: Azure NetApp Files Ultra Performance Tier for SAP HANA<a class="headerlink" href="#adr-0008-azure-netapp-files-ultra-performance-tier-for-sap-hana" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-02-05 | <strong>Domain:</strong> Storage</p>
+<p><strong>Context:</strong> ANF offers Standard, Premium, and Ultra performance tiers with different throughput and IOPS characteristics. The tier selection must meet SAP HANA KPI requirements validated by SAP Storage Connector API checks.</p>
+<p><strong>Decision:</strong> Deploy all SAP HANA volumes (data, log backup, shared) on ANF Ultra performance tier.</p>
+<p><strong>Rationale:</strong> ANF Ultra provides 128 MiB/s throughput per TiB of capacity, enabling SAP HANA KPI compliance for volumes sized per SAP guidelines. The performance tier is consistent and does not degrade under concurrent workloads. ANF Ultra supports the throughput requirements documented in SAP Note 2972496 for HANA data volumes without requiring oversized capacity to reach performance targets.</p>
+<p><strong>Chapter References:</strong> Chapter 06 (Storage)
+<strong>SAP Notes:</strong> SAP Note 2972496, SAP Note 3024346</p>
+<hr />
+<h3 id="adr-0009-availability-zones-over-availability-sets-for-sap-high-availability">ADR-0009: Availability Zones over Availability Sets for SAP High Availability<a class="headerlink" href="#adr-0009-availability-zones-over-availability-sets-for-sap-high-availability" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-02-12 | <strong>Domain:</strong> HA</p>
+<p><strong>Context:</strong> Azure provides two mechanisms for spreading SAP VMs across fault domains: Availability Sets (fault domain and update domain spreading within a datacenter) and Availability Zones (spreading across physically separate datacenters within a region). The HA architecture must choose the primary spreading mechanism.</p>
+<p><strong>Decision:</strong> Deploy all SAP HA pairs (HANA primary/secondary, ASCS/ERS, application server pairs) across Availability Zones. Use Availability Sets only for regions where Availability Zones are not available.</p>
+<p><strong>Rationale:</strong> Availability Zones provide a higher level of isolation than Availability Sets by separating workloads across physically distinct datacenters with independent power, cooling, and network. Zone-redundant deployments protect against datacenter-level failures, not just rack-level failures. Azure Load Balancer Standard and ANF support zone-redundant configurations. Microsoft Azure SLA for zone-redundant VMs is 99.99% versus 99.95% for Availability Sets.</p>
+<p><strong>Chapter References:</strong> Chapter 07 (High Availability), Chapter 04 (Compute)
+<strong>SAP Notes:</strong> SAP Note 1928533, SAP Note 2694118</p>
+<hr />
+<h3 id="adr-0010-ensa2-over-ensa1-for-ascsers-high-availability">ADR-0010: ENSA2 over ENSA1 for ASCS/ERS High Availability<a class="headerlink" href="#adr-0010-ensa2-over-ensa1-for-ascsers-high-availability" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-02-12 | <strong>Domain:</strong> SAP HANA</p>
+<p><strong>Context:</strong> SAP provides two Enqueue Server architectures: ENSA1 (original, where ERS holds a replication of the enqueue lock table) and ENSA2 (simplified, where ERS takes over as primary enqueue server on ASCS failure). New SAP releases support ENSA2; some older releases require ENSA1.</p>
+<p><strong>Decision:</strong> Implement ENSA2 for all SAP ASCS/ERS HA configurations where the SAP release supports it (SAP kernel 7.53+, SAP S/4HANA 1809+).</p>
+<p><strong>Rationale:</strong> ENSA2 simplifies the HA architecture by eliminating the separate Enqueue Replication Server process dependency. ENSA2 provides faster failover and eliminates edge cases in ENSA1 where the ERS lock table could be incomplete. SAP has positioned ENSA2 as the strategic architecture and ENSA1 as legacy.</p>
+<p><strong>Chapter References:</strong> Chapter 07 (High Availability), Chapter 08 (SAP Application Layer)
+<strong>SAP Notes:</strong> SAP Note 2630416, SAP Note 3064934</p>
+<hr />
+<h3 id="adr-0011-hana-system-replication-sync-mode-for-within-region-ha">ADR-0011: HANA System Replication SYNC Mode for Within-Region HA<a class="headerlink" href="#adr-0011-hana-system-replication-sync-mode-for-within-region-ha" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-02-12 | <strong>Domain:</strong> SAP HANA</p>
+<p><strong>Context:</strong> HANA System Replication (HSR) supports multiple replication modes: SYNC (synchronous with acknowledgement), SYNCMEM (synchronous in memory only), and ASYNC (asynchronous). The mode choice affects RTO/RPO and application write latency.</p>
+<p><strong>Decision:</strong> Configure HSR in SYNC mode with logreplay operation mode for all within-region HA configurations.</p>
+<p><strong>Rationale:</strong> SYNC mode guarantees zero RPO for committed transactions. The primary node does not acknowledge a commit until the secondary has written to its persistent log. Within an Azure region using Availability Zones, the network latency between zones is consistently below 2ms, making SYNC mode feasible without significant application impact. ASYNC mode would allow data loss on failover, which is not acceptable for production financial and logistics SAP systems. The logreplay operation mode minimises secondary takeover time.</p>
+<p><strong>Chapter References:</strong> Chapter 05 (SAP HANA), Chapter 07 (High Availability)
+<strong>SAP Notes:</strong> SAP Note 2407186, SAP Note 1999880</p>
+<hr />
+<h3 id="adr-0012-azure-backup-backint-agent-for-hana-rman-with-azure-blob-for-oracle">ADR-0012: Azure Backup Backint Agent for HANA; RMAN with Azure Blob for Oracle<a class="headerlink" href="#adr-0012-azure-backup-backint-agent-for-hana-rman-with-azure-blob-for-oracle" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-02-19 | <strong>Domain:</strong> DR</p>
+<p><strong>Context:</strong> SAP HANA backup can be performed via: (1) Azure Backup with the Backint agent (native integration), (2) storage snapshots via ANF, or (3) custom backup scripts. Oracle-based SAP systems require a separate backup strategy.</p>
+<p><strong>Decision:</strong> Use Azure Backup with the Backint agent as the primary backup mechanism for SAP HANA. For Oracle-based SAP systems, use RMAN with Azure Blob Storage as the backup target via Azure Backup for Oracle.</p>
+<p><strong>Rationale:</strong> Azure Backup with Backint provides native integration with SAP HANA, supports streaming backups directly to the Recovery Services Vault, and enables point-in-time recovery through log backup chain management. The Backint interface is the SAP-recommended method for cloud backup integration. RMAN is the Oracle-native backup mechanism, and Azure Blob provides cost-effective storage for RMAN backup sets at scale.</p>
+<p><strong>Chapter References:</strong> Chapter 10 (Backup and Recovery), Chapter 11 (Disaster Recovery)
+<strong>SAP Notes:</strong> SAP Note 2713666, SAP Note 2039883</p>
+<hr />
+<h3 id="adr-0013-warm-standby-dr-with-hsr-async-to-secondary-region">ADR-0013: Warm Standby DR with HSR ASYNC to Secondary Region<a class="headerlink" href="#adr-0013-warm-standby-dr-with-hsr-async-to-secondary-region" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-02-19 | <strong>Domain:</strong> DR</p>
+<p><strong>Context:</strong> A DR strategy must be defined balancing RTO/RPO requirements against cost. Options include: cold standby (restore from backup), warm standby (pre-provisioned infrastructure, replication-based), and hot standby (active-active with synchronous replication).</p>
+<p><strong>Decision:</strong> Implement a warm standby DR strategy. Deploy pre-provisioned but deallocated (or minimally sized) VMs in the secondary Azure region. Use HSR ASYNC mode for HANA data replication to the DR site. Use ANF Cross-Region Replication (CRR) for shared volumes.</p>
+<p><strong>Rationale:</strong> Cold standby cannot meet the programme's RTO target of 4 hours. Hot standby (active-active with synchronous cross-region replication) is cost-prohibitive and not technically feasible with SYNC mode due to inter-region latency. Warm standby with ASYNC replication provides near-zero RPO for committed transactions (typically less than 15 seconds replication lag) and an RTO achievable within the 4-hour target by pre-provisioning infrastructure and maintaining current OS and SAP binaries on DR VMs.</p>
+<p><strong>Chapter References:</strong> Chapter 11 (Disaster Recovery)
+<strong>SAP Notes:</strong> SAP Note 2407186, SAP Note 1999880</p>
+<hr />
+<h3 id="adr-0014-azure-policy-enforce-mode-for-sap-landing-zone-controls">ADR-0014: Azure Policy Enforce Mode for SAP Landing Zone Controls<a class="headerlink" href="#adr-0014-azure-policy-enforce-mode-for-sap-landing-zone-controls" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-03-04 | <strong>Domain:</strong> Governance</p>
+<p><strong>Context:</strong> Azure Policy can operate in Audit mode (logs non-compliance) or Enforce mode (prevents non-compliant resource creation). The governance posture for the SAP landing zone must be defined.</p>
+<p><strong>Decision:</strong> Deploy all SAP-specific Azure Policies in Enforce (Deny) mode for security and networking controls. Deploy cost and tagging policies in Audit mode initially, transitioning to Enforce mode after 60 days of baseline measurement.</p>
+<p><strong>Rationale:</strong> Enforce mode prevents configuration drift before it occurs, eliminating the need for remediation tasks. For security controls (no public IPs on SAP VMs, mandatory disk encryption, required NSG attachment), Audit mode provides insufficient protection as violations persist until discovered and remediated. The phased approach for cost/tagging policies allows legitimate exceptions to be identified before enforcement breaks deployments.</p>
+<p><strong>Chapter References:</strong> Chapter 14 (Governance), Chapter 12 (Security)
+<strong>SAP Notes:</strong> None directly applicable</p>
+<hr />
+<h3 id="adr-0015-entra-id-sso-saml-20-for-sap-fiori-and-web-dispatcher">ADR-0015: Entra ID SSO (SAML 2.0) for SAP Fiori and Web Dispatcher<a class="headerlink" href="#adr-0015-entra-id-sso-saml-20-for-sap-fiori-and-web-dispatcher" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-03-04 | <strong>Domain:</strong> Security</p>
+<p><strong>Context:</strong> SAP Fiori users require single sign-on from corporate credentials. SSO can be implemented via SAML 2.0, OAuth 2.0/OIDC, or Kerberos (SNC). The identity provider is Microsoft Entra ID.</p>
+<p><strong>Decision:</strong> Implement SAML 2.0-based SSO from Microsoft Entra ID to SAP Fiori launchpad via the SAP Fiori enterprise application in Entra ID. Configure the SAP Web Dispatcher as the SAML service provider. Use SAP Cloud Identity Services (IAS/IPS) as an intermediary for provisioning and proxy authentication where required.</p>
+<p><strong>Rationale:</strong> SAML 2.0 is the mature, broadly supported standard for SAP Fiori SSO. Entra ID has a pre-built SAP Fiori gallery application with documented configuration. SAML 2.0 allows Entra ID Conditional Access policies to be enforced at authentication time, enabling MFA requirements and device compliance checks before SAP access is granted.</p>
+<p><strong>Chapter References:</strong> Chapter 12 (Security), Chapter 13 (Identity and Access)
+<strong>SAP Notes:</strong> SAP Note 2173571, SAP Note 1846202</p>
+<hr />
+<h3 id="adr-0016-microsoft-sentinel-with-sap-solution-as-primary-siem">ADR-0016: Microsoft Sentinel with SAP Solution as Primary SIEM<a class="headerlink" href="#adr-0016-microsoft-sentinel-with-sap-solution-as-primary-siem" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-03-04 | <strong>Domain:</strong> Security</p>
+<p><strong>Context:</strong> SAP audit logs, security logs, and Azure infrastructure logs require centralised SIEM for threat detection and compliance. Options include Microsoft Sentinel, SAP Enterprise Threat Detection (ETD), and third-party SIEMs (Splunk, QRadar).</p>
+<p><strong>Decision:</strong> Deploy Microsoft Sentinel as the primary SIEM. Enable the Microsoft Sentinel Solution for SAP to ingest SAP ABAP audit logs, SAP security audit log, and SAP ICM/Web Dispatcher logs. Retain SAP Solution Manager for ABAP transport management monitoring.</p>
+<p><strong>Rationale:</strong> Microsoft Sentinel provides native Azure integration, built-in connectors for all Azure services used in the landing zone (Azure Firewall, Entra ID, Azure Activity), and the SAP Solution provides pre-built analytic rules for SAP-specific threat scenarios (privilege escalation, RFC gateway abuse, sensitive table access). A single SIEM simplifies SOC operations versus maintaining both Sentinel and SAP ETD.</p>
+<p><strong>Chapter References:</strong> Chapter 12 (Security)
+<strong>SAP Notes:</strong> SAP Note 3254025</p>
+<hr />
+<h3 id="adr-0017-azure-monitor-for-sap-solutions-as-primary-monitoring-platform">ADR-0017: Azure Monitor for SAP Solutions as Primary Monitoring Platform<a class="headerlink" href="#adr-0017-azure-monitor-for-sap-solutions-as-primary-monitoring-platform" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-03-11 | <strong>Domain:</strong> Operations</p>
+<p><strong>Context:</strong> SAP monitoring requires visibility into SAP application metrics (enqueue server, work processes, RFC queues), HANA database metrics, and OS-level metrics. Options include: Azure Monitor for SAP Solutions (AMS), SAP Solution Manager with CCMS, and third-party tools (Dynatrace, Nagios).</p>
+<p><strong>Decision:</strong> Deploy Azure Monitor for SAP Solutions (AMS) as the primary monitoring platform for SAP infrastructure and application monitoring. Retain SAP Solution Manager for ABAP workload management, transport management, and SAP Early Watch Alert reports.</p>
+<p><strong>Rationale:</strong> AMS provides native Azure integration, pre-built dashboards for SAP HANA, ASCS, and application servers, and feeds into Azure Monitor alerts and action groups. AMS does not require additional agents on SAP VMs beyond the standard Azure Monitor Agent. The AMS provider model is extensible and SAP-supported. SAP Solution Manager is retained for application-layer monitoring not available in AMS.</p>
+<p><strong>Chapter References:</strong> Chapter 15 (Operations and Monitoring)
+<strong>SAP Notes:</strong> SAP Note 3123386</p>
+<hr />
+<h3 id="adr-0018-centralised-private-dns-zone-design-for-sap-workloads">ADR-0018: Centralised Private DNS Zone Design for SAP Workloads<a class="headerlink" href="#adr-0018-centralised-private-dns-zone-design-for-sap-workloads" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-03-11 | <strong>Domain:</strong> Networking</p>
+<p><strong>Context:</strong> SAP workloads use multiple hostnames: virtual hostnames for HA (ASCS, HANA primary), physical hostnames for individual VMs, and Azure Private Endpoint hostnames for PaaS services. DNS resolution must be consistent across on-premises and Azure.</p>
+<p><strong>Decision:</strong> Deploy a centralised Private DNS Zone architecture in the hub VNet using Azure Private DNS Resolver. Create SAP-specific Private DNS Zones for SAP virtual hostnames. Link all spoke VNets to the central DNS zones. Configure the on-premises DNS to forward SAP Azure hostnames to the Azure Private DNS Resolver inbound endpoint.</p>
+<p><strong>Rationale:</strong> Centralised DNS management in the hub ensures consistent name resolution across all SAP spokes and from on-premises. The Private DNS Resolver eliminates the need for DNS forwarder VMs and provides SLA-backed availability. Virtual hostnames (separate from physical VM hostnames) are required for SAP HA configurations and must be registered in DNS independently of VM NIC IPs.</p>
+<p><strong>Chapter References:</strong> Chapter 02 (Networking Design), Chapter 07 (High Availability)
+<strong>SAP Notes:</strong> SAP Note 962955</p>
+<hr />
+<h3 id="adr-0019-rhel-for-sap-solutions-as-preferred-os-sles-as-supported-alternative">ADR-0019: RHEL for SAP Solutions as Preferred OS; SLES as Supported Alternative<a class="headerlink" href="#adr-0019-rhel-for-sap-solutions-as-preferred-os-sles-as-supported-alternative" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-03-18 | <strong>Domain:</strong> Compute</p>
+<p><strong>Context:</strong> SAP HANA and SAP NetWeaver are certified on specific versions of Red Hat Enterprise Linux (RHEL) for SAP Solutions and SUSE Linux Enterprise Server (SLES) for SAP. The programme must define an OS standard.</p>
+<p><strong>Decision:</strong> Standardise on Red Hat Enterprise Linux for SAP Solutions (RHEL for SAP) as the preferred operating system for all SAP workloads on Azure. SUSE Linux Enterprise Server for SAP (SLES for SAP) is supported as an alternative where customer preference or existing licensing dictates. Maintain version standards: RHEL 8.x or 9.x; SLES 15 SP4 or later.</p>
+<p><strong>Rationale:</strong> Both RHEL and SLES are fully supported and SAP-certified on Azure. The preference for RHEL reflects the programme customer's existing Red Hat Enterprise Agreement and internal operations team expertise. Standardising on a single OS reduces operational complexity (patch management, cluster configuration). This ADR is flagged for review if the customer's OS preference changes.</p>
+<p><strong>Chapter References:</strong> Chapter 04 (Compute)
+<strong>SAP Notes:</strong> SAP Note 2772999, SAP Note 2235581</p>
+<hr />
+<h3 id="adr-0020-reserved-instance-commitment-strategy-for-sap-compute">ADR-0020: Reserved Instance Commitment Strategy for SAP Compute<a class="headerlink" href="#adr-0020-reserved-instance-commitment-strategy-for-sap-compute" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-03-18 | <strong>Domain:</strong> Governance</p>
+<p><strong>Context:</strong> SAP production compute (Mv2-series VMs) is predictable and long-running. Azure Reserved Instances (RIs) provide significant cost savings (up to 72% versus pay-as-you-go) in exchange for 1-year or 3-year commitments. The commitment scope and term must be defined.</p>
+<p><strong>Decision:</strong> Purchase 3-year Reserved Instances for all SAP production VMs (HANA, ASCS, application servers) at subscription scope. Purchase 1-year Reserved Instances for SAP non-production VMs. Reserve at the VM family level (Mv2-series) to allow instance size flexibility within the family.</p>
+<p><strong>Rationale:</strong> Production SAP systems are long-running (more than 95% uptime) and do not change VM family frequently. 3-year RIs provide maximum cost savings. Instance size flexibility (selecting the VM family rather than specific size) enables resizing within the Mv2 family without losing RI benefits. Subscription scope (rather than shared scope) ensures RI benefits are applied to SAP workloads first.</p>
+<p><strong>Chapter References:</strong> Chapter 14 (Governance), Chapter 16 (Cost Management)
+<strong>SAP Notes:</strong> None directly applicable</p>
+<hr />
+<h3 id="adr-0021-azure-backup-vault-with-cross-region-restore-for-sap-vms">ADR-0021: Azure Backup Vault with Cross-Region Restore for SAP VMs<a class="headerlink" href="#adr-0021-azure-backup-vault-with-cross-region-restore-for-sap-vms" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-03-25 | <strong>Domain:</strong> DR</p>
+<p><strong>Context:</strong> VM-level backup (distinct from HANA Backint backup) is required for OS disks, application disks, and point-in-time VM recovery. Cross-Region Restore capability must be evaluated for DR scenarios.</p>
+<p><strong>Decision:</strong> Deploy Azure Backup Recovery Services Vault in each SAP subscription with Cross-Region Restore enabled. Configure VM backup policies for SAP application servers and non-HANA components. HANA database backups use Backint (ADR-0012) as the primary mechanism; VM backup covers the OS and application disk layer.</p>
+<p><strong>Rationale:</strong> Cross-Region Restore allows VM restore into the DR region from the primary region's backup vault without maintaining a separate vault. This reduces DR infrastructure cost and simplifies vault management. Enabling CRR at vault creation is required as it cannot be enabled after the vault is created.</p>
+<p><strong>Chapter References:</strong> Chapter 10 (Backup and Recovery), Chapter 11 (Disaster Recovery)
+<strong>SAP Notes:</strong> None directly applicable</p>
+<hr />
+<h3 id="adr-0022-backup-retention-design-35-day-operational-plus-7-year-compliance">ADR-0022: Backup Retention Design: 35-Day Operational plus 7-Year Compliance<a class="headerlink" href="#adr-0022-backup-retention-design-35-day-operational-plus-7-year-compliance" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-03-25 | <strong>Domain:</strong> DR</p>
+<p><strong>Context:</strong> Backup retention must satisfy both operational recovery requirements (ability to restore to any point in the last month) and compliance requirements (financial data retention regulations requiring multi-year backup preservation).</p>
+<p><strong>Decision:</strong> Configure Azure Backup policies with: (1) daily backup retained for 35 days; (2) weekly backup retained for 52 weeks; (3) monthly backup retained for 12 months; (4) yearly backup retained for 7 years. Store long-term retention (monthly and yearly) in Azure Backup Vault using Archive tier to minimise cost.</p>
+<p><strong>Rationale:</strong> 35-day daily retention covers the standard operational recovery window including month-end close periods. 7-year compliance retention satisfies financial audit requirements. Archive tier for long-term backups reduces storage cost by approximately 75% versus vault-standard tier, with an acceptable 12-hour rehydration delay for compliance restores.</p>
+<p><strong>Chapter References:</strong> Chapter 10 (Backup and Recovery)
+<strong>SAP Notes:</strong> None directly applicable</p>
+<hr />
+<h3 id="adr-0023-azure-firewall-premium-over-third-party-nva-for-sap-traffic-inspection">ADR-0023: Azure Firewall Premium over Third-Party NVA for SAP Traffic Inspection<a class="headerlink" href="#adr-0023-azure-firewall-premium-over-third-party-nva-for-sap-traffic-inspection" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-04-01 | <strong>Domain:</strong> Networking</p>
+<p><strong>Context:</strong> A detailed comparison of Azure Firewall Premium versus third-party Network Virtual Appliances (Palo Alto, Fortinet, Check Point) for SAP traffic inspection. This ADR extends ADR-0004 with explicit NVA comparison rationale.</p>
+<p><strong>Decision:</strong> Confirm Azure Firewall Premium as the traffic inspection solution. Do not deploy third-party NVAs in the hub.</p>
+<p><strong>Detailed Comparison:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Azure Firewall Premium</th>
+<th>Third-Party NVA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Management overhead</td>
+<td>Azure Portal / Firewall Policy</td>
+<td>Vendor-specific management plane</td>
+</tr>
+<tr>
+<td>HA</td>
+<td>Built-in zone-redundant</td>
+<td>Requires NVA cluster (Active/Active or Active/Standby)</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>Automatic (up to 30 Gbps)</td>
+<td>Manual scale-out; adds routing complexity</td>
+</tr>
+<tr>
+<td>Integration with Sentinel</td>
+<td>Native connector</td>
+<td>Syslog/CEF connector (additional configuration)</td>
+</tr>
+<tr>
+<td>SAP traffic support</td>
+<td>Verified via SAP support channels</td>
+<td>Vendor-specific; SAP support scope unclear</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>Predictable (hourly + data processed)</td>
+<td>VM costs + licences + egress</td>
+</tr>
+<tr>
+<td>IDPS</td>
+<td>Built-in Premium feature</td>
+<td>Requires separate subscription/module</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rationale:</strong> Azure Firewall Premium provides equivalent security capabilities to third-party NVAs for the threat scenarios relevant to the SAP landing zone, without the operational burden of NVA cluster management. The native Azure integration reduces the number of operational tools required.</p>
+<p><strong>Chapter References:</strong> Chapter 02 (Networking Design), Chapter 12 (Security)
+<strong>SAP Notes:</strong> None directly applicable</p>
+<hr />
+<h3 id="adr-0024-pacemaker-with-azure-fence-agent-for-sap-cluster-fencing">ADR-0024: Pacemaker with Azure Fence Agent for SAP Cluster Fencing<a class="headerlink" href="#adr-0024-pacemaker-with-azure-fence-agent-for-sap-cluster-fencing" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-04-01 | <strong>Domain:</strong> HA</p>
+<p><strong>Context:</strong> SAP HANA and ASCS/ERS HA on Linux requires a cluster manager. Pacemaker is the standard Linux cluster manager used with both RHEL and SLES. The fencing mechanism (STONITH) must be defined: options include the Azure Fence Agent (SBD with Azure API), shared disk SBD, and iSCSI-based SBD.</p>
+<p><strong>Decision:</strong> Implement Pacemaker clusters with the Azure Fence Agent (fence_azure_arm) as the STONITH mechanism. Configure the fence agent with a Managed Identity on each cluster VM to avoid stored credentials.</p>
+<p><strong>Rationale:</strong> The Azure Fence Agent is the Microsoft and SAP recommended STONITH mechanism for Azure-hosted SAP clusters. It uses the Azure VM REST API to force-stop a misbehaving node, eliminating the need for physical IPMI access. Managed Identity authentication removes the credential management burden of service principal secrets. The fence agent is actively maintained by Microsoft and SAP, ensuring compatibility with future OS and kernel updates.</p>
+<p><strong>Chapter References:</strong> Chapter 07 (High Availability)
+<strong>SAP Notes:</strong> SAP Note 2694118, SAP Note 1928533</p>
+<hr />
+<h3 id="adr-0025-hana-scale-up-architecture-as-default-scale-out-reserved-for-bw4hana">ADR-0025: HANA Scale-Up Architecture as Default; Scale-Out Reserved for BW/4HANA<a class="headerlink" href="#adr-0025-hana-scale-up-architecture-as-default-scale-out-reserved-for-bw4hana" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-04-08 | <strong>Domain:</strong> SAP HANA</p>
+<p><strong>Context:</strong> SAP HANA can be deployed as scale-up (single large VM) or scale-out (multiple VMs with HANA distributed storage). Scale-out enables larger total memory beyond single VM limits but adds architectural complexity.</p>
+<p><strong>Decision:</strong> Deploy SAP HANA in scale-up configuration as the default architecture. Reserve HANA scale-out consideration exclusively for SAP BW/4HANA systems requiring more than 12 TB of memory (beyond Mv2 series maximum).</p>
+<p><strong>Rationale:</strong> HANA scale-up is simpler to operate, provides lower latency (no inter-node HANA data exchange), and is sufficient for S/4HANA systems up to 12 TB. Scale-out introduces complexity in HSR configuration, storage layout (multiple nodes sharing ANF), and HA cluster configuration. The programme's current S/4HANA sizing is within Mv2 scale-up capacity.</p>
+<p><strong>Chapter References:</strong> Chapter 05 (SAP HANA), Chapter 04 (Compute)
+<strong>SAP Notes:</strong> SAP Note 2080991, SAP Note 2939585</p>
+<hr />
+<h3 id="adr-0026-proximity-placement-groups-per-availability-zone-for-sap-ha-pairs">ADR-0026: Proximity Placement Groups Per Availability Zone for SAP HA Pairs<a class="headerlink" href="#adr-0026-proximity-placement-groups-per-availability-zone-for-sap-ha-pairs" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-04-08 | <strong>Domain:</strong> Compute</p>
+<p><strong>Context:</strong> SAP HA pairs (HANA primary/secondary, ASCS/ERS) are deployed across Availability Zones per ADR-0009. Within each zone, the SAP application servers and database server must have low latency between them. Proximity Placement Groups (PPGs) can pin VMs to the same physical hardware cluster but cannot span zones.</p>
+<p><strong>Decision:</strong> Create one Proximity Placement Group per Availability Zone per SAP system. Anchor each PPG to the Mv2 HANA VM in that zone (as Mv2 VMs have limited placement options). Deploy the application server VMs in the same zone into the corresponding PPG.</p>
+<p><strong>Rationale:</strong> PPGs ensure the application servers and HANA database in the same zone are on the same physical hardware cluster, minimising network latency for HANA client connections. Anchoring PPGs to the HANA VM prevents placement failures caused by the limited datacenter capacity for Mv2 VMs. Cross-zone PPGs are not supported, so each zone requires its own PPG.</p>
+<p><strong>Chapter References:</strong> Chapter 04 (Compute), Chapter 07 (High Availability)
+<strong>SAP Notes:</strong> SAP Note 2844316</p>
+<hr />
+<h3 id="adr-0027-entra-id-conditional-access-for-sap-administrative-access">ADR-0027: Entra ID Conditional Access for SAP Administrative Access<a class="headerlink" href="#adr-0027-entra-id-conditional-access-for-sap-administrative-access" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-04-15 | <strong>Domain:</strong> Security</p>
+<p><strong>Context:</strong> SAP administrative access (SAP Basis, OS-level via Bastion, SAP GUI for administration) represents a high-risk access pattern requiring stronger authentication controls than standard Fiori SSO.</p>
+<p><strong>Decision:</strong> Define a dedicated Entra ID Conditional Access policy for SAP administrative access. Require: (1) phishing-resistant MFA (FIDO2 or certificate-based); (2) compliant device; (3) named locations only (corporate network or managed VPN); (4) Privileged Identity Management (PIM) just-in-time activation for SAP_BASIS role before access is permitted. Apply to all users with SAP_BASIS, SAP_HANA_ADMIN, or equivalent roles.</p>
+<p><strong>Rationale:</strong> SAP administrative access provides capability to exfiltrate entire databases, modify financial configurations, and create backdoor users. Standard MFA (SMS/TOTP) is insufficient for this risk level. Phishing-resistant MFA, combined with PIM just-in-time activation, provides a defence-in-depth approach requiring active approval workflow before high-privilege access is granted.</p>
+<p><strong>Chapter References:</strong> Chapter 12 (Security), Chapter 13 (Identity and Access)
+<strong>SAP Notes:</strong> SAP Note 2734827</p>
+<hr />
+<h3 id="adr-0028-anf-cross-region-replication-for-hana-shared-and-sapmnt-dr">ADR-0028: ANF Cross-Region Replication for HANA Shared and sapmnt DR<a class="headerlink" href="#adr-0028-anf-cross-region-replication-for-hana-shared-and-sapmnt-dr" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-04-15 | <strong>Domain:</strong> DR</p>
+<p><strong>Context:</strong> HANA data replication via HSR (ADR-0013) covers the HANA database. The HANA shared volume and SAP global transport directory also require DR replication as they contain SAP profiles, executables, and transport data not covered by HSR.</p>
+<p><strong>Decision:</strong> Enable Azure NetApp Files Cross-Region Replication (CRR) for all ANF volumes in the primary region that are not covered by HSR: hana-shared, sapmnt, and usr-sap-trans. Configure CRR with daily replication schedule and hourly for sapmnt volumes with active transport activity.</p>
+<p><strong>Rationale:</strong> ANF CRR provides asynchronous volume replication to the DR region at the storage layer, independent of the OS and application. This ensures the DR site has current SAP profiles, kernel binaries, and transport data available at DR failover time. Without ANF CRR, DR recovery would require manual copy of these volumes, extending RTO beyond the 4-hour target.</p>
+<p><strong>Chapter References:</strong> Chapter 06 (Storage), Chapter 11 (Disaster Recovery)
+<strong>SAP Notes:</strong> SAP Note 1552925</p>
+<hr />
+<h3 id="adr-0029-infrastructure-as-code-mandate-bicep-primary-terraform-secondary">ADR-0029: Infrastructure as Code Mandate: Bicep Primary, Terraform Secondary<a class="headerlink" href="#adr-0029-infrastructure-as-code-mandate-bicep-primary-terraform-secondary" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-04-22 | <strong>Domain:</strong> Governance</p>
+<p><strong>Context:</strong> All Azure infrastructure must be deployed via Infrastructure as Code (IaC) to ensure consistency, auditability, and repeatability. The IaC tooling choice must be standardised. Options include: ARM templates, Bicep, Terraform, and Pulumi.</p>
+<p><strong>Decision:</strong> Mandate Infrastructure as Code for all SAP Azure resource deployments. Designate Azure Bicep as the primary IaC language. Terraform (AzureRM provider) is the approved secondary option for teams with existing Terraform expertise or where cross-cloud portability is required. ARM templates are permitted only for resources where Bicep/Terraform support is absent. Manual portal deployments are prohibited for production resources.</p>
+<p><strong>Rationale:</strong> Bicep provides native Azure Resource Manager integration, is first-party supported by Microsoft, eliminates ARM template verbosity, and has strong IDE tooling (VS Code Bicep extension). Bicep modules are available from the Azure Verified Modules library for common patterns including SAP landing zone components. Terraform is retained as a secondary option to preserve team flexibility without mandating a migration of existing Terraform codebases.</p>
+<p><strong>Chapter References:</strong> Chapter 14 (Governance), Chapter 17 (Infrastructure as Code)
+<strong>SAP Notes:</strong> None directly applicable</p>
+<hr />
+<h3 id="adr-0030-azure-bastion-standard-as-sole-administrative-access-path-for-sap-vms">ADR-0030: Azure Bastion Standard as Sole Administrative Access Path for SAP VMs<a class="headerlink" href="#adr-0030-azure-bastion-standard-as-sole-administrative-access-path-for-sap-vms" title="Permanent link">&para;</a></h3>
+<p><strong>Status:</strong> Accepted | <strong>Decision Date:</strong> 2024-04-22 | <strong>Domain:</strong> Security</p>
+<p><strong>Context:</strong> Administrative access to SAP VMs (SSH for Linux OS administration, RDP for Windows jump servers) must be secured. Options include: public IP with NSG, Azure Bastion, site-to-site VPN jump server, and third-party PAM solutions.</p>
+<p><strong>Decision:</strong> Deploy Azure Bastion Standard SKU in the hub VNet as the sole administrative access mechanism for all SAP VMs. Prohibit public IPs on SAP VMs enforced by Azure Policy (ADR-0014). Configure Bastion with native client support enabled for SSH and RDP tunnelling from local clients. Integrate Bastion session recordings with Azure Monitor Logs.</p>
+<p><strong>Rationale:</strong> Azure Bastion eliminates the attack surface of exposed SSH/RDP ports by providing browser-based or native client tunnelled access without public IPs on target VMs. The Standard SKU provides session recording, IP-based connection, and native client support required for SAP GUI connections via RDP to jump servers. NSG-based access control alone is insufficient as it requires public IPs or complex VPN routing for remote administration.</p>
+<p><strong>Chapter References:</strong> Chapter 12 (Security), Chapter 15 (Operations and Monitoring)
+<strong>SAP Notes:</strong> None directly applicable</p>
+<hr />
+<h2 id="adrs-by-domain">ADRs by Domain<a class="headerlink" href="#adrs-by-domain" title="Permanent link">&para;</a></h2>
+<h3 id="landing-zone">Landing Zone<a class="headerlink" href="#landing-zone" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Decision Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0001</td>
+<td>Hub-Spoke VNet Topology for SAP Landing Zone</td>
+<td>Accepted</td>
+<td>2024-01-15</td>
+</tr>
+<tr>
+<td>ADR-0002</td>
+<td>Subscription Topology: Production and Non-Production Under SAP Management Group</td>
+<td>Accepted</td>
+<td>2024-01-15</td>
+</tr>
+</tbody>
+</table>
+<p>The Landing Zone ADRs establish the foundational structural decisions for the SAP programme: how subscriptions are organised under the management group hierarchy and how network topology is structured. These decisions are prerequisites for all subsequent domain decisions and are the most difficult to change once the programme is in delivery.</p>
+<hr />
+<h3 id="networking">Networking<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Decision Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0003</td>
+<td>ExpressRoute as Primary Connectivity for SAP to On-Premises</td>
+<td>Accepted</td>
+<td>2024-01-22</td>
+</tr>
+<tr>
+<td>ADR-0004</td>
+<td>Azure Firewall Premium as Centralised Egress and Inspection Point</td>
+<td>Accepted</td>
+<td>2024-01-22</td>
+</tr>
+<tr>
+<td>ADR-0005</td>
+<td>Hub-Spoke VNet over Azure Virtual WAN for SAP Landing Zone</td>
+<td>Accepted</td>
+<td>2024-01-22</td>
+</tr>
+<tr>
+<td>ADR-0018</td>
+<td>Centralised Private DNS Zone Design for SAP Workloads</td>
+<td>Accepted</td>
+<td>2024-03-11</td>
+</tr>
+<tr>
+<td>ADR-0023</td>
+<td>Azure Firewall Premium over Third-Party NVA for SAP Traffic Inspection</td>
+<td>Accepted</td>
+<td>2024-04-01</td>
+</tr>
+</tbody>
+</table>
+<p>The Networking domain has the largest number of ADRs, reflecting the complexity of SAP connectivity requirements. The five networking ADRs collectively define the connectivity model (ExpressRoute), security inspection approach (Azure Firewall Premium), topology choice (hub-spoke), DNS design (centralised Private DNS Resolver), and NVA comparison rationale.</p>
+<hr />
+<h3 id="compute">Compute<a class="headerlink" href="#compute" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Decision Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0006</td>
+<td>Mv2-Series VM Family as Primary for SAP HANA Scale-Up</td>
+<td>Accepted</td>
+<td>2024-02-05</td>
+</tr>
+<tr>
+<td>ADR-0019</td>
+<td>RHEL for SAP Solutions as Preferred OS; SLES as Supported Alternative</td>
+<td>Accepted</td>
+<td>2024-03-18</td>
+</tr>
+<tr>
+<td>ADR-0026</td>
+<td>Proximity Placement Groups Per Availability Zone for SAP HA Pairs</td>
+<td>Accepted</td>
+<td>2024-04-08</td>
+</tr>
+</tbody>
+</table>
+<p>The Compute domain ADRs define the VM family for HANA (Mv2), the OS standard (RHEL preferred), and the placement optimisation strategy (PPGs per zone). These three decisions together determine the physical compute substrate for all SAP workloads.</p>
+<hr />
+<h3 id="storage">Storage<a class="headerlink" href="#storage" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Decision Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0007</td>
+<td>Ultra Disk for HANA Log; Azure NetApp Files for HANA Data and Shared</td>
+<td>Accepted</td>
+<td>2024-02-05</td>
+</tr>
+<tr>
+<td>ADR-0008</td>
+<td>Azure NetApp Files Ultra Performance Tier for SAP HANA</td>
+<td>Accepted</td>
+<td>2024-02-05</td>
+</tr>
+</tbody>
+</table>
+<p>The Storage ADRs define the storage architecture for SAP HANA, the most storage-demanding component. The two ADRs together specify the storage type per HANA volume (Ultra Disk for log, ANF for data and shared) and the ANF performance tier (Ultra).</p>
+<hr />
+<h3 id="security">Security<a class="headerlink" href="#security" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Decision Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0015</td>
+<td>Entra ID SSO (SAML 2.0) for SAP Fiori and Web Dispatcher</td>
+<td>Accepted</td>
+<td>2024-03-04</td>
+</tr>
+<tr>
+<td>ADR-0016</td>
+<td>Microsoft Sentinel with SAP Solution as Primary SIEM</td>
+<td>Accepted</td>
+<td>2024-03-04</td>
+</tr>
+<tr>
+<td>ADR-0027</td>
+<td>Entra ID Conditional Access for SAP Administrative Access</td>
+<td>Accepted</td>
+<td>2024-04-15</td>
+</tr>
+<tr>
+<td>ADR-0030</td>
+<td>Azure Bastion Standard as Sole Administrative Access Path for SAP VMs</td>
+<td>Accepted</td>
+<td>2024-04-22</td>
+</tr>
+</tbody>
+</table>
+<p>The Security domain ADRs address the four primary security layers: user authentication (SSO via SAML 2.0), threat detection (Sentinel), privileged access control (Conditional Access with PIM), and administrative access path (Bastion). Together they implement a zero-trust approach for SAP on Azure.</p>
+<hr />
+<h3 id="high-availability">High Availability<a class="headerlink" href="#high-availability" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Decision Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0009</td>
+<td>Availability Zones over Availability Sets for SAP High Availability</td>
+<td>Accepted</td>
+<td>2024-02-12</td>
+</tr>
+<tr>
+<td>ADR-0024</td>
+<td>Pacemaker with Azure Fence Agent for SAP Cluster Fencing</td>
+<td>Accepted</td>
+<td>2024-04-01</td>
+</tr>
+</tbody>
+</table>
+<p>The HA domain ADRs establish the zone spreading strategy (AZs over ASets) and the cluster fencing mechanism (Pacemaker with Azure Fence Agent). These decisions underpin the 99.99% availability target for production SAP systems.</p>
+<hr />
+<h3 id="disaster-recovery">Disaster Recovery<a class="headerlink" href="#disaster-recovery" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Decision Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0012</td>
+<td>Azure Backup Backint Agent for HANA; RMAN with Azure Blob for Oracle</td>
+<td>Accepted</td>
+<td>2024-02-19</td>
+</tr>
+<tr>
+<td>ADR-0013</td>
+<td>Warm Standby DR with HSR ASYNC to Secondary Region</td>
+<td>Accepted</td>
+<td>2024-02-19</td>
+</tr>
+<tr>
+<td>ADR-0021</td>
+<td>Azure Backup Vault with Cross-Region Restore for SAP VMs</td>
+<td>Accepted</td>
+<td>2024-03-25</td>
+</tr>
+<tr>
+<td>ADR-0022</td>
+<td>Backup Retention Design: 35-Day Operational plus 7-Year Compliance</td>
+<td>Accepted</td>
+<td>2024-03-25</td>
+</tr>
+<tr>
+<td>ADR-0028</td>
+<td>ANF Cross-Region Replication for HANA Shared and sapmnt DR</td>
+<td>Accepted</td>
+<td>2024-04-15</td>
+</tr>
+</tbody>
+</table>
+<p>The DR domain is the largest by ADR count, reflecting the complexity of SAP disaster recovery spanning database backup (Backint/RMAN), DR strategy (warm standby), VM backup (Recovery Services Vault with CRR), retention policy (operational and compliance tiers), and shared volume replication (ANF CRR).</p>
+<hr />
+<h3 id="governance">Governance<a class="headerlink" href="#governance" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Decision Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0014</td>
+<td>Azure Policy Enforce Mode for SAP Landing Zone Controls</td>
+<td>Accepted</td>
+<td>2024-03-04</td>
+</tr>
+<tr>
+<td>ADR-0020</td>
+<td>Reserved Instance Commitment Strategy for SAP Compute</td>
+<td>Accepted</td>
+<td>2024-03-18</td>
+</tr>
+<tr>
+<td>ADR-0029</td>
+<td>Infrastructure as Code Mandate: Bicep Primary, Terraform Secondary</td>
+<td>Accepted</td>
+<td>2024-04-22</td>
+</tr>
+</tbody>
+</table>
+<p>The Governance ADRs define how the SAP Azure estate is controlled: policy enforcement posture (Enforce mode), cost optimisation commitment (Reserved Instances), and deployment discipline (IaC mandate). These decisions create the guardrails within which all other architectural decisions operate.</p>
+<hr />
+<h3 id="sap-hana">SAP HANA<a class="headerlink" href="#sap-hana" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Decision Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0010</td>
+<td>ENSA2 over ENSA1 for ASCS/ERS High Availability</td>
+<td>Accepted</td>
+<td>2024-02-12</td>
+</tr>
+<tr>
+<td>ADR-0011</td>
+<td>HANA System Replication SYNC Mode for Within-Region HA</td>
+<td>Accepted</td>
+<td>2024-02-12</td>
+</tr>
+<tr>
+<td>ADR-0025</td>
+<td>HANA Scale-Up Architecture as Default; Scale-Out Reserved for BW/4HANA</td>
+<td>Accepted</td>
+<td>2024-04-08</td>
+</tr>
+</tbody>
+</table>
+<p>The SAP HANA domain ADRs address SAP-specific architectural decisions: ASCS/ERS enqueue architecture (ENSA2), HANA replication mode (SYNC), and HANA deployment model (scale-up default). These decisions require deep SAP product knowledge and are reviewed with SAP support engagement.</p>
+<hr />
+<h3 id="operations">Operations<a class="headerlink" href="#operations" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Status</th>
+<th>Decision Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0017</td>
+<td>Azure Monitor for SAP Solutions as Primary Monitoring Platform</td>
+<td>Accepted</td>
+<td>2024-03-11</td>
+</tr>
+</tbody>
+</table>
+<p>The Operations domain currently has one ADR establishing the monitoring platform choice. Additional operations ADRs covering alerting runbooks, patching strategy, and change management are planned for Q3 2024.</p>
+<hr />
+<h2 id="superseded-decisions">Superseded Decisions<a class="headerlink" href="#superseded-decisions" title="Permanent link">&para;</a></h2>
+<h3 id="currently-superseded-adrs">Currently Superseded ADRs<a class="headerlink" href="#currently-superseded-adrs" title="Permanent link">&para;</a></h3>
+<p>At initial publication of this index (Q2 2024), no ADRs have been superseded. This table will be populated as the architecture evolves.</p>
+<table>
+<thead>
+<tr>
+<th>Superseded ADR</th>
+<th>Title</th>
+<th>Superseded By</th>
+<th>Supersession Date</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pending-supersession-candidates">Pending Supersession Candidates<a class="headerlink" href="#pending-supersession-candidates" title="Permanent link">&para;</a></h3>
+<p>The following ADRs are identified as likely candidates for supersession in Q3-Q4 2026 based on technology evolution:</p>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Title</th>
+<th>Likely Supersession Driver</th>
+<th>Target Review Quarter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0005</td>
+<td>Hub-Spoke VNet over Azure Virtual WAN</td>
+<td>Azure Virtual WAN maturation (Bastion in vWAN hub, improved NVA integration)</td>
+<td>Q3 2026</td>
+</tr>
+<tr>
+<td>ADR-0019</td>
+<td>RHEL for SAP Solutions as Preferred OS</td>
+<td>Potential customer OS preference change; SLES market share in SAP environments</td>
+<td>Q4 2026</td>
+</tr>
+<tr>
+<td>ADR-0006</td>
+<td>Mv2-Series VM Family as Primary for HANA Scale-Up</td>
+<td>Msv3/Mdsv3 full TDIv5 certification; Mv2 retirement timeline</td>
+<td>Q3 2026</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="adr-template-reference">ADR Template Reference<a class="headerlink" href="#adr-template-reference" title="Permanent link">&para;</a></h2>
+<p>All ADRs in this programme use the template located at <code>adr/templates/adr-template.md</code>. The template enforces consistent structure across all decision records.</p>
+<h3 id="required-template-sections">Required Template Sections<a class="headerlink" href="#required-template-sections" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Purpose</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Title</td>
+<td>ADR number and short descriptive title</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Current lifecycle state</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Decision Date</td>
+<td>ISO 8601 date of ARB acceptance</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Domain</td>
+<td>Primary architectural domain</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>Problem statement and forces driving the decision</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Decision</td>
+<td>The decision made, stated clearly</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Rationale</td>
+<td>Why this decision was made over alternatives</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Consequences</td>
+<td>Positive and negative consequences of the decision</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Alternatives Considered</td>
+<td>Other options evaluated with brief assessment</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Chapter References</td>
+<td>Links to relevant chapters in this documentation</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SAP Notes</td>
+<td>Applicable SAP Note IDs</td>
+<td>Where applicable</td>
+</tr>
+<tr>
+<td>Related ADRs</td>
+<td>Links to ADRs that depend on or influence this ADR</td>
+<td>Where applicable</td>
+</tr>
+<tr>
+<td>Review Date</td>
+<td>Date for next scheduled review</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="file-naming-convention">File Naming Convention<a class="headerlink" href="#file-naming-convention" title="Permanent link">&para;</a></h3>
+<p>ADR files must follow the naming convention: <code>ADR-NNNN-short-title-kebab-case.md</code></p>
+<p>Examples:
+- <code>ADR-0001-hub-spoke-vnet-topology.md</code>
+- <code>ADR-0015-entra-id-sso-saml-fiori.md</code>
+- <code>ADR-0030-azure-bastion-admin-access.md</code></p>
+<h3 id="creating-a-new-adr">Creating a New ADR<a class="headerlink" href="#creating-a-new-adr" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Identify the next available ADR number from this index</li>
+<li>Copy <code>adr/templates/adr-template.md</code> to <code>adr/decisions/ADR-NNNN-title.md</code></li>
+<li>Complete all required sections of the template</li>
+<li>Set status to <code>Proposed</code></li>
+<li>Submit a pull request referencing any related chapter documentation PRs</li>
+<li>Assign the Domain Lead and Security Lead (if applicable) as reviewers</li>
+<li>Present at the next ARB meeting</li>
+<li>Upon ARB approval, update status to <code>Accepted</code> and add the decision date; update this index</li>
+</ol>
+<hr />
+<h2 id="validation-checklist">Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">&para;</a></h2>
+<h3 id="index-completeness">Index Completeness<a class="headerlink" href="#index-completeness" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> All 30 ADRs are listed in the Master ADR Index table</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> All 30 ADRs have ADR Detail Summaries entries</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> All 30 ADRs appear in their respective domain sections</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> ADR count confirmed: 30 total ADRs indexed</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> All required topics from programme scope are covered (see Domain Coverage below)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Superseded ADRs table is present (empty at initial publication)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Pending Supersession Candidates table is populated</li>
+</ul>
+<h3 id="process-compliance">Process Compliance<a class="headerlink" href="#process-compliance" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> ADR lifecycle states are defined</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Roles and responsibilities are documented</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Decision criteria (when to create an ADR) are documented</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Eight-step review process is documented</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> ARB quarterly review cadence is documented</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> ADR template reference and file naming convention are documented</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> New ADR creation process (8 steps) is documented</li>
+</ul>
+<h3 id="domain-coverage-verification">Domain Coverage Verification<a class="headerlink" href="#domain-coverage-verification" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>ADR Count</th>
+<th>Topics Covered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Landing Zone</td>
+<td>2</td>
+<td>Hub-spoke topology, subscription topology</td>
+</tr>
+<tr>
+<td>Networking</td>
+<td>5</td>
+<td>ExpressRoute, Azure Firewall, hub-spoke vs vWAN, Private DNS, NVA comparison</td>
+</tr>
+<tr>
+<td>Compute</td>
+<td>3</td>
+<td>VM family (Mv2), OS choice (RHEL/SLES), Proximity Placement Groups</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>2</td>
+<td>Storage type per volume (Ultra Disk/ANF), ANF performance tier</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>4</td>
+<td>SSO (SAML 2.0), SIEM (Sentinel), Conditional Access, Bastion</td>
+</tr>
+<tr>
+<td>HA</td>
+<td>2</td>
+<td>Availability Zones, Pacemaker fence agent</td>
+</tr>
+<tr>
+<td>DR</td>
+<td>5</td>
+<td>Backint/RMAN backup, warm standby DR, VM backup vault, retention policy, ANF CRR</td>
+</tr>
+<tr>
+<td>Governance</td>
+<td>3</td>
+<td>Policy enforce mode, Reserved Instances, IaC mandate</td>
+</tr>
+<tr>
+<td>SAP HANA</td>
+<td>3</td>
+<td>ENSA2, HSR SYNC mode, scale-up vs scale-out</td>
+</tr>
+<tr>
+<td>Operations</td>
+<td>1</td>
+<td>Azure Monitor for SAP Solutions</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>30</strong></td>
+<td><strong>All required programme topics covered</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="chapter-metadata">Chapter Metadata<a class="headerlink" href="#chapter-metadata" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chapter</td>
+<td>ADR Index</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Accepted</td>
+</tr>
+<tr>
+<td>SAP Products</td>
+<td>SAP S/4HANA, SAP BW/4HANA, SAP NetWeaver, SAP HANA</td>
+</tr>
+<tr>
+<td>Azure Services</td>
+<td>All Azure services referenced in ADRs above</td>
+</tr>
+<tr>
+<td>Last Updated</td>
+<td>2024-04-22</td>
+</tr>
+<tr>
+<td>Maintained By</td>
+<td>Architecture Review Board</td>
+</tr>
+<tr>
+<td>Related Chapters</td>
+<td>All chapters (ADRs cross-reference all domains)</td>
+</tr>
+<tr>
+<td>Next Scheduled Review</td>
+<td>Q3 2024 (quarterly ARB sweep)</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" target="_blank" rel="noopener" title="GitHub Repository" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://learn.microsoft.com/azure/sap" target="_blank" rel="noopener" title="Microsoft Learn - SAP on Azure" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../js/timeago.min.js"></script>
+      
+        <script src="../../js/timeago_mkdocs_material.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

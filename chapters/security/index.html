@@ -1,0 +1,2164 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/security/" rel="canonical"/>
+<link href="../storage/" rel="prev"/>
+<link href="../governance/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Security Architecture - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-on-azure-security-architecture">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Security Architecture
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+<nav aria-label="Architecture Overview" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-zero-trust-security-layers">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: Zero Trust Security Layers
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+<nav aria-label="SAP Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-identity-and-access-management">
+<span class="md-ellipsis">
+      
+        SAP Identity and Access Management
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-security-audit-log-sm19sm20-integration-with-microsoft-sentinel">
+<span class="md-ellipsis">
+      
+        SAP Security Audit Log (SM19/SM20) Integration with Microsoft Sentinel
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference-table">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference Table
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+<nav aria-label="Azure Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-defender-for-cloud">
+<span class="md-ellipsis">
+      
+        Microsoft Defender for Cloud
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-key-vault-premium-configuration">
+<span class="md-ellipsis">
+      
+        Azure Key Vault Premium Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-firewall-premium-idps">
+<span class="md-ellipsis">
+      
+        Azure Firewall Premium IDPS
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-security-and-ddos">
+<span class="md-ellipsis">
+      
+        Network Security and DDoS
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-sentinel-sap-ctm-connector">
+<span class="md-ellipsis">
+      
+        Microsoft Sentinel SAP CTM Connector
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-microsoft-sentinel-sap-integration">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: Microsoft Sentinel SAP Integration
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rporto-table-security-specific">
+<span class="md-ellipsis">
+      
+        RPO/RTO Table (Security-Specific)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization">
+<span class="md-ellipsis">
+      
+        Cost Optimization
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#monitoring-and-alerts">
+<span class="md-ellipsis">
+      
+        Monitoring and Alerts
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-1-permanent-contributor-role-assignments-on-sap-production-subscription">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 1: Permanent Contributor Role Assignments on SAP Production Subscription
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-2-configuring-azure-firewall-idps-in-alert-mode-only">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 2: Configuring Azure Firewall IDPS in Alert Mode Only
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-3-not-configuring-mde-exclusions-for-hana-storage-paths">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 3: Not Configuring MDE Exclusions for HANA Storage Paths
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-4-using-key-vault-access-policies-instead-of-azure-rbac">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 4: Using Key Vault Access Policies Instead of Azure RBAC
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-5-storing-sap-hana-credentials-in-azure-devops-pipeline-variables">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 5: Storing SAP HANA Credentials in Azure DevOps Pipeline Variables
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-6-disabling-sap-security-audit-log-sm19-to-reduce-system-load">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 6: Disabling SAP Security Audit Log (SM19) to Reduce System Load
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-7-sap-cloud-connector-vm-without-hardening">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 7: SAP Cloud Connector VM Without Hardening
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-1-sap-fiori-sso-fails-with-saml-authentication-error-after-entra-id-conditional-access-policy-added">
+<span class="md-ellipsis">
+      
+        Issue 1: SAP Fiori SSO Fails with SAML Authentication Error After Entra ID Conditional Access Policy Added
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-2-microsoft-sentinel-sap-ctm-connector-stops-receiving-events">
+<span class="md-ellipsis">
+      
+        Issue 2: Microsoft Sentinel SAP CTM Connector Stops Receiving Events
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-3-azure-firewall-idps-blocking-legitimate-sap-rfc-traffic">
+<span class="md-ellipsis">
+      
+        Issue 3: Azure Firewall IDPS Blocking Legitimate SAP RFC Traffic
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-4-cmk-key-rotation-causes-sap-hana-disk-inaccessible">
+<span class="md-ellipsis">
+      
+        Issue 4: CMK Key Rotation Causes SAP HANA Disk Inaccessible
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-5-jit-vm-access-not-working-for-sap-basis-ssh-access-to-hana-vms">
+<span class="md-ellipsis">
+      
+        Issue 5: JIT VM Access Not Working for SAP Basis SSH Access to HANA VMs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-6-sentinel-analytic-rule-generates-false-positive-alerts-for-sap-batch-jobs">
+<span class="md-ellipsis">
+      
+        Issue 6: Sentinel Analytic Rule Generates False Positive Alerts for SAP Batch Jobs
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+<nav aria-label="Landing Zone Mapping" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#management-group-policy-assignments-sap-management-group-scope">
+<span class="md-ellipsis">
+      
+        Management Group Policy Assignments (SAP Management Group Scope)
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="./">
+<span class="md-ellipsis">
+    Phase C — Security and Governance
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="sap-on-azure-security-architecture">SAP on Azure Security Architecture<a class="headerlink" href="#sap-on-azure-security-architecture" title="Permanent link">¶</a></h1>
+<hr/>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>This chapter defines the security architecture for SAP workloads deployed on Microsoft Azure. The scope covers identity and access management (IAM) using Microsoft Entra ID with Privileged Identity Management (PIM) and Conditional Access; SAP Fiori single sign-on (SSO) via SAML 2.0; Azure Firewall Premium with IDPS (Intrusion Detection and Prevention System) in alert-and-deny mode; network security group (NSG) baselines; Microsoft Defender for Cloud with Servers Plan 2; Microsoft Sentinel with the SAP Continuous Threat Monitoring connector; Azure Key Vault Premium for secrets and Customer Managed Keys (CMK); disk encryption; and audit logging.</p>
+<p>The SAP security architecture follows the Zero Trust model: no traffic is implicitly trusted based on network location, all identities are verified before resource access, and least-privilege access is enforced at every layer. SAP systems contain sensitive financial, HR, and operational data subject to PCI-DSS, SOC 2, ISO 27001, and GDPR compliance requirements. Each security control documented here maps to one or more compliance requirements.</p>
+<p>Key architecture decisions: Microsoft Entra ID as the single identity provider for SAP Fiori and SAP ABAP SAML SSO; Azure Firewall Premium IDPS in alert-and-deny mode for all SAP network perimeters; Microsoft Sentinel with the SAP Continuous Threat Monitoring connector for SAP-aware SIEM; CMK via Azure Key Vault Premium for all data-at-rest encryption; PIM for all privileged Azure infrastructure roles; and no permanent Contributor or Owner role assignments on SAP production subscriptions.</p>
+<hr/>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>The SAP security architecture implements defense in depth across five layers:</p>
+<ol>
+<li><strong>Identity layer</strong>: Microsoft Entra ID with PIM, Conditional Access, and SAML 2.0 SSO for SAP Fiori.</li>
+<li><strong>Network perimeter layer</strong>: Azure Firewall Premium IDPS, NSG baselines per SAP subnet, Azure DDoS Protection Standard.</li>
+<li><strong>Host layer</strong>: Microsoft Defender for Cloud Servers Plan 2, Azure Update Manager, Azure Disk Encryption with CMK.</li>
+<li><strong>Application layer</strong>: SAP authorization concepts (roles, profiles), SAP Security Audit Log (SM19/SM20), SAP Change Document Log.</li>
+<li><strong>Data layer</strong>: CMK encryption for ANF volumes and managed disks, Azure Backup encryption, Key Vault Premium for secret management.</li>
+</ol>
+<h3 id="architecture-diagram-zero-trust-security-layers">Architecture Diagram: Zero Trust Security Layers<a class="headerlink" href="#architecture-diagram-zero-trust-security-layers" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph TB
+  subgraph Identity["Identity Layer"]
+    EntraID["Microsoft Entra ID Conditional Access + PIM"]
+    SAML["SAML 2.0 SSO SAP Fiori + NetWeaver ABAP"]
+    MFA["Multi-Factor Authentication All SAP access"]
+  end
+  subgraph NetworkPerimeter["Network Perimeter Layer"]
+    AzFWPremium["Azure Firewall Premium IDPS Alert+Deny TLS Inspection"]
+    NSGs["NSG Baselines Per SAP Subnet Explicit deny-all"]
+    DDoS["Azure DDoS Protection Standard"]
+  end
+  subgraph HostLayer["Host Layer"]
+    Defender["Microsoft Defender for Cloud Servers Plan 2"]
+    UpdateMgr["Azure Update Manager Patch within 30d of CVE"]
+    ADE["Azure Disk Encryption CMK via Key Vault Premium"]
+  end
+  subgraph AppLayer["Application Layer"]
+    SAPAudit["SAP Security Audit Log SM19/SM20 forwarded to Sentinel"]
+    SAPAuth["SAP Role-Based Authorization Profile Generator"]
+    SAPChange["SAP Change Document Log ABAP change auditing"]
+  end
+  subgraph DataLayer["Data Layer"]
+    CMK["Customer Managed Keys Azure Key Vault Premium"]
+    ANFEnc["ANF Volume Encryption CMK-backed"]
+    BackupEnc["Azure Backup Encryption CMK in RSV"]
+  end
+  EntraID --&gt; SAML
+  EntraID --&gt; MFA
+  SAML --&gt;|MFA required| SAP_Access["SAP Production Systems"]
+  AzFWPremium --&gt; SAP_Access
+  NSGs --&gt; SAP_Access
+  Defender --&gt; SAP_Access
+  SAPAudit --&gt;|Log forwarding| Sentinel["Microsoft Sentinel SAP CTM Connector"]
+  CMK --&gt; ANFEnc
+  CMK --&gt; BackupEnc
+  CMK --&gt; ADE</code></pre>
+<hr/>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<h3 id="sap-identity-and-access-management">SAP Identity and Access Management<a class="headerlink" href="#sap-identity-and-access-management" title="Permanent link">¶</a></h3>
+<p><strong>SAP Fiori SSO with Microsoft Entra ID (SAML 2.0):</strong></p>
+<p>SAP NetWeaver ABAP is configured as a SAML 2.0 Service Provider (SP) with Microsoft Entra ID as the Identity Provider (IdP). The SAML trust relationship is established by:</p>
+<ol>
+<li>Downloading the SAP ABAP SAML SP metadata from SAML2 transaction in SAP GUI.</li>
+<li>Uploading the SP metadata to Microsoft Entra ID Enterprise Application (SAP NetWeaver) configuration.</li>
+<li>Downloading the Entra ID IdP metadata (SAML signing certificate + SSO endpoint URL) and uploading to SAML2 transaction in SAP ABAP.</li>
+<li>Configuring the SAML Name ID format as <code>&lt;user&gt;@&lt;domain&gt;</code> (email) or <code>&lt;sAMAccountName&gt;</code> to map to SAP user principal.</li>
+</ol>
+<p>SAP user mapping from Entra ID to SAP ABAP user accounts:</p>
+<table>
+<thead>
+<tr>
+<th>Entra ID attribute</th>
+<th>SAP ABAP user field</th>
+<th>Mapping rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>userPrincipalName (UPN)</td>
+<td>BNAME (SAP username)</td>
+<td>Strip @domain suffix; uppercase; match to SAP user ID</td>
+</tr>
+<tr>
+<td>objectId</td>
+<td>SAML Name ID</td>
+<td>Direct mapping when using persistent NameID format</td>
+</tr>
+<tr>
+<td>mail</td>
+<td>SAP SAML2 user mapping via email</td>
+<td>Used when SAP users are identified by email in SU01</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conditional Access Policy for SAP Fiori Production:</strong></p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="p">{</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="nt">"displayName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA-SAP-Fiori-Prod-MFA-Required"</span><span class="p">,</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="nt">"conditions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nt">"applications"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="nt">"includeApplications"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"&lt;SAP-Fiori-EntraID-AppId&gt;"</span><span class="p">]</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="nt">"users"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">      </span><span class="nt">"includeGroups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"SAP-Fiori-Users-All"</span><span class="p">],</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">      </span><span class="nt">"excludeGroups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"SAP-Break-Glass-Accounts"</span><span class="p">]</span>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="nt">"clientAppTypes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"browser"</span><span class="p">,</span><span class="w"> </span><span class="s2">"mobileAppsAndDesktopClients"</span><span class="p">]</span>
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">  </span><span class="nt">"grantControls"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">    </span><span class="nt">"operator"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AND"</span><span class="p">,</span>
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">    </span><span class="nt">"builtInControls"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"mfa"</span><span class="p">,</span><span class="w"> </span><span class="s2">"compliantDevice"</span><span class="p">]</span>
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">  </span><span class="nt">"sessionControls"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">    </span><span class="nt">"signInFrequency"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hours"</span><span class="p">,</span>
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">      </span><span class="nt">"isEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-0-24"><a href="#__codelineno-0-24" id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>The <code>compliantDevice</code> requirement enforces that SAP Fiori access from mobile devices requires an Intune-compliant device (screen lock, encryption, OS version current). Browser-based SAP Fiori access from managed corporate devices does not require compliantDevice (covered by Entra ID Hybrid Azure AD Join).</p>
+<p><strong>PIM for Azure Infrastructure Roles:</strong></p>
+<p>No permanent Contributor or Owner role assignments exist on the SAP production subscription. All privileged roles are activated through PIM:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>PIM Activation Duration</th>
+<th>Approver</th>
+<th>Justification Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP-Infra-Contributor (custom)</td>
+<td>4 hours maximum</td>
+<td>SAP Infrastructure Lead</td>
+<td>ServiceNow change ticket number</td>
+</tr>
+<tr>
+<td>Key Vault Administrator</td>
+<td>2 hours maximum</td>
+<td>SAP Security Lead</td>
+<td>Incident ticket number</td>
+</tr>
+<tr>
+<td>Network Contributor (SAP spokes)</td>
+<td>4 hours maximum</td>
+<td>SAP Network team lead</td>
+<td>Change ticket number</td>
+</tr>
+<tr>
+<td>Virtual Machine Contributor (HANA subnet)</td>
+<td>8 hours maximum</td>
+<td>SAP HANA DBA Lead</td>
+<td>Planned maintenance ticket</td>
+</tr>
+<tr>
+<td>Reader (all SAP subscriptions)</td>
+<td>Permanent</td>
+<td>N/A</td>
+<td>No justification required</td>
+</tr>
+</tbody>
+</table>
+<p>PIM activation alerts are sent to the SAP Security team distribution list for all Contributor-level and above activations, regardless of approval outcome.</p>
+<h3 id="sap-security-audit-log-sm19sm20-integration-with-microsoft-sentinel">SAP Security Audit Log (SM19/SM20) Integration with Microsoft Sentinel<a class="headerlink" href="#sap-security-audit-log-sm19sm20-integration-with-microsoft-sentinel" title="Permanent link">¶</a></h3>
+<p>The SAP Continuous Threat Monitoring (CTM) connector for Microsoft Sentinel forwards SAP Security Audit Log events (SM20) to the Sentinel Log Analytics workspace. The connector is deployed as a containerized agent (Docker or Podman) on a dedicated agent VM in the SAP management subnet.</p>
+<p>SAP audit events forwarded to Sentinel:</p>
+<table>
+<thead>
+<tr>
+<th>Event Class</th>
+<th>SAP Event ID</th>
+<th>Description</th>
+<th>Sentinel Severity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dialog logon</td>
+<td>AUW</td>
+<td>Successful dialog logon to SAP system</td>
+<td>Informational</td>
+</tr>
+<tr>
+<td>Failed logon</td>
+<td>AUA</td>
+<td>Failed logon attempt</td>
+<td>Medium (5+ failures: High)</td>
+</tr>
+<tr>
+<td>RFC/CPIC logon</td>
+<td>AUJ</td>
+<td>RFC destination logon</td>
+<td>Informational</td>
+</tr>
+<tr>
+<td>Authorization failure</td>
+<td>AUB</td>
+<td>Authorization check failure</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Transaction start</td>
+<td>AUE</td>
+<td>Transaction start with sensitive t-code</td>
+<td>Medium (for SE16, SU01, SE37, SA38)</td>
+</tr>
+<tr>
+<td>Report execution</td>
+<td>AUF</td>
+<td>Background report execution</td>
+<td>Informational</td>
+</tr>
+<tr>
+<td>User master change</td>
+<td>AUG</td>
+<td>SAP user master record change (SU01)</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Role/Profile assignment</td>
+<td>AUH</td>
+<td>Authorization role/profile assignment</td>
+<td>High</td>
+</tr>
+<tr>
+<td>System parameter change</td>
+<td>AUI</td>
+<td>SAP profile parameter change (RZ10)</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Debugging breakpoint</td>
+<td>AUK</td>
+<td>ABAP debugger with breakpoint in production</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Download to frontend</td>
+<td>AUL</td>
+<td>Data download to frontend desktop</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<p>Sentinel Analytic Rule for SAP brute force detection:
+<div class="language-kusto highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">SAPAuditLog</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">EventType</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"AUA"</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">MessageId</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="p">(</span><span class="s">"AU4"</span><span class="p">,</span><span class="w"> </span><span class="s">"AU5"</span><span class="p">,</span><span class="w"> </span><span class="s">"AU6"</span><span class="p">,</span><span class="w"> </span><span class="s">"AU7"</span><span class="p">)</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="p">|</span><span class="w"> </span><span class="k">summarize</span><span class="w"> </span><span class="n">FailedAttempts</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">count</span><span class="p">(),</span><span class="w"> </span><span class="n">Users</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">make_set</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">IPAddress</span><span class="p">,</span><span class="w"> </span><span class="n">bin</span><span class="p">(</span><span class="n">TimeGenerated</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="n">m</span><span class="p">)</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">FailedAttempts</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">10</span>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="p">|</span><span class="w"> </span><span class="k">extend</span><span class="w"> </span><span class="n">SeverityLevel</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"High"</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="p">|</span><span class="w"> </span><span class="k">project</span><span class="w"> </span><span class="n">TimeGenerated</span><span class="p">,</span><span class="w"> </span><span class="n">IPAddress</span><span class="p">,</span><span class="w"> </span><span class="n">FailedAttempts</span><span class="p">,</span><span class="w"> </span><span class="n">Users</span><span class="p">,</span><span class="w"> </span><span class="n">SeverityLevel</span>
+</span></code></pre></div></p>
+<h3 id="sap-notes-reference-table">SAP Notes Reference Table<a class="headerlink" href="#sap-notes-reference-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1656250</td>
+<td>SAP on Azure: Security Recommendations</td>
+<td>General SAP security hardening on Azure; recommended OS security settings; SAP-specific firewall rules</td>
+<td>SAP VM OS hardening; NSG baseline; Azure Firewall rules</td>
+</tr>
+<tr>
+<td>2369415</td>
+<td>SAP on Azure: Security Best Practices</td>
+<td>Azure-specific SAP security controls; Defender for Cloud recommendations; Key Vault integration</td>
+<td>Defender for Cloud configuration; Key Vault for SAP secrets</td>
+</tr>
+<tr>
+<td>2773983</td>
+<td>Microsoft Sentinel: SAP Continuous Threat Monitoring Connector</td>
+<td>SAP CTM connector architecture; SM19 audit log configuration; required SAP authorizations for CTM agent</td>
+<td>Sentinel SAP CTM connector configuration</td>
+</tr>
+<tr>
+<td>1689246</td>
+<td>SAP Security Audit Log: Configuration Guide</td>
+<td>SM19 audit log profile configuration; minimum event classes to capture; log archiving requirements</td>
+<td>SAP SM19 configuration for Sentinel forwarding</td>
+</tr>
+<tr>
+<td>2209195</td>
+<td>SAP on Azure: TLS Configuration for ICM</td>
+<td>TLS 1.2 minimum enforcement on SAP Internet Communication Manager; cipher suite selection</td>
+<td>SAP ICM TLS profile parameter configuration</td>
+</tr>
+<tr>
+<td>2510660</td>
+<td>Disabling SAP Default Users: Best Practices</td>
+<td>Locking SAP default users (DDIC, SAP*, TMSADM, EarlyWatch); password policy for locked users</td>
+<td>SAP user management hardening</td>
+</tr>
+<tr>
+<td>1860711</td>
+<td>SAP HANA: Security Configuration Guide</td>
+<td>HANA SSL configuration; HANA user authentication settings; HANA audit log configuration</td>
+<td>SAP HANA security baseline configuration</td>
+</tr>
+<tr>
+<td>2372069</td>
+<td>SAP HANA: Secure Network Communication</td>
+<td>HANA SSL/TLS configuration for client connections; certificate management; prohibited cipher suites</td>
+<td>HANA SSL configuration in indexserver.ini</td>
+</tr>
+<tr>
+<td>2830222</td>
+<td>SAP Fiori: Security Hardening Guide</td>
+<td>Fiori security hardening; WAF rules for Fiori OData APIs; Content Security Policy headers</td>
+<td>Application Gateway WAF custom rules for Fiori</td>
+</tr>
+<tr>
+<td>2927905</td>
+<td>Microsoft Entra ID SSO for SAP S/4HANA</td>
+<td>Entra ID SAML 2.0 configuration with SAP S/4HANA; user mapping; Conditional Access integration</td>
+<td>SAP SAML2 transaction configuration; Entra ID SSO setup</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<h3 id="microsoft-defender-for-cloud">Microsoft Defender for Cloud<a class="headerlink" href="#microsoft-defender-for-cloud" title="Permanent link">¶</a></h3>
+<p>Microsoft Defender for Cloud is enabled at the SAP management group scope with the following plans:</p>
+<p><strong>Defender for Servers Plan 2</strong> on all SAP production VMs:
+- <strong>Microsoft Defender for Endpoint (MDE)</strong> integration: MDE is automatically provisioned on all Windows and Linux SAP VMs. MDE provides real-time antimalware, behavioral detection, and EDR capabilities. On SAP HANA VMs, MDE is configured to exclude HANA data and log volume paths (/hana/data, /hana/log) from real-time scan to prevent scan-induced I/O latency on HANA storage operations.
+- <strong>Agentless disk scanning</strong>: Defender for Cloud scans VM OS disks for malware and vulnerabilities without installing an agent. Scans are performed on disk snapshots, not on the running VM, to avoid I/O impact.
+- <strong>File Integrity Monitoring (FIM)</strong>: Monitors changes to critical SAP OS files (/usr/sap/SID/<em>, /sapmnt/SID/profile/</em>, /etc/hosts, sudoers) and alerts when unauthorized changes are detected.
+- <strong>Adaptive network hardening</strong>: Analyzes NSG rules and actual traffic patterns, recommending tighter NSG rules based on observed traffic. Recommendations reviewed monthly by the SAP Network team.
+- <strong>Just-in-Time (JIT) VM access</strong>: SSH port (22) is blocked on all SAP VM NSGs by default. Basis and DBA team members request JIT access via Defender for Cloud, which opens TCP 22 from their specific IP for a maximum of 3 hours, then closes it automatically.</p>
+<p><strong>Defender for Storage</strong> on all Azure Storage accounts used for SAP:
+- Detects malware in HANA backup files uploaded to Azure Blob Storage.
+- Alerts on anomalous access patterns: downloads of large SAP backup archives from unexpected IP addresses.
+- Detects mass data export from SAP-related storage accounts.</p>
+<p><strong>Defender for Key Vault</strong> on all SAP Key Vault instances:
+- Detects unusual access patterns: access from unexpected IP addresses, access by non-SAP service principals.
+- Alerts on Key Vault soft delete disable attempts and purge protection disable attempts.
+- Detects credential stuffing attacks against Key Vault access policies.</p>
+<h3 id="azure-key-vault-premium-configuration">Azure Key Vault Premium Configuration<a class="headerlink" href="#azure-key-vault-premium-configuration" title="Permanent link">¶</a></h3>
+<p>Azure Key Vault Premium (HSM-backed) is deployed per SAP environment (production and non-production use separate instances) in the SAP production subscription, accessed via Private Endpoint from the SAP spoke.</p>
+<p><strong>Key Vault Secrets stored:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Secret Name</th>
+<th>Purpose</th>
+<th>Rotation Frequency</th>
+<th>Rotated By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hana-system-password</td>
+<td>SAP HANA SYSTEM user password</td>
+<td>90 days</td>
+<td>Azure Function triggered by Key Vault rotation event</td>
+</tr>
+<tr>
+<td>hana-backup-enckey</td>
+<td>HANA backup encryption key (backint)</td>
+<td>Annual</td>
+<td>Manual; requires HANA backup re-encryption</td>
+</tr>
+<tr>
+<td>sap-abap-adm-password</td>
+<td>SAP &lt;SID&gt;adm OS user password</td>
+<td>90 days</td>
+<td>Azure Function + SAP HANA sidecar for validation</td>
+</tr>
+<tr>
+<td>sap-rfc-password-SID</td>
+<td>SAP RFC destination password for SID-to-SID RFC calls</td>
+<td>90 days</td>
+<td>Azure Function + SAP RFC destination update via SM59</td>
+</tr>
+<tr>
+<td>appgw-tls-cert-fiori</td>
+<td>SAP Fiori TLS certificate (PFX)</td>
+<td>Auto-renewed via DigiCert integration</td>
+<td>Key Vault certificate auto-renewal policy</td>
+</tr>
+<tr>
+<td>cmk-disk-key</td>
+<td>Customer Managed Key for Premium SSD v2 Disk Encryption Set</td>
+<td>Annual key rotation; old key version retained</td>
+<td>Manual with 48-hour transition window</td>
+</tr>
+<tr>
+<td>cmk-anf-key</td>
+<td>Customer Managed Key for ANF volume encryption</td>
+<td>Annual key rotation</td>
+<td>Manual with ANF re-encryption</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Vault Access Control (Azure RBAC):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Principal</th>
+<th>Scope</th>
+<th>Permissions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Key Vault Secrets User</td>
+<td>HANA VM system-assigned managed identity</td>
+<td>Key Vault secrets for HANA credentials</td>
+<td>Get, List secrets</td>
+</tr>
+<tr>
+<td>Key Vault Secrets User</td>
+<td>Azure Backup managed identity</td>
+<td>Key Vault backup encryption key</td>
+<td>Get secret</td>
+</tr>
+<tr>
+<td>Key Vault Certificate User</td>
+<td>Application Gateway user-assigned managed identity</td>
+<td>Fiori TLS certificate</td>
+<td>Get, List certificates</td>
+</tr>
+<tr>
+<td>Key Vault Crypto User</td>
+<td>Disk Encryption Set system-assigned managed identity</td>
+<td>CMK disk key</td>
+<td>WrapKey, UnwrapKey</td>
+</tr>
+<tr>
+<td>Key Vault Crypto User</td>
+<td>ANF account managed identity</td>
+<td>CMK ANF key</td>
+<td>WrapKey, UnwrapKey</td>
+</tr>
+<tr>
+<td>Key Vault Administrator</td>
+<td>SAP Security team PIM group</td>
+<td>Full Key Vault</td>
+<td>All operations (PIM-activated, maximum 2 hours)</td>
+</tr>
+</tbody>
+</table>
+<p>No Key Vault access policies are used; Azure RBAC is the sole authorization mechanism on all SAP Key Vault instances.</p>
+<p><strong>Key Vault configuration requirements:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>az<span class="w"> </span>keyvault<span class="w"> </span>update<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span>--name<span class="w"> </span>kv-sap-prod<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span>--enable-soft-delete<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">  </span>--soft-delete-retention-days<span class="w"> </span><span class="m">90</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">  </span>--enable-purge-protection<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">  </span>--public-network-access<span class="w"> </span>Disabled<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">  </span>--default-action<span class="w"> </span>Deny
+</span></code></pre></div></p>
+<h3 id="azure-firewall-premium-idps">Azure Firewall Premium IDPS<a class="headerlink" href="#azure-firewall-premium-idps" title="Permanent link">¶</a></h3>
+<p>Azure Firewall Premium IDPS is configured in <strong>Alert and Deny</strong> mode (not Alert only). The IDPS signature set is updated automatically by Microsoft. Custom IDPS rules are added for SAP-specific attack signatures:</p>
+<p><strong>IDPS policy configuration:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>resource firewallPolicy 'Microsoft.Network/firewallPolicies@2023-06-01' = {
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>  properties: {
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>    sku: { tier: 'Premium' }
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>    intrusionDetection: {
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>      mode: 'Deny'
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a>      configuration: {
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a>        signatureOverrides: [
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a>          { id: '2024897', mode: 'Deny' }  // SAP ICM directory traversal
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a>          { id: '2024898', mode: 'Deny' }  // SAP Message Server exploit
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a>        ]
+</span><span id="__span-3-11"><a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a>        bypassTrafficSettings: [
+</span><span id="__span-3-12"><a href="#__codelineno-3-12" id="__codelineno-3-12" name="__codelineno-3-12"></a>          {
+</span><span id="__span-3-13"><a href="#__codelineno-3-13" id="__codelineno-3-13" name="__codelineno-3-13"></a>            name: 'bypass-hana-replication'
+</span><span id="__span-3-14"><a href="#__codelineno-3-14" id="__codelineno-3-14" name="__codelineno-3-14"></a>            protocol: 'TCP'
+</span><span id="__span-3-15"><a href="#__codelineno-3-15" id="__codelineno-3-15" name="__codelineno-3-15"></a>            sourceAddresses: ['10.10.3.0/27']
+</span><span id="__span-3-16"><a href="#__codelineno-3-16" id="__codelineno-3-16" name="__codelineno-3-16"></a>            destinationAddresses: ['10.10.3.0/27']
+</span><span id="__span-3-17"><a href="#__codelineno-3-17" id="__codelineno-3-17" name="__codelineno-3-17"></a>            destinationPorts: ['40000-40099']
+</span><span id="__span-3-18"><a href="#__codelineno-3-18" id="__codelineno-3-18" name="__codelineno-3-18"></a>            description: 'HANA HSR traffic exempt from IDPS (intra-subnet)'
+</span><span id="__span-3-19"><a href="#__codelineno-3-19" id="__codelineno-3-19" name="__codelineno-3-19"></a>          }
+</span><span id="__span-3-20"><a href="#__codelineno-3-20" id="__codelineno-3-20" name="__codelineno-3-20"></a>        ]
+</span><span id="__span-3-21"><a href="#__codelineno-3-21" id="__codelineno-3-21" name="__codelineno-3-21"></a>      }
+</span><span id="__span-3-22"><a href="#__codelineno-3-22" id="__codelineno-3-22" name="__codelineno-3-22"></a>    }
+</span><span id="__span-3-23"><a href="#__codelineno-3-23" id="__codelineno-3-23" name="__codelineno-3-23"></a>    transportSecurity: {
+</span><span id="__span-3-24"><a href="#__codelineno-3-24" id="__codelineno-3-24" name="__codelineno-3-24"></a>      certificateAuthority: {
+</span><span id="__span-3-25"><a href="#__codelineno-3-25" id="__codelineno-3-25" name="__codelineno-3-25"></a>        keyVaultSecretId: tlsInspectionCertSecretId
+</span><span id="__span-3-26"><a href="#__codelineno-3-26" id="__codelineno-3-26" name="__codelineno-3-26"></a>        name: 'sap-tls-inspection-ca'
+</span><span id="__span-3-27"><a href="#__codelineno-3-27" id="__codelineno-3-27" name="__codelineno-3-27"></a>      }
+</span><span id="__span-3-28"><a href="#__codelineno-3-28" id="__codelineno-3-28" name="__codelineno-3-28"></a>    }
+</span><span id="__span-3-29"><a href="#__codelineno-3-29" id="__codelineno-3-29" name="__codelineno-3-29"></a>  }
+</span><span id="__span-3-30"><a href="#__codelineno-3-30" id="__codelineno-3-30" name="__codelineno-3-30"></a>}
+</span></code></pre></div></p>
+<p><strong>TLS inspection:</strong> Azure Firewall Premium TLS inspection is enabled for outbound HTTPS traffic from SAP VMs to the internet (SAP support portal, OS update repositories). TLS inspection requires a CA certificate to be installed in the Azure Firewall policy and in the SAP VM OS trust stores. TLS inspection does not apply to intra-VNet traffic (HANA to application server connections use the internal ANF NFS path, not HTTPS).</p>
+<p><strong>Exclusion from TLS inspection:</strong> SAP BTP Cloud Connector outbound HTTPS is excluded from TLS inspection (Azure Firewall IDPS bypass rule for destination *.hana.ondemand.com) because Cloud Connector uses certificate pinning that breaks when an inspection certificate is inserted.</p>
+<h3 id="network-security-and-ddos">Network Security and DDoS<a class="headerlink" href="#network-security-and-ddos" title="Permanent link">¶</a></h3>
+<p><strong>Azure DDoS Protection Standard</strong> is enabled on the SAP production VNet (not just the hub VNet). This protects the SAP spoke VNet from volumetric DDoS attacks targeting the Azure Application Gateway WAF v2 public IP (if Application Gateway is internet-facing for external SAP Fiori users). Standard tier provides adaptive real-time protection, metric alerting, and DDoS rapid response support from Microsoft.</p>
+<p><strong>NSG Flow Logs and Traffic Analytics</strong> are enabled on all SAP subnet NSGs:
+- Flow logs sent to Azure Storage Account (LRS, cool tier; lifecycle policy moves to archive after 90 days).
+- Traffic Analytics enabled with 10-minute aggregation interval, sent to the Log Analytics workspace.
+- Traffic Analytics is used to identify unexpected communication patterns: HANA VM initiating connections to the internet, AAS VMs communicating directly with each other bypassing the message server, or unexpected inbound connections from on-premises to HANA VMs.</p>
+<h3 id="microsoft-sentinel-sap-ctm-connector">Microsoft Sentinel SAP CTM Connector<a class="headerlink" href="#microsoft-sentinel-sap-ctm-connector" title="Permanent link">¶</a></h3>
+<p>The SAP Continuous Threat Monitoring connector for Microsoft Sentinel provides SAP-aware threat detection that the generic Sentinel analytics rules cannot provide without SAP context. The connector:</p>
+<ol>
+<li>Reads SAP Security Audit Log (SM20) via an RFC-based connection from the agent to the SAP system.</li>
+<li>Reads SAP system log (SM21), change document log (SCU3), user lock log, and SAP HANA audit log.</li>
+<li>Sends all events to the Sentinel Log Analytics workspace via the Log Analytics Data Collector API.</li>
+<li>Provides built-in Sentinel Analytic Rules for SAP threats: brute force against SAP GUI logon, SAP privilege escalation (SU01 changes), sensitive transaction execution (SE16, SE37, SA38 in production), SAP transport import from non-standard routes, and SAP user lockout bypass.</li>
+</ol>
+<p>The CTM agent runs on a dedicated VM (D2s_v5) in the SAP management subnet. The agent authenticates to the SAP system using a dedicated SAP RFC user (Z_SENTINEL_AGENT) with minimum required authorizations:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>Authorization Object: S_RFC
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>  ACTVT: 16 (Execute)
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>  RFC_TYPE: FUNC
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>  RFC_NAME: /SDF/SMON_API*, SYSMON*, RSAU_READ*
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a>Authorization Object: S_TABU_DIS
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a>  ACTVT: 03 (Display)
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a>  DICBERCLS: SS (System tables for audit log)
+</span></code></pre></div>
+<h3 id="architecture-diagram-microsoft-sentinel-sap-integration">Architecture Diagram: Microsoft Sentinel SAP Integration<a class="headerlink" href="#architecture-diagram-microsoft-sentinel-sap-integration" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph LR
+  subgraph SAPSystem["SAP Production System"]
+    SM20["SAP Security Audit Log SM20"]
+    SM21["SAP System Log SM21"]
+    HANAAUDIT["HANA Audit Log"]
+    SU01Changes["User Master Changes SU01"]
+  end
+  subgraph SentinelAgent["Sentinel CTM Agent VM D2s_v5 mgmt-subnet"]
+    CTMContainer["SAP CTM Container Docker/Podman"]
+    RFCConn["RFC Connection to SAP ABAP Z_SENTINEL_AGENT user"]
+  end
+  subgraph Sentinel["Microsoft Sentinel"]
+    LAW["Log Analytics Workspace SAPAuditLog table"]
+    Analytics["SAP Analytic Rules Brute force Privilege escalation Sensitive t-codes"]
+    SOAR["SOAR Playbooks Auto-lock compromised SAP user Auto-create ServiceNow incident"]
+    Workbooks["SAP Security Workbook Dashboard KPIs Trend analysis"]
+  end
+  SM20 --&gt;|RFC read| RFCConn
+  SM21 --&gt;|RFC read| RFCConn
+  HANAAUDIT --&gt;|JDBC read| CTMContainer
+  SU01Changes --&gt;|RFC read| RFCConn
+  CTMContainer --&gt;|Log Analytics API via Private Endpoint| LAW
+  LAW --&gt; Analytics
+  Analytics --&gt; SOAR
+  Analytics --&gt; Workbooks</code></pre>
+<hr/>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP Fiori identity provider</td>
+<td>(1) SAP Identity Authentication Service (IAS) standalone; (2) Microsoft Entra ID standalone; (3) Entra ID as corporate IdP with IAS as proxy</td>
+<td>Microsoft Entra ID as primary IdP with Conditional Access; SAP IAS used only for SAP-to-SAP SSO where Entra ID cannot be directly configured</td>
+<td>Entra ID provides organization-wide Conditional Access policies (MFA, compliant device, named location), PIM integration, and unified identity governance. SAP IAS adds complexity without additional value when Entra ID already meets all SAP SSO requirements.</td>
+<td>SAP Note 2927905; Entra ID SAP integration documentation</td>
+</tr>
+<tr>
+<td>Azure Firewall IDPS mode</td>
+<td>(1) Off (monitoring only via NSG logs); (2) Alert mode (log only, no block); (3) Alert and Deny mode</td>
+<td>Alert and Deny mode</td>
+<td>PCI-DSS requirement 6.4 and ISO 27001 A.13.1.2 require active network intrusion prevention for systems handling cardholder data or sensitive financial data. Alert-only mode detects attacks but does not prevent them; Deny mode blocks known exploitation attempts in real time.</td>
+<td>Azure Firewall Premium documentation; PCI-DSS v4.0 requirement 6.4</td>
+</tr>
+<tr>
+<td>SAP Security Audit Log SIEM integration</td>
+<td>(1) Custom log shipping via syslog to Splunk/QRadar; (2) Microsoft Sentinel with SAP CTM connector; (3) SAP Enterprise Threat Detection (ETD)</td>
+<td>Microsoft Sentinel with SAP CTM connector</td>
+<td>SAP CTM connector provides pre-built SAP-aware Analytic Rules, Workbooks, and SOAR Playbooks that would require months of custom development in alternative SIEMs. Sentinel integrates natively with Entra ID and Defender for Cloud for correlated SAP + cloud infrastructure alerts. SAP ETD is an on-premises solution with separate infrastructure and licensing costs.</td>
+<td>SAP Note 2773983; Microsoft Sentinel SAP CTM documentation</td>
+</tr>
+<tr>
+<td>Key Vault access model</td>
+<td>(1) Key Vault access policies; (2) Azure RBAC</td>
+<td>Azure RBAC only; no access policies</td>
+<td>Azure RBAC provides fine-grained role assignments with PIM support and Azure Monitor audit logs. Access policies are flat (Principal can either access a Key Vault entirely or not at all for a given operation type), limiting least-privilege implementation. Azure RBAC allows scoping access to specific secrets, certificates, or keys.</td>
+<td>Azure Key Vault RBAC documentation; Azure security baseline for Key Vault</td>
+</tr>
+<tr>
+<td>Disk encryption approach</td>
+<td>(1) Platform Managed Keys (PMK); (2) Azure Disk Encryption (ADE with BitLocker/dm-crypt); (3) Server-side encryption with Customer Managed Keys (CMK)</td>
+<td>CMK via Disk Encryption Set for managed disks</td>
+<td>CMK satisfies key ownership requirements for ISO 27001 and PCI-DSS. ADE (BitLocker/dm-crypt) adds OS-level encryption on top of Azure's native server-side encryption, creating double encryption (useful only in highly regulated environments); it also requires the OS to decrypt before HANA can read from disk, adding CPU overhead. CMK server-side encryption (transparent to the guest OS) provides compliance without performance impact.</td>
+<td>PCI-DSS v4.0 requirement 3.5; ISO 27001 A.10</td>
+</tr>
+<tr>
+<td>MDE exclusion for HANA storage paths</td>
+<td>(1) No exclusions (full scan); (2) Exclude /hana/data and /hana/log from real-time scan; (3) Disable MDE on HANA VMs</td>
+<td>Exclude HANA data and log volume paths from real-time scan; retain all other MDE capabilities</td>
+<td>Real-time filesystem scan of HANA data volume (2 TiB, high I/O) would add 5-15% I/O latency overhead, pushing HANA storage latency above the 1 ms p99 KPI from SAP Note 1943937. Excluding these paths removes the scan overhead while retaining MDE protection for OS, SAP kernel binaries, and SAP instance directories.</td>
+<td>SAP Note 1943937 (storage latency KPI); Microsoft Defender for Cloud documentation on antimalware exclusions</td>
+</tr>
+<tr>
+<td>SAP Basis team privileged access</td>
+<td>(1) Permanent Contributor role on SAP production subscription; (2) PIM-activated time-bounded Contributor; (3) Azure Lighthouse with delegated access</td>
+<td>PIM-activated time-bounded Contributor role (maximum 8 hours) with approval workflow</td>
+<td>Permanent Contributor role on production subscription violates least-privilege principle and creates persistent attack surface if a SAP Basis engineer's Entra ID account is compromised. PIM activation requires MFA, business justification (ServiceNow ticket), and manager approval, creating an auditable approval trail for every privileged action.</td>
+<td>Azure PIM documentation; CIS Azure Benchmark 1.23</td>
+</tr>
+<tr>
+<td>HANA SSL/TLS for client connections</td>
+<td>(1) SAP HANA without SSL (TCP plaintext); (2) HANA SSL with self-signed certificates; (3) HANA SSL with certificates from organizational PKI or Azure Key Vault</td>
+<td>HANA SSL with certificates from Azure Key Vault-integrated CA</td>
+<td>Plaintext HANA client connections expose HANA credentials and query data on the network. Self-signed certificates require manual certificate trust distribution and are not revocable. Certificates from a managed CA (Key Vault integrated) provide automated renewal, revocation support, and centralized certificate lifecycle management.</td>
+<td>SAP Note 2372069; SAP Note 1860711</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Pillar</th>
+<th>Requirement</th>
+<th>Implementation</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Security</td>
+<td>All SAP access must require MFA</td>
+<td>Conditional Access policy CA-SAP-Fiori-Prod-MFA-Required applied to all SAP Fiori Entra ID Enterprise Applications; SAP GUI access requires MFA via Named Location policy for SAP RFC remote function calls</td>
+<td>Azure Conditional Access documentation</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>No permanent privileged role assignments on SAP production</td>
+<td>PIM activated roles only; reader role is the maximum permanent assignment; all Contributor+ role activations logged and alertable</td>
+<td>Azure PIM documentation; CIS Azure Benchmark</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>All SAP VM OS disks must be encrypted with CMK</td>
+<td>Disk Encryption Set with CMK assigned to all SAP VM managed disks in production subscription; Azure Policy Deny-Disk-Without-CMK assigned at SAP management group scope</td>
+<td>Azure Disk Encryption documentation</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>SAP Security Audit Log must be forwarded to SIEM within 15 minutes of event</td>
+<td>Sentinel SAP CTM connector pulls SM20 events every 5 minutes; events available in Sentinel within 5-10 minutes of SAP system generation; 30-day active retention + 1-year archive in Log Analytics</td>
+<td>SAP Note 2773983; Sentinel data retention</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>SAP HANA SSL must be enforced for all client connections</td>
+<td>HANA global.ini [communication] sslMinProtocol = TLSv1.2; sslCipherSuites = ECDHE-RSA-AES256-GCM-SHA384; HANA user store (hdbuserstore) configured with SSL=TRUE on all application server connections</td>
+<td>SAP Note 2372069</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>Security control failures must not impact SAP availability</td>
+<td>Sentinel CTM agent failure does not impact SAP system operation (agent is read-only RFC); Azure Firewall failure uses Azure Firewall zone-redundant deployment (3 instances across zones)</td>
+<td>Azure Firewall zone redundancy documentation</td>
+</tr>
+<tr>
+<td>Operational Excellence</td>
+<td>Security incidents must be detected and responded to within defined SLAs</td>
+<td>Sentinel Analytic Rule alerts trigger SOAR playbooks; Critical alerts (brute force, ABAP debugger in production) auto-create P1 incidents in ServiceNow within 5 minutes; Sev 1 security incidents have 1-hour response SLA</td>
+<td>Microsoft Sentinel SOAR documentation</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>Security tooling cost must be justified against risk reduction</td>
+<td>Defender for Cloud Servers Plan 2 cost (~$15/VM/month) is justified by agentless scanning, MDE integration, and JIT VM access, which collectively replace 2-3 separate security tools; Sentinel ingestion cost optimized by filtering high-volume SAP syslog events before ingestion</td>
+<td>Azure Defender for Cloud pricing</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="rporto-table-security-specific">RPO/RTO Table (Security-Specific)<a class="headerlink" href="#rporto-table-security-specific" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Security Scenario</th>
+<th>Detection Time</th>
+<th>Response Time</th>
+<th>Recovery Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP user credential compromise (brute force)</td>
+<td>5-10 minutes (Sentinel rule fires after 10 failed logons in 10 minutes)</td>
+<td>15 minutes (SOAR playbook auto-locks SAP user + Entra ID account)</td>
+<td>Lock user via SU01; reset Entra ID password; investigate source IP via NSG flow logs</td>
+</tr>
+<tr>
+<td>SAP ABAP debugger active in production</td>
+<td>1-5 minutes (SM20 event AUK forwarded to Sentinel; Critical alert)</td>
+<td>30 minutes (manual investigation; session termination via SM04)</td>
+<td>SAP Basis kills ABAP work process; Sentinel incident documents timeline</td>
+</tr>
+<tr>
+<td>Azure Firewall IDPS block (SAP exploit attempt)</td>
+<td>Immediate (Azure Firewall blocks and logs)</td>
+<td>15 minutes (Sev 2 alert to SAP Security team)</td>
+<td>No SAP recovery required (attack blocked); Firewall log analyzed for source IP; IP blocked in Azure DDoS/NSG</td>
+</tr>
+<tr>
+<td>CMK key deletion (accidental)</td>
+<td>Immediate (Key Vault Defender alert)</td>
+<td>5 minutes (soft delete protection + purge protection prevents immediate deletion; 90-day recovery window)</td>
+<td>Recover deleted key via Key Vault undelete; no SAP downtime if recovery within soft delete period</td>
+</tr>
+<tr>
+<td>SAP production user privilege escalation (SU01 unauthorized role assignment)</td>
+<td>5-10 minutes (Sentinel rule fires on SM20 AUH event)</td>
+<td>30 minutes (SOAR creates incident; SAP Security reviews and revokes role assignment)</td>
+<td>Revert unauthorized role assignment via SU01; document in security incident; review audit trail in SCU3</td>
+</tr>
+<tr>
+<td>Mass download from SAP system (data exfiltration attempt)</td>
+<td>5-10 minutes (Sentinel rule fires on SM20 AUL events &gt; threshold)</td>
+<td>30 minutes (Sev 1 alert; SAP user session terminated via SM04; ABAP connection blocked at NSG)</td>
+<td>Terminate SAP user session; review downloaded data via SM20 download audit log entries; report to DPO if personal data involved</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="cost-optimization">Cost Optimization<a class="headerlink" href="#cost-optimization" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Potential Saving</th>
+<th>Implementation</th>
+<th>Prerequisites</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sentinel data ingestion tiering</td>
+<td>30-50% Sentinel ingestion cost reduction; SAP syslog events (high volume, low security value) moved to Basic Logs tier (~$0.50/GB vs. $2.76/GB for Analytics logs)</td>
+<td>Route SAP OS syslog (/var/log/messages) to Log Analytics Basic Logs tier; keep SM20 audit events in Analytics Logs tier for Sentinel Analytic Rule processing</td>
+<td>Log Analytics workspace Basic Logs tier configuration; KQL queries updated to include Basic Logs tables</td>
+</tr>
+<tr>
+<td>Defender for Cloud commitment tier</td>
+<td>20% Defender for Servers cost reduction; at 50+ VMs, commitment tier pricing applies</td>
+<td>Enable Defender for Servers Plan 2 at the management group scope rather than per-subscription; qualify for commitment tier pricing when 50+ SAP VMs are enrolled simultaneously</td>
+<td>Minimum 50 enrolled VMs; management group-level Defender plan</td>
+</tr>
+<tr>
+<td>PIM activation audit log archival</td>
+<td>~$30/month saving by archiving Entra ID PIM audit logs to Azure Storage after 90 days</td>
+<td>Configure Entra ID diagnostic settings to forward PIM audit logs to Log Analytics with 90-day retention; export to Azure Storage (cool tier) for long-term archive via diagnostic setting</td>
+<td>Log Analytics diagnostic setting for Entra ID; Azure Storage lifecycle policy</td>
+</tr>
+<tr>
+<td>JIT VM access replaces VPN for emergency access</td>
+<td>~$200/month saving by eliminating dedicated emergency access VPN concentrator</td>
+<td>Defender for Cloud JIT VM access opens SAP VM SSH port on demand from authorized IPs; eliminates need for dedicated emergency VPN endpoint</td>
+<td>Defender for Cloud Servers Plan 2 (JIT requires Plan 2); SAP VM NSG must have JIT-compatible configuration</td>
+</tr>
+<tr>
+<td>Sentinel SOAR auto-remediation reduces incident response labor</td>
+<td>2-4 hours saved per security incident; at $150/hour analyst cost and 5 incidents/month: $1,500-3,000/month labor saving</td>
+<td>Deploy SOAR playbooks for auto-lock of compromised SAP users, auto-create ServiceNow incident, auto-notify SAP Security team; automates first 30 minutes of incident response</td>
+<td>Sentinel SOAR Logic App playbooks deployed; ServiceNow integration configured</td>
+</tr>
+<tr>
+<td>ANF encryption with CMK from existing Key Vault</td>
+<td>Zero incremental cost (CMK is already in Key Vault for disk encryption; reusing same Key Vault for ANF adds no cost)</td>
+<td>Configure ANF account to use existing Key Vault CMK for volume encryption; same CMK can be used for both disk encryption sets and ANF if key policy permits</td>
+<td>Azure Key Vault with existing CMK; ANF account CMK configuration</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="monitoring-and-alerts">Monitoring and Alerts<a class="headerlink" href="#monitoring-and-alerts" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Metric/Signal</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Action Group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP-BruteForce-Logon</td>
+<td>Sentinel: SM20 AU4/AU5/AU6/AU7 from same IP</td>
+<td>Above 10 failed logons in 10 minutes</td>
+<td>Critical</td>
+<td>sap-security-oncall + SOAR auto-lock</td>
+</tr>
+<tr>
+<td>SAP-Privileged-User-Change</td>
+<td>Sentinel: SM20 AUH event (role/profile assignment)</td>
+<td>Any production role assignment outside maintenance window</td>
+<td>High</td>
+<td>sap-security-ops</td>
+</tr>
+<tr>
+<td>SAP-ABAP-Debugger-Production</td>
+<td>Sentinel: SM20 AUK event (debugger with breakpoint)</td>
+<td>Any ABAP debugger event in production system</td>
+<td>Critical</td>
+<td>sap-security-oncall + SAP-basis-oncall</td>
+</tr>
+<tr>
+<td>SAP-SensitiveTransaction</td>
+<td>Sentinel: SM20 AUE (SE16/SA38/SE37/STMS in production)</td>
+<td>Any execution outside approved change window</td>
+<td>High</td>
+<td>sap-security-ops</td>
+</tr>
+<tr>
+<td>Firewall-IDPS-Block</td>
+<td>Azure Firewall IDPS log: Action = Deny</td>
+<td>Any IDPS deny event in 5-minute window</td>
+<td>High</td>
+<td>sap-security-ops</td>
+</tr>
+<tr>
+<td>Firewall-IDPS-HighVolume</td>
+<td>Azure Firewall IDPS log: Alert or Deny events</td>
+<td>Above 50 events in 15 minutes</td>
+<td>Critical</td>
+<td>sap-security-oncall</td>
+</tr>
+<tr>
+<td>KeyVault-CMK-AccessDenied</td>
+<td>Key Vault diagnostic: Access denied to CMK key</td>
+<td>Any access denied event</td>
+<td>Critical</td>
+<td>sap-security-oncall</td>
+</tr>
+<tr>
+<td>KeyVault-SoftDelete-Disabled</td>
+<td>Azure Activity Log: Disable soft delete operation on Key Vault</td>
+<td>Any soft delete disable event</td>
+<td>Critical</td>
+<td>sap-security-oncall</td>
+</tr>
+<tr>
+<td>PIM-Activation-Contributor</td>
+<td>Entra ID Audit Log: PIM role activation for SAP subscription</td>
+<td>Any Contributor+ activation</td>
+<td>Informational</td>
+<td>sap-security-ops (informational email)</td>
+</tr>
+<tr>
+<td>Defender-Critical-Finding</td>
+<td>Defender for Cloud: Critical security alert on SAP VM</td>
+<td>Any Critical severity Defender alert</td>
+<td>High</td>
+<td>sap-security-ops</td>
+</tr>
+<tr>
+<td>SAP-MassDownload</td>
+<td>Sentinel: SM20 AUL events by single user</td>
+<td>Above 100 download events in 1 hour by same user</td>
+<td>High</td>
+<td>sap-security-ops</td>
+</tr>
+<tr>
+<td>HANA-SSL-Certificate-Expiry</td>
+<td>Azure Monitor: Key Vault certificate expiry</td>
+<td>Certificate expiry within 30 days</td>
+<td>Medium</td>
+<td>sap-security-ops</td>
+</tr>
+<tr>
+<td>NSG-SAP-Rule-Change</td>
+<td>Azure Activity Log: NSG rule create/update/delete in SAP subnets</td>
+<td>Any NSG rule change in SAP production subscription</td>
+<td>Medium</td>
+<td>sap-security-ops</td>
+</tr>
+<tr>
+<td>Entra-ID-SAP-UserDisabled</td>
+<td>Entra ID Audit Log: SAP Fiori app user disabled or MFA reset</td>
+<td>Any SAP Fiori group member account disabled or MFA method deleted</td>
+<td>High</td>
+<td>sap-security-ops</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-1-permanent-contributor-role-assignments-on-sap-production-subscription">Anti-Pattern 1: Permanent Contributor Role Assignments on SAP Production Subscription<a class="headerlink" href="#anti-pattern-1-permanent-contributor-role-assignments-on-sap-production-subscription" title="Permanent link">¶</a></h3>
+<p>Granting permanent Contributor or Owner roles to SAP Basis engineers on the SAP production subscription creates a persistent attack surface. If an engineer's Entra ID account is compromised via phishing, credential stuffing, or session hijacking, the attacker gains immediate Contributor-level access to all SAP production VMs, storage, and network resources without any additional authentication challenge. Permanent Contributor assignments also violate CIS Azure Benchmark control 1.23 and ISO 27001 A.9.2.3.</p>
+<p><strong>Correct approach:</strong> Remove all permanent Contributor and Owner role assignments from the SAP production subscription. Assign only Reader role permanently. Use PIM to provide time-bounded Contributor access with MFA, approval workflow, and business justification requirement. Maximum activation duration for SAP production infrastructure changes should be 8 hours with automatic expiry.</p>
+<h3 id="anti-pattern-2-configuring-azure-firewall-idps-in-alert-mode-only">Anti-Pattern 2: Configuring Azure Firewall IDPS in Alert Mode Only<a class="headerlink" href="#anti-pattern-2-configuring-azure-firewall-idps-in-alert-mode-only" title="Permanent link">¶</a></h3>
+<p>Azure Firewall Premium IDPS in Alert mode logs detected attacks but does not block them. This is appropriate for initial deployment to verify IDPS signatures do not produce false positives. However, leaving IDPS in Alert mode permanently means that known SAP exploitation patterns (ICM directory traversal, Message Server CVE-based exploits) are detected, logged, and allowed to continue. PCI-DSS requirement 6.4 and SAP-specific security guidance require active prevention (Deny mode) for systems processing financial data.</p>
+<p><strong>Correct approach:</strong> Operate Azure Firewall Premium IDPS in Alert and Deny mode for all production SAP environments. During initial deployment, run IDPS in Alert mode for 4-6 weeks to identify false positives specific to the SAP traffic patterns. After tuning (adding bypass rules for identified false positives such as HANA HSR traffic or SAP Cloud Connector), switch to Deny mode via a planned change.</p>
+<h3 id="anti-pattern-3-not-configuring-mde-exclusions-for-hana-storage-paths">Anti-Pattern 3: Not Configuring MDE Exclusions for HANA Storage Paths<a class="headerlink" href="#anti-pattern-3-not-configuring-mde-exclusions-for-hana-storage-paths" title="Permanent link">¶</a></h3>
+<p>Deploying Microsoft Defender for Endpoint on SAP HANA VMs without excluding the HANA data and log volume paths from real-time scan causes MDE to scan every file written to /hana/data and /hana/log in real-time. HANA writes 100s of MB/s to the log volume continuously; MDE scan overhead on each write increases log write latency from sub-0.5 ms (ANF Ultra baseline) to 2-5 ms per write, exceeding the SAP Note 1943937 storage KPI of below 1 ms p99 for log volume latency. This manifests as HANA short dumps (transaction timeout) and SAP ABAP update task failures.</p>
+<p><strong>Correct approach:</strong> Configure MDE exclusions for HANA storage paths in the Microsoft Defender for Endpoint policy: exclude /hana/data, /hana/log, and /hana/backup from real-time protection. These exclusions must be managed via Intune policy (not manual on each VM) to prevent accidental removal during MDE updates. Retain MDE protection for /usr/sap, /sapmnt, and OS directories where malware is more likely to reside.</p>
+<h3 id="anti-pattern-4-using-key-vault-access-policies-instead-of-azure-rbac">Anti-Pattern 4: Using Key Vault Access Policies Instead of Azure RBAC<a class="headerlink" href="#anti-pattern-4-using-key-vault-access-policies-instead-of-azure-rbac" title="Permanent link">¶</a></h3>
+<p>Key Vault access policies are the legacy authorization model for Azure Key Vault. Access policies grant permissions at the Key Vault level, not at the individual secret, key, or certificate level. This means a service principal with the <code>get</code> permission on Key Vault secrets can access all secrets in that Key Vault, violating least-privilege. Access policies also do not integrate with Azure Monitor for unified audit logging, and PIM cannot be used to time-bound Key Vault access policy assignments.</p>
+<p><strong>Correct approach:</strong> Delete all Key Vault access policies and use Azure RBAC exclusively. Assign Key Vault roles (Key Vault Secrets User, Key Vault Certificate User, Key Vault Crypto User) at the individual secret/certificate/key scope where possible, or at the Key Vault scope for service principals that require broad access. Use PIM for the Key Vault Administrator role to ensure all administrative access is time-bounded and audited.</p>
+<h3 id="anti-pattern-5-storing-sap-hana-credentials-in-azure-devops-pipeline-variables">Anti-Pattern 5: Storing SAP HANA Credentials in Azure DevOps Pipeline Variables<a class="headerlink" href="#anti-pattern-5-storing-sap-hana-credentials-in-azure-devops-pipeline-variables" title="Permanent link">¶</a></h3>
+<p>SAP Basis teams frequently store HANA SYSTEM password, SAP RFC passwords, and SAP &lt;SID&gt;adm OS user password as Azure DevOps pipeline secret variables to automate HANA operations (backup scripts, monitoring queries, SAP landscape management). Azure DevOps pipeline variables, even marked as secret, are not stored in HSM-backed storage and are accessible to any pipeline with access to the variable group. If the Azure DevOps organization is compromised, all stored SAP credentials are exposed.</p>
+<p><strong>Correct approach:</strong> Store all SAP credentials in Azure Key Vault. Azure DevOps pipelines retrieve secrets at runtime via the Azure Key Vault task or Azure CLI with managed identity authentication. The pipeline service principal is granted only the Key Vault Secrets User role on the specific secrets it requires. Secrets are never written to pipeline logs (use the isSecret output variable parameter). Rotate Key Vault secrets on a 90-day schedule using Key Vault rotation policies.</p>
+<h3 id="anti-pattern-6-disabling-sap-security-audit-log-sm19-to-reduce-system-load">Anti-Pattern 6: Disabling SAP Security Audit Log (SM19) to Reduce System Load<a class="headerlink" href="#anti-pattern-6-disabling-sap-security-audit-log-sm19-to-reduce-system-load" title="Permanent link">¶</a></h3>
+<p>Some SAP Basis teams disable or restrict the SAP Security Audit Log (SM19 audit profile) on development or quality systems under the rationale that audit logging adds system load (0.5-2% additional CPU for dialog work processes). However, many security incidents involving SAP systems are discovered only after analyzing audit log history. If SM19 is not configured or is too restrictive, there is no forensic record of unauthorized transactions, privilege escalations, or data downloads that may have occurred weeks before the incident is discovered.</p>
+<p><strong>Correct approach:</strong> Configure SM19 audit profiles on all SAP systems (not just production) to capture at minimum: all failed logon attempts (AUA), all successful logon/logoff events for privileged users (SAP_ALL, basis admins), all SU01 user master changes (AUG), all role/profile assignments (AUH), all executions of sensitive transactions (SE16, SE37, SA38, STMS, RZ10), and all ABAP debugger activations (AUK). The 0.5-2% CPU overhead is acceptable for the forensic capability it provides. Configure SM19 log archiving to Azure Blob Storage for 2-year retention per compliance requirements.</p>
+<h3 id="anti-pattern-7-sap-cloud-connector-vm-without-hardening">Anti-Pattern 7: SAP Cloud Connector VM Without Hardening<a class="headerlink" href="#anti-pattern-7-sap-cloud-connector-vm-without-hardening" title="Permanent link">¶</a></h3>
+<p>SAP Cloud Connector installed on an unmanaged Azure VM in the management subnet with default OS settings creates a persistent outbound HTTPS tunnel from the Azure SAP environment to SAP BTP. If the Cloud Connector VM is compromised, the attacker can use the established BTP tunnel to exfiltrate SAP data or inject malicious integration flows. Common hardening gaps include: Cloud Connector VM accessible via SSH from any IP in the management subnet; Cloud Connector administrator portal (port 8443) accessible from any IP; OS not patched; no MDE installed.</p>
+<p><strong>Correct approach:</strong> Harden the Cloud Connector VM per SAP Cloud Connector administration guide: restrict SSH access via JIT VM access (Defender for Cloud); restrict Cloud Connector admin portal (8443) access to SAP admin workstation IPs only via NSG; install MDE with appropriate exclusions; enable OS auto-patching via Azure Update Manager; configure Cloud Connector certificate for mTLS (mutual TLS) authentication with SAP BTP to prevent cloud connector impersonation.</p>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="issue-1-sap-fiori-sso-fails-with-saml-authentication-error-after-entra-id-conditional-access-policy-added">Issue 1: SAP Fiori SSO Fails with SAML Authentication Error After Entra ID Conditional Access Policy Added<a class="headerlink" href="#issue-1-sap-fiori-sso-fails-with-saml-authentication-error-after-entra-id-conditional-access-policy-added" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> After adding the Conditional Access policy CA-SAP-Fiori-Prod-MFA-Required, SAP Fiori users receive SAML authentication failure error when accessing SAP Fiori from corporate laptops. Browser developer tools show the Entra ID SAML response is being rejected by SAP ABAP with error: SAML2: Authentication failed.</p>
+<p><strong>Root cause:</strong> The Conditional Access policy grant control <code>compliantDevice</code> is blocking authentication for SAP Fiori users on corporate laptops that are Azure AD joined but not Intune-enrolled. The SAML response from Entra ID includes the device compliance claim, and SAP ABAP SAML2 configuration is rejecting sessions where the compliantDevice claim is present but false.</p>
+<p><strong>Resolution:</strong> Separate the Conditional Access policy into two policies: (1) CA-SAP-Fiori-MFA-All: require MFA for all users accessing SAP Fiori application (no device compliance requirement); (2) CA-SAP-Fiori-CompliantDevice-Unmanaged: require compliant device only for access from devices not Azure AD hybrid-joined. Exclude devices where the deviceTrustType is ServerAD (Hybrid Azure AD joined) from the compliantDevice requirement. Monitor Entra ID sign-in logs (Azure Monitor → Entra ID → Sign-ins) filtered for the SAP Fiori application to verify both policies apply correctly.</p>
+<h3 id="issue-2-microsoft-sentinel-sap-ctm-connector-stops-receiving-events">Issue 2: Microsoft Sentinel SAP CTM Connector Stops Receiving Events<a class="headerlink" href="#issue-2-microsoft-sentinel-sap-ctm-connector-stops-receiving-events" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> SAP security events stop appearing in the Sentinel SAPAuditLog table. The Sentinel CTM agent VM shows as running, but the last event in Log Analytics was 4 hours ago. The SAP SM20 audit log on the SAP system shows new events being generated.</p>
+<p><strong>Root cause:</strong> The SAP RFC user (Z_SENTINEL_AGENT) password expired after 90 days. The SAP default password policy for service users requires 90-day password rotation unless the user type is set to System (which disables password expiry for RFC users). The CTM agent HANA connection string uses the expired password and silently fails to authenticate.</p>
+<p><strong>Resolution:</strong> Reset the Z_SENTINEL_AGENT SAP user password in SU01 (set new password and click Save). Update the password in the CTM agent configuration file (/opt/sapcon/SID/systemconfig.ini, field password). Restart the CTM container: docker restart sapcon-SID. Verify events resume in Log Analytics within 5-10 minutes. To prevent recurrence: set the Z_SENTINEL_AGENT user type to System in SU01 (disables password expiry) and add the user to the SAP_System_Users user group; alternatively, store the password in Azure Key Vault and configure the CTM agent to retrieve it on startup.</p>
+<h3 id="issue-3-azure-firewall-idps-blocking-legitimate-sap-rfc-traffic">Issue 3: Azure Firewall IDPS Blocking Legitimate SAP RFC Traffic<a class="headerlink" href="#issue-3-azure-firewall-idps-blocking-legitimate-sap-rfc-traffic" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> SAP RFC calls from an external partner system to the SAP production ABAP system are being blocked by Azure Firewall IDPS. Azure Firewall logs show IDPS rule 2024127 (SQL injection pattern) blocking traffic on TCP port 3300. The partner system's RFC function module parameter contains SQL-like strings that trigger the IDPS signature.</p>
+<p><strong>Root cause:</strong> The Azure Firewall IDPS signature 2024127 matches on SQL injection patterns in TCP payload. SAP RFC traffic on port 3300 carries ABAP table select query strings in the RFC parameter payload. When a partner system's RFC call includes a WHERE clause string as an RFC parameter value, the IDPS signature incorrectly identifies it as a SQL injection attempt.</p>
+<p><strong>Resolution:</strong> Add an IDPS bypass rule for the specific source and destination IP pair: in the Azure Firewall policy, add a bypass entry for the partner system's IP range (source) to the SAP ABAP VM private IP (destination) on port 3300-3399 for the specific IDPS signature 2024127. This narrow bypass preserves IDPS protection for all other traffic while allowing the legitimate RFC traffic. Alternatively, configure the RFC connection to use TLS encryption (SAP SNC/TLS on RFC) which would encrypt the payload and prevent IDPS from inspecting it. Reference: Azure Firewall IDPS bypass configuration.</p>
+<h3 id="issue-4-cmk-key-rotation-causes-sap-hana-disk-inaccessible">Issue 4: CMK Key Rotation Causes SAP HANA Disk Inaccessible<a class="headerlink" href="#issue-4-cmk-key-rotation-causes-sap-hana-disk-inaccessible" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> After rotating the Customer Managed Key in Azure Key Vault (creating a new key version), all Premium SSD v2 disks on the SAP HANA VMs become read-only and HANA reports I/O errors within 10 minutes. The Disk Encryption Set shows the old key version is being used, but the new version is marked as current.</p>
+<p><strong>Root cause:</strong> The Disk Encryption Set (DES) has auto-key-rotation enabled, but the Key Vault access policy (or RBAC role) for the DES managed identity was granted on the previous key version URL rather than the Key Vault key identifier (which covers all versions). When the new key version was created, the DES managed identity attempted to use the new version for wrapping/unwrapping but received a Key Vault access denied error.</p>
+<p><strong>Resolution:</strong> Verify that the DES system-assigned managed identity has the Key Vault Crypto User role scoped to the Key Vault (not to a specific key version). Check RBAC: az role assignment list --scope /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.KeyVault/vaults/kv-sap-prod. If the role is scoped to a specific key ID (not the Key Vault), re-assign the role to the Key Vault scope. After fixing RBAC, update the DES to explicitly reference the new key version: az disk-encryption-set update --key-url <new-key-version-url>. SAP HANA disks will resume normal I/O within 5 minutes of the DES update propagating. Reference: Azure CMK rotation documentation.</new-key-version-url></rg></sub></p>
+<h3 id="issue-5-jit-vm-access-not-working-for-sap-basis-ssh-access-to-hana-vms">Issue 5: JIT VM Access Not Working for SAP Basis SSH Access to HANA VMs<a class="headerlink" href="#issue-5-jit-vm-access-not-working-for-sap-basis-ssh-access-to-hana-vms" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> SAP Basis engineer requests JIT VM access to the HANA primary VM from Defender for Cloud. The JIT access request is approved, but the engineer still cannot SSH to the HANA VM. The NSG on the HANA subnet shows the JIT-added rule for TCP 22, but the connection times out.</p>
+<p><strong>Root cause:</strong> The Azure NSG for the HANA subnet (nsg-sap-hana-prod) has a Deny-All-Inbound rule at priority 4000. The JIT VM access mechanism creates a temporary NSG allow rule for TCP 22 from the engineer's source IP. However, the JIT rule is created at a specific priority (typically 100-1000 range). If there is another deny rule at a priority lower than 4000 but higher than the JIT rule priority that blocks SSH, the JIT rule is bypassed. In this case, a custom rule "Block-SSH-from-All" at priority 200 was added, and the JIT rule was created at priority 1000 (lower priority = evaluated later), so the deny rule at 200 takes precedence.</p>
+<p><strong>Resolution:</strong> Remove the custom "Block-SSH-from-All" rule at priority 200 from the HANA subnet NSG. The default Deny-All-Inbound at priority 4000 is sufficient; JIT creates temporary allow rules at priorities above 4000 minus the number of JIT requests, typically in the 100-1000 range. The JIT rules should be at a priority that overrides the default deny but not any custom explicit deny rules. After removing the conflicting rule, test JIT access and verify that the engineer can SSH to the HANA VM within the approved time window.</p>
+<h3 id="issue-6-sentinel-analytic-rule-generates-false-positive-alerts-for-sap-batch-jobs">Issue 6: Sentinel Analytic Rule Generates False Positive Alerts for SAP Batch Jobs<a class="headerlink" href="#issue-6-sentinel-analytic-rule-generates-false-positive-alerts-for-sap-batch-jobs" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> The SAP-SensitiveTransaction Sentinel Analytic Rule generates High severity alerts every 5 minutes for SE38 (ABAP program execution) transaction activity from the background work process user ALEREMOTE during overnight SAP IDoc/ALE background processing. The SAP Security team is alert-fatigued by 200+ false positive High alerts per day.</p>
+<p><strong>Root cause:</strong> The SAP CTM Sentinel Analytic Rule for sensitive transaction execution was configured to alert on any execution of SE38, SA38, and SE16 in the SAP production system without filtering for background RFC users (RFC users that run automated batch processes). ALEREMOTE is an RFC user that legitimately executes ABAP programs via SE38 as part of SAP ALE background processing.</p>
+<p><strong>Resolution:</strong> Modify the Sentinel KQL Analytic Rule to exclude known SAP service users (ALEREMOTE, BWREMOTE, TMSADM, CSMREG) from the sensitive transaction alert: add a where clause <code>| where User !in~ ("ALEREMOTE", "BWREMOTE", "TMSADM", "CSMREG")</code>. Additionally, add a time-of-day filter to only alert on SE38/SA38 executions during business hours (08:00-20:00 UTC) for interactive dialog logon type, excluding background (type A) logon type from the alert. After tuning, review the alert count over 48 hours to confirm false positive rate drops below 5 per day. Reference: Sentinel SAP CTM built-in rule customization documentation.</p>
+<hr/>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Subscription</th>
+<th>Management Group</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure Key Vault Premium (SAP production secrets + CMK)</td>
+<td>SAP Production Subscription</td>
+<td>Landing Zones &gt; SAP</td>
+<td>Key Vault in same subscription as SAP VMs minimizes cross-subscription latency for secret retrieval; Defender for Key Vault alerts go to SAP production subscription</td>
+</tr>
+<tr>
+<td>Microsoft Sentinel (SAP CTM connector, Analytic Rules)</td>
+<td>Security/Management Subscription</td>
+<td>Platform &gt; Management</td>
+<td>Sentinel is a shared security service; SAP CTM connector forwards to a shared Sentinel workspace used by all workloads, enabling cross-workload correlation (SAP + Azure infrastructure + Entra ID)</td>
+</tr>
+<tr>
+<td>Microsoft Defender for Cloud (all plans)</td>
+<td>SAP Management Group scope</td>
+<td>Landing Zones &gt; SAP (inherited from MG)</td>
+<td>Defender plans enabled at management group scope ensure no SAP subscription opts out of security coverage</td>
+</tr>
+<tr>
+<td>Disk Encryption Sets</td>
+<td>SAP Production Subscription</td>
+<td>Landing Zones &gt; SAP</td>
+<td>DES must be co-located with managed disks; different subscription requires cross-subscription DES references which are not supported</td>
+</tr>
+</tbody>
+</table>
+<h3 id="management-group-policy-assignments-sap-management-group-scope">Management Group Policy Assignments (SAP Management Group Scope)<a class="headerlink" href="#management-group-policy-assignments-sap-management-group-scope" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Effect</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deny-Disk-Without-CMK</td>
+<td>Deny (custom)</td>
+<td>Prevents SAP managed disks from being created without a CMK-backed Disk Encryption Set</td>
+</tr>
+<tr>
+<td>Require-Defender-Servers-Plan2</td>
+<td>DeployIfNotExists</td>
+<td>Ensures Defender for Servers Plan 2 is enabled on all SAP subscriptions</td>
+</tr>
+<tr>
+<td>Deny-Public-IP-on-NIC</td>
+<td>Deny</td>
+<td>Prevents public IP on SAP VM NICs; forces access via Azure Bastion</td>
+</tr>
+<tr>
+<td>Require-JIT-VM-Access</td>
+<td>AuditIfNotExists</td>
+<td>Audits that JIT VM access is configured on all SAP VMs with network access</td>
+</tr>
+<tr>
+<td>Deny-KeyVault-PublicAccess</td>
+<td>Deny</td>
+<td>Prevents Key Vault from enabling public network access</td>
+</tr>
+<tr>
+<td>Require-KeyVault-SoftDelete</td>
+<td>Deny</td>
+<td>Prevents Key Vault creation without soft delete and purge protection</td>
+</tr>
+<tr>
+<td>Deploy-SecurityCenter-DiagnosticSettings</td>
+<td>DeployIfNotExists</td>
+<td>Ensures Defender for Cloud security alerts forwarded to Sentinel workspace</td>
+</tr>
+<tr>
+<td>Audit-PIM-NoPermStandalonePrivileged</td>
+<td>AuditIfNotExists</td>
+<td>Audits that Contributor+ roles are managed via PIM (not permanent assignments)</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/active-directory/saas-apps/sap-netweaver-tutorial">Microsoft Entra ID SSO for SAP NetWeaver</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/sentinel/sap/deployment-overview">Microsoft Sentinel: SAP Continuous Threat Monitoring connector</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/firewall/premium-features#idps">Azure Firewall Premium IDPS</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers-select-plan">Microsoft Defender for Cloud: Servers Plan 2</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide">Azure Key Vault RBAC guide</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption">Customer-managed keys for Azure Disk Encryption</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/active-directory/privileged-identity-management/pim-configure">Azure Privileged Identity Management overview</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/sap/workloads/security-baseline">SAP on Azure security best practices</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/active-directory/conditional-access/concept-conditional-access-cloud-apps">Azure Conditional Access for SAP applications</a></li>
+</ul>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

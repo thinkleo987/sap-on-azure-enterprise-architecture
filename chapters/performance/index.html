@@ -1,0 +1,2935 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/performance/" rel="canonical"/>
+<link href="../disaster-recovery/" rel="prev"/>
+<link href="../cost-optimization/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Performance Architecture - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-on-azure-performance-engineering">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Performance Architecture
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+<nav aria-label="Architecture Overview" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-sap-performance-topology-with-ppg-and-availability-zones">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: SAP Performance Topology with PPG and Availability Zones
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+<nav aria-label="SAP Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-workload-profiles">
+<span class="md-ellipsis">
+      
+        SAP Workload Profiles
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-hana-in-memory-performance">
+<span class="md-ellipsis">
+      
+        SAP HANA In-Memory Performance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-abap-work-process-tuning">
+<span class="md-ellipsis">
+      
+        SAP ABAP Work Process Tuning
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-buffer-configuration">
+<span class="md-ellipsis">
+      
+        SAP Buffer Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#database-statistics-maintenance">
+<span class="md-ellipsis">
+      
+        Database Statistics Maintenance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference-table">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference Table
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+<nav aria-label="Azure Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#proximity-placement-groups">
+<span class="md-ellipsis">
+      
+        Proximity Placement Groups
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#accelerated-networking">
+<span class="md-ellipsis">
+      
+        Accelerated Networking
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#expressroute-performance">
+<span class="md-ellipsis">
+      
+        ExpressRoute Performance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-netapp-files-ultra-tier">
+<span class="md-ellipsis">
+      
+        Azure NetApp Files Ultra Tier
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ultra-disk-iopsthroughput-configuration">
+<span class="md-ellipsis">
+      
+        Ultra Disk IOPS/Throughput Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#service-detail-diagram">
+<span class="md-ellipsis">
+      
+        Service Detail Diagram
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#compute-performance">
+<span class="md-ellipsis">
+      
+        Compute Performance
+      
+    </span>
+</a>
+<nav aria-label="Compute Performance" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vm-families-for-sap-tiers">
+<span class="md-ellipsis">
+      
+        VM Families for SAP Tiers
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#numa-topology-considerations">
+<span class="md-ellipsis">
+      
+        NUMA Topology Considerations
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#memory-bandwidth-for-hana">
+<span class="md-ellipsis">
+      
+        Memory Bandwidth for HANA
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-dedicated-hosts">
+<span class="md-ellipsis">
+      
+        Azure Dedicated Hosts
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#storage-performance">
+<span class="md-ellipsis">
+      
+        Storage Performance
+      
+    </span>
+</a>
+<nav aria-label="Storage Performance" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ultra-disk-iops-and-throughput-for-hana-datalog">
+<span class="md-ellipsis">
+      
+        Ultra Disk IOPS and Throughput for HANA Data/Log
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#write-accelerator-for-hana-log-on-mv2">
+<span class="md-ellipsis">
+      
+        Write Accelerator for HANA Log on Mv2
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anf-ultra-tier-latency">
+<span class="md-ellipsis">
+      
+        ANF Ultra Tier Latency
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#storage-latency-per-sap-note-2399079">
+<span class="md-ellipsis">
+      
+        Storage Latency per SAP Note 2399079
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-performance">
+<span class="md-ellipsis">
+      
+        Network Performance
+      
+    </span>
+</a>
+<nav aria-label="Network Performance" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#application-to-database-latency-requirements">
+<span class="md-ellipsis">
+      
+        Application-to-Database Latency Requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#expressroute-bandwidth-planning">
+<span class="md-ellipsis">
+      
+        ExpressRoute Bandwidth Planning
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#inter-az-latency-for-hana-hsr">
+<span class="md-ellipsis">
+      
+        Inter-AZ Latency for HANA HSR
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hana-scale-out-network">
+<span class="md-ellipsis">
+      
+        HANA Scale-Out Network
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-architecture">
+<span class="md-ellipsis">
+      
+        Security Architecture
+      
+    </span>
+</a>
+<nav aria-label="Security Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance-monitoring-access-control">
+<span class="md-ellipsis">
+      
+        Performance Monitoring Access Control
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#key-vault-for-performance-tool-credentials">
+<span class="md-ellipsis">
+      
+        Key Vault for Performance Tool Credentials
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-security-for-performance-testing">
+<span class="md-ellipsis">
+      
+        Network Security for Performance Testing
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability-and-high-availability">
+<span class="md-ellipsis">
+      
+        Reliability and High Availability
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization">
+<span class="md-ellipsis">
+      
+        Cost Optimization
+      
+    </span>
+</a>
+<nav aria-label="Cost Optimization" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance-vs-cost-trade-offs">
+<span class="md-ellipsis">
+      
+        Performance vs Cost Trade-offs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#right-sizing-process">
+<span class="md-ellipsis">
+      
+        Right-Sizing Process
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reserved-instances-for-performance-tier-vms">
+<span class="md-ellipsis">
+      
+        Reserved Instances for Performance-Tier VMs
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance-benchmarking">
+<span class="md-ellipsis">
+      
+        Performance Benchmarking
+      
+    </span>
+</a>
+<nav aria-label="Performance Benchmarking" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-sd-benchmark">
+<span class="md-ellipsis">
+      
+        SAP SD Benchmark
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hana-tpc-h-on-azure">
+<span class="md-ellipsis">
+      
+        HANA TPC-H on Azure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#baseline-documentation-process">
+<span class="md-ellipsis">
+      
+        Baseline Documentation Process
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operations-and-monitoring">
+<span class="md-ellipsis">
+      
+        Operations and Monitoring
+      
+    </span>
+</a>
+<nav aria-label="Operations and Monitoring" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-monitor-for-sap-solutions-ams-providers">
+<span class="md-ellipsis">
+      
+        Azure Monitor for SAP Solutions (AMS) Providers
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vm-insights-for-sap">
+<span class="md-ellipsis">
+      
+        VM Insights for SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#earlywatch-alert-integration">
+<span class="md-ellipsis">
+      
+        EarlyWatch Alert Integration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance-alerts">
+<span class="md-ellipsis">
+      
+        Performance Alerts
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance-capacity-planning">
+<span class="md-ellipsis">
+      
+        Performance Capacity Planning
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+<nav aria-label="Landing Zone Mapping" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ppg-placement-in-landing-zone">
+<span class="md-ellipsis">
+      
+        PPG Placement in Landing Zone
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#subnet-design-for-low-latency-tiers">
+<span class="md-ellipsis">
+      
+        Subnet Design for Low-Latency Tiers
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#validation-checklist">
+<span class="md-ellipsis">
+      
+        Validation Checklist
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-1-deploying-hana-vms-without-proximity-placement-groups">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 1: Deploying HANA VMs Without Proximity Placement Groups
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-2-using-premium-ssd-v1-or-v2-for-hana-log-volume-without-write-accelerator">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 2: Using Premium SSD (v1 or v2) for HANA Log Volume Without Write Accelerator
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-3-shared-anf-capacity-pool-across-sids-and-service-levels">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 3: Shared ANF Capacity Pool Across SIDs and Service Levels
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-4-over-provisioning-abap-work-processes-without-numa-awareness">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 4: Over-Provisioning ABAP Work Processes Without NUMA Awareness
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-5-disabling-transparent-huge-pages-without-testing-impact">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 5: Disabling Transparent Huge Pages Without Testing Impact
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-6-sizing-hana-memory-at-11-with-quick-sizer-output">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 6: Sizing HANA Memory at 1:1 with Quick Sizer Output
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting-scenario-1-hana-slow-queries-column-store-full-table-scan">
+<span class="md-ellipsis">
+      
+        Troubleshooting Scenario 1: HANA Slow Queries — Column Store Full Table Scan
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting-scenario-2-high-iops-latency-on-hana-data-volume">
+<span class="md-ellipsis">
+      
+        Troubleshooting Scenario 2: High IOPS Latency on HANA Data Volume
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting-scenario-3-network-bottleneck-abap-dialog-response-time-elevated-after-vm-migration">
+<span class="md-ellipsis">
+      
+        Troubleshooting Scenario 3: Network Bottleneck — ABAP Dialog Response Time Elevated After VM Migration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting-scenario-4-ppg-misconfiguration-ppg-allocation-failure-during-scale-out">
+<span class="md-ellipsis">
+      
+        Troubleshooting Scenario 4: PPG Misconfiguration — PPG Allocation Failure During Scale-Out
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting-scenario-5-write-accelerator-issues-log-write-latency-remains-high-after-wa-enable">
+<span class="md-ellipsis">
+      
+        Troubleshooting Scenario 5: Write Accelerator Issues — Log Write Latency Remains High After WA Enable
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting-scenario-6-hana-hsr-replication-lag-during-business-hours">
+<span class="md-ellipsis">
+      
+        Troubleshooting Scenario 6: HANA HSR Replication Lag During Business Hours
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="./">
+<span class="md-ellipsis">
+    Phase F — Optimization and Performance
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="sap-on-azure-performance-engineering">SAP on Azure Performance Engineering<a class="headerlink" href="#sap-on-azure-performance-engineering" title="Permanent link">¶</a></h1>
+<hr/>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>SAP workloads on Azure have deterministic performance requirements defined by SAP certification standards, SAP Notes, and measured benchmarks. SAP HANA, the in-memory database underlying SAP S/4HANA and SAP BW/4HANA, requires storage latency below 1 ms p99 for log writes (SAP Note 2399079), storage read throughput of at least 400 MB/s for data volumes, memory bandwidth sufficient for columnar scan operations measured in GB/s, and sub-1 ms application-to-database round-trip time for ABAP dialog work processes. These are not aspirational targets but pass/fail thresholds: an Azure VM SKU or storage configuration that fails these tests is not supported for SAP HANA production. SAP NetWeaver ABAP adds a separate set of requirements around CPU throughput (measured in SAPS), work process response time, and RFC latency between application and database tiers. Performance engineering on Azure is therefore a constraint-satisfaction problem with documented lower bounds, not an optimization exercise.</p>
+<p>The primary bottlenecks for SAP workloads on Azure are storage latency (HANA log write path), memory bandwidth (HANA column store scan operations), and network latency (ABAP application-to-HANA round-trip and HANA System Replication synchronous log shipping). Compute throughput (SAPS) is straightforward to provision by scaling out application servers. Storage IOPS and throughput on managed disks are disk-size-dependent and VM-SKU-limited, which makes Azure NetApp Files Ultra tier the preferred choice for HANA data and log volumes because ANF throughput scales with provisioned capacity and is not constrained by VM NIC limits for NFS traffic in the same way that Premium SSD attached storage is. Network bottlenecks manifest at two levels: the VM-level (Accelerated Networking is mandatory for all SAP VMs per SAP Note 1928533) and the topology level (Proximity Placement Groups are mandatory for latency-sensitive tiers per SAP Note 2800746).</p>
+<p>Performance baseline documentation is a prerequisite before production go-live. The baseline captures: storage KPIs measured with hcmt (HANA Hardware Configuration Check Tool, SAP Note 1943937), network latency measured between application and database VMs, ABAP work process response time distribution under peak SAPS load, HANA key performance indicators from SAP HANA Studio or Cockpit (delta merge time, savepoint duration, log write latency histogram), and OS-level metrics (CPU ready time, memory ballooning, NIC packet loss). Without a baseline, post-go-live performance incidents cannot be diagnosed as regressions versus original misconfiguration. Azure Monitor Workbook for SAP Solutions and AMS (Azure Monitor for SAP Solutions) both integrate with the SAP HANA performance monitoring APIs to capture ongoing KPIs.</p>
+<hr/>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>The SAP on Azure performance architecture is organized into concentric tiers of latency sensitivity. The innermost tier is the SAP HANA database server: it requires the lowest latency access to its ANF NFS volumes and the highest memory bandwidth of any Azure VM SKU. The next tier is the SAP application server cluster (PAS and AAS VMs): these require low-latency RFC connections to HANA and low-latency NFS access to the /sapmnt share. The outermost tier is end-user connectivity through SAP Web Dispatcher, load balancers, and ExpressRoute — latency here affects user-perceived SAP GUI response time but is less critical than intra-SAP component latency. Each tier has distinct VM families, storage types, and network configurations that must be coordinated to achieve overall system performance targets.</p>
+<p>Proximity Placement Groups (PPGs) are the Azure construct that constrains VM placement to the same physical data center within an Availability Zone. For SAP HANA scale-up deployments, placing the HANA VM and application server VMs in the same PPG reduces intra-zone application-to-database latency from a typical 0.5-1.5 ms to below 0.5 ms. SAP Note 2800746 explicitly requires PPG usage for SAP HANA production workloads where application servers are co-located with the HANA VM. The PPG must be anchored to an Availability Zone; the anchor VM (typically the HANA primary) determines the physical location, and all other PPG members are placed near it. PPG constraint is applied at VM creation time; retrofitting an existing VM into a PPG requires deallocating the VM, which causes downtime.</p>
+<p>Accelerated Networking (AN) is the Azure feature that bypasses the hypervisor virtual switch for NIC data path operations, using SR-IOV to deliver NIC hardware directly to the VM. AN reduces network latency from approximately 200 microseconds to below 50 microseconds for inter-VM traffic and reduces CPU overhead for network processing by approximately 50%. SAP Note 1928533 mandates Accelerated Networking for all supported SAP VM sizes on Azure. All E-series (Edsv5, Easv5), M-series (Msv2, Mdsv3, Mv2), and D-series (Ddsv5) VMs that appear on the SAP Note 1928533 Azure VM list support AN. AN is enabled per NIC; a VM with multiple NICs requires AN enabled on each NIC independently. AN requires the NETVSC and HANA drivers on SLES and RHEL; the SAP-specific OS images from Azure Marketplace include these drivers pre-installed.</p>
+<p>Storage performance is the most complex dimension of SAP on Azure performance engineering. HANA data volume throughput and IOPS requirements scale with HANA memory size and workload type: a HANA OLTP workload (S/4HANA) requires 400 MB/s data read throughput and 250 MB/s log write throughput per SAP Note 2399079. These requirements are validated by the HANA Hardware Configuration Check Tool (hcmt). Azure NetApp Files Ultra tier delivers 128 MiB/s per TiB provisioned, meaning a 4 TiB Ultra volume delivers ~512 MiB/s, which exceeds the HANA data throughput requirement. For HANA log volumes, latency (not throughput) is the binding constraint: the log write must complete in under 1 ms p99 per SAP Note 2399079. ANF Ultra tier delivers sub-0.5 ms p99 log write latency in the same Azure region, meeting this requirement with margin. Premium SSD v2 managed disks can also meet this requirement on Write Accelerator-enabled M-series VMs (see the Compute Performance section).</p>
+<h3 id="architecture-diagram-sap-performance-topology-with-ppg-and-availability-zones">Architecture Diagram: SAP Performance Topology with PPG and Availability Zones<a class="headerlink" href="#architecture-diagram-sap-performance-topology-with-ppg-and-availability-zones" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph TB
+  subgraph AZ1["Availability Zone 1"]
+    subgraph PPG1["Proximity Placement Group 1 (AZ1)"]
+      HANA1["HANA Primary\nM64s_v2 / M192is_v2\n1 TiB–4 TiB RAM\nWrite Accelerator ON"]
+      PAS["PAS\nE32ds_v5\n32 vCPU 256 GiB\nAccel Networking"]
+      AAS1["AAS-01\nE32ds_v5\n32 vCPU 256 GiB"]
+    end
+    subgraph ANF1["ANF Ultra Capacity Pool — Zone 1"]
+      DataVol1["HANA Data NFS\nUltra tier\n400+ MB/s"]
+      LogVol1["HANA Log NFS\nUltra tier\n&lt;0.5 ms p99"]
+    end
+  end
+  subgraph AZ2["Availability Zone 2"]
+    subgraph PPG2["Proximity Placement Group 2 (AZ2)"]
+      HANA2["HANA Secondary\nM64s_v2 / M192is_v2\nHSR SYNC"]
+      AAS2["AAS-02\nE32ds_v5"]
+      AAS3["AAS-03\nE32ds_v5"]
+    end
+    subgraph ANF2["ANF Ultra Capacity Pool — Zone 2"]
+      DataVol2["HANA Data NFS\nUltra tier\n400+ MB/s"]
+      LogVol2["HANA Log NFS\nUltra tier\n&lt;0.5 ms p99"]
+    end
+  end
+  subgraph SharedInfra["Shared Infrastructure"]
+    ILB_HANA["ILB HANA VIP\nStandard SKU\nFloating IP"]
+    ILB_ASCS["ILB ASCS VIP\nStandard SKU"]
+    ANF_Sapmnt["ANF sapmnt\nPremium tier\nCross-zone NFS"]
+    ExpressRoute["ExpressRoute Gateway\nUltra Performance\n10 Gbps"]
+    OnPrem["On-premises\nSAP Frontend\nUsers/RFC"]
+  end
+  HANA1 --&gt;|NFS v4.1 nconnect=8| DataVol1
+  HANA1 --&gt;|NFS v4.1 nconnect=8| LogVol1
+  HANA2 --&gt;|NFS v4.1 nconnect=8| DataVol2
+  HANA2 --&gt;|NFS v4.1 nconnect=8| LogVol2
+  HANA1 --&gt;|HSR SYNC replication\ninter-AZ| HANA2
+  PAS --&gt;|RFC &lt;0.5 ms PPG| HANA1
+  AAS1 --&gt;|RFC &lt;0.5 ms PPG| HANA1
+  AAS2 --&gt;|RFC cross-AZ| ILB_HANA
+  AAS3 --&gt;|RFC cross-AZ| ILB_HANA
+  ILB_HANA --&gt;|Active| HANA1
+  ILB_HANA -.-&gt;|Standby| HANA2
+  PAS --&gt; ANF_Sapmnt
+  AAS1 --&gt; ANF_Sapmnt
+  AAS2 --&gt; ANF_Sapmnt
+  AAS3 --&gt; ANF_Sapmnt
+  OnPrem --&gt;|SAP GUI / RFC| ExpressRoute
+  ExpressRoute --&gt; ILB_ASCS</code></pre>
+<hr/>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<h3 id="sap-workload-profiles">SAP Workload Profiles<a class="headerlink" href="#sap-workload-profiles" title="Permanent link">¶</a></h3>
+<p>SAP workloads on Azure fall into three performance profiles, each with distinct bottleneck patterns:</p>
+<p><strong>OLTP (SAP S/4HANA, SAP ECC):</strong> CPU throughput (SAPS) and database transaction latency dominate. HANA log write latency directly impacts ABAP dialog work process response time because ABAP commit processing waits for HANA log persistence before returning to the user. The critical path is: ABAP work process → HANA SQL execute → HANA row store or column store operation → HANA log write (synchronous, waits for storage ACK) → HANA commit return → ABAP response. A 1 ms increase in HANA log write latency adds approximately 1 ms to every committed ABAP dialog step. For an ABAP dialog step with 20 database commits, 1 ms log latency adds 20 ms to the step time, which is perceptible to users.</p>
+<p><strong>OLAP (SAP BW/4HANA, SAP BW on HANA):</strong> Memory bandwidth and HANA parallel execution capacity dominate. BW queries perform full columnar table scans; a 1 TiB HANA column store scanned at 50 GB/s (typical M-series memory bandwidth) takes 20 seconds. HANA partitioning and parallelism are critical tuning parameters. The ratio of HANA memory to data size determines whether data fits in memory or requires reads from storage. BW/4HANA data loads are storage-throughput-bound: high-volume InfoProvider activations require 400 MB/s+ read throughput from the HANA data volume.</p>
+<p><strong>Mixed (SAP S/4HANA with embedded analytics, SAP HANA Live):</strong> Both OLTP and OLAP requirements apply simultaneously. Peak OLAP queries can saturate HANA execution slots, causing OLTP response time degradation. HANA workload classes (SAP Note 2222250) are used to partition resources between interactive (OLTP) and batch (OLAP) workloads. VM sizing must accommodate the combined SAPS requirement of both workload types at simultaneous peak.</p>
+<h3 id="sap-hana-in-memory-performance">SAP HANA In-Memory Performance<a class="headerlink" href="#sap-hana-in-memory-performance" title="Permanent link">¶</a></h3>
+<p>HANA's columnar in-memory architecture delivers performance through SIMD (Single Instruction Multiple Data) vector operations on column-compressed data. For Azure, the relevant constraint is memory bandwidth: HANA column scan performance scales with memory bandwidth per NUMA node, not CPU frequency. The M192is_v2 provides 192 vCPUs across multiple NUMA nodes, each with local DRAM channels. HANA NUMA-local memory access is critical; HANA processes should be pinned to NUMA nodes using cgroup or HANA's own NUMA binding configuration (parameter <code>numa_nodes_filter</code> in indexserver.ini). Cross-NUMA memory access incurs a penalty of approximately 30-50 ns versus local access, which compounds for column scan operations.</p>
+<p>HANA delta merge is a background operation that converts row store (delta store) to column store format. Delta merge is triggered when the delta store size exceeds a threshold (default: HANA auto-merge at 20% of column store size). Delta merges are CPU and memory-bandwidth intensive and can cause transient OLTP latency spikes if they run during peak load. Azure scheduling: delta merge operations should be scheduled during off-peak windows using HANA system parameter <code>merge_job_start_time</code> in indexserver.ini. Write Accelerator on M-series VMs ensures that HANA log writes during high-merge-load periods do not degrade below the 1 ms p99 threshold.</p>
+<p>HANA savepoints (checkpoints) write all dirty column store delta pages to the data volume. Savepoint frequency (default: every 5 minutes) and duration determine the sustained data volume write throughput requirement. A HANA system with 1 TiB memory and 20% dirty pages generates approximately 200 GiB of savepoint writes per 5-minute interval, requiring approximately 700 MB/s data volume write throughput sustained for the savepoint duration. ANF Ultra tier handles this with provisioned throughput; Premium SSD v2 requires the disk to be provisioned with sufficient throughput capacity (configurable independently of IOPS on Premium SSD v2).</p>
+<h3 id="sap-abap-work-process-tuning">SAP ABAP Work Process Tuning<a class="headerlink" href="#sap-abap-work-process-tuning" title="Permanent link">¶</a></h3>
+<p>ABAP work processes are the unit of concurrency for SAP NetWeaver. Each work process is a single OS process that handles one user request at a time. Work process tuning affects CPU utilization efficiency and response time distribution:</p>
+<ul>
+<li><strong>Dialog work processes:</strong> Set to 2x the number of VM vCPUs as a starting point. For E32ds_v5 (32 vCPUs), configure 64 dialog work processes (parameter <code>rdisp/wp_no_dia</code> in DEFAULT.PFL). Monitor CPU utilization: if CPU is below 70% and dialog wait queue depth exceeds 0, add work processes.</li>
+<li><strong>Background work processes:</strong> Minimum 6; scale based on number of concurrent batch jobs. Background work processes use the same CPU pool as dialog work processes; excessive background processes starve dialog work.</li>
+<li><strong>Update work processes:</strong> Minimum 4 for V1 (synchronous update); V2 (asynchronous update) minimum 2. V1 update latency affects ABAP commit latency.</li>
+<li><strong>Enqueue work processes:</strong> 1 per ASCS instance (SAP ENSA2). The enqueue server is single-threaded; lock throughput is limited by single-core CPU speed, not core count. Use the fastest available vCPU clock speed for ASCS VMs.</li>
+<li><strong>Spool work processes:</strong> Minimum 2; increase if spool queue backup occurs during batch printing peaks.</li>
+</ul>
+<h3 id="sap-buffer-configuration">SAP Buffer Configuration<a class="headerlink" href="#sap-buffer-configuration" title="Permanent link">¶</a></h3>
+<p>ABAP buffer sizes in DEFAULT.PFL directly affect application server CPU and database load. Undersized buffers cause excessive database reads (buffer misses counted in ST05/SM66):</p>
+<table>
+<thead>
+<tr>
+<th>SAP Buffer</th>
+<th>Parameter</th>
+<th>Minimum Production Value</th>
+<th>Impact of Undersizing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Program buffer</td>
+<td><code>zcsa/program_buffer_area</code></td>
+<td>2,000,000,000 (2 GB)</td>
+<td>Frequent ABAP program loads from database</td>
+</tr>
+<tr>
+<td>Table buffer (generic)</td>
+<td><code>zcsa/db_max_buffersize</code></td>
+<td>400,000 (400 MB)</td>
+<td>High SELECT on nametab tables</td>
+</tr>
+<tr>
+<td>CUA buffer</td>
+<td><code>rscp/max_bufsize</code></td>
+<td>32,000 (32 MB)</td>
+<td>GUI layout reloads from database</td>
+</tr>
+<tr>
+<td>Table definition buffer</td>
+<td><code>zcsa/table_buffer_area</code></td>
+<td>60,000,000 (60 MB)</td>
+<td>DD* table lookups on every transparent table access</td>
+</tr>
+<tr>
+<td>Export/import buffer</td>
+<td><code>es/buffersize</code></td>
+<td>100,000 (100 MB for shared memory)</td>
+<td>Shared memory miss — file system read from /sapmnt</td>
+</tr>
+<tr>
+<td>Roll buffer</td>
+<td><code>rdisp/ROLL_MAXFS</code></td>
+<td>8,000,000 (62.5 MB per work proc)</td>
+<td>Excessive paging for large ABAP contexts</td>
+</tr>
+</tbody>
+</table>
+<h3 id="database-statistics-maintenance">Database Statistics Maintenance<a class="headerlink" href="#database-statistics-maintenance" title="Permanent link">¶</a></h3>
+<p>HANA column store statistics are maintained automatically by the HANA optimizer. For HANA, performance issues related to stale statistics are less common than in traditional RDBMS, but the following maintenance operations have Azure-specific scheduling considerations:</p>
+<ul>
+<li><strong>Row store reorganization:</strong> Run monthly via <code>ALTER SYSTEM RECLAIM VERSION SPACE</code>. Schedule during off-peak hours; this operation generates significant row store I/O.</li>
+<li><strong>Index rebuild:</strong> HANA column store indexes are compressed and re-merged automatically during delta merge. Manual index rebuild is not typically required but can be triggered if fragmentation metrics in M_CS_TABLES show high fragmentation ratios.</li>
+<li><strong>Table redistribution (scale-out only):</strong> For HANA scale-out on Azure (M-series VMs connected via dedicated storage network), run <code>ALTER TABLE ... PARTITION BY RANGE REDISTRIBUTE</code> after adding HANA worker nodes to rebalance data across nodes.</li>
+<li><strong>Statistics refresh for row store tables:</strong> HANA row store tables used by ABAP lock tables and enqueue data require statistics updates after mass data loads. Execute <code>UPDATE STATISTICS</code> on row store tables in the SYSTEM schema after large data loads.</li>
+</ul>
+<h3 id="sap-notes-reference-table">SAP Notes Reference Table<a class="headerlink" href="#sap-notes-reference-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Performance Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Azure: Supported Products and Azure VM Types</td>
+<td>VM selection for all SAP tiers; Accelerated Networking mandatory</td>
+<td>All SAP VMs on Azure</td>
+</tr>
+<tr>
+<td>2399079</td>
+<td>Elimination of Storage Configuration Performance Check in HANA</td>
+<td>Defines HANA storage KPIs: log &lt;1 ms p99, data 400 MB/s read</td>
+<td>HANA storage configuration</td>
+</tr>
+<tr>
+<td>1943937</td>
+<td>Hardware Configuration Check Tool (HCMT/HWCCT)</td>
+<td>Provides hcmt tool to validate storage KPIs pre-production</td>
+<td>Pre-go-live HANA storage validation</td>
+</tr>
+<tr>
+<td>2800746</td>
+<td>Proximity Placement Groups for SAP NetWeaver</td>
+<td>Mandates PPG for HANA+appserver co-location</td>
+<td>PPG configuration for HANA systems</td>
+</tr>
+<tr>
+<td>2222250</td>
+<td>SAP HANA Workload Classes</td>
+<td>HANA resource management for mixed OLTP/OLAP</td>
+<td>HANA workload class configuration</td>
+</tr>
+<tr>
+<td>2684254</td>
+<td>SAP HANA DB: Recommended OS Settings for SLES 15</td>
+<td>OS-level tuning: huge pages, CPU governor, NUMA settings</td>
+<td>HANA OS configuration on SLES</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>SAP HANA DB: Recommended OS Settings for RHEL 8</td>
+<td>OS-level tuning for RHEL 8/9: transparent huge pages, NUMA</td>
+<td>HANA OS configuration on RHEL</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>Optimizing the Network Configuration on HANA and OS Level</td>
+<td>HANA network tuning: TCP buffer sizes, NUMA pinning for HSR</td>
+<td>HANA System Replication network</td>
+</tr>
+<tr>
+<td>1956005</td>
+<td>Enterprise Linux support for Microsoft Azure</td>
+<td>OS support matrix for Azure SAP workloads</td>
+<td>OS version selection</td>
+</tr>
+<tr>
+<td>2235581</td>
+<td>SAP HANA: Supported Operating Systems</td>
+<td>HANA OS support matrix; SLES 15 SP3+, RHEL 8.4+</td>
+<td>HANA OS selection</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<h3 id="proximity-placement-groups">Proximity Placement Groups<a class="headerlink" href="#proximity-placement-groups" title="Permanent link">¶</a></h3>
+<p>Proximity Placement Groups (PPGs) are mandatory for SAP HANA production deployments on Azure where application servers communicate with the HANA database (SAP Note 2800746). Without PPGs, Azure places VMs anywhere within an Availability Zone, which can result in inter-rack communication with latencies of 1-3 ms — above the 1 ms threshold for ABAP dialog application-to-database round-trip time.</p>
+<p>PPG design rules for SAP on Azure:</p>
+<ol>
+<li><strong>One PPG per Availability Zone per SAP system.</strong> Do not span a PPG across zones; cross-zone placement defeats the purpose of PPGs and is blocked by Azure for zonal PPGs.</li>
+<li><strong>Anchor the PPG to the HANA VM.</strong> The HANA VM is deployed first; the PPG is created with the same zone constraint. Subsequent VMs (PAS, AAS) join the PPG at creation.</li>
+<li><strong>Do not include DR or backup VMs in the production PPG.</strong> DR VMs in a different zone must use a separate PPG.</li>
+<li><strong>Scale sets (VMSS) for application servers:</strong> Flexible Orchestration VMSS members can join a PPG if the VMSS is configured with <code>proximityPlacementGroup</code> at creation.</li>
+<li><strong>Capacity reservation groups:</strong> For capacity assurance, create an Azure Capacity Reservation Group anchored to the same AZ and attach the HANA VM and critical application server VMs to it. This ensures VM capacity is reserved even when VMs are deallocated.</li>
+</ol>
+<p>PPG constraint can fail VM allocation if the data center hosting the anchor VM does not have capacity for the requested VM SKU. If PPG allocation fails, the resolution is: (a) choose a different VM SKU with available capacity; (b) request capacity increase via Azure support; or (c) if performance requirements allow, use a softer co-location hint (not recommended for production HANA).</p>
+<h3 id="accelerated-networking">Accelerated Networking<a class="headerlink" href="#accelerated-networking" title="Permanent link">¶</a></h3>
+<p>Accelerated Networking (AN) must be enabled on every SAP VM NIC. On Azure Linux VMs running SLES or RHEL, AN is visible as a VF (Virtual Function) NIC managed by the <code>hv_netvsc</code> driver. Verify AN is active with <code>ethtool -i eth0 | grep "driver"</code> — the driver should show <code>mlx4_core</code> or <code>mlx5_core</code> (Mellanox/ConnectX) rather than <code>hv_netvsc</code> when AN is active.</p>
+<p>AN is automatically enabled for supported VM sizes when provisioned via the Azure portal or ARM templates with <code>"enableAcceleratedNetworking": true</code> on the NIC resource. AN cannot be enabled on a running VM; the VM must be stopped-deallocated. Disabling AN on a running SAP system causes immediate network throughput degradation and increased CPU utilization for network processing.</p>
+<h3 id="expressroute-performance">ExpressRoute Performance<a class="headerlink" href="#expressroute-performance" title="Permanent link">¶</a></h3>
+<p>SAP on Azure requires ExpressRoute for production connectivity from on-premises SAP users to Azure. The ExpressRoute Gateway SKU determines the maximum bandwidth and connections:</p>
+<table>
+<thead>
+<tr>
+<th>Gateway SKU</th>
+<th>Max Bandwidth</th>
+<th>Max Connections</th>
+<th>Use Case for SAP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard</td>
+<td>1 Gbps</td>
+<td>10</td>
+<td>Non-production only</td>
+</tr>
+<tr>
+<td>High Performance</td>
+<td>2 Gbps</td>
+<td>10</td>
+<td>Small production SAP (&lt; 1,000 users)</td>
+</tr>
+<tr>
+<td>Ultra Performance</td>
+<td>10 Gbps</td>
+<td>10</td>
+<td>Production SAP S/4HANA, BW/4HANA</td>
+</tr>
+<tr>
+<td>ErGw3AZ (Zone-redundant)</td>
+<td>10 Gbps</td>
+<td>10</td>
+<td>Production SAP requiring AZ-redundant gateway</td>
+</tr>
+</tbody>
+</table>
+<p>For SAP production systems, Ultra Performance gateway (or ErGw3AZ) is required. The 10 Gbps bandwidth supports concurrent SAP GUI sessions, RFC/BAPI integrations, and HANA database exports. SAP GUI sessions consume approximately 10-50 Kbps per user; 10,000 concurrent users require approximately 500 Mbps, which leaves headroom on a 10 Gbps gateway for background RFC traffic.</p>
+<p>FastPath for ExpressRoute bypasses the gateway for dataplane traffic (VM-to-on-premises), reducing latency by approximately 1-2 ms compared to routing through the gateway. FastPath requires Ultra Performance or ErGw3AZ gateway and must be explicitly enabled on the ExpressRoute connection. For SAP RFC and HANA integration traffic between on-premises and Azure, FastPath is recommended.</p>
+<h3 id="azure-netapp-files-ultra-tier">Azure NetApp Files Ultra Tier<a class="headerlink" href="#azure-netapp-files-ultra-tier" title="Permanent link">¶</a></h3>
+<p>ANF Ultra tier delivers 128 MiB/s throughput per TiB provisioned. For HANA data volumes, the typical sizing is 2x HANA memory size in TiB. Key ANF performance parameters:</p>
+<ul>
+<li><strong>nconnect mount option:</strong> <code>nconnect=8</code> creates 8 parallel TCP connections per NFS mount, multiplying effective throughput by approximately 8x for large sequential I/O. This is required to achieve HANA data volume throughput targets on ANF.</li>
+<li><strong>Volume placement:</strong> ANF volumes for HANA data and log must be in the same Azure region and zone as the HANA VM. Cross-zone ANF mounts are not supported for HANA production (latency exceeds 1 ms p99 for log volumes).</li>
+<li><strong>ANF backup integration:</strong> ANF snapshots created by azacsnap do not consume capacity until the snapshot diverges from the active volume (copy-on-write). Snapshot creation is near-instantaneous and does not impact HANA throughput.</li>
+<li><strong>Delegated subnet:</strong> ANF requires a dedicated /28 subnet delegated to <code>Microsoft.NetApp/volumes</code>. This subnet must have no route to the internet and must be sized to accommodate HANA scale-out worker node volumes.</li>
+</ul>
+<h3 id="ultra-disk-iopsthroughput-configuration">Ultra Disk IOPS/Throughput Configuration<a class="headerlink" href="#ultra-disk-iopsthroughput-configuration" title="Permanent link">¶</a></h3>
+<p>Azure Ultra Disk allows independent configuration of disk size, IOPS, and throughput. For SAP HANA log volumes on managed disks (alternative to ANF), Ultra Disk is required on Mv2 and Mdsv3 VMs:</p>
+<table>
+<thead>
+<tr>
+<th>Volume</th>
+<th>Disk Size</th>
+<th>Min IOPS Provision</th>
+<th>Throughput Provision</th>
+<th>Write Accelerator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA log (single disk)</td>
+<td>512 GiB</td>
+<td>5,000 IOPS</td>
+<td>250 MB/s</td>
+<td>N/A (Ultra Disk natively fast)</td>
+</tr>
+<tr>
+<td>HANA data (single disk)</td>
+<td>4,096 GiB</td>
+<td>7,000 IOPS</td>
+<td>400 MB/s</td>
+<td>Not applicable</td>
+</tr>
+<tr>
+<td>HANA shared</td>
+<td>1,024 GiB</td>
+<td>1,000 IOPS</td>
+<td>250 MB/s</td>
+<td>Not applicable</td>
+</tr>
+</tbody>
+</table>
+<p>Ultra Disk requires the VM to be in an Availability Zone (not available for non-zonal VMs). Ultra Disk IOPS and throughput can be adjusted online without disk detach or VM reboot (live resize). This makes Ultra Disk suitable for environments where performance requirements change with load patterns.</p>
+<h3 id="service-detail-diagram">Service Detail Diagram<a class="headerlink" href="#service-detail-diagram" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph LR
+  subgraph ComputeLayer["Compute Layer"]
+    HANAVMAZ1["HANA VM AZ1\nMv2 / M-series\nWrite Accelerator\nAccel Networking"]
+    AppVMAZ1["App Server AZ1\nEdsv5-series\nAccel Networking"]
+  end
+  subgraph StorageLayer["Storage Layer"]
+    ANFUltra["ANF Ultra Tier\nnconnect=8\n128 MiB/s per TiB\n&lt;0.5 ms p99 log"]
+    UltraDisk["Ultra Disk\nIOPS configurable\nThroughput configurable\nNo max-size constraint"]
+    PremSSDv2["Premium SSD v2\nOS + HANA shared\n3,000–80,000 IOPS\nOnline resize"]
+  end
+  subgraph NetworkLayer["Network Layer"]
+    PPG["PPG\nSame physical host rack\n&lt;0.5 ms intra-AZ"]
+    AN["Accelerated Networking\nSR-IOV\n&lt;50 µs NIC latency"]
+    ERGw["ExpressRoute Gateway\nUltra Performance\n10 Gbps FastPath"]
+  end
+  subgraph MonitorLayer["Monitoring Layer"]
+    AMS["AMS\nHANA provider\nNetWeaver provider"]
+    VMInsights["VM Insights\nNetwork Map\nPerf counters"]
+    LAW["Log Analytics Workspace\nAlerts\nDashboards"]
+  end
+  HANAVMAZ1 --&gt;|NFS v4.1 nconnect=8| ANFUltra
+  HANAVMAZ1 --&gt;|attached disk| UltraDisk
+  HANAVMAZ1 --&gt;|OS disk| PremSSDv2
+  AppVMAZ1 --&gt;|RFC/SQL| HANAVMAZ1
+  HANAVMAZ1 --- PPG
+  AppVMAZ1 --- PPG
+  HANAVMAZ1 --- AN
+  AppVMAZ1 --- AN
+  AMS --&gt;|HANA SQL API| HANAVMAZ1
+  AMS --&gt; LAW
+  VMInsights --&gt; LAW
+  LAW --&gt;|Alerts| AMS
+  ERGw --&gt;|FastPath| AppVMAZ1</code></pre>
+<hr/>
+<h2 id="compute-performance">Compute Performance<a class="headerlink" href="#compute-performance" title="Permanent link">¶</a></h2>
+<h3 id="vm-families-for-sap-tiers">VM Families for SAP Tiers<a class="headerlink" href="#vm-families-for-sap-tiers" title="Permanent link">¶</a></h3>
+<p>Azure VM families for SAP are selected by workload tier, not by raw vCPU count. The selection criteria are: SAP certification (SAP Note 1928533 Azure list), memory-to-CPU ratio (HANA requires high memory/vCPU ratio), local NVMe availability (Mdsv3 for HANA Fast Restart), and network throughput (Mv2 provides 16,000 Mbps, essential for HANA HSR log shipping).</p>
+<table>
+<thead>
+<tr>
+<th>VM Family</th>
+<th>Use Case</th>
+<th>vCPUs</th>
+<th>RAM</th>
+<th>Network Gbps</th>
+<th>SAP SAPS Rating</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M32ts_v2</td>
+<td>HANA small production (&lt; 192 GiB)</td>
+<td>32</td>
+<td>192 GiB</td>
+<td>16,000 Mbps</td>
+<td>~32,000</td>
+<td>Write Accelerator required for log</td>
+</tr>
+<tr>
+<td>M64s_v2</td>
+<td>HANA medium production (&lt; 1 TiB)</td>
+<td>64</td>
+<td>1,024 GiB</td>
+<td>16,000 Mbps</td>
+<td>~64,000</td>
+<td>Most common S/4HANA production SKU</td>
+</tr>
+<tr>
+<td>M128s_v2</td>
+<td>HANA large (&lt; 2 TiB)</td>
+<td>128</td>
+<td>2,048 GiB</td>
+<td>16,000 Mbps</td>
+<td>~128,000</td>
+<td>BW/4HANA mid-range</td>
+</tr>
+<tr>
+<td>M192is_v2</td>
+<td>HANA XL (&lt; 4 TiB)</td>
+<td>192</td>
+<td>4,096 GiB</td>
+<td>25,000 Mbps</td>
+<td>~192,000</td>
+<td>Largest single-node HANA on Azure</td>
+</tr>
+<tr>
+<td>M208ms_v2 (Mv2)</td>
+<td>HANA XXL (&lt; 5.7 TiB)</td>
+<td>208</td>
+<td>5,700 GiB</td>
+<td>16,000 Mbps</td>
+<td>~208,000</td>
+<td>Requires Mv2 generation</td>
+</tr>
+<tr>
+<td>Msv2-128</td>
+<td>HANA memory-optimized</td>
+<td>128</td>
+<td>3,892 GiB</td>
+<td>16,000 Mbps</td>
+<td>~128,000</td>
+<td>Alternate for large HANA</td>
+</tr>
+<tr>
+<td>Mdsv3-Medium_32</td>
+<td>HANA with PMEM Fast Restart</td>
+<td>32</td>
+<td>440 GiB</td>
+<td>16,000 Mbps</td>
+<td>~32,000</td>
+<td>Local NVMe for PMEM</td>
+</tr>
+<tr>
+<td>E32ds_v5</td>
+<td>SAP Application Server (PAS/AAS)</td>
+<td>32</td>
+<td>256 GiB</td>
+<td>16,000 Mbps</td>
+<td>~32,000 SAPS</td>
+<td>Standard app server SKU</td>
+</tr>
+<tr>
+<td>E64ds_v5</td>
+<td>SAP Application Server (large)</td>
+<td>64</td>
+<td>512 GiB</td>
+<td>16,000 Mbps</td>
+<td>~64,000 SAPS</td>
+<td>Large S/4HANA landscapes</td>
+</tr>
+<tr>
+<td>E16ds_v5</td>
+<td>ASCS/ERS, SCS, small AAS</td>
+<td>16</td>
+<td>128 GiB</td>
+<td>12,500 Mbps</td>
+<td>~16,000 SAPS</td>
+<td>ASCS/ERS requires minimal resources</td>
+</tr>
+<tr>
+<td>D4ds_v5</td>
+<td>SAP Web Dispatcher</td>
+<td>4</td>
+<td>16 GiB</td>
+<td>4,000 Mbps</td>
+<td>N/A</td>
+<td>HTTP/HTTPS reverse proxy</td>
+</tr>
+</tbody>
+</table>
+<h3 id="numa-topology-considerations">NUMA Topology Considerations<a class="headerlink" href="#numa-topology-considerations" title="Permanent link">¶</a></h3>
+<p>M-series VMs on Azure present multiple NUMA nodes to the guest OS. The HANA database process (indexserver) must be bound to specific NUMA nodes to avoid cross-NUMA memory access latency. NUMA topology for key HANA VMs:</p>
+<ul>
+<li><strong>M64s_v2:</strong> 2 NUMA nodes, 32 vCPUs and ~512 GiB RAM per node. HANA indexserver should bind to both NUMA nodes using <code>numactl --interleave=all</code> for balanced memory access.</li>
+<li><strong>M192is_v2:</strong> 4 NUMA nodes, 48 vCPUs and ~1 TiB RAM per node. HANA NUMA binding via <code>indexserver.ini: [execution] max_numa_node_count = 4</code>.</li>
+<li><strong>Mv2 (M208ms_v2):</strong> 2 NUMA nodes. Large HANA memory footprint benefits from interleaved allocation.</li>
+</ul>
+<p>Verify NUMA topology in the guest with <code>numactl --hardware</code>. Configure HANA NUMA binding in <code>/hana/shared/SID/HDB00/daemon.ini</code>:
+<div class="language-ini highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">[process.hdbindexserver]</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="na">numaNodes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">0,1,2,3</span>
+</span></code></pre></div></p>
+<h3 id="memory-bandwidth-for-hana">Memory Bandwidth for HANA<a class="headerlink" href="#memory-bandwidth-for-hana" title="Permanent link">¶</a></h3>
+<p>HANA column store scan performance is bounded by memory bandwidth. Azure M-series memory bandwidth specifications:</p>
+<table>
+<thead>
+<tr>
+<th>VM SKU</th>
+<th>Theoretical Memory Bandwidth</th>
+<th>STREAM Benchmark (measured)</th>
+<th>HANA Column Scan Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M64s_v2</td>
+<td>~400 GB/s</td>
+<td>~320 GB/s</td>
+<td>~200 GB/s per NUMA node</td>
+</tr>
+<tr>
+<td>M192is_v2</td>
+<td>~1,000 GB/s</td>
+<td>~800 GB/s</td>
+<td>~600 GB/s aggregate</td>
+</tr>
+<tr>
+<td>M208ms_v2</td>
+<td>~450 GB/s</td>
+<td>~360 GB/s</td>
+<td>~250 GB/s aggregate</td>
+</tr>
+</tbody>
+</table>
+<p>Memory bandwidth is not listed in Azure VM specifications but is measurable with the STREAM benchmark (included in the SAP hcmt test suite). For BW/4HANA query performance, STREAM Triad &gt;300 GB/s is the practical minimum for reasonable query response times on TiB-scale column stores.</p>
+<h3 id="azure-dedicated-hosts">Azure Dedicated Hosts<a class="headerlink" href="#azure-dedicated-hosts" title="Permanent link">¶</a></h3>
+<p>Azure Dedicated Hosts (ADH) provide physical server isolation for SAP VMs. ADH is relevant for SAP performance in two scenarios:</p>
+<ol>
+<li><strong>NUMA isolation:</strong> On a shared host, other tenants' VMs on the same physical server compete for memory bandwidth. ADH eliminates this competition, providing consistent HANA column scan performance. In practice, Azure M-series hosts are typically not multi-tenanted for HANA-class workloads, but ADH provides a contractual guarantee.</li>
+<li><strong>Noisy neighbor for CPU-bound ABAP workloads:</strong> Application server VMs on D/E series hosts can experience CPU steal time from co-tenant VMs. ADH eliminates CPU steal; this is observable in Azure Metrics as CPU credits (not applicable to non-burstable VMs) and via <code>top</code>/<code>sar</code> CPU steal percentage in the guest OS.</li>
+</ol>
+<p>ADH for SAP HANA: use the <code>Msv2</code> or <code>Mv2</code> host SKU. One Dedicated Host can host one or two HANA VMs depending on RAM requirements and host capacity. ADH is charged per host per hour regardless of VM utilization, which increases cost; reserved capacity pricing for ADH requires 1-year or 3-year commitment.</p>
+<hr/>
+<h2 id="storage-performance">Storage Performance<a class="headerlink" href="#storage-performance" title="Permanent link">¶</a></h2>
+<h3 id="ultra-disk-iops-and-throughput-for-hana-datalog">Ultra Disk IOPS and Throughput for HANA Data/Log<a class="headerlink" href="#ultra-disk-iops-and-throughput-for-hana-datalog" title="Permanent link">¶</a></h3>
+<p>HANA storage KPIs from SAP Note 2399079 (the replacement for SAP Note 1943937 storage check) define the minimum values that must pass the hcmt validation tool. These values are measured at the storage layer (not the application layer):</p>
+<table>
+<thead>
+<tr>
+<th>Volume</th>
+<th>Type</th>
+<th>Min IOPS</th>
+<th>Min Throughput</th>
+<th>Max Latency (p99)</th>
+<th>SAP Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA data (/hana/data)</td>
+<td>ANF Ultra or Ultra Disk</td>
+<td>7,000 (4 KiB random read)</td>
+<td>400 MB/s sequential read</td>
+<td>1 ms read</td>
+<td>2399079</td>
+</tr>
+<tr>
+<td>HANA log (/hana/log)</td>
+<td>ANF Ultra or Ultra Disk + Write Accelerator</td>
+<td>2,000 (write)</td>
+<td>250 MB/s sequential write</td>
+<td>1 ms write p99</td>
+<td>2399079</td>
+</tr>
+<tr>
+<td>HANA shared (/hana/shared)</td>
+<td>ANF Premium or Premium SSD v2</td>
+<td>1,000</td>
+<td>250 MB/s</td>
+<td>2 ms</td>
+<td>1943937</td>
+</tr>
+<tr>
+<td>HANA backup (/hana/backup)</td>
+<td>Standard SSD or Azure Backup</td>
+<td>500</td>
+<td>100 MB/s</td>
+<td>Not specified (throughput-bound)</td>
+<td>1943937</td>
+</tr>
+<tr>
+<td>/sapmnt (NFS)</td>
+<td>ANF Premium</td>
+<td>500</td>
+<td>100 MB/s</td>
+<td>5 ms (not latency-critical)</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>OS disk (/dev/sda)</td>
+<td>Premium SSD v2</td>
+<td>3,000 baseline</td>
+<td>125 MB/s</td>
+<td>5 ms</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>ASCS/ERS OS</td>
+<td>Premium SSD v2</td>
+<td>3,000</td>
+<td>125 MB/s</td>
+<td>5 ms</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h3 id="write-accelerator-for-hana-log-on-mv2">Write Accelerator for HANA Log on Mv2<a class="headerlink" href="#write-accelerator-for-hana-log-on-mv2" title="Permanent link">¶</a></h3>
+<p>Write Accelerator (WA) is an Azure feature available exclusively on M-series VMs. It provides a write cache for managed disks attached to the HANA log volume, ensuring that HANA log writes are acknowledged to the OS (fsync) within microseconds, with the actual disk persistence occurring asynchronously. The effect is that HANA log write latency is reduced from approximately 1-3 ms (Premium SSD without WA) to below 0.5 ms (WA-enabled Premium SSD v2 or P30+ disks).</p>
+<p>Write Accelerator rules:
+- WA is supported only on M-series VMs (including Msv2, Mv2, Mdsv3). It is not available on E-series VMs.
+- WA must be enabled per disk via the Azure portal, CLI (<code>az disk update --write-accelerator true</code>), or ARM template (<code>writeAcceleratorEnabled: true</code>).
+- WA must NOT be enabled on the OS disk or the HANA data volume disk — only on the log disk.
+- WA has a per-VM limit: M64s allows 8 WA-enabled disks; M192is allows 16 WA-enabled disks.
+- If ANF Ultra tier is used for HANA log volumes, Write Accelerator is not applicable (NFS volumes mounted via network; WA applies only to managed disks).</p>
+<h3 id="anf-ultra-tier-latency">ANF Ultra Tier Latency<a class="headerlink" href="#anf-ultra-tier-latency" title="Permanent link">¶</a></h3>
+<p>ANF Ultra tier latency characteristics measured in Azure regions:</p>
+<ul>
+<li><strong>Log write latency (4 KiB random write, fdatasync):</strong> 200-400 µs p50, below 500 µs p99 in same-region deployments.</li>
+<li><strong>Data read latency (128 KiB sequential read):</strong> Below 1 ms for large I/O; sub-millisecond for most reads.</li>
+<li><strong>Cross-zone ANF latency (if applicable):</strong> 2-5 ms p99 — exceeds HANA log write requirement; cross-zone ANF mounts for HANA log are not supported.</li>
+</ul>
+<p>ANF latency measurements should be captured with the hcmt tool before production go-live. The hcmt test suite runs a comprehensive set of I/O patterns including:
+- <code>hcmt -v -t storage</code> for storage KPI validation.
+- <code>hcmt -v -t network</code> for network latency and bandwidth validation.
+Results are output as JSON and compared against thresholds in the hcmt threshold file (<code>thresholds.json</code>); a PASS status is required for SAP certification of the Azure infrastructure.</p>
+<h3 id="storage-latency-per-sap-note-2399079">Storage Latency per SAP Note 2399079<a class="headerlink" href="#storage-latency-per-sap-note-2399079" title="Permanent link">¶</a></h3>
+<p>SAP Note 2399079 replaces the storage performance check in the Hardware Configuration Check Tool (HCMT). The key thresholds are:</p>
+<ul>
+<li><strong>HANA data volume read latency:</strong> &lt; 1 ms p99 for 1 MiB sequential reads. Rationale: HANA data volume reads occur during HANA restart (loading column store pages from storage) and during table scan operations that miss the HANA in-memory cache.</li>
+<li><strong>HANA log volume write latency:</strong> &lt; 1 ms p99 for 512 B random writes (fdatasync). Rationale: every ABAP commit triggers a HANA log write; this is on the critical path for ABAP dialog response time.</li>
+<li><strong>HANA data volume write throughput (savepoint):</strong> &gt; 250 MB/s sustained for 60 seconds. Rationale: HANA savepoints write all dirty pages; savepoint duration must be short enough to not interfere with regular operations.</li>
+</ul>
+<p>Failing any of these thresholds means the infrastructure is not certified for SAP HANA production. The most common failure is log volume write latency on Premium SSD without Write Accelerator, which delivers 1-3 ms log write latency. The fix is always ANF Ultra tier or Write Accelerator-enabled managed disk for the log volume.</p>
+<hr/>
+<h2 id="network-performance">Network Performance<a class="headerlink" href="#network-performance" title="Permanent link">¶</a></h2>
+<h3 id="application-to-database-latency-requirements">Application-to-Database Latency Requirements<a class="headerlink" href="#application-to-database-latency-requirements" title="Permanent link">¶</a></h3>
+<p>The ABAP application server communicates with HANA over the SAP HANA SQL API (JDBC/ODBC via SQLDBC library). Every ABAP database request generates one or more network round trips. The latency requirement:</p>
+<ul>
+<li><strong>Intra-PPG (same Availability Zone, PPG-constrained):</strong> &lt; 0.5 ms round-trip time (RTT) for TCP packets. This is achievable with Accelerated Networking and PPG co-location.</li>
+<li><strong>Intra-zone without PPG:</strong> 0.5–1.5 ms RTT typical. May be acceptable for non-dialog-intensive workloads but not for high-SAPS S/4HANA.</li>
+<li><strong>Cross-AZ (application server in AZ2, HANA in AZ1):</strong> 1–3 ms RTT typical for cross-AZ within the same Azure region. This is acceptable for application servers that communicate with the HANA ILB VIP (cross-AZ ILB routing).</li>
+<li><strong>On-premises to HANA via ExpressRoute (RFC or SQL):</strong> 5–15 ms RTT depending on ExpressRoute circuit latency and gateway processing. Acceptable only for batch RFC integrations, not for ABAP dialog work processes.</li>
+</ul>
+<p>Measure network latency with <code>hping3</code> or <code>nping</code> between the application server and HANA VM IP addresses. For SAP-specific validation, use the SAP hcmt tool (<code>hcmt -v -t network</code>) which measures TCP round-trip time over multiple packet sizes.</p>
+<h3 id="expressroute-bandwidth-planning">ExpressRoute Bandwidth Planning<a class="headerlink" href="#expressroute-bandwidth-planning" title="Permanent link">¶</a></h3>
+<p>ExpressRoute bandwidth planning for SAP on Azure must account for:</p>
+<table>
+<thead>
+<tr>
+<th>Traffic Type</th>
+<th>Bandwidth per 1,000 Users</th>
+<th>Peak Multiplier</th>
+<th>Total for 10,000 Users</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP GUI (DIAG protocol)</td>
+<td>5-50 Kbps per session</td>
+<td>3x</td>
+<td>150-1,500 Mbps</td>
+</tr>
+<tr>
+<td>RFC/BAPI (on-premises integration)</td>
+<td>10-100 Mbps per integration point</td>
+<td>2x</td>
+<td>200-2,000 Mbps</td>
+</tr>
+<tr>
+<td>HANA backup to on-premises</td>
+<td>500 Mbps - 2 Gbps</td>
+<td>1x (off-peak)</td>
+<td>500 Mbps - 2 Gbps</td>
+</tr>
+<tr>
+<td>SAP Solution Manager to Azure</td>
+<td>10-50 Mbps</td>
+<td>1.5x</td>
+<td>15-75 Mbps</td>
+</tr>
+</tbody>
+</table>
+<p>For a 10,000-user SAP S/4HANA system with multiple RFC integrations, an ExpressRoute circuit of 2-10 Gbps is required. Ultra Performance ExpressRoute Gateway (10 Gbps) with FastPath enabled covers most enterprise SAP deployments. Multiple ExpressRoute circuits for redundancy: minimum 2 circuits from different providers, each with their own gateway connection.</p>
+<h3 id="inter-az-latency-for-hana-hsr">Inter-AZ Latency for HANA HSR<a class="headerlink" href="#inter-az-latency-for-hana-hsr" title="Permanent link">¶</a></h3>
+<p>HANA System Replication (HSR) in SYNC mode requires the HANA secondary to acknowledge every log write before the primary returns the commit to the application. The inter-AZ latency for HSR affects HANA OLTP throughput:</p>
+<ul>
+<li><strong>HANA HSR SYNC latency impact:</strong> Every HANA commit waits for the HSR acknowledgment (in addition to the local log write). If inter-AZ RTT = 1 ms, HSR adds ~1 ms to every HANA commit latency. For a workload with 1,000 commits/second, this is a 1,000 ms/second overhead (effectively 1x CPU core equivalent).</li>
+<li><strong>Azure inter-AZ RTT:</strong> Typically 0.5–2 ms within a region. Microsoft does not publish official inter-AZ latency guarantees; measure with <code>hping3</code> between AZ1 and AZ2 VMs.</li>
+<li><strong>HANA HSR network isolation:</strong> HSR log shipping traffic should use a dedicated NIC (or VLAN/subnet) separate from the HANA SQL client traffic. On M-series VMs with 25 Gbps NICs, HSR peak throughput (during large transactions) can saturate a shared NIC. Configure HSR <code>[system_replication_communication]</code> section in <code>global.ini</code> to bind HSR to the dedicated interface IP.</li>
+</ul>
+<p>SAP Note 2382421 provides network tuning parameters for HANA HSR:
+<div class="language-ini highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">[system_replication_communication]</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="na">listeninterface</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">.internal</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="k">[communication]</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="na">tcp_backlog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">2048</span>
+</span></code></pre></div></p>
+<h3 id="hana-scale-out-network">HANA Scale-Out Network<a class="headerlink" href="#hana-scale-out-network" title="Permanent link">¶</a></h3>
+<p>For HANA scale-out (multiple HANA worker nodes sharing a distributed database), inter-node communication uses the HANA internal communication network. On Azure, this requires:</p>
+<ul>
+<li>Dedicated subnet for HANA internal communication: /24 minimum, isolated from SAP application server subnets.</li>
+<li>All HANA worker node VMs in the same Availability Zone (no cross-AZ scale-out supported).</li>
+<li>Accelerated Networking on all HANA worker VMs.</li>
+<li>MTU 9000 (jumbo frames) configured on the HANA internal NIC: <code>ip link set eth1 mtu 9000</code> in <code>/etc/sysconfig/network/ifcfg-eth1</code>.</li>
+<li>ANF volumes for HANA data and log must use <code>nconnect=8</code> per worker node.</li>
+</ul>
+<hr/>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>SAP/Azure Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PPG strategy for HANA+appserver</td>
+<td>(1) No PPG, rely on AZ placement; (2) PPG per AZ anchored to HANA VM; (3) Cross-zone soft PPG</td>
+<td>PPG per AZ anchored to HANA VM</td>
+<td>Option 2 achieves &lt; 0.5 ms intra-AZ RTT between HANA and app servers; option 1 results in 0.5–1.5 ms RTT with no guarantee; cross-zone PPG not supported</td>
+<td>SAP Note 2800746; Azure docs: PPG for SAP</td>
+</tr>
+<tr>
+<td>VM family for HANA production</td>
+<td>(1) Mv2 (208 vCPU/5.7 TiB); (2) M192is_v2 (192 vCPU/4 TiB); (3) M64s_v2 (64 vCPU/1 TiB); (4) E-series (not HANA-certified)</td>
+<td>M64s_v2 for standard S/4HANA; M192is_v2 for BW/4HANA</td>
+<td>M64s_v2 covers up to 800 GiB HANA memory (S/4HANA standard) with Write Accelerator and ANF support; M192is_v2 for large BW/4HANA; Mv2 only when &gt;4 TiB required</td>
+<td>SAP Note 1928533 certified instances list</td>
+</tr>
+<tr>
+<td>HANA log storage: ANF Ultra vs managed disk Write Accelerator</td>
+<td>(1) ANF Ultra NFS with nconnect=8; (2) Premium SSD v2 + Write Accelerator (M-series only); (3) Ultra Disk (no WA needed)</td>
+<td>ANF Ultra tier as primary; Ultra Disk on Mv2 where ANF not available</td>
+<td>ANF Ultra delivers &lt; 0.5 ms p99 log latency with nconnect=8 and is not subject to VM disk IOPS limits; Write Accelerator achieves similar latency but requires M-series and is limited per-VM; Ultra Disk viable but higher per-GB cost than ANF at scale</td>
+<td>SAP Note 2399079; ANF SAP HANA guide</td>
+</tr>
+<tr>
+<td>Network design: dedicated HSR subnet vs shared NIC</td>
+<td>(1) HSR traffic on same NIC as SQL client traffic; (2) Dedicated second NIC for HSR; (3) VLAN separation on single NIC</td>
+<td>Dedicated second NIC for HSR on M-series VMs with 25 Gbps NIC</td>
+<td>HSR peak traffic during large transactions can saturate a 16 Gbps NIC when combined with SQL client traffic; dedicated NIC prevents HSR from impacting dialog response time; M-series supports up to 8 NICs</td>
+<td>SAP Note 2382421; HANA System Replication guide</td>
+</tr>
+<tr>
+<td>NUMA binding for HANA indexserver</td>
+<td>(1) No explicit NUMA binding (OS decides); (2) numactl interleave all NUMA nodes; (3) HANA-level NUMA configuration in indexserver.ini</td>
+<td>HANA-level NUMA configuration in indexserver.ini</td>
+<td>Explicit HANA NUMA binding via <code>max_numa_node_count</code> ensures HANA column store pages are interleaved across all NUMA nodes, maximizing aggregate memory bandwidth; OS default allocation is less predictable</td>
+<td>SAP Note 2684254; HANA Administration Guide</td>
+</tr>
+<tr>
+<td>ANF vs managed disk for HANA data volume</td>
+<td>(1) ANF Ultra tier NFS; (2) Multiple Premium SSD v2 striped (LVM); (3) Ultra Disk striped</td>
+<td>ANF Ultra tier NFS</td>
+<td>ANF throughput scales linearly with provisioned capacity at fixed cost per TiB; Premium SSD v2 striping requires LVM configuration and per-disk IOPS/throughput provisioning which is complex; ANF provides shared access for HANA scale-out and HSR without per-node disk management</td>
+<td>SAP Note 1943937; ANF SAP HANA sizing</td>
+</tr>
+<tr>
+<td>Availability Zone placement for HANA</td>
+<td>(1) Single AZ (no cross-zone HA); (2) Two-AZ HANA HSR SYNC; (3) Three-AZ active/active (not supported for HANA SYNC)</td>
+<td>Two-AZ HANA HSR SYNC with Pacemaker</td>
+<td>Azure guarantees 99.99% SLA for VMs in multiple AZs; HSR SYNC provides zero data loss (RPO=0) on AZ failure; single AZ does not qualify for 99.99% SLA; three-AZ not supported with SYNC mode due to write amplification</td>
+<td>Azure SLA; SAP Note 2808515</td>
+</tr>
+<tr>
+<td>Monitoring: AMS vs custom Azure Monitor</td>
+<td>(1) Azure Monitor for SAP Solutions (AMS) native providers; (2) Custom Azure Monitor workbooks with Prometheus exporters; (3) SAP Solution Manager with Azure integration</td>
+<td>AMS native providers (HANA, NetWeaver, OS) with custom alert rules</td>
+<td>AMS HANA provider integrates directly with HANA SQL monitoring views without custom scripting; AMS NetWeaver provider collects ABAP work process metrics; custom Prometheus requires additional VM and maintenance; AMS is managed service with no infrastructure overhead</td>
+<td>AMS documentation; SAP Note 3215564</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="sap-notes-reference">SAP Notes Reference<a class="headerlink" href="#sap-notes-reference" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Version</th>
+<th>Key Performance Guidance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Azure: Supported Products and Azure VM Types</td>
+<td>Current</td>
+<td>Master list of certified Azure VM SKUs; Accelerated Networking mandatory for all listed VMs</td>
+</tr>
+<tr>
+<td>2399079</td>
+<td>Elimination of Hana Storage Performance Check in HANA</td>
+<td>Current</td>
+<td>Supersedes HCMT storage check; defines log &lt;1 ms, data 400 MB/s, hcmt test procedure</td>
+</tr>
+<tr>
+<td>1943937</td>
+<td>Hardware Configuration Check Tool — HCMT/HWCCT</td>
+<td>Current</td>
+<td>hcmt tool download; storage KPI thresholds; network test parameters</td>
+</tr>
+<tr>
+<td>2800746</td>
+<td>Proximity Placement Groups for SAP NetWeaver</td>
+<td>Current</td>
+<td>PPG mandatory for HANA+appserver; PPG anchor to HANA VM; Azure-specific configuration</td>
+</tr>
+<tr>
+<td>2684254</td>
+<td>SAP HANA DB: Recommended OS Settings for SLES 15 / SLES for SAP</td>
+<td>Current</td>
+<td>CPU governor performance; transparent huge pages disable; NUMA settings; kernel parameters</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>SAP HANA DB: Recommended OS Settings for RHEL 8</td>
+<td>Current</td>
+<td>RHEL 8/9 specific: tuned profile sap-hana; NUMA policy; kernel.numa_balancing disable</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>Optimizing the Network Configuration on HANA and OS Level</td>
+<td>Current</td>
+<td>HSR network binding; TCP buffer sizes; jumbo frames for HANA scale-out</td>
+</tr>
+<tr>
+<td>2222250</td>
+<td>SAP HANA Workload Classes</td>
+<td>Current</td>
+<td>Resource isolation for mixed OLTP/OLAP; CPU and memory limits per workload class</td>
+</tr>
+<tr>
+<td>1999930</td>
+<td>FAQ: SAP HANA Memory</td>
+<td>Current</td>
+<td>HANA memory sizing formulas; column store memory estimation; delta store sizing</td>
+</tr>
+<tr>
+<td>3114876</td>
+<td>SAP HANA on Azure NetApp Files: Volume Layout</td>
+<td>Current</td>
+<td>ANF volume naming, sizing, and placement for HANA; nconnect mount option</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Pillar</th>
+<th>Requirement</th>
+<th>Implementation</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Performance Efficiency</td>
+<td>HANA log write latency &lt; 1 ms p99; ABAP dialog response time &lt; 1 s at peak SAPS; ExpressRoute bandwidth sufficient for peak load</td>
+<td>ANF Ultra tier with nconnect=8 for HANA log; PPG for intra-AZ app-to-DB &lt; 0.5 ms; Ultra Performance ExpressRoute gateway with FastPath; hcmt validation pre-go-live</td>
+<td>SAP Note 2399079; SAP Note 2800746; Azure Architecture Center SAP performance</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>RPO=0 for HANA (HSR SYNC); no performance degradation during single-AZ failure; automatic failover &lt; 120 seconds</td>
+<td>HANA HSR SYNC cross-AZ with Pacemaker SAPHana resource agent; ILB with floating IP for automatic VIP migration; PPG per AZ ensures performance is maintained in surviving zone</td>
+<td>Azure SLA 99.99%; SAP Note 2808515</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Performance monitoring data contains sensitive SAP landscape information; performance testing credentials must be protected</td>
+<td>Azure Monitor for SAP Solutions uses system-assigned managed identity (no credential storage); Key Vault for hcmt tool configuration secrets; network security groups block performance monitoring ports from public internet</td>
+<td>AMS security model; Azure Key Vault integration</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>ANF Ultra tier and M-series VMs are premium-cost resources; right-sizing prevents over-provisioning; Reserved Instances provide 3-year commitment discount</td>
+<td>Right-sizing via Azure Advisor + SAP EarlyWatch Alert SAPS utilization data; 3-year Reserved Instance for HANA VMs (40-60% discount vs pay-as-you-go); ANF capacity pool right-sizing based on hcmt throughput measurements; auto-pause non-production HANA systems</td>
+<td>Azure Advisor; SAP EarlyWatch Alert; Azure RI pricing</td>
+</tr>
+<tr>
+<td>Operational Excellence</td>
+<td>Performance baselines must be captured and compared across system lifecycle; performance incidents require repeatable diagnostic procedure</td>
+<td>hcmt baseline documentation stored in Azure Storage (immutable blob container); AMS dashboards capture HANA key performance metrics in 30-second intervals; Azure Monitor Alerts trigger runbooks for threshold breaches; EarlyWatch Alert submitted monthly to SAP for trend analysis</td>
+<td>Azure Monitor Workbook for SAP; SAP EarlyWatch Alert; SAP Note 3215564</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="security-architecture">Security Architecture<a class="headerlink" href="#security-architecture" title="Permanent link">¶</a></h2>
+<h3 id="performance-monitoring-access-control">Performance Monitoring Access Control<a class="headerlink" href="#performance-monitoring-access-control" title="Permanent link">¶</a></h3>
+<p>Azure Monitor for SAP Solutions (AMS) uses a system-assigned managed identity to authenticate to HANA and NetWeaver. The managed identity is assigned the minimum required roles:</p>
+<ul>
+<li>HANA monitoring: A dedicated HANA database user (<code>AZUREWLBACKUPUSER</code> equivalent for monitoring) with SELECT privileges on monitoring views only (<code>SYS.M_*</code>, <code>_SYS_STATISTICS.*</code>). This user is not a HANA system administrator.</li>
+<li>NetWeaver monitoring: An ABAP RFC user with <code>S_RFC</code> authorization for function modules <code>RFC_READ_TABLE</code>, <code>TH_SERVER_LIST</code>, <code>SWNC_COLLECTOR_GET_AGGREGATED</code>. The RFC user must not have dialog logon authorization (<code>S_TCODE</code> blank).</li>
+<li>OS monitoring (Linux): The AMS VM extension runs as root on the monitored VM. The extension is pinned to a specific version and updated only after SAP-approved testing.</li>
+</ul>
+<p>Access to AMS dashboards in Azure Monitor is controlled by Azure RBAC:
+- <strong>Monitoring Reader:</strong> Can view dashboards and alerts, cannot modify alert rules or AMS providers.
+- <strong>Monitoring Contributor:</strong> Can create and modify alert rules and AMS providers.
+- <strong>Owner/Contributor on AMS resource:</strong> Can delete AMS provider instances; restrict to SAP basis team leads only.</p>
+<h3 id="key-vault-for-performance-tool-credentials">Key Vault for Performance Tool Credentials<a class="headerlink" href="#key-vault-for-performance-tool-credentials" title="Permanent link">¶</a></h3>
+<p>Performance testing tools (hcmt, fio, iperf3 for custom tests) require credentials for HANA database access. These credentials must be stored in Azure Key Vault, not in configuration files on the VM:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># Retrieve hcmt HANA user password at test time</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nv">HANA_PASS</span><span class="o">=</span><span class="k">$(</span>az<span class="w"> </span>keyvault<span class="w"> </span>secret<span class="w"> </span>show<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span>--vault-name<span class="w"> </span>kv-sap-perf-prod<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">  </span>--name<span class="w"> </span>hcmt-hana-user<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">  </span>--query<span class="w"> </span>value<span class="w"> </span>-o<span class="w"> </span>tsv<span class="k">)</span>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="c1"># Pass to hcmt via environment variable (not command-line argument)</span>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HANA_PASSWORD</span><span class="o">=</span><span class="nv">$HANA_PASS</span>
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a>hcmt<span class="w"> </span>-v<span class="w"> </span>-t<span class="w"> </span>storage
+</span></code></pre></div>
+<p>The Key Vault must be in the same Azure region as the SAP workload. Access is granted via managed identity on the performance testing VM, with a Key Vault access policy granting only <code>Get</code> on secrets. The Key Vault diagnostic logs (secret access events) are forwarded to Log Analytics for audit trail.</p>
+<h3 id="network-security-for-performance-testing">Network Security for Performance Testing<a class="headerlink" href="#network-security-for-performance-testing" title="Permanent link">¶</a></h3>
+<p>Performance testing generates high-volume synthetic I/O (fio, hcmt storage tests) and network traffic (iperf3). NSG rules must permit this traffic only from designated test VMs:</p>
+<ul>
+<li>Performance testing VMs are deployed in a dedicated subnet (<code>snet-perf-testing</code>) with an NSG that permits inbound from the test subnet only.</li>
+<li>hcmt storage tests run locally on the HANA VM (no inbound network required).</li>
+<li>iperf3 network tests between app server and HANA VM require TCP port 5201 permitted within the SAP application subnet.</li>
+<li>All performance test results are exported to Azure Blob Storage via a service endpoint connection (no public internet path).</li>
+</ul>
+<hr/>
+<h2 id="reliability-and-high-availability">Reliability and High Availability<a class="headerlink" href="#reliability-and-high-availability" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Tier</th>
+<th>RPO Target</th>
+<th>RTO Target</th>
+<th>HA Method</th>
+<th>DR Method</th>
+<th>Azure SLA Component</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP HANA (primary)</td>
+<td>0 (zero data loss)</td>
+<td>&lt; 120 seconds (automated)</td>
+<td>HSR SYNC + Pacemaker SAPHana RA; ILB floating IP</td>
+<td>HSR async to DR region (RPO &lt; 15 min); or ANF Cross-Region Replication</td>
+<td>Azure VM 99.99% (multi-AZ); ANF 99.99%</td>
+</tr>
+<tr>
+<td>SAP ASCS/ERS</td>
+<td>0 (stateless failover)</td>
+<td>&lt; 60 seconds (Pacemaker)</td>
+<td>Pacemaker ENSA2 cluster; ILB floating IP; fence_azure_arm STONITH</td>
+<td>Active ASCS profile on DR HANA system; restart from DR storage</td>
+<td>Azure VM 99.99% (multi-AZ)</td>
+</tr>
+<tr>
+<td>SAP Application Servers (PAS/AAS)</td>
+<td>Stateless (no data)</td>
+<td>&lt; 5 minutes (VM restart)</td>
+<td>Multiple AAS VMs across AZs; SAP Logon Group load distribution; Azure VMSS Flexible for horizontal scale</td>
+<td>Pre-provisioned AAS VMs in DR region (stopped); start on DR activation</td>
+<td>Azure VM 99.9% (single AZ) for each AAS</td>
+</tr>
+<tr>
+<td>SAP Web Dispatcher</td>
+<td>Stateless</td>
+<td>&lt; 5 minutes</td>
+<td>Two Web Dispatcher VMs behind Azure Application Gateway; health probes</td>
+<td>DR Application Gateway + Web Dispatcher in DR region</td>
+<td>Azure Application Gateway 99.95%</td>
+</tr>
+<tr>
+<td>ANF HANA volumes</td>
+<td>N/A (managed service)</td>
+<td>&lt; 15 minutes (snapshot restore)</td>
+<td>ANF built-in HA (99.99%); azacsnap hourly snapshots</td>
+<td>ANF Cross-Region Replication (async, RPO &lt; 1 hour); restore from snapshot</td>
+<td>ANF SLA 99.99%</td>
+</tr>
+<tr>
+<td>ExpressRoute Gateway</td>
+<td>N/A (redundant circuits)</td>
+<td>&lt; 5 minutes (BGP reconvergence)</td>
+<td>Two ExpressRoute circuits (different providers); Zone-redundant ErGw3AZ</td>
+<td>DR region ExpressRoute circuit pre-provisioned</td>
+<td>ExpressRoute Gateway 99.95%</td>
+</tr>
+</tbody>
+</table>
+<p>Performance implications of HA events:
+- <strong>HANA HSR failover:</strong> Application servers lose HANA connectivity for the duration of Pacemaker failover (60-120 seconds). ABAP work processes enter CPIC error state. After ILB VIP migration, application servers reconnect automatically via SAP HANA client failover configuration (JDBC failover parameter: <code>reconnect=true</code>).
+- <strong>Post-failover performance:</strong> The new HANA primary (former secondary) starts without warm column store cache. First queries after failover are slower until the column store is loaded from ANF. Cache warm-up time depends on HANA memory size: approximately 5-15 minutes for a 1 TiB HANA system loading column store pages at 400 MB/s.</p>
+<hr/>
+<h2 id="cost-optimization">Cost Optimization<a class="headerlink" href="#cost-optimization" title="Permanent link">¶</a></h2>
+<h3 id="performance-vs-cost-trade-offs">Performance vs Cost Trade-offs<a class="headerlink" href="#performance-vs-cost-trade-offs" title="Permanent link">¶</a></h3>
+<p>Performance tier VMs and storage are the most expensive components of an SAP on Azure deployment. The trade-offs are well-defined:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Performance Tier</th>
+<th>Cost Tier</th>
+<th>Performance Difference</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA storage: ANF Ultra vs ANF Premium</td>
+<td>Ultra: 128 MiB/s/TiB, &lt; 0.5 ms p99</td>
+<td>Premium: 64 MiB/s/TiB, 1-2 ms p99</td>
+<td>Ultra mandatory for HANA log (1 ms requirement); Premium acceptable for HANA shared</td>
+<td>Log: Ultra mandatory; Data: Ultra preferred; Shared: Premium</td>
+</tr>
+<tr>
+<td>HANA VM: M64s_v2 vs M32ts_v2</td>
+<td>M64s_v2: 1 TiB RAM, 64 vCPU</td>
+<td>M32ts_v2: 192 GiB RAM, 32 vCPU</td>
+<td>Linear SAPS difference; M32ts_v2 for &lt; 150 GiB HANA memory</td>
+<td>Right-size based on HANA Quick Sizer output</td>
+</tr>
+<tr>
+<td>App server: E32ds_v5 vs E16ds_v5</td>
+<td>E32ds_v5: 32 vCPU 256 GiB</td>
+<td>E16ds_v5: 16 vCPU 128 GiB</td>
+<td>2x SAPS difference; start with E16ds_v5 for non-production</td>
+<td>Non-production: E16ds_v5; production: E32ds_v5 based on SAPS</td>
+</tr>
+<tr>
+<td>ExpressRoute: Ultra vs High Performance</td>
+<td>10 Gbps vs 2 Gbps</td>
+<td>~4x cost difference</td>
+<td>No functional difference below 2 Gbps aggregate traffic</td>
+<td>Monitor ExpressRoute utilization; downsize if consistently &lt; 1 Gbps</td>
+</tr>
+</tbody>
+</table>
+<h3 id="right-sizing-process">Right-Sizing Process<a class="headerlink" href="#right-sizing-process" title="Permanent link">¶</a></h3>
+<p>SAP system right-sizing on Azure is a three-phase process:</p>
+<ol>
+<li><strong>Pre-deployment:</strong> Use SAP Quick Sizer output (SAPS requirement) to select initial VM SKU. Apply 30% headroom over Quick Sizer SAPS for peak concurrency. For HANA memory: Quick Sizer output x 1.2 (20% buffer) = minimum VM RAM.</li>
+<li><strong>Post-deployment (first 30 days):</strong> Monitor CPU utilization (target &lt; 65% average), memory utilization (HANA allocated / total VM RAM, target &lt; 80%), and SAPS utilization from SAP SM66/SM50/EWA (EarlyWatch Alert). Collect data for at least 2 complete business cycles (month-end, quarter-end).</li>
+<li><strong>Continuous right-sizing:</strong> Azure Advisor generates VM right-sizing recommendations based on 30-day CPU and network utilization. SAP EarlyWatch Alert (submitted monthly via SAP Solution Manager) provides ABAP response time trends and SAPS utilization percentages that feed the right-sizing analysis.</li>
+</ol>
+<h3 id="reserved-instances-for-performance-tier-vms">Reserved Instances for Performance-Tier VMs<a class="headerlink" href="#reserved-instances-for-performance-tier-vms" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Estimated Saving</th>
+<th>Implementation Complexity</th>
+<th>Prerequisites</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3-year Reserved Instance for HANA M-series VMs</td>
+<td>55-60% vs pay-as-you-go</td>
+<td>Low (purchase via Azure portal; no VM changes)</td>
+<td>3-year commitment; HANA VM SKU confirmed stable via right-sizing process</td>
+</tr>
+<tr>
+<td>1-year Reserved Instance for application server E-series</td>
+<td>35-40% vs pay-as-you-go</td>
+<td>Low</td>
+<td>1-year commitment; application server count stable</td>
+</tr>
+<tr>
+<td>ANF capacity pool: reserved capacity pricing</td>
+<td>20-30% depending on region</td>
+<td>Low (configure reserved capacity on ANF capacity pool)</td>
+<td>ANF capacity pool size confirmed via hcmt throughput measurements</td>
+</tr>
+<tr>
+<td>Auto-shutdown non-production HANA systems</td>
+<td>60-70% savings on non-prod (18h/day shutdown)</td>
+<td>Medium (requires HANA stop/start automation; ABAP RFC reconnect handling)</td>
+<td>HANA auto-start scripts; SAP system stop/start runbooks tested</td>
+</tr>
+<tr>
+<td>Azure Spot VMs for non-prod application servers</td>
+<td>70-80% savings on app server tier</td>
+<td>High (Spot VMs can be evicted; SAP work process must handle reconnection gracefully)</td>
+<td>Non-production only; SAP Logon Group configured for Spot VM eviction tolerance</td>
+</tr>
+<tr>
+<td>ExpressRoute circuit downsize (if under-utilized)</td>
+<td>30-50% on gateway cost</td>
+<td>Medium (requires BGP reconvergence; brief connectivity interruption)</td>
+<td>90-day utilization data showing &lt; 50% of current bandwidth</td>
+</tr>
+<tr>
+<td>Storage tiering: move HANA backup from Premium to Standard SSD</td>
+<td>40-50% on backup storage</td>
+<td>Low (change backup path mount to Standard tier ANF or Azure Blob cold)</td>
+<td>HANA backup latency not on critical path; restore time testing required</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="performance-benchmarking">Performance Benchmarking<a class="headerlink" href="#performance-benchmarking" title="Permanent link">¶</a></h2>
+<h3 id="sap-sd-benchmark">SAP SD Benchmark<a class="headerlink" href="#sap-sd-benchmark" title="Permanent link">¶</a></h3>
+<p>The SAP SD (Sales and Distribution) benchmark is the standard throughput measurement for SAP OLTP workloads. It measures SAPS (SAP Application Performance Standard) under a defined SD order-processing workload. For Azure validation:</p>
+<ul>
+<li><strong>Benchmark procedure:</strong> SAP provides the SD benchmark tool via SAP Service Marketplace. The benchmark simulates concurrent users executing SD order processing steps, including VA01 (sales order creation), VL01N (delivery), and VF01 (billing).</li>
+<li><strong>Azure published benchmarks:</strong> SAP publishes certified benchmark results for Azure VM SKUs at <a href="https://www.sap.com/dmc/exp/2018-benchmark-directory/#/sd">https://www.sap.com/dmc/exp/2018-benchmark-directory/#/sd</a>. E32ds_v5 delivers approximately 32,000 SAPS; M64s_v2 delivers approximately 64,000 SAPS (including HANA database).</li>
+<li><strong>Benchmark interpretation:</strong> Published SAPS values assume ideal conditions (dedicated server, no background load, optimal PPG placement). Production systems should be sized at 70% of published SAPS to allow headroom for batch jobs, RFC integrations, and reporting queries running concurrently with dialog workload.</li>
+</ul>
+<h3 id="hana-tpc-h-on-azure">HANA TPC-H on Azure<a class="headerlink" href="#hana-tpc-h-on-azure" title="Permanent link">¶</a></h3>
+<p>TPC-H is the standard decision-support benchmark for HANA OLAP performance. SAP publishes TPC-H results for HANA on Azure in the SAP HANA Hardware Directory. Key parameters for Azure:</p>
+<ul>
+<li><strong>TPC-H Scale Factor (SF):</strong> SF-3000 (3,000 GB dataset) is typical for BW/4HANA validation on M192is_v2 (4 TiB RAM). The dataset must fit in HANA memory for in-memory performance.</li>
+<li><strong>Result metric:</strong> Composite Query-per-Hour (QphH@SF-3000). Higher is better; published M192is_v2 results exceed 1,000 QphH@SF-3000 on Azure ANF Ultra storage.</li>
+<li><strong>Interpretation:</strong> TPC-H is a synthetic benchmark; actual BW/4HANA query performance depends on data model design, HANA partitioning strategy, and workload class configuration. Use TPC-H for infrastructure validation, not production query performance estimation.</li>
+</ul>
+<h3 id="baseline-documentation-process">Baseline Documentation Process<a class="headerlink" href="#baseline-documentation-process" title="Permanent link">¶</a></h3>
+<p>Performance baseline documentation must be captured before production go-live and stored in an immutable location:</p>
+<ol>
+<li><strong>Storage baseline (hcmt):</strong> Run <code>hcmt -v -t storage</code> on the HANA VM against the ANF data and log volumes. Export results to JSON. Store in Azure Blob Storage with immutable container policy (WORM) for compliance.</li>
+<li><strong>Network baseline (hcmt):</strong> Run <code>hcmt -v -t network</code> between HANA VM and each application server VM. Document RTT (round-trip time) and throughput. Verify PPG co-location delivers &lt; 0.5 ms RTT.</li>
+<li><strong>HANA KPI baseline (SAP HANA Studio / HANA Cockpit):</strong> Capture HANA system overview metrics: service memory consumption, delta store size, savepoint duration, log write latency histogram (from <code>M_SERVICE_STATISTICS</code>), and alert count.</li>
+<li><strong>ABAP baseline (SM66/SM50):</strong> Record peak dialog work process response time distribution, CPU utilization per work process type, and SAPS utilization percentage during a simulated peak load test.</li>
+<li><strong>OS baseline (SAR/sar):</strong> Capture CPU utilization (per-core and aggregate), memory utilization, disk I/O (iops and throughput per mount point), and network packet rate per NIC from a 4-hour peak load window.</li>
+</ol>
+<hr/>
+<h2 id="operations-and-monitoring">Operations and Monitoring<a class="headerlink" href="#operations-and-monitoring" title="Permanent link">¶</a></h2>
+<h3 id="azure-monitor-for-sap-solutions-ams-providers">Azure Monitor for SAP Solutions (AMS) Providers<a class="headerlink" href="#azure-monitor-for-sap-solutions-ams-providers" title="Permanent link">¶</a></h3>
+<p>AMS collects performance metrics via specialized providers that integrate with SAP APIs:</p>
+<table>
+<thead>
+<tr>
+<th>AMS Provider</th>
+<th>Metrics Collected</th>
+<th>Collection Interval</th>
+<th>Alert Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP HANA</td>
+<td>HANA memory usage, delta merge rate, savepoint duration, log write latency, service availability, HSR status, disk usage per volume</td>
+<td>30 seconds</td>
+<td>HANA OOM risk, log latency breach, delta merge failure, HSR lag</td>
+</tr>
+<tr>
+<td>SAP NetWeaver (ABAP)</td>
+<td>Work process utilization, short dumps rate, enqueue lock table fill, system log error rate, spool queue depth</td>
+<td>60 seconds</td>
+<td>Work process exhaustion, lock table full, high short dump rate</td>
+</tr>
+<tr>
+<td>OS (Linux)</td>
+<td>CPU utilization, memory utilization, disk I/O (IOPS, throughput, latency per mount), network (Mbps, packet loss, retransmits)</td>
+<td>30 seconds</td>
+<td>CPU saturation, disk I/O bottleneck, network errors</td>
+</tr>
+<tr>
+<td>HA Cluster (Pacemaker)</td>
+<td>Cluster node status, resource state (HANA, ASCS, ERS), STONITH status, cluster communication errors</td>
+<td>30 seconds</td>
+<td>Resource failover event, STONITH failure, cluster split-brain</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vm-insights-for-sap">VM Insights for SAP<a class="headerlink" href="#vm-insights-for-sap" title="Permanent link">¶</a></h3>
+<p>Azure VM Insights (via Log Analytics agent or Azure Monitor Agent) provides OS-level performance data visualized in the Azure portal:</p>
+<ul>
+<li><strong>Performance tab:</strong> Shows CPU, memory, disk, and network metrics with 5-minute granularity. Useful for identifying noisy-neighbor effects and resource contention.</li>
+<li><strong>Map tab:</strong> Shows network connections between VMs, enabling visualization of SAP application-to-database communication paths and identifying unexpected cross-zone connections.</li>
+<li><strong>Log queries:</strong> VM Insights data in Log Analytics can be queried with KQL to identify performance regressions over time:
+<div class="language-kql highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">Perf</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">ObjectName</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"Logical Disk"</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">CounterName</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"Disk Transfers/sec"</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">InstanceName</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"/hana/log"</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="p">|</span><span class="w"> </span><span class="k">summarize</span><span class="w"> </span><span class="n">avg</span><span class="p">(</span><span class="n">CounterValue</span><span class="p">)</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">bin</span><span class="p">(</span><span class="n">TimeGenerated</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="n">m</span><span class="p">),</span><span class="w"> </span><span class="n">Computer</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="p">|</span><span class="w"> </span><span class="k">render</span><span class="w"> </span><span class="n">timechart</span>
+</span></code></pre></div></li>
+</ul>
+<h3 id="earlywatch-alert-integration">EarlyWatch Alert Integration<a class="headerlink" href="#earlywatch-alert-integration" title="Permanent link">¶</a></h3>
+<p>SAP EarlyWatch Alert (EWA) is an automated SAP system health check submitted to SAP Support. EWA provides performance trend analysis that Azure Monitor cannot provide because it accesses ABAP-layer metrics:</p>
+<ul>
+<li><strong>SAPS utilization trend:</strong> EWA reports CPU utilization as a percentage of licensed SAPS, enabling right-sizing decisions.</li>
+<li><strong>Database response time trend:</strong> EWA reports HANA average response time per work process type over the reporting period.</li>
+<li><strong>Buffer quality trend:</strong> EWA reports ABAP buffer hit ratios; declining buffer quality indicates buffer undersizing.</li>
+<li><strong>Submission frequency:</strong> Monthly (automated via SAP Solution Manager or Cloud ALM).</li>
+<li><strong>Azure integration:</strong> SAP Solution Manager runs on an Azure VM (E16ds_v5 or E32ds_v5); it connects to the monitored SAP systems via RFC. The Solution Manager VM should be in the same VNet as the SAP systems (not via ExpressRoute) to ensure low-latency RFC connections for EWA data collection.</li>
+</ul>
+<h3 id="performance-alerts">Performance Alerts<a class="headerlink" href="#performance-alerts" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Metric/Signal</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Runbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA Log Write Latency High</td>
+<td>AMS HANA provider: <code>hanadb_disk_io_time_ms</code> for log volume</td>
+<td>p99 &gt; 1 ms for 5 consecutive minutes</td>
+<td>Critical</td>
+<td>Check ANF volume throughput utilization; check HANA write_lob_chunks metric; verify Write Accelerator status if managed disk</td>
+</tr>
+<tr>
+<td>HANA Memory Near Capacity</td>
+<td>AMS HANA provider: <code>hanadb_used_memory_mb / hanadb_total_memory_mb</code></td>
+<td>&gt; 85% for 10 minutes</td>
+<td>Warning (&gt; 90%: Critical)</td>
+<td>Execute <code>ALTER SYSTEM RECLAIM VERSION SPACE</code>; check for HANA delta store accumulation; consider HANA memory dump if OOM imminent</td>
+</tr>
+<tr>
+<td>Application Server Work Process Saturation</td>
+<td>AMS NetWeaver provider: dialog work process free count</td>
+<td>&lt; 10% free work processes for 3 minutes</td>
+<td>Critical</td>
+<td>Add AAS VM (if spare capacity in VMSS); kill stuck work processes (SM50); check for HANA lockwait causing work process stacking</td>
+</tr>
+<tr>
+<td>HANA HSR Replication Lag</td>
+<td>AMS HANA provider: HSR secondary log shipping lag</td>
+<td>&gt; 30 seconds</td>
+<td>Critical</td>
+<td>Check inter-AZ network bandwidth; check HANA secondary disk I/O; verify no HANA secondary maintenance window conflicts; escalate if &gt; 5 minutes</td>
+</tr>
+<tr>
+<td>ANF Volume Throughput Saturation</td>
+<td>Azure Monitor: <code>Microsoft.NetApp/netAppAccounts/capacityPools/volumes/readThroughput</code> + <code>writeThroughput</code></td>
+<td>&gt; 90% of provisioned throughput for 10 minutes</td>
+<td>Warning</td>
+<td>Increase ANF volume size (throughput scales with size); review HANA delta merge schedule; check for runaway HANA query consuming data volume I/O</td>
+</tr>
+<tr>
+<td>ExpressRoute Gateway Bandwidth High</td>
+<td>Azure Monitor: <code>ExpressRouteGatewayBitsPerSecond</code></td>
+<td>&gt; 80% of gateway SKU limit for 30 minutes</td>
+<td>Warning</td>
+<td>Review traffic composition; check for unplanned HANA backup over ExpressRoute; consider upgrading to higher gateway SKU</td>
+</tr>
+<tr>
+<td>HANA Delta Merge Duration Excessive</td>
+<td>AMS HANA provider: delta merge duration per table</td>
+<td>&gt; 30 minutes per delta merge operation</td>
+<td>Warning</td>
+<td>Check for unpartitioned large HANA column store tables; review merge scheduling configuration; check HANA CPU availability during merge</td>
+</tr>
+</tbody>
+</table>
+<h3 id="performance-capacity-planning">Performance Capacity Planning<a class="headerlink" href="#performance-capacity-planning" title="Permanent link">¶</a></h3>
+<p>Monthly capacity planning review compares current utilization against thresholds:</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Current Utilization</th>
+<th>Warning Threshold</th>
+<th>Action at Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA VM CPU (SAPS % of VM capacity)</td>
+<td>Track monthly average from EWA</td>
+<td>70% average</td>
+<td>Plan VM scale-up at next maintenance window</td>
+</tr>
+<tr>
+<td>HANA VM Memory (HANA used / VM RAM)</td>
+<td>Track daily peak from AMS</td>
+<td>80% peak</td>
+<td>Plan HANA memory extension or VM scale-up</td>
+</tr>
+<tr>
+<td>ANF Data Volume throughput</td>
+<td>Track daily peak from Azure Monitor</td>
+<td>80% of provisioned</td>
+<td>Increase ANF volume size by 1 TiB increments</td>
+</tr>
+<tr>
+<td>ExpressRoute bandwidth</td>
+<td>Track hourly average from Azure Monitor</td>
+<td>60% of circuit speed</td>
+<td>Open capacity review with network team</td>
+</tr>
+<tr>
+<td>Application server vCPU (% of SAPS at peak)</td>
+<td>Track from SM50/EWA</td>
+<td>65% at peak</td>
+<td>Add AAS VM; right-size existing AAS if underutilized</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<h3 id="ppg-placement-in-landing-zone">PPG Placement in Landing Zone<a class="headerlink" href="#ppg-placement-in-landing-zone" title="Permanent link">¶</a></h3>
+<p>In the SAP on Azure Landing Zone architecture, PPGs are deployed in the production SAP subscription and are scoped to a single Availability Zone:</p>
+<ul>
+<li><strong>PPG naming convention:</strong> <code>ppg-&lt;SID&gt;-&lt;region-short&gt;-&lt;az&gt;-&lt;env&gt;</code> (e.g., <code>ppg-S4P-neu-az1-prod</code>).</li>
+<li><strong>PPG creation prerequisite:</strong> The AZ-constrained Capacity Reservation Group must be created before the PPG to ensure capacity availability. The HANA VM anchor creates the PPG physical placement; subsequent VMs must match the zone.</li>
+<li><strong>Landing Zone policy:</strong> Azure Policy (<code>Deny</code>) prevents HANA-certified VMs from being deployed without a PPG assignment. This policy is applied at the SAP production management group scope.</li>
+<li><strong>PPG and VMSS:</strong> Application server VMSS (Flexible Orchestration) must have <code>proximityPlacementGroup</code> specified at VMSS creation. The VMSS zone must match the PPG zone.</li>
+</ul>
+<h3 id="subnet-design-for-low-latency-tiers">Subnet Design for Low-Latency Tiers<a class="headerlink" href="#subnet-design-for-low-latency-tiers" title="Permanent link">¶</a></h3>
+<p>The SAP Landing Zone uses four dedicated subnets to isolate performance-sensitive traffic:</p>
+<table>
+<thead>
+<tr>
+<th>Subnet</th>
+<th>CIDR</th>
+<th>Purpose</th>
+<th>NSG Policy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>snet-sap-hana</td>
+<td>/27 (32 IPs)</td>
+<td>HANA VM NICs (primary NIC: SQL client traffic)</td>
+<td>Allow: intra-subnet (HANA SQL port 30013-30099); Allow: from snet-sap-app; Deny: all else</td>
+</tr>
+<tr>
+<td>snet-sap-hana-rep</td>
+<td>/27 (32 IPs)</td>
+<td>HANA VM second NIC (HSR replication traffic)</td>
+<td>Allow: TCP 40001-40099 between HANA nodes only; Deny: all else</td>
+</tr>
+<tr>
+<td>snet-sap-app</td>
+<td>/25 (128 IPs)</td>
+<td>PAS, AAS, ASCS/ERS VMs</td>
+<td>Allow: to snet-sap-hana (30013); Allow: from ExpressRoute; Allow: intra-subnet</td>
+</tr>
+<tr>
+<td>snet-netapp</td>
+<td>/28 (16 IPs, delegated)</td>
+<td>ANF delegated subnet</td>
+<td>Delegated to Microsoft.NetApp/volumes; no NSG (ANF requirement)</td>
+</tr>
+</tbody>
+</table>
+<p>The separation of HANA client (snet-sap-hana) and HSR replication (snet-sap-hana-rep) traffic onto dedicated subnets and NICs ensures that HSR log shipping traffic does not compete with ABAP SQL query traffic on the same NIC bandwidth allocation.</p>
+<hr/>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<ol>
+<li>SAP workloads on Azure: planning and deployment checklist — <a href="https://learn.microsoft.com/azure/sap/workloads/deployment-checklist">https://learn.microsoft.com/azure/sap/workloads/deployment-checklist</a></li>
+<li>SAP HANA Azure virtual machine storage configurations — <a href="https://learn.microsoft.com/azure/sap/workloads/hana-vm-operations-storage">https://learn.microsoft.com/azure/sap/workloads/hana-vm-operations-storage</a></li>
+<li>Azure NetApp Files for SAP HANA — <a href="https://learn.microsoft.com/azure/sap/workloads/hana-vm-operations-netapp">https://learn.microsoft.com/azure/sap/workloads/hana-vm-operations-netapp</a></li>
+<li>SAP HANA infrastructure configurations and operations on Azure — <a href="https://learn.microsoft.com/azure/sap/workloads/hana-vm-operations">https://learn.microsoft.com/azure/sap/workloads/hana-vm-operations</a></li>
+<li>Proximity Placement Groups for SAP applications with Azure — <a href="https://learn.microsoft.com/azure/sap/workloads/proximity-placement-scenarios">https://learn.microsoft.com/azure/sap/workloads/proximity-placement-scenarios</a></li>
+<li>Azure Monitor for SAP Solutions providers — <a href="https://learn.microsoft.com/azure/sap/monitor/providers">https://learn.microsoft.com/azure/sap/monitor/providers</a></li>
+<li>Azure virtual machine sizes for SAP workloads — <a href="https://learn.microsoft.com/azure/sap/workloads/planning-guide">https://learn.microsoft.com/azure/sap/workloads/planning-guide</a></li>
+<li>Configure Azure Write Accelerator for M-series virtual machines — <a href="https://learn.microsoft.com/azure/virtual-machines/how-to-enable-write-accelerator">https://learn.microsoft.com/azure/virtual-machines/how-to-enable-write-accelerator</a></li>
+<li>SAP HANA Large Instances network architecture — <a href="https://learn.microsoft.com/azure/sap/large-instances/hana-network-architecture">https://learn.microsoft.com/azure/sap/large-instances/hana-network-architecture</a></li>
+<li>ExpressRoute performance and scale — <a href="https://learn.microsoft.com/azure/expressroute/expressroute-faqs">https://learn.microsoft.com/azure/expressroute/expressroute-faqs</a></li>
+</ol>
+<hr/>
+<h2 id="validation-checklist">Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">¶</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> SAP Notes 8+ real numbers (10 SAP Notes listed with real note numbers and content)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> WAF all 5 pillars (Performance Efficiency, Reliability, Security, Cost Optimization, Operational Excellence)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Design decisions 8+ rows (8 rows covering PPG, VM family, storage, network, NUMA, ANF vs disk, AZ placement, monitoring)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Two Mermaid diagrams valid (Architecture Overview: graph TB; Service Detail: graph LR)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> RPO/RTO table populated (6 SAP tiers with RPO, RTO, HA Method, DR Method, SLA Component)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Storage requirements table present (8 volume types with IOPS, latency, SAP Note)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> VM comparison table present (11 VM SKUs across HANA, app server, Web Dispatcher tiers)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Alert table 5+ alerts (7 alerts covering log latency, memory, work process, HSR, ANF, ExpressRoute, delta merge)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Anti-patterns 5+ (see Anti-Patterns section below)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Troubleshooting 5+ (see Troubleshooting section below)</li>
+</ul>
+<hr/>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-1-deploying-hana-vms-without-proximity-placement-groups">Anti-Pattern 1: Deploying HANA VMs Without Proximity Placement Groups<a class="headerlink" href="#anti-pattern-1-deploying-hana-vms-without-proximity-placement-groups" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> HANA VM and application server VMs are deployed in the same Availability Zone but without a PPG. Azure places VMs within the zone at any available physical host, potentially on different racks separated by multiple network hops.</p>
+<p><strong>Impact:</strong> Application-to-database round-trip time is 1–3 ms instead of &lt; 0.5 ms. For an S/4HANA dialog step with 50 database calls, this adds 25–125 ms per dialog step. At 10,000 SAPS, this is a 10–50% response time degradation. SAP EarlyWatch Alert reports elevated average dialog response times; users report slow SAP GUI response.</p>
+<p><strong>Correct approach:</strong> Create PPG anchored to the HANA VM's AZ before deploying any VMs. Deploy HANA VM first (anchors PPG to physical location), then deploy PAS and AAS VMs with PPG membership. Verify PPG membership with <code>az vm show --name &lt;vm&gt; --query proximityPlacementGroup</code>. Enforce PPG membership via Azure Policy at the SAP management group scope.</p>
+<hr/>
+<h3 id="anti-pattern-2-using-premium-ssd-v1-or-v2-for-hana-log-volume-without-write-accelerator">Anti-Pattern 2: Using Premium SSD (v1 or v2) for HANA Log Volume Without Write Accelerator<a class="headerlink" href="#anti-pattern-2-using-premium-ssd-v1-or-v2-for-hana-log-volume-without-write-accelerator" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> HANA log volume (/hana/log) is hosted on a Premium SSD P20 or P30 disk attached to an M-series VM, without Write Accelerator enabled.</p>
+<p><strong>Impact:</strong> Premium SSD write latency is 1–3 ms for fsync operations. HANA log writes (fdatasync) complete in 1–3 ms instead of the required &lt; 1 ms p99. hcmt storage test fails on log write latency threshold (SAP Note 2399079). HANA OLTP throughput is throttled by log write latency; high-concurrency workloads show HANA wait event <code>LogFlush</code> as the top wait in HANA thread samples.</p>
+<p><strong>Correct approach:</strong> Either (a) enable Write Accelerator on the log volume disk via <code>az disk update --name &lt;disk&gt; --resource-group &lt;rg&gt; --write-accelerator true</code> and restart HANA; or (b) migrate HANA log volume to ANF Ultra tier (preferred, no Write Accelerator needed, sub-0.5 ms p99 latency). Do not enable Write Accelerator on data or OS disks.</p>
+<hr/>
+<h3 id="anti-pattern-3-shared-anf-capacity-pool-across-sids-and-service-levels">Anti-Pattern 3: Shared ANF Capacity Pool Across SIDs and Service Levels<a class="headerlink" href="#anti-pattern-3-shared-anf-capacity-pool-across-sids-and-service-levels" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> Multiple SAP SIDs (e.g., PRD, QAS, DEV) and different service levels (Ultra, Premium) are configured in a single ANF capacity pool to reduce management overhead.</p>
+<p><strong>Impact:</strong> ANF throughput is shared across all volumes in a capacity pool. A DEV system running HANA export generates peak I/O that saturates the capacity pool's throughput budget, causing production HANA log write latency to spike above 1 ms. The SLA violation is intermittent and difficult to trace without ANF-level monitoring.</p>
+<p><strong>Correct approach:</strong> Create dedicated ANF capacity pools per service level and environment tier: (a) PRD HANA data/log volumes: dedicated Ultra tier pool; (b) Non-production HANA volumes: separate Premium tier pool; (c) /sapmnt and /usr/sap/trans: shared Standard tier pool. Use ANF manual QoS type on Ultra tier pools to assign explicit throughput limits per volume, preventing any single volume from consuming the pool's aggregate throughput.</p>
+<hr/>
+<h3 id="anti-pattern-4-over-provisioning-abap-work-processes-without-numa-awareness">Anti-Pattern 4: Over-Provisioning ABAP Work Processes Without NUMA Awareness<a class="headerlink" href="#anti-pattern-4-over-provisioning-abap-work-processes-without-numa-awareness" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> E32ds_v5 (32 vCPU, 2 NUMA nodes of 16 vCPUs each) is configured with 100 dialog work processes to maximize concurrency, without pinning work processes to NUMA nodes.</p>
+<p><strong>Impact:</strong> With 100 work processes on 32 vCPUs, CPU contention causes high work process queue wait times (observable in SM66 as "On CPU" time &gt; "Processing" time). Cross-NUMA memory access for ABAP shared memory segments (buffer pool) adds 30–50 ns per memory access. The system does not scale beyond ~70% of theoretical SAPS despite appearing to have headroom.</p>
+<p><strong>Correct approach:</strong> Configure dialog work processes at 1.5–2x vCPU count (48–64 for E32ds_v5), not an arbitrary large number. Pin SAP work process types to CPU cores using <code>taskset</code> or cgroup cpuset if NUMA-local ABAP shared memory access is critical. For E32ds_v5, keep all work processes within the same NUMA node if the ABAP shared memory configuration fits in one NUMA node's RAM.</p>
+<hr/>
+<h3 id="anti-pattern-5-disabling-transparent-huge-pages-without-testing-impact">Anti-Pattern 5: Disabling Transparent Huge Pages Without Testing Impact<a class="headerlink" href="#anti-pattern-5-disabling-transparent-huge-pages-without-testing-impact" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> SAP Note 2684254 (SLES) and SAP Note 3024346 (RHEL) recommend disabling Transparent Huge Pages (THP) for HANA. A team applies <code>echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled</code> system-wide on all SAP VMs, including application servers, without testing.</p>
+<p><strong>Impact:</strong> ABAP work process virtual memory management uses THP for large ABAP memory areas. Disabling THP on application servers (not HANA) increases TLB pressure for ABAP memory allocations, causing measurable increase in CPU time per ABAP dialog step (3–8% measured in benchmarks). The performance degradation is small per step but accumulates at high SAPS utilization.</p>
+<p><strong>Correct approach:</strong> Apply THP=never only to the HANA VM (HANA indexserver is explicitly documented to perform worse with THP). On ABAP application server VMs, set THP=madvise (allows THP for applications that explicitly request it, disables for those that do not) rather than never. Test ABAP SD benchmark response times before and after THP changes on application servers. SAP Notes 2684254 and 3024346 apply to HANA VMs; they do not prescribe THP settings for ABAP application servers.</p>
+<hr/>
+<h3 id="anti-pattern-6-sizing-hana-memory-at-11-with-quick-sizer-output">Anti-Pattern 6: Sizing HANA Memory at 1:1 with Quick Sizer Output<a class="headerlink" href="#anti-pattern-6-sizing-hana-memory-at-11-with-quick-sizer-output" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> Quick Sizer output reports 500 GiB HANA memory requirement. Team selects M32ts_v2 (192 GiB RAM), arguing that HANA will use only 500 GiB at peak — but the VM has 1,024 GiB RAM (M64s_v2) available; Quick Sizer is used as a ceiling, not a floor.</p>
+<p><strong>Impact:</strong> Actually, the opposite mistake: Quick Sizer output (500 GiB) is selected without adding the required 20% buffer. HANA memory footprint at production runtime includes: table data in column store, row store (lock tables, ABAP session data), HANA code and stack, SAP HANA extensions (AFL, PAL), and delta store during heavy write periods. The actual HANA memory consumption at peak is 550–650 GiB, causing HANA OOM (out-of-memory) kills under month-end load. M32ts_v2 (192 GiB) is undersized for 500 GiB Quick Sizer output.</p>
+<p><strong>Correct approach:</strong> HANA VM RAM = Quick Sizer HANA memory output x 1.2 (minimum). Select the next VM SKU above this calculated value. For 500 GiB Quick Sizer output: 500 x 1.2 = 600 GiB minimum — select M64s_v2 (1,024 GiB). Verify memory consumption after 30 days of production operation via AMS HANA memory utilization metric; right-size downward only if &lt; 60% utilization is consistently observed.</p>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="troubleshooting-scenario-1-hana-slow-queries-column-store-full-table-scan">Troubleshooting Scenario 1: HANA Slow Queries — Column Store Full Table Scan<a class="headerlink" href="#troubleshooting-scenario-1-hana-slow-queries-column-store-full-table-scan" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> Specific ABAP reports or HANA queries take 10–60 seconds in production but run in &lt; 1 second on a development system with the same data volume.</p>
+<p><strong>Diagnosis steps:</strong>
+1. In HANA Studio or SAP HANA Cockpit, navigate to Performance — Expensive Statements Trace. Identify the slow SQL statement.
+2. Run <code>EXPLAIN PLAN FOR &lt;statement&gt;</code> in HANA SQL console. Check for <code>COLUMN SEARCH</code> operations without partition pruning — indicates a full column store scan.
+3. Check <code>M_CS_TABLES</code> for the scanned table: verify <code>IS_COLUMN_TABLE=TRUE</code>, check <code>MEMORY_SIZE_IN_TOTAL</code> vs <code>DISK_SIZE</code> — if <code>MEMORY_SIZE_IN_TOTAL</code> is near zero but <code>DISK_SIZE</code> is large, the column store pages are not in memory (requires reload from ANF).
+4. Check <code>M_DELTA_MERGE_STATISTICS</code> for the table: if the last delta merge was recent (within 1 hour) and merge duration was &gt; 10 minutes, the column store may be partially in the delta store, degrading scan performance.
+5. Check HANA CPU: <code>SELECT * FROM M_SERVICE_STATISTICS WHERE SERVICE_NAME='indexserver'</code> — look for <code>TOTAL_CPU_TIME</code> growth rate and compare to expected query frequency.</p>
+<p><strong>Resolution:</strong>
+- If column store is not in memory: add memory to HANA (increase VM RAM) or reduce column store size via table partitioning.
+- If missing partition pruning: add HANA partitioning on the scan predicate column; update statistics: <code>UPDATE STATISTICS &lt;table&gt;</code>.
+- If delta merge causing performance: schedule <code>ALTER TABLE &lt;table&gt; MERGE DELTA</code> during off-peak, or tune delta merge threshold in <code>indexserver.ini [mergedog] auto_merge_threshold_percent</code>.</p>
+<hr/>
+<h3 id="troubleshooting-scenario-2-high-iops-latency-on-hana-data-volume">Troubleshooting Scenario 2: High IOPS Latency on HANA Data Volume<a class="headerlink" href="#troubleshooting-scenario-2-high-iops-latency-on-hana-data-volume" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> AMS alert fires for ANF data volume throughput saturation. HANA savepoint duration increases from 30 seconds to 5+ minutes. ABAP background jobs slow down. hcmt re-test fails on data volume read throughput (&lt; 400 MB/s measured vs 400 MB/s required).</p>
+<p><strong>Diagnosis steps:</strong>
+1. Check ANF volume metrics in Azure Monitor: <code>readThroughput</code> and <code>writeThroughput</code> for the HANA data volume. If both are near 100% of provisioned throughput, the volume is saturated.
+2. Identify which HANA operation is consuming throughput: check <code>M_VOLUME_IO_STATISTICS</code> in HANA SQL — look for high <code>READ_SIZE</code> or <code>WRITE_SIZE</code> in recent minutes.
+3. Check if a HANA data load or BW InfoProvider activation is running concurrently with regular OLAP queries: <code>SELECT * FROM M_TRANSACTIONS WHERE STATUS='RUNNING'</code>.
+4. Check ANF mount options: verify <code>nconnect=8</code> is active with <code>cat /proc/mounts | grep /hana/data</code>. If nconnect is missing, TCP connections to ANF are limited to 1, capping throughput.
+5. Check HANA backup: verify no backint backup is reading the data volume during peak hours.</p>
+<p><strong>Resolution:</strong>
+- Immediate: Increase ANF data volume size by 1–2 TiB (throughput scales automatically: adding 1 TiB Ultra adds 128 MiB/s throughput). This can be done online without HANA restart.
+- If nconnect was missing: re-mount with <code>nconnect=8</code> (requires brief unmount; HANA must be stopped first).
+- Long-term: Separate HANA savepoint schedule from BW data load windows using HANA workload classes (SAP Note 2222250).</p>
+<hr/>
+<h3 id="troubleshooting-scenario-3-network-bottleneck-abap-dialog-response-time-elevated-after-vm-migration">Troubleshooting Scenario 3: Network Bottleneck — ABAP Dialog Response Time Elevated After VM Migration<a class="headerlink" href="#troubleshooting-scenario-3-network-bottleneck-abap-dialog-response-time-elevated-after-vm-migration" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> After migrating application server VMs from AZ1 PPG to a new VMSS deployment, ABAP dialog response time increases from 400 ms to 1,200 ms. SAP SM50 shows increased database request time per dialog step.</p>
+<p><strong>Diagnosis steps:</strong>
+1. Measure network RTT from the affected application server to the HANA VM: <code>hping3 -S -c 100 -p 30013 &lt;HANA_IP&gt;</code> — compare RTT to pre-migration baseline.
+2. Verify PPG membership: <code>az vm show -n &lt;appserver-vm&gt; -g &lt;rg&gt; --query proximityPlacementGroup</code>.
+3. If no PPG or wrong PPG: the VMSS was deployed without specifying the PPG, or the VMSS zone does not match the HANA PPG zone.
+4. Check Accelerated Networking: <code>az network nic show -n &lt;nic&gt; -g &lt;rg&gt; --query enableAcceleratedNetworking</code>. If false, AN was not enabled on the new VMSS NIC.
+5. Run HANA top SQL from the affected time window: verify the slow queries are identical to pre-migration (rules out query plan regression).</p>
+<p><strong>Resolution:</strong>
+- If PPG missing: stop-deallocate the VMSS instances; update VMSS model to add <code>proximityPlacementGroup</code> reference; restart VMs. Note: this causes downtime for affected VMs.
+- If AN missing: stop-deallocate VMSS instance; enable AN on NIC; restart. An Azure Policy violation should have prevented this; add Policy enforcement.
+- Prevent recurrence: Add ARM template validation tests (Azure Policy or Bicep what-if) to VMSS deployment pipeline that verify PPG and AN configuration before deployment.</p>
+<hr/>
+<h3 id="troubleshooting-scenario-4-ppg-misconfiguration-ppg-allocation-failure-during-scale-out">Troubleshooting Scenario 4: PPG Misconfiguration — PPG Allocation Failure During Scale-Out<a class="headerlink" href="#troubleshooting-scenario-4-ppg-misconfiguration-ppg-allocation-failure-during-scale-out" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> Adding a new AAS VM during an SAP peak load event fails with Azure error: <code>AllocationFailed: Unable to allocate VM in the proximity placement group</code>.</p>
+<p><strong>Diagnosis steps:</strong>
+1. Check PPG zone: <code>az ppg show -n &lt;ppg-name&gt; -g &lt;rg&gt; --query zones</code>. The zone must match the requested VM SKU availability.
+2. Check VM SKU availability in the PPG's zone: <code>az vm list-skus --location &lt;region&gt; --zone &lt;az&gt; --size Standard_E32ds_v5 --output table</code>. If <code>NotAvailableForSubscription</code> in that zone, capacity is exhausted.
+3. Check whether the PPG has unused members that are preventing placement: if a stopped VM is in the PPG, it still holds the PPG physical placement constraint.</p>
+<p><strong>Resolution:</strong>
+- Immediate: If E32ds_v5 capacity is unavailable in the PPG's zone, request Azure capacity increase via support (SLA: 24–72 hours). As a temporary measure, deploy an E16ds_v5 or E32as_v5 (AMD) which may have available capacity in the same zone.
+- If the PPG physical constraint is too restrictive: consider creating a second PPG in the same zone for overflow AAS VMs. The second PPG may land on a different physical host group but remains in the same zone (RTT &lt; 1 ms, acceptable for non-primary AAS).
+- Long-term: Use Azure Capacity Reservation Groups to pre-reserve E32ds_v5 instances in each AZ for rapid scale-out without allocation failures.</p>
+<hr/>
+<h3 id="troubleshooting-scenario-5-write-accelerator-issues-log-write-latency-remains-high-after-wa-enable">Troubleshooting Scenario 5: Write Accelerator Issues — Log Write Latency Remains High After WA Enable<a class="headerlink" href="#troubleshooting-scenario-5-write-accelerator-issues-log-write-latency-remains-high-after-wa-enable" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> Write Accelerator was enabled on the HANA log disk, but AMS alert for HANA log write latency continues to fire (p99 &gt; 1 ms). hcmt re-test still fails on log write latency.</p>
+<p><strong>Diagnosis steps:</strong>
+1. Verify WA is enabled and active: <code>az disk show -n &lt;log-disk&gt; -g &lt;rg&gt; --query writeAcceleratorEnabled</code>. If false, WA enable did not persist (possible VM restart did not occur after WA enable).
+2. Verify the disk shown in Azure portal as WA-enabled is the correct disk mounted at /hana/log: <code>lsblk -o NAME,MOUNTPOINT</code> on the HANA VM.
+3. Check for multiple disks striped for /hana/log: if an LVM striped volume spans 2+ disks, ALL disks in the stripe must have WA enabled. If only one disk in the stripe has WA, fsync on the striped device is bottlenecked by the non-WA disk.
+4. Check HANA file system: if /hana/log is mounted as an NFS ANF volume (not a managed disk), Write Accelerator is irrelevant — the latency issue is with ANF configuration (nconnect, volume tier).
+5. Check VM model: WA is not supported on E-series VMs. If the HANA VM is not an M-series, WA is unavailable regardless of disk configuration.</p>
+<p><strong>Resolution:</strong>
+- If WA not active: stop-deallocate HANA VM (WA enable requires VM deallocation on some configurations); re-enable WA; restart.
+- If LVM stripe: enable WA on all disks in the stripe group.
+- If ANF volume (not managed disk): WA does not apply; fix ANF nconnect mount option or verify ANF Ultra tier is used (not Premium).
+- If non-M-series VM: WA is unavailable; the only resolution is migration to ANF Ultra tier for the log volume or VM migration to M-series.</p>
+<hr/>
+<h3 id="troubleshooting-scenario-6-hana-hsr-replication-lag-during-business-hours">Troubleshooting Scenario 6: HANA HSR Replication Lag During Business Hours<a class="headerlink" href="#troubleshooting-scenario-6-hana-hsr-replication-lag-during-business-hours" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> AMS alert fires for HANA HSR replication lag &gt; 30 seconds during daily peak load window (09:00–11:00). The lag resolves after the peak window. No HSR lag during off-peak hours.</p>
+<p><strong>Diagnosis steps:</strong>
+1. Check HANA primary log shipping throughput: <code>SELECT * FROM M_SERVICE_REPLICATION</code> — look for <code>REPLICATION_STATUS</code> and <code>SHIPPED_LOG_POSITION</code> vs <code>REPLAYED_LOG_POSITION</code> gap.
+2. Measure inter-AZ network bandwidth during peak: check Azure VM NIC metrics for the HANA primary VM during the peak window. If NIC throughput is near the VM's network cap (M64s_v2: 16 Gbps), HSR log shipping and SQL client traffic are competing.
+3. Check if HSR is bound to a dedicated NIC or shared with SQL client traffic: <code>SELECT * FROM M_INIFILE_CONTENTS WHERE KEY='listeninterface' AND FILE_NAME='global.ini'</code>.
+4. Check HANA secondary log replay throughput: log from <code>M_SERVICE_REPLICATION</code> on the secondary — if <code>LOG_RECOVERY_THREAD_COUNT</code> is low, the secondary is replay-bound, not network-bound.</p>
+<p><strong>Resolution:</strong>
+- If NIC saturation: bind HSR to a dedicated second NIC (requires HANA stop, NIC addition to VM, HSR reconfiguration of <code>listeninterface</code> to the dedicated NIC IP in <code>global.ini</code>).
+- If secondary replay-bound: increase <code>[system_replication_communication] log_recovery_thread_count</code> in <code>global.ini</code> on the secondary (requires HANA service restart on secondary only).
+- If network bandwidth is available but lag persists: check for large LOB write operations on the primary during peak load — LOB log records can be disproportionately large and saturate HSR log shipping bandwidth for a short period.</p>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

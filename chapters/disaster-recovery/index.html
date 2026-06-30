@@ -1,0 +1,3075 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/disaster-recovery/" rel="canonical"/>
+<link href="../high-availability/" rel="prev"/>
+<link href="../performance/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Disaster Recovery - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-on-azure-disaster-recovery-architecture">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Disaster Recovery
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+<nav aria-label="SAP Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-dr-landscape-design">
+<span class="md-ellipsis">
+      
+        SAP DR Landscape Design
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-hana-system-replication-async-mode-for-dr">
+<span class="md-ellipsis">
+      
+        SAP HANA System Replication — Async Mode for DR
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-application-server-recovery">
+<span class="md-ellipsis">
+      
+        SAP Application Server Recovery
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-central-services-recovery">
+<span class="md-ellipsis">
+      
+        SAP Central Services Recovery
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-netweaver-dr-procedures">
+<span class="md-ellipsis">
+      
+        SAP NetWeaver DR Procedures
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-transport-domain-in-dr">
+<span class="md-ellipsis">
+      
+        SAP Transport Domain in DR
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-architecture-applicability">
+<span class="md-ellipsis">
+      
+        SAP Notes — Architecture Applicability
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+<nav aria-label="Azure Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-paired-regions-for-sap">
+<span class="md-ellipsis">
+      
+        Azure Paired Regions for SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#expressroute-global-reach-for-dr-connectivity">
+<span class="md-ellipsis">
+      
+        ExpressRoute Global Reach for DR Connectivity
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-site-recovery-for-non-hana-sap-components">
+<span class="md-ellipsis">
+      
+        Azure Site Recovery for Non-HANA SAP Components
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-netapp-files-cross-region-replication">
+<span class="md-ellipsis">
+      
+        Azure NetApp Files Cross-Region Replication
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-backup-geo-redundant-vaults">
+<span class="md-ellipsis">
+      
+        Azure Backup Geo-Redundant Vaults
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-subscription-design">
+<span class="md-ellipsis">
+      
+        DR Subscription Design
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-traffic-manager-for-sap-fiori-dr">
+<span class="md-ellipsis">
+      
+        Azure Traffic Manager for SAP Fiori DR
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-network-topology">
+<span class="md-ellipsis">
+      
+        DR Network Topology
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-strategy-by-sap-tier">
+<span class="md-ellipsis">
+      
+        DR Strategy by SAP Tier
+      
+    </span>
+</a>
+<nav aria-label="DR Strategy by SAP Tier" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#production-sap-systems">
+<span class="md-ellipsis">
+      
+        Production SAP Systems
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#quality-assurance-sap-systems">
+<span class="md-ellipsis">
+      
+        Quality Assurance SAP Systems
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#development-and-sandbox-sap-systems">
+<span class="md-ellipsis">
+      
+        Development and Sandbox SAP Systems
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-strategy-decision-matrix">
+<span class="md-ellipsis">
+      
+        DR Strategy Decision Matrix
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hana-dr-design">
+<span class="md-ellipsis">
+      
+        HANA DR Design
+      
+    </span>
+</a>
+<nav aria-label="HANA DR Design" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hana-system-replication-modes">
+<span class="md-ellipsis">
+      
+        HANA System Replication Modes
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#logreplay-vs-delta_datashipping-operation-mode">
+<span class="md-ellipsis">
+      
+        logreplay vs delta_datashipping Operation Mode
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#multi-target-replication">
+<span class="md-ellipsis">
+      
+        Multi-Target Replication
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hana-dr-takeover-procedure">
+<span class="md-ellipsis">
+      
+        HANA DR Takeover Procedure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hana-dr-testing-without-impact-to-production">
+<span class="md-ellipsis">
+      
+        HANA DR Testing Without Impact to Production
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#application-server-dr">
+<span class="md-ellipsis">
+      
+        Application Server DR
+      
+    </span>
+</a>
+<nav aria-label="Application Server DR" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-site-recovery-for-sap-application-servers">
+<span class="md-ellipsis">
+      
+        Azure Site Recovery for SAP Application Servers
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#custom-scripts-for-sap-aware-failover">
+<span class="md-ellipsis">
+      
+        Custom Scripts for SAP-Aware Failover
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-profile-and-transport-file-recovery">
+<span class="md-ellipsis">
+      
+        SAP Profile and Transport File Recovery
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-licence-recovery-in-dr">
+<span class="md-ellipsis">
+      
+        SAP Licence Recovery in DR
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-runbooks">
+<span class="md-ellipsis">
+      
+        DR Runbooks
+      
+    </span>
+</a>
+<nav aria-label="DR Runbooks" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-declaration-process">
+<span class="md-ellipsis">
+      
+        DR Declaration Process
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#failover-sequence">
+<span class="md-ellipsis">
+      
+        Failover Sequence
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-test-procedure">
+<span class="md-ellipsis">
+      
+        DR Test Procedure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#failback-procedure">
+<span class="md-ellipsis">
+      
+        Failback Procedure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rto-measurement-methodology">
+<span class="md-ellipsis">
+      
+        RTO Measurement Methodology
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+<nav aria-label="Azure Well-Architected Alignment" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability">
+<span class="md-ellipsis">
+      
+        Reliability
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security">
+<span class="md-ellipsis">
+      
+        Security
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimisation">
+<span class="md-ellipsis">
+      
+        Cost Optimisation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operational-excellence">
+<span class="md-ellipsis">
+      
+        Operational Excellence
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance-efficiency">
+<span class="md-ellipsis">
+      
+        Performance Efficiency
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-architecture">
+<span class="md-ellipsis">
+      
+        Security Architecture
+      
+    </span>
+</a>
+<nav aria-label="Security Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#replication-encryption">
+<span class="md-ellipsis">
+      
+        Replication Encryption
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-environment-access-controls">
+<span class="md-ellipsis">
+      
+        DR Environment Access Controls
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-security-in-dr-region">
+<span class="md-ellipsis">
+      
+        Network Security in DR Region
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability-and-high-availability">
+<span class="md-ellipsis">
+      
+        Reliability and High Availability
+      
+    </span>
+</a>
+<nav aria-label="Reliability and High Availability" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#component-failure-domains">
+<span class="md-ellipsis">
+      
+        Component Failure Domains
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rpo-and-rto-by-sap-tier">
+<span class="md-ellipsis">
+      
+        RPO and RTO by SAP Tier
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#composite-sla-calculation">
+<span class="md-ellipsis">
+      
+        Composite SLA Calculation
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimisation_1">
+<span class="md-ellipsis">
+      
+        Cost Optimisation
+      
+    </span>
+</a>
+<nav aria-label="Cost Optimisation" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-cost-model">
+<span class="md-ellipsis">
+      
+        DR Cost Model
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-cost-table">
+<span class="md-ellipsis">
+      
+        DR Cost Table
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimisation-recommendations">
+<span class="md-ellipsis">
+      
+        Cost Optimisation Recommendations
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operations-and-monitoring">
+<span class="md-ellipsis">
+      
+        Operations and Monitoring
+      
+    </span>
+</a>
+<nav aria-label="Operations and Monitoring" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-monitoring-strategy">
+<span class="md-ellipsis">
+      
+        DR Monitoring Strategy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alert-table">
+<span class="md-ellipsis">
+      
+        Alert Table
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-drill-scheduling">
+<span class="md-ellipsis">
+      
+        DR Drill Scheduling
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-monitor-dr-dashboard">
+<span class="md-ellipsis">
+      
+        Azure Monitor DR Dashboard
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+<nav aria-label="Landing Zone Mapping" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-subscription">
+<span class="md-ellipsis">
+      
+        DR Subscription
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-vnet-design">
+<span class="md-ellipsis">
+      
+        DR VNet Design
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-connectivity">
+<span class="md-ellipsis">
+      
+        DR Connectivity
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#validation-checklist">
+<span class="md-ellipsis">
+      
+        Validation Checklist
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-1-using-delta_datashipping-for-production-dr">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 1: Using delta_datashipping for Production DR
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-2-not-pre-staging-the-sap-emergency-licence">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 2: Not Pre-staging the SAP Emergency Licence
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-3-sharing-the-dr-subscription-with-non-production-sap-workloads">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 3: Sharing the DR Subscription with Non-Production SAP Workloads
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-4-configuring-hsr-replication-directly-off-the-ha-cluster-vip">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 4: Configuring HSR Replication Directly Off the HA Cluster VIP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-5-skipping-anf-crr-for-the-sap-transport-directory">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 5: Skipping ANF CRR for the SAP Transport Directory
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-6-not-testing-the-asr-recovery-plan-before-a-dr-event">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 6: Not Testing the ASR Recovery Plan Before a DR Event
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#scenario-1-hana-hsr-replication-lag-exceeds-15-minutes">
+<span class="md-ellipsis">
+      
+        Scenario 1: HANA HSR Replication Lag Exceeds 15 Minutes
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#scenario-2-hana-hsr-replication-disconnected">
+<span class="md-ellipsis">
+      
+        Scenario 2: HANA HSR Replication Disconnected
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#scenario-3-asr-recovery-plan-fails-at-hana-takeover-step">
+<span class="md-ellipsis">
+      
+        Scenario 3: ASR Recovery Plan Fails at HANA Takeover Step
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#scenario-4-anf-crr-volumes-cannot-be-broken-stuck-in-replicating-state">
+<span class="md-ellipsis">
+      
+        Scenario 4: ANF CRR Volumes Cannot Be Broken (Stuck in Replicating State)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#scenario-5-sap-application-server-fails-to-start-after-asr-failover-profile-not-found">
+<span class="md-ellipsis">
+      
+        Scenario 5: SAP Application Server Fails to Start After ASR Failover — Profile Not Found
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../operations/">
+<span class="md-ellipsis">
+    Phase E — Operations and Resilience
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="sap-on-azure-disaster-recovery-architecture">SAP on Azure Disaster Recovery Architecture<a class="headerlink" href="#sap-on-azure-disaster-recovery-architecture" title="Permanent link">¶</a></h1>
+<hr/>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>SAP workloads impose strict recovery requirements that exceed the capabilities of generic disaster recovery tooling. SAP systems consist of multiple interdependent tiers: the SAP HANA database, ABAP application servers (Primary Application Server and Additional Application Servers), SAP Central Services (ASCS and ERS for enqueue replication), the SAP Web Dispatcher, and the SAP Transport Management System. Each tier has distinct recovery time and recovery point characteristics. The SAP HANA database demands near-zero data loss (RPO &lt; 15 minutes for async replication, RPO = 0 for synchronous replication) because financial and operational transactions written to HANA cannot be reconstructed from application-layer logs alone. SAP Central Services carries the in-memory enqueue lock table, which cannot be replicated asynchronously — all open locks are lost at failover and SAP programs waiting on those locks receive ABAP dump messages. SAP application servers are stateless relative to the database but carry instance profiles, work directory state, and in-flight ABAP batch jobs that must be accounted for in the recovery sequence. The DR architecture must address each tier with controls matched to its specific recovery characteristics, not apply a uniform snapshot-and-restore strategy across the entire SAP landscape.</p>
+<p>Microsoft Azure provides the building blocks required to construct a tier-specific SAP DR architecture. Azure paired regions (for example East US 2 paired with Central US, or West Europe paired with North Europe) guarantee that Microsoft staggers maintenance operations and prioritises paired-region recovery in declared Azure region disasters. Azure Site Recovery (ASR) orchestrates VM replication and failover for stateless or lightly stateful VMs, including SAP application servers and Web Dispatchers, with RPO targets of under 15 minutes and customisable recovery plans that invoke PowerShell extension scripts for SAP-specific steps. Azure NetApp Files Cross-Region Replication (ANF CRR) replicates NFS volumes — used for SAP shared filesystems such as <code>/sapmnt</code>, <code>/usr/sap/trans</code>, and SAP global directories — across regions with a replication interval of 10 minutes (hourly schedules also available). ExpressRoute Global Reach connects the DR region's on-premises gateway to the primary region's gateway without traversing the public internet, preserving the private network path that SAP systems require for RFC calls to on-premises backend systems. SAP HANA System Replication (HSR) in asynchronous mode provides continuous database replication across regions with a replication lag bounded only by network throughput, typically under 15 minutes for transaction volumes below 5 GB/hour of redo log generation.</p>
+<p>DR strategy selection for SAP on Azure is not a binary active-passive choice. A four-tier model is the practical approach: (1) Production SAP systems receive warm standby DR with automated failover orchestration and HSR async replication, targeting RPO ≤ 15 minutes and RTO ≤ 4 hours; (2) Quality Assurance systems receive periodic backup restore from geo-redundant Azure Recovery Services Vaults, targeting RPO ≤ 24 hours and RTO ≤ 8 hours; (3) Development and sandbox systems use on-demand rebuild from infrastructure-as-code and the most recent database backup, targeting RPO ≤ 24 hours and RTO ≤ 24 hours; (4) Integration and pre-production systems are evaluated individually but default to the QA tier unless they are in the critical path for production cutover. This tiered approach avoids the cost of running warm-standby DR for every system while ensuring that the production tier meets SAP contractual SLAs. DR strategy for each SAP SID is documented in the System Profile maintained by the SAP Basis team and reviewed annually or whenever the system's criticality classification changes.</p>
+<hr/>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>The SAP on Azure DR architecture spans two Azure paired regions: a Primary Region hosting the production SAP landscape and a DR Region hosting the standby SAP landscape. Both regions share the same Azure management group hierarchy, subscription structure, and governance policies applied at the SAP Management Group scope. The DR subscription is a sibling to the production subscription under the SAP Management Group, ensuring that Azure Policy assignments for SAP VM SKU restrictions, disk encryption enforcement, and network ACL baselines apply equally to both regions. Shared services — Azure Key Vault, Azure Monitor Log Analytics, Microsoft Sentinel — are deployed with geo-redundancy so that DR operations do not depend on primary region availability for secrets retrieval, log querying, or SIEM alerting.</p>
+<p>At the database tier, SAP HANA System Replication in asynchronous mode (operation mode <code>logreplay</code>) continuously ships redo log segments from the primary HANA node to the DR HANA standby node. The DR HANA VM is sized identically to the primary HANA VM (same M-series SKU, same memory configuration) because HANA HSR in logreplay mode applies redo logs to a fully loaded in-memory database image on the standby, not a cold disk image. Any under-sizing of the DR HANA VM results in HSR connection failures when the standby cannot load the data volume into memory. ANF Cross-Region Replication replicates the <code>/sapmnt/&lt;SID&gt;</code>, <code>/usr/sap/trans</code>, and HANA data and log volumes at 10-minute intervals, providing a shared filesystem DR target that is consistent with the HANA data replication timeline.</p>
+<p>At the application tier, Azure Site Recovery replicates production SAP application server VMs (PAS and all AAS instances) to the DR region with an RPO target of 15 minutes. ASR does not replicate the SAP HANA database VMs — those are handled exclusively by HANA HSR — but it does replicate the ASCS and ERS VMs. ASR replication uses managed disk replication behind the scenes, storing recovery points in a cache storage account in the source region and replicating delta changes every 30 seconds to ASR-managed storage in the target region. Custom recovery plan scripts handle SAP-specific tasks: mounting ANF volumes, starting SAPHostAgent, starting the ASCS instance, starting the ERS instance, starting the PAS instance, and starting AAS instances in the configured sequence with inter-step wait timers.</p>
+<p>The DR region SAP landscape mirrors the production topology: one HANA VM (M-series), one ASCS VM, one ERS VM, one PAS VM, and a configurable number of AAS VMs pre-provisioned and replicated by ASR. The DR region contains its own ANF capacity pool, with volumes provisioned to receive CRR replication from the primary. Azure Traffic Manager with Priority routing directs SAP Fiori traffic to the primary region's Web Dispatcher VMs; in a declared DR event, the DNS TTL expiry (300 seconds) and Traffic Manager monitoring interval (30 seconds) determine how quickly Fiori users are redirected to DR-region Web Dispatcher endpoints.</p>
+<pre class="mermaid"><code>graph TB
+  subgraph PrimaryRegion["Primary Region — East US 2"]
+    subgraph ProdSub["SAP Production Subscription"]
+      subgraph ProdVNet["SAP Prod VNet 10.10.0.0/16"]
+        subgraph AppSubnet["App Subnet 10.10.1.0/24"]
+          PAS["PAS VM\nM32ts / 192 GB\nSAP App Server"]
+          AAS1["AAS VM 1\nE16ds_v5"]
+          AAS2["AAS VM 2\nE16ds_v5"]
+          WD["Web Dispatcher\nE4ds_v5"]
+        end
+        subgraph ASCSSubnet["ASCS Subnet 10.10.2.0/27"]
+          ASCS["ASCS VM\nD4ds_v5\nSAP Central Services"]
+          ERS["ERS VM\nD4ds_v5\nEnqueue Replication"]
+        end
+        subgraph HANASubnet["HANA Subnet 10.10.3.0/27"]
+          HANA_P["HANA Primary\nM128s / 2TB\nSYSTEM REPLICATION SOURCE"]
+          HANA_S["HANA HSR Secondary\nM128s / 2TB\nHA Sync"]
+        end
+        subgraph ANFPrimary["ANF Primary"]
+          ANF_P["/sapmnt /usr/sap/trans\nANF Ultra 4 TB"]
+        end
+      end
+    end
+  end
+
+  subgraph DRRegion["DR Region — Central US"]
+    subgraph DRSub["SAP DR Subscription"]
+      subgraph DRVNet["SAP DR VNet 10.30.0.0/16"]
+        subgraph DRAppSubnet["App Subnet 10.30.1.0/24"]
+          DR_PAS["DR PAS VM\nASR Replicated"]
+          DR_AAS1["DR AAS VM 1\nASR Replicated"]
+          DR_AAS2["DR AAS VM 2\nASR Replicated"]
+          DR_WD["DR Web Dispatcher\nASR Replicated"]
+        end
+        subgraph DRASCSSubnet["ASCS Subnet 10.30.2.0/27"]
+          DR_ASCS["DR ASCS VM\nASR Replicated"]
+          DR_ERS["DR ERS VM\nASR Replicated"]
+        end
+        subgraph DRHANASubnet["HANA Subnet 10.30.3.0/27"]
+          HANA_DR["HANA DR Standby\nM128s / 2TB\nHSR ASYNC TARGET"]
+        end
+        subgraph ANF_DR["ANF DR"]
+          ANF_D["/sapmnt /usr/sap/trans\nANF Ultra CRR Target"]
+        end
+      end
+    end
+  end
+
+  subgraph SharedServices["Shared Services"]
+    TM["Azure Traffic Manager\nPriority Routing — Fiori"]
+    RSV["Geo-Redundant RSV\nAzure Backup"]
+    ASR_Vault["ASR Recovery Services Vault\nSource: East US 2 → Target: Central US"]
+  end
+
+  HANA_P --&gt;|"HSR Async — logreplay\nRPO ≤ 15 min"| HANA_DR
+  ANF_P --&gt;|"CRR 10-min interval"| ANF_D
+  PAS --&gt;|"ASR Block Replication\nRPO ≤ 15 min"| DR_PAS
+  AAS1 --&gt;|"ASR Block Replication"| DR_AAS1
+  AAS2 --&gt;|"ASR Block Replication"| DR_AAS2
+  ASCS --&gt;|"ASR Block Replication"| DR_ASCS
+  ERS --&gt;|"ASR Block Replication"| DR_ERS
+  WD --&gt;|"ASR Block Replication"| DR_WD
+  WD --&gt;|"Primary endpoint"| TM
+  DR_WD -.-&gt;|"Failover endpoint"| TM</code></pre>
+<hr/>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<h3 id="sap-dr-landscape-design">SAP DR Landscape Design<a class="headerlink" href="#sap-dr-landscape-design" title="Permanent link">¶</a></h3>
+<p>The SAP DR landscape is a functional replica of the production landscape at the system level. Each production SAP SID (for example, S4P for S/4HANA production) has a corresponding DR target that shares the same SID and system number, enabling SAP GUI connections, RFC destination configurations, and SAP Solution Manager monitoring to work without reconfiguration after DR failover. This is a critical design constraint: if the DR system uses a different SID, every downstream integration — IDocs, RFC, BAPI, BAPIs from connected systems — requires re-pointing after failover, multiplying the RTO by the number of integrations. The DR landscape uses the same SAP kernel version, patch level, and transport track as production, enforced by the SAP Basis team's post-transport checklist that includes a DR landscape sync verification step.</p>
+<p>The approach for the database tier is HANA System Replication (HSR), not system copy. Periodic system copies (weekly or monthly snapshots of the HANA database restored to DR) cannot achieve an RPO below the copy frequency and require hours of database startup time, making them unsuitable for production DR. HSR maintains a continuously updated in-memory replica in the DR region with redo log shipping lag determined solely by network bandwidth between regions. System copies are retained as a separate mechanism for DR environment patching and DR test isolation (see the DR Testing section), not for production DR recovery.</p>
+<p>SAP application servers are stateless from the database perspective but carry instance-level state: the SAP work processes have in-flight dialog and batch jobs at the moment of a disaster. In-flight dialog steps are rolled back automatically by SAP's database commit/rollback mechanism after the HANA DR takeover completes. In-flight batch jobs are in ABAP status ACTIVE at the time of failure; after DR failover they appear as ACTIVE with no executing host, and the SAP Basis team must use SM50/SM66 to identify and restart or cancel them as part of the DR runbook. This is an accepted behaviour — batch job recovery is included in the RTO calculation with a 30-minute allowance for batch job triage.</p>
+<h3 id="sap-hana-system-replication-async-mode-for-dr">SAP HANA System Replication — Async Mode for DR<a class="headerlink" href="#sap-hana-system-replication-async-mode-for-dr" title="Permanent link">¶</a></h3>
+<p>SAP HANA System Replication for DR uses operation mode <code>logreplay</code> and replication mode <code>async</code>. In <code>logreplay</code> mode, the secondary site receives redo log segments, replays them against an in-memory copy of the data volumes, and maintains a fully consistent database image ready for takeover with minimal additional replay time (typically under 60 seconds of log replay at takeover). In contrast, <code>delta_datashipping</code> mode does not keep the secondary in-memory and requires a full data shipping cycle before takeover, which can take hours for large HANA databases. <code>delta_datashipping</code> fails to meet production DR RTO targets below 4 hours for databases larger than 500 GB.</p>
+<p>Replication mode <code>async</code> means the primary HANA node acknowledges transaction commits to the application layer without waiting for the secondary to confirm receipt of the redo log. The replication lag is bounded by the network bandwidth between regions and the transaction log generation rate. For a production SAP S/4HANA system generating 3 GB/hour of redo log, the replication lag over a 1 Gbps ExpressRoute connection (shared with other traffic) is typically 2–5 minutes. SAP Note 1999880 documents the HSR monitoring views <code>M_SERVICE_REPLICATION</code> and <code>M_SYSTEM_REPLICATION</code> which expose <code>SECONDARY_ACTIVE_STATUS</code>, <code>REPLICATION_STATUS</code>, and <code>REPLICATION_MODE</code>. The alert <code>HANA HSR Replication Lag &gt; 15 min</code> (implemented in Azure Monitor via a custom metric from HANA monitoring agent) fires before the RPO threshold is breached.</p>
+<h3 id="sap-application-server-recovery">SAP Application Server Recovery<a class="headerlink" href="#sap-application-server-recovery" title="Permanent link">¶</a></h3>
+<p>SAP application server VMs (PAS and AAS) are replicated by Azure Site Recovery. At DR failover, ASR recreates the VMs in the DR region VNet with the same disk contents as of the latest recovery point (RPO ≤ 15 minutes). The VMs start with the production IP addresses remapped to the DR subnet's IP scheme (handled by ASR network mapping). The SAP application servers mount the <code>/sapmnt/&lt;SID&gt;</code> NFS share from the DR ANF volume (which received CRR replication from primary) and read instance profiles from there. SAP licence files stored in <code>/usr/sap/&lt;SID&gt;/SYS/global/saphostsrv.cfg</code> and the SAP hardware key are VM-specific — after ASR failover to new VM hardware, the SAP hardware key changes and a new SAP licence must be applied. The DR runbook includes a step to generate and apply a new SAP licence key using the DR hardware key, obtained from <code>saplicense -get</code> on the DR application server after first start.</p>
+<h3 id="sap-central-services-recovery">SAP Central Services Recovery<a class="headerlink" href="#sap-central-services-recovery" title="Permanent link">¶</a></h3>
+<p>SAP Central Services (ASCS instance for the enqueue server and message server, ERS instance for Enqueue Replication Server) are replicated by ASR. The ASCS instance carries the in-memory enqueue lock table. At the moment of a primary region failure, all locks in the enqueue lock table are lost — there is no mechanism to replicate the enqueue lock table to the DR region. SAP programs that held locks display ABAP runtime error <code>ENQUEUE_FAILED</code> after the DR ASCS starts. This is an accepted and documented behaviour in SAP Note 2630425. The DR runbook includes a step to communicate to business process owners that SAP transactions with pending locks must be restarted after DR failover. The ERS instance in production maintains a replicated copy of the enqueue table for HA within the primary region, but this replication does not cross regions.</p>
+<h3 id="sap-netweaver-dr-procedures">SAP NetWeaver DR Procedures<a class="headerlink" href="#sap-netweaver-dr-procedures" title="Permanent link">¶</a></h3>
+<p>SAP NetWeaver DR recovery sequence follows the dependency order mandated by SAP startup scripts: (1) mount shared filesystems (<code>/sapmnt</code>, <code>/usr/sap/trans</code>), (2) start SAP HANA database, (3) start ASCS instance (message server + enqueue server), (4) start ERS instance (enqueue replication), (5) start PAS instance, (6) start AAS instances. Deviating from this sequence causes SAP startup failures: starting the PAS before the ASCS results in the message server connection failure and SAP work processes entering error state. ASR Recovery Plans encode this sequence with explicit inter-group wait timers: 5-minute wait after HANA takeover, 3-minute wait after ASCS start, 2-minute wait after ERS start, before starting PAS. The pre- and post-failover scripts in the Recovery Plan execute PowerShell runbooks from an Azure Automation account in the DR subscription.</p>
+<h3 id="sap-transport-domain-in-dr">SAP Transport Domain in DR<a class="headerlink" href="#sap-transport-domain-in-dr" title="Permanent link">¶</a></h3>
+<p>The SAP Transport Management System (TMS) operates through the Transport Domain Controller (TDC), which is typically the production SAP system. After DR failover, the DR SAP system is the live production system, but TMS still references the original TDC hostname. The DR runbook includes a step to execute transaction STMS on the DR system and verify the Transport Domain Controller connection. If the TDC is unreachable (because it was in the failed primary region), the DR system must be promoted to a temporary TDC using the TMS reconfiguration procedure documented in SAP Note 1768384. Transport imports are suspended during the DR period to prevent incomplete transports from entering the DR production system. A freeze on SAP changes is issued as part of the DR declaration process.</p>
+<h3 id="sap-notes-architecture-applicability">SAP Notes — Architecture Applicability<a class="headerlink" href="#sap-notes-architecture-applicability" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1999880</td>
+<td>FAQ: SAP HANA System Replication</td>
+<td>Defines HSR replication modes (sync/syncmem/async), logreplay vs delta_datashipping, multi-tier HSR topology, monitoring views M_SYSTEM_REPLICATION</td>
+<td>HANA DR Design, Monitoring</td>
+</tr>
+<tr>
+<td>2039883</td>
+<td>FAQ: SAP HANA Database Backup and Recovery</td>
+<td>Backup-based DR for QA/Dev tiers, HANA backup encryption, recovery time estimation for large databases</td>
+<td>QA/Dev DR Strategy, Runbooks</td>
+</tr>
+<tr>
+<td>2057595</td>
+<td>FAQ: SAP HANA High Availability</td>
+<td>HSR pre-checks, network bandwidth requirements between primary and secondary, HANA takeover procedure steps</td>
+<td>HANA DR Design, Runbooks</td>
+</tr>
+<tr>
+<td>2630425</td>
+<td>SAP HANA System Replication Known Issues and Restrictions</td>
+<td>Enqueue lock loss at ASCS failover, delta_datashipping limitations, HSR takeover incomplete scenarios</td>
+<td>Central Services DR, Anti-Patterns</td>
+</tr>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>Supported M-series VM types for HANA DR standby, certification requirements for DR VMs</td>
+<td>DR VM Sizing, Design Decisions</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>SAP on Microsoft Azure: Support Prerequisites</td>
+<td>ExpressRoute requirement for production SAP, support prerequisites for DR configurations</td>
+<td>DR Connectivity</td>
+</tr>
+<tr>
+<td>1768384</td>
+<td>SAP Transport Management System in High Availability Scenarios</td>
+<td>TMS/TDC reconfiguration in DR, promoting a system to TDC</td>
+<td>Transport Domain DR</td>
+</tr>
+<tr>
+<td>2925421</td>
+<td>SAP HANA System Replication — Operations Guide</td>
+<td>HANA takeover commands (<code>hdbnsutil -sr_takeover</code>), re-registration of original primary as secondary after failback, full HSR operational runbook</td>
+<td>HANA DR Runbooks</td>
+</tr>
+<tr>
+<td>2630765</td>
+<td>SAP HANA Backup and Recovery for Azure NetApp Files</td>
+<td>ANF snapshot-consistent backups for HANA, integration with HANA Backint for ANF CRR scenarios</td>
+<td>ANF DR, Backup Strategy</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>SAP HANA 2.0 SPS 06 Release Notes</td>
+<td>Multi-target HSR support including 1+1+1 topology for chained replication (primary → HA secondary → DR secondary)</td>
+<td>Multi-Target HSR Design</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<h3 id="azure-paired-regions-for-sap">Azure Paired Regions for SAP<a class="headerlink" href="#azure-paired-regions-for-sap" title="Permanent link">¶</a></h3>
+<p>Azure paired regions for SAP workloads must be selected based on three criteria: geographic proximity (to minimise HSR replication latency), Azure region capability (M-series VM availability in both regions), and regulatory residency requirements (data must remain in the same jurisdiction). The validated SAP DR region pairs for the three primary geographies are:</p>
+<ul>
+<li><strong>Americas</strong>: East US 2 (primary) / Central US (DR) — M-series available in both, approximately 18 ms inter-region round-trip latency via ExpressRoute Global Reach</li>
+<li><strong>Europe</strong>: West Europe (Netherlands) (primary) / North Europe (Ireland) (DR) — M-series available in both, approximately 22 ms inter-region round-trip latency</li>
+<li><strong>Asia Pacific</strong>: Southeast Asia (Singapore) (primary) / East Asia (Hong Kong) (DR) — M-series available in both, approximately 31 ms inter-region round-trip latency</li>
+</ul>
+<p>The latency figures above are for ExpressRoute Global Reach paths, which route through the Microsoft backbone rather than the public internet. These latencies are acceptable for HANA HSR async mode because async replication does not block application commits. For HANA HSR sync mode (required for zero RPO), the Microsoft-documented latency limit is 1 ms round-trip; cross-region latencies of 18–31 ms make sync mode across regions non-viable for production SAP workloads.</p>
+<h3 id="expressroute-global-reach-for-dr-connectivity">ExpressRoute Global Reach for DR Connectivity<a class="headerlink" href="#expressroute-global-reach-for-dr-connectivity" title="Permanent link">¶</a></h3>
+<p>ExpressRoute Global Reach connects two ExpressRoute circuits (one in the primary region, one in the DR region) through the Microsoft backbone, creating a private path between the primary Azure region and the DR Azure region without traversing the public internet. For SAP DR, this path serves three functions: (1) HANA HSR redo log replication between primary HANA VM and DR HANA standby VM; (2) RFC calls from the DR SAP application servers to on-premises backend systems (ERP to legacy systems, SAP PI/PO integrations); (3) operator access from on-premises to the DR region for DR runbook execution. Global Reach is provisioned at the connectivity subscription level and the route advertisement from DR VNet is controlled by the DR ExpressRoute Gateway's connection authorisation. Each ExpressRoute circuit must have Premium add-on enabled for Global Reach when primary and DR regions are in different geopolitical regions.</p>
+<h3 id="azure-site-recovery-for-non-hana-sap-components">Azure Site Recovery for Non-HANA SAP Components<a class="headerlink" href="#azure-site-recovery-for-non-hana-sap-components" title="Permanent link">¶</a></h3>
+<p>Azure Site Recovery manages replication of all SAP VM tiers except HANA. ASR replication for SAP VMs is configured with the following parameters:</p>
+<ul>
+<li><strong>Replication policy</strong>: RPO threshold 15 minutes, app-consistent snapshot frequency 4 hours, recovery point retention 24 hours</li>
+<li><strong>Target resource group</strong>: pre-created in DR subscription with naming convention <code>rg-sap-dr-&lt;SID&gt;-&lt;region&gt;</code></li>
+<li><strong>Target virtual network</strong>: DR SAP VNet with network mapping configured in ASR (source subnet → target subnet mapping)</li>
+<li><strong>Target VM size</strong>: identical to source VM size (ASR allows override for compute-optimised DR scenarios, but SAP VMs must match for performance parity)</li>
+<li><strong>Managed disk type</strong>: Premium SSD (same as source; ASR does not downgrade disk type)</li>
+<li><strong>Availability zone</strong>: ASR supports zone-to-zone and region-to-region replication; for cross-region DR, zone assignment in the DR region is specified per VM in the Recovery Plan</li>
+</ul>
+<p>ASR replication health is monitored through the ASR vault's replication health dashboard and through Azure Monitor alerts on the <code>ASRReplicationLagExceedingRPOThreshold</code> metric. The ASR Mobility Service agent must be installed on all SAP VMs in scope; on Linux VMs, the agent is deployed via the Custom Script Extension in the VM provisioning Bicep templates.</p>
+<h3 id="azure-netapp-files-cross-region-replication">Azure NetApp Files Cross-Region Replication<a class="headerlink" href="#azure-netapp-files-cross-region-replication" title="Permanent link">¶</a></h3>
+<p>ANF Cross-Region Replication replicates ANF volumes from the primary region to the DR region. For SAP, the following volumes are included in CRR:</p>
+<table>
+<thead>
+<tr>
+<th>Volume</th>
+<th>Mount Point</th>
+<th>Size</th>
+<th>Replication Schedule</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sapmnt-&lt;SID&gt;</code></td>
+<td><code>/sapmnt/&lt;SID&gt;</code></td>
+<td>256 GB</td>
+<td>10-minute</td>
+<td>SAP shared directory, instance profiles, kernel executables</td>
+</tr>
+<tr>
+<td><code>usrsaptrans</code></td>
+<td><code>/usr/sap/trans</code></td>
+<td>512 GB</td>
+<td>10-minute</td>
+<td>SAP transport directory; imports frozen during DR</td>
+</tr>
+<tr>
+<td><code>usrsap-&lt;SID&gt;-ASCS</code></td>
+<td><code>/usr/sap/&lt;SID&gt;/ASCS&lt;nr&gt;</code></td>
+<td>64 GB</td>
+<td>10-minute</td>
+<td>ASCS instance directory</td>
+</tr>
+<tr>
+<td><code>usrsap-&lt;SID&gt;-ERS</code></td>
+<td><code>/usr/sap/&lt;SID&gt;/ERS&lt;nr&gt;</code></td>
+<td>64 GB</td>
+<td>10-minute</td>
+<td>ERS instance directory</td>
+</tr>
+</tbody>
+</table>
+<p>HANA data and log volumes are NOT replicated via ANF CRR when HSR is in use — HSR is the authoritative replication mechanism for HANA. ANF CRR and HSR are complementary but operate independently. During DR failover, ANF CRR replication to the DR volumes must be broken (the DR volumes converted from data protection volumes to standard read-write volumes) before the DR SAP VMs can mount them. The CRR break operation takes less than 2 minutes for volumes below 512 GB.</p>
+<h3 id="azure-backup-geo-redundant-vaults">Azure Backup Geo-Redundant Vaults<a class="headerlink" href="#azure-backup-geo-redundant-vaults" title="Permanent link">¶</a></h3>
+<p>Azure Recovery Services Vaults (RSV) configured with geo-redundant storage (GRS) replicate backup data to the paired region. For SAP, two separate RSVs are used:</p>
+<ul>
+<li><strong>Production RSV</strong> (<code>rsv-sap-prod-&lt;region&gt;</code>): GRS-enabled, retains HANA Backint backups (daily full, hourly log backups with 35-day retention), ASR replication data (managed by ASR, not backup policies)</li>
+<li><strong>Non-Production RSV</strong> (<code>rsv-sap-nonprod-&lt;region&gt;</code>): GRS-enabled, retains QA/Dev HANA backup restore points, Azure Backup for SAP HANA on Azure VM (uses Backint API), 30-day retention</li>
+</ul>
+<p>Cross-Region Restore (CRR) is enabled on both RSVs, allowing restore of SAP HANA backup points to VMs in the DR region without waiting for a declared Azure region disaster. This capability is used for DR testing: a HANA backup taken in production can be restored to a test HANA VM in the DR region to validate recovery procedures without touching the HSR standby.</p>
+<h3 id="dr-subscription-design">DR Subscription Design<a class="headerlink" href="#dr-subscription-design" title="Permanent link">¶</a></h3>
+<p>The DR subscription is a dedicated subscription under the SAP Management Group in the Azure management group hierarchy. It is not the same subscription as the production subscription. Reasons for subscription separation:</p>
+<ol>
+<li><strong>Blast radius isolation</strong>: Production subscription quota exhaustion, policy violations, or accidental resource deletion does not affect DR subscription readiness</li>
+<li><strong>RBAC isolation</strong>: DR subscription access is restricted to the DR Operations team and SAP Basis leads; production DevOps teams do not have access to DR subscription by default</li>
+<li><strong>Cost visibility</strong>: DR subscription costs are reported separately, enabling the finance team to account for DR as a distinct cost category</li>
+<li><strong>Policy independence</strong>: The DR subscription can carry a more permissive Azure Policy assignment for <code>Allowed VM SKUs</code> during DR testing (allowing temporary non-production VMs) without relaxing policy on the production subscription</li>
+<li><strong>Azure quota pre-allocation</strong>: M-series vCPU quota in the DR subscription is reserved exclusively for DR HANA VMs and ASR failover targets; a shared subscription risks quota depletion by non-production VMs leaving insufficient quota for DR VM startup</li>
+</ol>
+<p>The DR subscription uses the naming convention <code>sub-sap-dr-&lt;region-abbreviation&gt;</code> and is tagged with <code>environment=DR</code>, <code>sap-tier=production-dr</code>, and <code>cost-centre=&lt;IT-DR-cost-centre-code&gt;</code>.</p>
+<h3 id="azure-traffic-manager-for-sap-fiori-dr">Azure Traffic Manager for SAP Fiori DR<a class="headerlink" href="#azure-traffic-manager-for-sap-fiori-dr" title="Permanent link">¶</a></h3>
+<p>Azure Traffic Manager provides DNS-based routing for SAP Fiori access. Traffic Manager is configured with Priority routing and two endpoints:</p>
+<ul>
+<li><strong>Priority 1</strong> (primary): Public IP address of the SAP Web Dispatcher in the primary region (or the Azure Application Gateway Frontend IP if Application Gateway fronts the Web Dispatcher)</li>
+<li><strong>Priority 2</strong> (DR): Public IP address of the SAP Web Dispatcher in the DR region (or DR Application Gateway Frontend IP)</li>
+</ul>
+<p>Traffic Manager health probes monitor the primary endpoint every 30 seconds on TCP port 443. If three consecutive probes fail (90-second detection window), Traffic Manager demotes Priority 1 and routes DNS responses to Priority 2. TTL on the Traffic Manager DNS record is set to 300 seconds (5 minutes), meaning the maximum DNS propagation delay after Traffic Manager switches is 5 minutes. The total Fiori routing failover time is: 90 seconds (probe detection) + 300 seconds (TTL) = approximately 6.5 minutes, which is factored into the application-layer RTO.</p>
+<hr/>
+<h3 id="dr-network-topology">DR Network Topology<a class="headerlink" href="#dr-network-topology" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph TB
+  subgraph OnPrem["On-Premises Data Center"]
+    CorpNet["Corporate Network\n10.100.0.0/8"]
+    OnPremSAP["SAP On-Premises Backend\nLegacy ERP / PI"]
+  end
+
+  subgraph GlobalServices["Global / Regional Services"]
+    TM["Azure Traffic Manager\nPriority Routing\nFiori DNS failover"]
+    RSV_GRS["Geo-Redundant RSV\nBackup replicated to DR region"]
+    GlobalReach["ExpressRoute Global Reach\nMicrosoft Backbone"]
+  end
+
+  subgraph PrimaryConn["Connectivity Subscription — East US 2"]
+    HubPrimary["Hub VNet 10.0.0.0/16\nAzure Firewall Premium\nExpressRoute GW UltraPerf"]
+  end
+
+  subgraph DRConn["Connectivity Subscription — Central US DR"]
+    HubDR["DR Hub VNet 10.20.0.0/16\nAzure Firewall Premium\nExpressRoute GW UltraPerf"]
+  end
+
+  subgraph PrimaryProd["SAP Production Subscription — East US 2"]
+    ProdVNet["SAP Prod VNet 10.10.0.0/16"]
+    subgraph ProdTiers["Production SAP Tiers"]
+      P_HANA["HANA Primary\n10.10.3.4 (M128s)"]
+      P_HANA_S["HANA HA Secondary\n10.10.3.5 (M128s)"]
+      P_ASCS["ASCS\n10.10.2.4"]
+      P_PAS["PAS\n10.10.1.4"]
+      P_WD["Web Dispatcher\n10.10.1.10"]
+    end
+    ANFPrimary["ANF Ultra — Primary\n/sapmnt /usr/sap/trans"]
+  end
+
+  subgraph DRSub["SAP DR Subscription — Central US"]
+    DRVNet["SAP DR VNet 10.30.0.0/16"]
+    subgraph DRTiers["DR Standby SAP Tiers"]
+      DR_HANA["HANA DR Standby\n10.30.3.4 (M128s)"]
+      DR_ASCS["DR ASCS\n10.30.2.4 (ASR)"]
+      DR_PAS["DR PAS\n10.30.1.4 (ASR)"]
+      DR_WD["DR Web Dispatcher\n10.30.1.10 (ASR)"]
+    end
+    ANF_DR["ANF Ultra — DR CRR Target\n/sapmnt /usr/sap/trans"]
+    ASR_Vault["ASR Recovery Vault\nTarget Region: Central US"]
+  end
+
+  CorpNet --&gt;|"ExpressRoute Circuit\nPrimary Region"| HubPrimary
+  CorpNet --&gt;|"ExpressRoute Circuit\nDR Region"| HubDR
+  HubPrimary &lt;--&gt;|"ExpressRoute Global Reach\nMicrosoft Backbone"| HubDR
+  HubPrimary --&gt; ProdVNet
+  HubDR --&gt; DRVNet
+
+  P_HANA --&gt;|"HSR Async logreplay\nRPO ≤ 15 min"| DR_HANA
+  ANFPrimary --&gt;|"CRR 10-min schedule"| ANF_DR
+
+  P_ASCS --&gt;|"ASR Block Replication"| ASR_Vault
+  P_PAS --&gt;|"ASR Block Replication"| ASR_Vault
+  P_WD --&gt;|"ASR Block Replication"| ASR_Vault
+  ASR_Vault --&gt;|"Recovery Plan Failover"| DR_ASCS
+  ASR_Vault --&gt;|"Recovery Plan Failover"| DR_PAS
+  ASR_Vault --&gt;|"Recovery Plan Failover"| DR_WD
+
+  RSV_GRS --&gt;|"Backup Restore — QA/Dev DR"| DRSub
+
+  P_WD --&gt;|"Health Probe\nPriority 1"| TM
+  DR_WD -.-&gt;|"Health Probe\nPriority 2"| TM
+
+  OnPremSAP &lt;--&gt;|"RFC / IDOC after failover\nvia Global Reach"| DRVNet</code></pre>
+<hr/>
+<h2 id="dr-strategy-by-sap-tier">DR Strategy by SAP Tier<a class="headerlink" href="#dr-strategy-by-sap-tier" title="Permanent link">¶</a></h2>
+<h3 id="production-sap-systems">Production SAP Systems<a class="headerlink" href="#production-sap-systems" title="Permanent link">¶</a></h3>
+<p>Production SAP systems — identified by SID suffix <code>P</code> (for example <code>S4P</code>, <code>BWPP</code>, <code>CRMP</code>) — receive the full warm-standby DR architecture:</p>
+<ul>
+<li><strong>Database</strong>: HANA System Replication async in logreplay mode to DR region HANA VM. HSR is the sole DR mechanism for the database. No database snapshot or backup restore is used for production DR failover.</li>
+<li><strong>Application servers</strong>: Azure Site Recovery replication with 15-minute RPO. Recovery Plan with SAP-aware startup sequence scripts.</li>
+<li><strong>Shared filesystem</strong>: ANF Cross-Region Replication at 10-minute schedule for <code>/sapmnt</code>, <code>/usr/sap/trans</code>, and instance directories.</li>
+<li><strong>SAP Central Services</strong>: ASR replication. Post-failover enqueue lock loss is accepted and documented.</li>
+<li><strong>SAP Fiori / Web Dispatcher</strong>: ASR replication + Traffic Manager Priority 2 endpoint activation.</li>
+</ul>
+<h3 id="quality-assurance-sap-systems">Quality Assurance SAP Systems<a class="headerlink" href="#quality-assurance-sap-systems" title="Permanent link">¶</a></h3>
+<p>QA systems (<code>S4Q</code>, <code>BWPQ</code>) receive periodic backup restore DR:</p>
+<ul>
+<li><strong>Database</strong>: Daily HANA full backup to geo-redundant RSV using Azure Backup for SAP HANA (Backint). In DR, restore from the most recent backup point in the paired-region RSV. Recovery time for a 1 TB HANA database from Azure Backup restore is approximately 2–3 hours (benchmark from Microsoft: approximately 400 MB/minute restore throughput).</li>
+<li><strong>Application servers</strong>: Not replicated by ASR. Rebuilt from Bicep IaC templates in the DR subscription. IaC deployment time for QA application server VMs: approximately 30–45 minutes.</li>
+<li><strong>Shared filesystem</strong>: ANF volumes are not CRR-replicated for QA. ANF volumes are provisioned in DR region and <code>/sapmnt</code> is populated from the HANA restore's associated file backup.</li>
+<li><strong>SAP Central Services</strong>: Rebuilt from IaC. SAP software installation from software repository in Azure Blob (geo-redundant).</li>
+</ul>
+<h3 id="development-and-sandbox-sap-systems">Development and Sandbox SAP Systems<a class="headerlink" href="#development-and-sandbox-sap-systems" title="Permanent link">¶</a></h3>
+<p>Dev/sandbox systems (<code>S4D</code>, <code>S4S</code>) are rebuilt on demand:</p>
+<ul>
+<li><strong>Database</strong>: No continuous replication. Restore from the most recent weekly full backup in the geo-redundant RSV. If the latest backup is 6 days old, the dev system is restored to that point — data loss in dev is accepted.</li>
+<li><strong>Application servers</strong>: Rebuilt from IaC. SAP software installed from the Azure Blob software repository.</li>
+<li><strong>Timeline</strong>: RTO 24 hours is acceptable. Dev rebuild is initiated only if the primary region outage exceeds 48 hours.</li>
+</ul>
+<h3 id="dr-strategy-decision-matrix">DR Strategy Decision Matrix<a class="headerlink" href="#dr-strategy-decision-matrix" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP System Type</th>
+<th>RPO Target</th>
+<th>RTO Target</th>
+<th>DB DR Method</th>
+<th>App Server DR Method</th>
+<th>Filesystem DR Method</th>
+<th>DR Activation Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Production (SID suffix P)</td>
+<td>≤ 15 min</td>
+<td>≤ 4 hours</td>
+<td>HANA HSR async logreplay</td>
+<td>Azure Site Recovery</td>
+<td>ANF CRR 10-min</td>
+<td>Automated detection + manual DR declaration</td>
+</tr>
+<tr>
+<td>Pre-Production / Integration</td>
+<td>≤ 4 hours</td>
+<td>≤ 8 hours</td>
+<td>HANA HSR async logreplay</td>
+<td>Azure Site Recovery</td>
+<td>ANF CRR hourly</td>
+<td>Manual DR declaration</td>
+</tr>
+<tr>
+<td>Quality Assurance</td>
+<td>≤ 24 hours</td>
+<td>≤ 8 hours</td>
+<td>Azure Backup restore from GRS RSV</td>
+<td>IaC rebuild</td>
+<td>ANF new provision</td>
+<td>Manual, RTO &gt; 4 hours from incident</td>
+</tr>
+<tr>
+<td>Development</td>
+<td>≤ 7 days</td>
+<td>≤ 24 hours</td>
+<td>Azure Backup restore from GRS RSV</td>
+<td>IaC rebuild</td>
+<td>ANF new provision</td>
+<td>Manual, only if primary outage &gt; 48 hours</td>
+</tr>
+<tr>
+<td>Sandbox</td>
+<td>No DR SLA</td>
+<td>No DR SLA</td>
+<td>Not applicable</td>
+<td>Not applicable</td>
+<td>Not applicable</td>
+<td>Not activated for region failure</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="hana-dr-design">HANA DR Design<a class="headerlink" href="#hana-dr-design" title="Permanent link">¶</a></h2>
+<h3 id="hana-system-replication-modes">HANA System Replication Modes<a class="headerlink" href="#hana-system-replication-modes" title="Permanent link">¶</a></h3>
+<p>SAP HANA System Replication supports four replication modes that differ in the synchronisation point between the primary and secondary:</p>
+<table>
+<thead>
+<tr>
+<th>Replication Mode</th>
+<th>Commit Acknowledgement</th>
+<th>Data Loss Exposure</th>
+<th>Network Latency Impact</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sync</code></td>
+<td>After secondary confirms log write to disk</td>
+<td>Zero (RPO = 0)</td>
+<td>Blocks primary commit if secondary unreachable</td>
+<td>HA within same AZ (≤ 1 ms RTT)</td>
+</tr>
+<tr>
+<td><code>syncmem</code></td>
+<td>After secondary confirms log write to memory</td>
+<td>Up to secondary memory loss</td>
+<td>Slightly lower than sync (no disk write wait on secondary)</td>
+<td>HA within same datacenter</td>
+</tr>
+<tr>
+<td><code>async</code></td>
+<td>After primary writes log to disk (secondary async)</td>
+<td>Up to replication lag (typically &lt; 15 min)</td>
+<td>No impact on primary commit latency</td>
+<td>DR across regions (18–31 ms RTT)</td>
+</tr>
+<tr>
+<td><code>async</code> + <code>full_sync</code></td>
+<td>Configured per tenant; <code>full_sync</code> option blocks if secondary falls behind</td>
+<td>Zero when secondary connected, unbounded if disconnected</td>
+<td>Blocks primary if secondary lag exceeds threshold</td>
+<td>Not recommended for cross-region DR</td>
+</tr>
+</tbody>
+</table>
+<p>For cross-region SAP DR on Azure, <code>async</code> replication mode is the only viable choice. The <code>sync</code> and <code>syncmem</code> modes at 18+ ms inter-region latency add 18+ ms to every SAP database commit — for an S/4HANA system executing 200 commits/second, this adds 3,600 ms of cumulative blocking per second, which is not acceptable.</p>
+<h3 id="logreplay-vs-delta_datashipping-operation-mode">logreplay vs delta_datashipping Operation Mode<a class="headerlink" href="#logreplay-vs-delta_datashipping-operation-mode" title="Permanent link">¶</a></h3>
+<p>The operation mode controls what the secondary HANA site stores and how it prepares for takeover:</p>
+<ul>
+<li><strong><code>logreplay</code></strong> (recommended for DR): The secondary site receives redo log segments and continuously replays them against a full in-memory data image. The secondary database is always in a state consistent up to the last applied log segment. Takeover time is the time to replay the last few seconds of unprocessed log segments (typically &lt; 60 seconds). Memory requirement on secondary: same as primary (full data image loaded in memory).</li>
+<li><strong><code>delta_datashipping</code></strong>: The secondary site receives full data shipping at configurable intervals (default 10 minutes) plus delta redo log for the interval. The secondary does not keep the data volume in memory. At takeover, the secondary must load the full data volume from disk into memory (potentially hours for TB-scale databases). Not suitable for production DR with RTO &lt; 4 hours for databases &gt; 500 GB.</li>
+</ul>
+<p>The DR HANA VM must be sized identically to the primary HANA VM because <code>logreplay</code> mode requires the secondary to hold the full in-memory data volume. Choosing a smaller secondary VM results in HANA HSR connection failure with the error <code>[34014] The secondary system does not have enough memory to hold the full data volume</code>.</p>
+<h3 id="multi-target-replication">Multi-Target Replication<a class="headerlink" href="#multi-target-replication" title="Permanent link">¶</a></h3>
+<p>For SAP landscapes requiring both HA (within primary region) and DR (cross-region), a multi-target (1+1+1) HSR topology is used:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>Primary HANA (East US 2, AZ1)
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    ↓ HSR sync — logreplay (HA)
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>HA Secondary HANA (East US 2, AZ2)
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>    ↓ HSR async — logreplay (DR)
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>DR Secondary HANA (Central US)
+</span></code></pre></div>
+<p>In this topology, the HA tier uses <code>sync</code> replication for zero RPO within the region, and the DR tier uses <code>async</code> replication chained off the HA secondary (not directly off the primary). The chaining reduces load on the primary HANA node. HANA supports this via the <code>--replicationMode=async</code> flag on the HSR add-secondary command for the DR tier. Multi-target HSR requires HANA 2.0 SPS 03 or later (SAP Note 3024346).</p>
+<p>The HA secondary and DR secondary are independent sites — if the HA secondary fails, HSR automatically re-routes replication between primary and DR secondary. After HA secondary recovery, it re-registers as an HSR target and resynchronises.</p>
+<h3 id="hana-dr-takeover-procedure">HANA DR Takeover Procedure<a class="headerlink" href="#hana-dr-takeover-procedure" title="Permanent link">¶</a></h3>
+<p>The authoritative HANA DR takeover procedure is:</p>
+<ol>
+<li><strong>Verify HSR status</strong> on DR secondary before takeover: <code>hdbnsutil -sr_state</code> should show <code>ACTIVE</code> for the DR site.</li>
+<li><strong>Initiate takeover</strong> on the DR HANA VM: <code>hdbnsutil -sr_takeover</code></li>
+<li><strong>Monitor takeover progress</strong> in <code>hdbnsutil -sr_state</code> output — status transitions from <code>SECONDARY</code> to <code>TAKEOVER</code> to <code>PRIMARY</code>.</li>
+<li><strong>Verify database started</strong> as primary: <code>HDB info</code> on DR HANA OS user shows HANA processes running. <code>hdbsql -u SYSTEM -p &lt;password&gt; -n localhost:30015 "SELECT * FROM M_SYSTEM_OVERVIEW"</code> returns rows.</li>
+<li><strong>Verify replication lag replayed</strong>: Check <code>M_SERVICE_REPLICATION</code> view — <code>SECONDARY_ACTIVE_STATUS = 'YES'</code> indicates no more replication. After takeover, no secondary is connected (the original primary is failed), so this view returns no rows.</li>
+<li><strong>Validate database consistency</strong>: Execute HANA consistency check: <code>hdbcons -e "consistency check"</code> — should return <code>CHECK PASSED</code>.</li>
+<li><strong>Update HANA tenant connection string</strong> if application servers use the HANA tenant port (30015) rather than the system DB port — typically no change required if using HANA nameserver-based routing.</li>
+</ol>
+<p>The entire takeover procedure, steps 1–7, is scripted in an Azure Automation PowerShell runbook that SSH-executes commands on the DR HANA VM using a managed identity and SSH key stored in Key Vault.</p>
+<h3 id="hana-dr-testing-without-impact-to-production">HANA DR Testing Without Impact to Production<a class="headerlink" href="#hana-dr-testing-without-impact-to-production" title="Permanent link">¶</a></h3>
+<p>DR testing using the HSR standby directly risks impacting production replication — a test takeover makes the DR secondary the primary, leaving production without a DR target. Two approaches avoid this:</p>
+<ol>
+<li><strong>Snapshot-based test restore</strong>: Use the HANA Backup / ANF snapshot of the DR ANF volume to provision a separate test HANA instance in the DR region. This creates an isolated test environment identical to the DR standby's state without breaking HSR. After testing, delete the test instance and ANF clone. Production HSR is never interrupted.</li>
+<li><strong>Planned test takeover with immediate re-registration</strong>: Execute a planned takeover (<code>hdbnsutil -sr_takeover --mode=takeover</code>) on the DR secondary, validate the database, then immediately re-register the original primary (which was in a controlled shutdown state) as the new secondary (<code>hdbnsutil -sr_register --remoteHost=&lt;primary-host&gt; --remoteInstance=&lt;nr&gt; --replicationMode=async --name=PRIMARY_SITE</code>). This approach requires a maintenance window on the production system. It is executed as the annual DR simulation test.</li>
+</ol>
+<hr/>
+<h2 id="application-server-dr">Application Server DR<a class="headerlink" href="#application-server-dr" title="Permanent link">¶</a></h2>
+<h3 id="azure-site-recovery-for-sap-application-servers">Azure Site Recovery for SAP Application Servers<a class="headerlink" href="#azure-site-recovery-for-sap-application-servers" title="Permanent link">¶</a></h3>
+<p>ASR is configured for all non-HANA SAP VMs. The ASR configuration for SAP-specific requirements:</p>
+<ul>
+<li><strong>Crash-consistent vs app-consistent recovery points</strong>: ASR creates app-consistent snapshots every 4 hours using VSS (Windows) or pre/post scripts (Linux). For SAP on Linux, the ASR pre-snapshot script stops SAP work processes gracefully (<code>sapcontrol -nr &lt;nr&gt; -function Stop</code>) and the post-snapshot script restarts them. This ensures the VM snapshot is SAP-application-consistent, meaning no torn ABAP work process state is in the snapshot. Between app-consistent snapshots, crash-consistent recovery points are created every 5 minutes.</li>
+<li><strong>Recovery point selection</strong>: During DR failover, the latest app-consistent recovery point is preferred over the latest crash-consistent recovery point to avoid ABAP state corruption. The ASR Recovery Plan is configured with <code>Latest app-consistent</code> as the recovery point type.</li>
+<li><strong>Target VM size</strong>: Identical to source. SAP is not licensed per CPU count on Azure, but SAP sizing (SAPS rating) is CPU-count-dependent. Under-sizing the DR application server reduces throughput and causes SAP dialog step timeouts.</li>
+</ul>
+<h3 id="custom-scripts-for-sap-aware-failover">Custom Scripts for SAP-Aware Failover<a class="headerlink" href="#custom-scripts-for-sap-aware-failover" title="Permanent link">¶</a></h3>
+<p>ASR Recovery Plans invoke custom scripts (Azure Automation runbooks) at each recovery group boundary. The SAP-specific scripts handle steps that ASR's built-in VM boot cannot perform:</p>
+<table>
+<thead>
+<tr>
+<th>Recovery Group</th>
+<th>Script</th>
+<th>Action</th>
+<th>Timeout</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Group 1 (Pre-failover)</td>
+<td><code>Break-ANF-CRR.ps1</code></td>
+<td>Breaks ANF CRR replication, converts DR volumes to read-write</td>
+<td>5 minutes</td>
+</tr>
+<tr>
+<td>Group 1 (Pre-failover)</td>
+<td><code>Update-DNS-Records.ps1</code></td>
+<td>Updates Private DNS A records from production to DR IPs for SAP hostnames</td>
+<td>3 minutes</td>
+</tr>
+<tr>
+<td>Group 2 (Database)</td>
+<td><code>Execute-HANA-Takeover.ps1</code></td>
+<td>SSH executes <code>hdbnsutil -sr_takeover</code> on DR HANA VM, polls for completion</td>
+<td>10 minutes</td>
+</tr>
+<tr>
+<td>Group 3 (Central Services)</td>
+<td><code>Start-ASCS-ERS.ps1</code></td>
+<td>SSH executes SAP ASCS start, waits for message server port 3600 to respond</td>
+<td>5 minutes</td>
+</tr>
+<tr>
+<td>Group 4 (PAS)</td>
+<td><code>Start-PAS.ps1</code></td>
+<td>SSH executes SAP PAS start, verifies work process status via <code>sapcontrol -nr &lt;nr&gt; -function GetProcessList</code></td>
+<td>5 minutes</td>
+</tr>
+<tr>
+<td>Group 5 (AAS)</td>
+<td><code>Start-AAS-Instances.ps1</code></td>
+<td>SSH executes SAP AAS starts in parallel, verifies each</td>
+<td>10 minutes</td>
+</tr>
+<tr>
+<td>Group 6 (Post-failover)</td>
+<td><code>Validate-SAP-Landscape.ps1</code></td>
+<td>Executes SAP availability check via RFC using SAP .NET Connector, posts result to Teams webhook</td>
+<td>5 minutes</td>
+</tr>
+</tbody>
+</table>
+<p>All runbooks are stored in the Azure Automation account <code>aa-sap-dr-&lt;region&gt;</code> in the DR subscription. Runbook authentication uses managed identity with RBAC role <code>Virtual Machine Contributor</code> on the DR resource group and <code>Key Vault Secrets User</code> on the DR Key Vault.</p>
+<h3 id="sap-profile-and-transport-file-recovery">SAP Profile and Transport File Recovery<a class="headerlink" href="#sap-profile-and-transport-file-recovery" title="Permanent link">¶</a></h3>
+<p>After ASR failover, SAP instance profiles are read from the <code>/sapmnt/&lt;SID&gt;/profile/</code> directory on the DR ANF volume (populated by ANF CRR). The profiles reference the SAP hostname, which after DR failover resolves to the DR VM's IP via Private DNS. The <code>Update-DNS-Records.ps1</code> script must run before the SAP instances start to ensure hostname resolution is correct. Any hardcoded IP addresses in SAP profiles (for example <code>icm/server_port_0 = PROT=HTTP,PORT=8000,PROCTIMEOUT=600,TIMEOUT=600</code>) are avoided by using hostnames in all profile parameters — this is enforced by the SAP Basis team's profile review checklist.</p>
+<p>The SAP transport directory <code>/usr/sap/trans</code> is replicated by ANF CRR. After DR failover, the directory is available read-write on the DR ANF volume. However, transport imports are frozen as part of DR declaration, so the transport directory is used read-only (for program source access) during the DR period.</p>
+<h3 id="sap-licence-recovery-in-dr">SAP Licence Recovery in DR<a class="headerlink" href="#sap-licence-recovery-in-dr" title="Permanent link">¶</a></h3>
+<p>SAP licences are tied to the SAP hardware key, which is derived from the host's unique hardware identifiers. When ASR recreates VMs in the DR region, the hardware key of the DR VMs differs from the original production VMs. The SAP Basis runbook step after application server start is:</p>
+<ol>
+<li>Log in to the DR ASCS VM via Azure Bastion.</li>
+<li>Switch to the <code>&lt;sid&gt;adm</code> OS user.</li>
+<li>Run <code>saplicense -get</code> to retrieve the new hardware key.</li>
+<li>Open an SAP support request (incident type: <code>BC-LIC-LIK</code>) with the new hardware key and request an emergency licence for the DR system.</li>
+<li>SAP provides an emergency 28-day temporary licence within minutes via the SAP support portal.</li>
+<li>Apply the temporary licence: <code>saplicense -install</code> with the provided key file.</li>
+<li>After the DR period ends and production is restored, request a permanent licence restore.</li>
+</ol>
+<p>SAP emergency licences for DR are a known procedure documented in SAP Note 2133415. The 28-day emergency licence provides sufficient time for any production DR scenario.</p>
+<hr/>
+<h2 id="dr-runbooks">DR Runbooks<a class="headerlink" href="#dr-runbooks" title="Permanent link">¶</a></h2>
+<h3 id="dr-declaration-process">DR Declaration Process<a class="headerlink" href="#dr-declaration-process" title="Permanent link">¶</a></h3>
+<p>A DR event is declared when one of the following conditions is met:</p>
+<ol>
+<li><strong>Azure Service Health</strong> reports an active Azure region outage affecting East US 2 with estimated recovery time exceeding 4 hours.</li>
+<li><strong>SAP Availability Manager</strong> (or SAP Solution Manager system monitoring) reports all production SAP systems unreachable for more than 30 consecutive minutes.</li>
+<li><strong>Azure Monitor alert</strong> <code>Primary-Region-HANA-Unreachable</code> fires (HANA port 30015 unreachable from DR region monitoring VM for 10 consecutive minutes).</li>
+<li><strong>IT Management decision</strong> following a physical infrastructure event (datacenter fire, flood, power failure) affecting the primary region.</li>
+</ol>
+<p>The DR Declaration is a formal step requiring approval from two of three named approvers (IT Director, SAP Application Manager, Infrastructure Lead). The declaration is logged in the IT incident management system (ServiceNow) with incident type <code>DR_DECLARATION</code> and severity P1. The declaration triggers the DR communication plan: notification to all SAP users, notification to business process owners, activation of the DR Operations team on-call bridge.</p>
+<h3 id="failover-sequence">Failover Sequence<a class="headerlink" href="#failover-sequence" title="Permanent link">¶</a></h3>
+<p>The failover sequence is divided into four layers executed in strict order:</p>
+<p><strong>Layer 1 — Network (estimated time: 10 minutes)</strong>
+1. Confirm DR ExpressRoute circuit is up (<code>az network expressroute show --resource-group rg-connectivity-dr --name er-sap-dr</code>).
+2. Confirm ExpressRoute Global Reach connection is propagating routes (<code>az network expressroute peering show</code> — verify BGP routes include production VNet prefixes propagated via Global Reach).
+3. Update Private DNS zones in DR subscription: point SAP host A records to DR VM IPs.
+4. Confirm Azure Firewall in DR hub VNet is running and routing tables are correct.
+5. Test connectivity from DR bastion host to DR SAP VNet subnets.</p>
+<p><strong>Layer 2 — Storage (estimated time: 15 minutes)</strong>
+1. Break ANF CRR replication: <code>az netappfiles volume replication remove</code> on each DR data protection volume. This converts volumes to standard read-write.
+2. Verify DR ANF volumes are mounted by DR VMs (if VMs are already running in DR): <code>df -h | grep sapmnt</code>.
+3. Verify <code>/sapmnt/&lt;SID&gt;</code> directory structure is intact: <code>ls -la /sapmnt/&lt;SID&gt;/profile/</code>.
+4. Verify <code>/usr/sap/trans</code> directory is accessible with correct permissions (<code>&lt;sid&gt;adm</code> readable, <code>sapsys</code> group writable).
+5. Confirm DR storage account (used by ASR) is accessible.</p>
+<p><strong>Layer 3 — Database (estimated time: 20 minutes)</strong>
+1. On DR HANA VM, verify HSR status: <code>hdbnsutil -sr_state</code>. Expected: site name matches DR site configuration, <code>SECONDARY_ACTIVE_STATUS=YES</code> (or <code>CONNECTION_STATUS=CONNECTING</code> if primary is unreachable).
+2. Execute HANA takeover: <code>hdbnsutil -sr_takeover</code> (or via Automation runbook <code>Execute-HANA-Takeover.ps1</code>).
+3. Monitor takeover: poll <code>hdbnsutil -sr_state</code> every 30 seconds until <code>mode=PRIMARY</code>.
+4. Verify database started: <code>HDB info</code> shows <code>hdbdaemon</code>, <code>hdbcompileserver</code>, <code>hdbnameserver</code>, <code>hdbindexserver</code> processes running.
+5. Connect to HANA and verify tenant database: <code>hdbsql -u SYSTEM -p &lt;password&gt; -n localhost:30015 -d &lt;DBSID&gt; "SELECT CURRENT_TIMESTAMP FROM DUMMY"</code>.
+6. Run HANA consistency check: <code>hdbcons -e "consistency check"</code>.</p>
+<p><strong>Layer 4 — Application (estimated time: 45–90 minutes, primarily SAP licence wait)</strong>
+1. Execute ASR Recovery Plan: <code>az recoveryservices vault failover start</code> (or via Azure Portal ASR Recovery Plans).
+2. Monitor ASR failover progress in the Recovery Services vault failover jobs.
+3. After ASCS VM starts: wait for ASCS SAP instance to start (via <code>Start-ASCS-ERS.ps1</code>). Verify message server port 3600 responds: <code>telnet &lt;ASCS-DR-IP&gt; 3600</code>.
+4. After ERS VM starts: verify ERS running via <code>sapcontrol -nr &lt;nr&gt; -function GetProcessList</code> shows <code>enrepserver</code> in GREEN state.
+5. After PAS VM starts: request and apply SAP emergency licence (steps in SAP Licence Recovery section). Verify licence: <code>saplicense -show</code>.
+6. Start PAS SAP instance: <code>sapcontrol -nr &lt;nr&gt; -function Start</code>. Wait for PAS to reach GREEN status.
+7. Start AAS instances in parallel.
+8. Execute SAP landscape validation (<code>Validate-SAP-Landscape.ps1</code>): tests RFC connection, SM50 work process list, basic dialog step execution.
+9. Activate Traffic Manager DR endpoint: confirm Priority 1 probe is failing, Priority 2 (DR) is responding. DNS TTL expiry propagates Fiori URL to DR in ≤ 5 minutes.
+10. Notify DR declaration approvers and business process owners that SAP DR landscape is available.</p>
+<p><strong>Total estimated RTO: 90 minutes (network) + storage overlap + 20 min DB + 45–90 min application = 2.5–4 hours depending on SAP licence response time.</strong></p>
+<h3 id="dr-test-procedure">DR Test Procedure<a class="headerlink" href="#dr-test-procedure" title="Permanent link">¶</a></h3>
+<p>DR tests are executed twice per year (aligned with SAP DR test schedule in the operations calendar). The test procedure uses method 1 (snapshot-based test restore) to avoid interrupting production HSR:</p>
+<ol>
+<li><strong>Pre-test preparation (T-7 days)</strong>: Create ANF snapshots of DR volumes manually via Azure Portal. Notify SAP basis team of DR test window. Prepare test HANA VM in DR subscription (pre-provisioned M64s for test — smaller than production to reduce cost).</li>
+<li><strong>Test execution (Day 0)</strong>:
+   a. Clone ANF DR volume snapshot to a new ANF test volume in the DR region.
+   b. Mount test ANF volume on test HANA VM.
+   c. Start HANA on test VM using the mounted data volume: <code>HDB start</code>. This starts HANA from the snapshot point.
+   d. Verify HANA started and data is consistent up to the snapshot timestamp.
+   e. Deploy test application server VMs from IaC, connecting to the test HANA.
+   f. Execute SAP functional test: logon, transaction execution (VA01, ME21N, FB50), RFC call to test system.
+   g. Measure RTO from step (a) start to step (f) completion. Document actual vs target.</li>
+<li><strong>Post-test cleanup</strong>: Delete test HANA VM, test application server VMs, test ANF volumes. Document findings in DR test report.</li>
+<li><strong>HSR continuity verification</strong>: After test, verify production HSR replication is undisturbed: <code>hdbnsutil -sr_state</code> on production primary and HA secondary.</li>
+</ol>
+<h3 id="failback-procedure">Failback Procedure<a class="headerlink" href="#failback-procedure" title="Permanent link">¶</a></h3>
+<p>Failback to the primary region after DR recovery is a planned operation executed during a maintenance window. Steps:</p>
+<ol>
+<li><strong>Verify primary region recovery</strong>: Confirm Azure Service Health shows primary region fully operational. Verify primary region VMs (all production SAP VMs) are running and healthy.</li>
+<li><strong>Synchronise HANA from DR to primary</strong>: Register the original primary HANA VM as a new secondary off the DR HANA (which is now primary): <code>hdbnsutil -sr_register --remoteHost=&lt;dr-hana-host&gt; --remoteInstance=&lt;nr&gt; --replicationMode=async --name=ORIGINAL_PRIMARY</code>. Wait for initial synchronisation to complete (this is a full data sync — time depends on database size, approximately 2–4 hours for 2 TB HANA at 200 MB/s ANF throughput).</li>
+<li><strong>Perform planned takeover back to primary</strong>: After sync completes, execute planned takeover: <code>hdbnsutil -sr_takeover --mode=takeover</code> on the original primary HANA VM. This makes the original primary the new primary again.</li>
+<li><strong>Re-register DR as secondary</strong>: <code>hdbnsutil -sr_register --remoteHost=&lt;primary-hana-host&gt; --remoteInstance=&lt;nr&gt; --replicationMode=async --name=DR_SITE</code> on the DR HANA VM.</li>
+<li><strong>Failback application servers</strong>: Execute ASR Re-protect (reverse replication from DR back to primary) for all ASR-protected VMs. After re-protect completes and RPO reaches ≤ 15 minutes, execute failback failover (ASR planned failover from DR to primary).</li>
+<li><strong>Re-establish ANF CRR</strong>: Break CRR direction, re-establish from primary ANF to DR ANF (primary → DR). Initial resync requires transferring delta changes from DR operation period.</li>
+<li><strong>Validate primary SAP landscape</strong>: Execute the same validation steps as DR activation (layers 1–4) in reverse.</li>
+<li><strong>Deactivate DR Traffic Manager endpoint</strong>: After primary Fiori is confirmed working, demote the DR Traffic Manager endpoint to standby (Priority 2).</li>
+</ol>
+<h3 id="rto-measurement-methodology">RTO Measurement Methodology<a class="headerlink" href="#rto-measurement-methodology" title="Permanent link">¶</a></h3>
+<p>RTO is measured from the moment of DR declaration (T0) to the moment SAP users can successfully log in and execute transactions (T_ready). The measurement is divided into:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Measurement Point</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T0</td>
+<td>DR declaration logged in ServiceNow</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>T_network</td>
+<td>Private DNS updated, DR connectivity confirmed</td>
+<td>T0 + 10 min</td>
+</tr>
+<tr>
+<td>T_storage</td>
+<td>ANF CRR broken, DR volumes read-write</td>
+<td>T0 + 25 min</td>
+</tr>
+<tr>
+<td>T_database</td>
+<td>HANA takeover complete, database in PRIMARY mode</td>
+<td>T0 + 45 min</td>
+</tr>
+<tr>
+<td>T_ascs</td>
+<td>ASCS instance running, message server port 3600 responding</td>
+<td>T0 + 70 min</td>
+</tr>
+<tr>
+<td>T_pas</td>
+<td>PAS instance running, SAP licence applied</td>
+<td>T0 + 120 min</td>
+</tr>
+<tr>
+<td>T_ready</td>
+<td>All AAS running, Traffic Manager switched, user logon test passed</td>
+<td>T0 + 180–240 min</td>
+</tr>
+</tbody>
+</table>
+<p>RTO target of ≤ 4 hours (240 minutes) accommodates SAP emergency licence response time (up to 60 minutes in worst case). If SAP emergency licence is pre-staged in DR Key Vault (a 28-day temporary licence renewed monthly as part of DR operations), T_pas reduces to T0 + 90 min and T_ready to T0 + 120–150 min.</p>
+<hr/>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>SAP/Azure Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA DR replication mode</td>
+<td>sync, syncmem, async</td>
+<td>async</td>
+<td>Cross-region latency (18–31 ms) makes sync/syncmem non-viable; sync adds 18+ ms per commit. async achieves RPO ≤ 15 min with no primary performance impact.</td>
+<td>SAP Note 1999880; HANA Administration Guide — System Replication</td>
+</tr>
+<tr>
+<td>HANA DR operation mode</td>
+<td>logreplay, delta_datashipping</td>
+<td>logreplay</td>
+<td>delta_datashipping requires full data load at takeover (hours for TB-scale DB). logreplay maintains in-memory replica, takeover &lt; 60 seconds.</td>
+<td>SAP Note 2057595</td>
+</tr>
+<tr>
+<td>DR region pair</td>
+<td>Multiple options evaluated</td>
+<td>East US 2 / Central US (Americas); West Europe / North Europe (EMEA)</td>
+<td>Azure-documented paired regions with M-series availability and lowest inter-region latency.</td>
+<td>Azure paired regions documentation</td>
+</tr>
+<tr>
+<td>DR HANA VM sizing</td>
+<td>Same as production vs. smaller</td>
+<td>Same M-series SKU as production</td>
+<td>logreplay mode requires full in-memory data volume on secondary. Under-sizing causes HSR connection failure.</td>
+<td>SAP Note 1999880; HANA System Replication Guide</td>
+</tr>
+<tr>
+<td>Application server DR mechanism</td>
+<td>ASR vs. IaC rebuild vs. VM snapshot</td>
+<td>Azure Site Recovery</td>
+<td>ASR achieves 15-min RPO with automated failover orchestration and Recovery Plan scripts. IaC rebuild cannot achieve &lt; 2-hour RTO. VM snapshots lack SAP-aware consistency.</td>
+<td>Azure Site Recovery SAP deployment guide</td>
+</tr>
+<tr>
+<td>DR subscription model</td>
+<td>Shared prod/DR subscription vs. dedicated DR subscription</td>
+<td>Dedicated DR subscription</td>
+<td>Blast radius isolation, RBAC separation, independent cost accounting, independent Azure Policy assignments.</td>
+<td>Azure Landing Zone for SAP guidance</td>
+</tr>
+<tr>
+<td>ANF replication for SAP shared filesystem</td>
+<td>ANF CRR vs. DFS-R vs. rsync over VPN</td>
+<td>ANF CRR</td>
+<td>Native Azure managed replication with 10-minute RPO, no custom sync scripts, no additional VMs required. Consistent with HANA HSR timeline.</td>
+<td>Azure NetApp Files CRR documentation</td>
+</tr>
+<tr>
+<td>Enqueue lock handling at DR failover</td>
+<td>Replicate locks vs. accept loss vs. Enqueue Replication Server extension</td>
+<td>Accept lock loss at regional failover</td>
+<td>Cross-region ERS replication is not supported by SAP. Lock loss is documented in SAP Note 2630425 and accepted by business. Impact mitigated by user communication and restart procedures.</td>
+<td>SAP Note 2630425</td>
+</tr>
+<tr>
+<td>SAP licence in DR</td>
+<td>Pre-stage emergency licence vs. request at failover time</td>
+<td>Pre-stage 28-day temporary licence renewed monthly</td>
+<td>Eliminates 30–60 minute SAP support wait from RTO critical path. Monthly renewal is automated via SAP support API.</td>
+<td>SAP Note 2133415</td>
+</tr>
+<tr>
+<td>Traffic Manager for Fiori</td>
+<td>Traffic Manager vs. Azure Front Door vs. Application Gateway</td>
+<td>Azure Traffic Manager</td>
+<td>Fiori access is direct B2B corporate network access, not public CDN-optimised traffic. Traffic Manager DNS-based routing with 90-second detection + 300-second TTL is adequate. Front Door adds cost without benefit for non-CDN SAP Fiori.</td>
+<td>Azure Traffic Manager documentation</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="sap-notes-reference">SAP Notes Reference<a class="headerlink" href="#sap-notes-reference" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Relevant Section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1999880</td>
+<td>FAQ: SAP HANA System Replication</td>
+<td>HANA DR Design, Replication Modes, Multi-Target HSR</td>
+</tr>
+<tr>
+<td>2039883</td>
+<td>FAQ: SAP HANA Database Backup and Recovery</td>
+<td>QA/Dev DR Strategy, Backup Restore Procedures</td>
+</tr>
+<tr>
+<td>2057595</td>
+<td>FAQ: SAP HANA High Availability</td>
+<td>HANA Takeover Procedure, Pre-checks, Network Requirements</td>
+</tr>
+<tr>
+<td>2630425</td>
+<td>SAP HANA System Replication Known Issues and Restrictions</td>
+<td>Enqueue Lock Loss, delta_datashipping Limitations</td>
+</tr>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>DR VM Sizing, M-series Certification</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>SAP on Microsoft Azure: Support Prerequisites</td>
+<td>ExpressRoute Requirement, DR Support Prerequisites</td>
+</tr>
+<tr>
+<td>1768384</td>
+<td>TMS in High Availability Scenarios</td>
+<td>TMS/TDC Reconfiguration, Transport Domain DR</td>
+</tr>
+<tr>
+<td>2925421</td>
+<td>SAP HANA System Replication — Operations Guide</td>
+<td>HANA Takeover Commands, Re-registration Procedure, Failback</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>SAP HANA 2.0 SPS 06 Release Notes</td>
+<td>Multi-Target HSR 1+1+1 Topology</td>
+</tr>
+<tr>
+<td>2133415</td>
+<td>SAP Licence in Virtual and Cloud Environments</td>
+<td>Emergency Licence Procedure, Hardware Key Change After VM Migration</td>
+</tr>
+<tr>
+<td>2630765</td>
+<td>SAP HANA Backup and Recovery for Azure NetApp Files</td>
+<td>ANF Snapshot Backups, Backint for ANF</td>
+</tr>
+<tr>
+<td>2927965</td>
+<td>Availability and BCDR Concepts for SAP on Azure</td>
+<td>Azure-specific DR concepts, ASR for SAP, DR strategy overview</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<h3 id="reliability">Reliability<a class="headerlink" href="#reliability" title="Permanent link">¶</a></h3>
+<p>The DR architecture directly implements the Reliability pillar by designing for regional failure as a first-class scenario. HANA HSR async replication provides continuous data replication with RPO ≤ 15 minutes, eliminating point-in-time data loss as a reliability risk. Azure Site Recovery provides automated failover orchestration, eliminating manual VM recreation as a source of human error during high-stress DR events. ANF Cross-Region Replication ensures shared filesystem availability in the DR region without dependency on primary region storage. Azure paired regions guarantee that Microsoft infrastructure maintenance is staggered between primary and DR regions and that DR region recovery is prioritised in a declared Azure outage. The recovery plan is tested twice yearly, and RTO measurements are documented and tracked against targets — the reliability of the DR process itself is subject to measurement.</p>
+<h3 id="security">Security<a class="headerlink" href="#security" title="Permanent link">¶</a></h3>
+<p>The Security pillar is preserved in the DR region through identical security controls. The DR subscription inherits the same Azure Policy assignments as the production subscription via the SAP Management Group scope — encryption-at-rest enforcement, NSG baseline requirements, and Azure Defender for Cloud enforcement apply to DR VMs from the moment they are provisioned. Replication data transmitted over ExpressRoute Global Reach traverses the Microsoft backbone private network. ANF CRR replication is encrypted in transit using TLS. HSR replication uses HANA's built-in SSL encryption between primary and secondary (<code>communication=ssl</code> in HSR configuration, with certificates managed by the SAP Basis team). The DR subscription RBAC grants <code>DR Operations</code> security group <code>Virtual Machine Contributor</code> rights, not <code>Owner</code> or <code>Contributor</code> at subscription scope. All Azure Automation runbooks authenticate via managed identity, eliminating stored credentials. Secrets required for DR runbooks (HANA system password, SAP OS user passwords) are stored in the DR Key Vault with access restricted to the DR Automation account's managed identity and the DR Operations security group via PIM-eligible assignments.</p>
+<h3 id="cost-optimisation">Cost Optimisation<a class="headerlink" href="#cost-optimisation" title="Permanent link">¶</a></h3>
+<p>The Cost Optimisation pillar is addressed through a tiered DR strategy that matches DR investment to business impact. Production systems justify warm-standby DR costs because RTO ≤ 4 hours has a direct financial impact. QA and Dev systems use backup-restore and IaC rebuild, eliminating continuous replication costs for non-production. DR region VMs (ASR replicated) are in a powered-off state until failover — ASR charges for replicated disk storage and replication traffic, not for running compute. The DR HANA VM (M-series) is always-on because HSR requires a running HANA instance — this is the single largest DR cost item and is offset by Azure Reserved Instances (1-year RI) for the DR HANA VM. ASR replication traffic costs are bounded by the delta-change rate, not total VM disk size.</p>
+<h3 id="operational-excellence">Operational Excellence<a class="headerlink" href="#operational-excellence" title="Permanent link">¶</a></h3>
+<p>The Operational Excellence pillar is addressed through infrastructure-as-code, automated runbooks, and documented testing. The entire DR infrastructure (DR VNet, ANF volumes, ASR vault, Recovery Plans, Automation runbooks) is deployed and maintained via Bicep templates in the repository's <code>bicep/dr/</code> directory, version-controlled alongside production infrastructure code. DR runbook scripts are stored in the Azure Automation account as PowerShell runbooks, version-controlled in the repository's <code>automation/dr/</code> directory, and linked to the Recovery Plan steps by runbook name and version tag. DR tests are scheduled in the operations calendar and test results are documented in the DR register. Post-DR-test retrospective findings are converted to GitHub Issues and tracked to resolution before the next test.</p>
+<h3 id="performance-efficiency">Performance Efficiency<a class="headerlink" href="#performance-efficiency" title="Permanent link">¶</a></h3>
+<p>The Performance Efficiency pillar requires that DR VMs perform identically to production VMs at failover. All SAP DR VMs are sized identically to production (same VM SKU, same disk configuration). The DR region's ANF capacity pool is provisioned at the same service level (Ultra) and capacity as production to deliver the same NFS throughput required by SAP. The DR ExpressRoute Gateway uses the <code>UltraPerformance</code> SKU (10 Gbps) to match the primary region, ensuring that post-failover RFC and user traffic is not throttled by an under-provisioned gateway. Performance testing of the DR environment (transaction throughput benchmark using ECATT or SAP HANA benchmark) is included in the annual DR simulation test.</p>
+<hr/>
+<h2 id="security-architecture">Security Architecture<a class="headerlink" href="#security-architecture" title="Permanent link">¶</a></h2>
+<h3 id="replication-encryption">Replication Encryption<a class="headerlink" href="#replication-encryption" title="Permanent link">¶</a></h3>
+<p>All replication traffic between the primary and DR regions is encrypted:</p>
+<ul>
+<li><strong>HANA HSR</strong>: Configured with <code>communication=ssl</code> in the <code>global.ini</code> [system_replication] section. HANA generates self-signed certificates for HSR by default; this deployment uses certificates from the internal PKI issued to each HANA VM's FQDN and stored in the HANA certificate store (<code>hdbsql -n localhost:30015 -u SYSTEM "SELECT * FROM CERTIFICATES"</code>). Certificates are renewed before expiry as part of the SAP Basis monthly operations checklist.</li>
+<li><strong>ANF CRR</strong>: ANF Cross-Region Replication encrypts data in transit using AES-256. This is implemented by the ANF service; no configuration is required by the customer.</li>
+<li><strong>ASR block replication</strong>: ASR replication traffic travels over HTTPS (TLS 1.2 minimum) to ASR-managed storage endpoints in the DR region. The ASR Mobility Service agent on the source VMs encrypts data at the block level before transmission.</li>
+<li><strong>Azure Backup</strong>: Backup data is encrypted using the RSV encryption key (CMK via Azure Key Vault Premium) and transmitted over TLS to the RSV. The CMK is stored in the DR Key Vault, separate from the production Key Vault, to avoid cross-region Key Vault dependency during DR.</li>
+</ul>
+<h3 id="dr-environment-access-controls">DR Environment Access Controls<a class="headerlink" href="#dr-environment-access-controls" title="Permanent link">¶</a></h3>
+<p>The DR subscription enforces the principle of least privilege with the following RBAC assignments:</p>
+<table>
+<thead>
+<tr>
+<th>Role Assignment</th>
+<th>Scope</th>
+<th>Members</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reader</td>
+<td>DR Subscription</td>
+<td>SAP Application team, SAP Basis team</td>
+<td>Read-only monitoring of DR readiness</td>
+</tr>
+<tr>
+<td>Virtual Machine Contributor</td>
+<td>DR SAP Resource Groups</td>
+<td>DR Operations security group (PIM-eligible)</td>
+<td>VM management during DR execution only</td>
+</tr>
+<tr>
+<td>Network Contributor</td>
+<td>DR Connectivity Resource Groups</td>
+<td>Network team</td>
+<td>DR network configuration</td>
+</tr>
+<tr>
+<td>Key Vault Secrets User</td>
+<td>DR Key Vault</td>
+<td>DR Automation Account managed identity, DR Operations PIM</td>
+<td>Secret retrieval for runbooks and manual operations</td>
+</tr>
+<tr>
+<td>Recovery Services Contributor</td>
+<td>ASR Vault</td>
+<td>DR Operations PIM</td>
+<td>ASR failover execution</td>
+</tr>
+<tr>
+<td>Owner</td>
+<td>DR Subscription</td>
+<td>None (no permanent Owner)</td>
+<td>Owner rights via PIM only for infrastructure changes</td>
+</tr>
+</tbody>
+</table>
+<p>PIM-eligible assignments require approval from the IT Security Manager for activation. Activation is time-limited (8-hour maximum), justified with the ServiceNow incident number, and fully audited in Microsoft Entra ID audit logs.</p>
+<h3 id="network-security-in-dr-region">Network Security in DR Region<a class="headerlink" href="#network-security-in-dr-region" title="Permanent link">¶</a></h3>
+<p>The DR region replicates the primary region's network security posture:</p>
+<ul>
+<li><strong>Azure Firewall Premium</strong> in the DR hub VNet enforces the same application rule collections and network rule collections as the primary hub. Firewall policies are defined as Azure Firewall Policy resources and applied to both the primary and DR hub firewalls — a single policy change propagates to both regions simultaneously.</li>
+<li><strong>NSG baselines</strong> for SAP subnets are deployed via Azure Policy <code>DeployIfNotExists</code> using the same policy definitions as the primary region. The DR subscription inherits these policies from the SAP Management Group.</li>
+<li><strong>Azure DDoS Protection Standard</strong> is enabled on the DR VNet to protect the DR Fiori endpoint during an active DR period when the DR Web Dispatcher is serving production users.</li>
+<li><strong>Private Endpoints</strong> for all PaaS services (ANF not applicable; Key Vault, Automation, Monitor) are deployed in the DR subscription's Private Endpoint subnet with corresponding Private DNS Zone entries.</li>
+<li><strong>Just-in-time VM access</strong> (Microsoft Defender for Cloud JIT) is enabled on all DR VMs. During normal operations, management ports (SSH port 22) are closed. During DR operations, the DR Operations team activates JIT access (maximum 8-hour windows) to open SSH from the Azure Bastion host IP only.</li>
+</ul>
+<hr/>
+<h2 id="reliability-and-high-availability">Reliability and High Availability<a class="headerlink" href="#reliability-and-high-availability" title="Permanent link">¶</a></h2>
+<h3 id="component-failure-domains">Component Failure Domains<a class="headerlink" href="#component-failure-domains" title="Permanent link">¶</a></h3>
+<p>The DR architecture provides protection against two failure categories: component failure within the primary region (addressed by HA architecture — Pacemaker clusters, Availability Zones, HSR sync) and regional failure (addressed by the DR architecture described in this chapter). The DR architecture does not duplicate the HA architecture in the DR region — HA within the DR region during an active DR event is a secondary concern and is addressed only for the HANA tier (the DR HANA VM is a single instance; a region-internal HANA HSR secondary within the DR region is not provisioned in default configuration to control cost).</p>
+<h3 id="rpo-and-rto-by-sap-tier">RPO and RTO by SAP Tier<a class="headerlink" href="#rpo-and-rto-by-sap-tier" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Tier</th>
+<th>RPO Target</th>
+<th>RTO Target</th>
+<th>HA Method</th>
+<th>DR Method</th>
+<th>Azure SLA Component</th>
+<th>DR Test Frequency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S/4HANA Production (HANA DB)</td>
+<td>≤ 15 minutes</td>
+<td>≤ 4 hours</td>
+<td>HSR sync within AZ (RPO=0) + Pacemaker STONITH</td>
+<td>HSR async logreplay to DR region</td>
+<td>HANA VM: 99.99% (AZ)</td>
+<td>2x per year</td>
+</tr>
+<tr>
+<td>S/4HANA Production (App Servers)</td>
+<td>≤ 15 minutes</td>
+<td>≤ 4 hours</td>
+<td>Multiple AAS instances across AZs</td>
+<td>Azure Site Recovery</td>
+<td>ASR RPO ≤ 15 min</td>
+<td>2x per year</td>
+</tr>
+<tr>
+<td>S/4HANA Production (ASCS/ERS)</td>
+<td>≤ 15 minutes (enqueue loss accepted)</td>
+<td>≤ 4 hours</td>
+<td>Pacemaker HA cluster (ASCS+ERS)</td>
+<td>Azure Site Recovery</td>
+<td>ASR RPO ≤ 15 min</td>
+<td>2x per year</td>
+</tr>
+<tr>
+<td>S/4HANA Production (Fiori/WD)</td>
+<td>≤ 15 minutes</td>
+<td>≤ 30 minutes (DNS TTL)</td>
+<td>Multiple WD instances, load balanced</td>
+<td>ASR + Traffic Manager</td>
+<td>Traffic Manager: 99.99%</td>
+<td>2x per year</td>
+</tr>
+<tr>
+<td>BW/4HANA Production (HANA DB)</td>
+<td>≤ 15 minutes</td>
+<td>≤ 4 hours</td>
+<td>HSR sync</td>
+<td>HSR async logreplay</td>
+<td>HANA VM: 99.99%</td>
+<td>2x per year</td>
+</tr>
+<tr>
+<td>Quality Assurance</td>
+<td>≤ 24 hours</td>
+<td>≤ 8 hours</td>
+<td>None (single instances)</td>
+<td>Azure Backup GRS + IaC rebuild</td>
+<td>RSV GRS: 99.9%</td>
+<td>1x per year</td>
+</tr>
+<tr>
+<td>Development</td>
+<td>≤ 7 days</td>
+<td>≤ 24 hours</td>
+<td>None</td>
+<td>Azure Backup GRS + IaC rebuild</td>
+<td>RSV GRS: 99.9%</td>
+<td>Not tested separately</td>
+</tr>
+<tr>
+<td>SAP Transport Domain Controller</td>
+<td>≤ 15 minutes (with production)</td>
+<td>≤ 4 hours</td>
+<td>Part of production S4P landscape</td>
+<td>Recovered with S4P DR</td>
+<td>Same as production</td>
+<td>2x per year</td>
+</tr>
+</tbody>
+</table>
+<h3 id="composite-sla-calculation">Composite SLA Calculation<a class="headerlink" href="#composite-sla-calculation" title="Permanent link">¶</a></h3>
+<p>The composite SLA for the production SAP DR solution depends on the weakest link in the DR chain. The critical path to DR availability:</p>
+<ul>
+<li>ExpressRoute Global Reach: 99.95% SLA</li>
+<li>DR HANA VM (M-series, single instance): 99.9% SLA (single VM)</li>
+<li>ANF service: 99.99% SLA</li>
+<li>Azure Site Recovery service: 99.9% SLA</li>
+<li>Azure Automation: 99.9% SLA</li>
+</ul>
+<p>The composite SLA for DR availability = 99.95% × 99.9% × 99.99% × 99.9% × 99.9% ≈ <strong>99.64%</strong>. This means the DR mechanism itself is unavailable for approximately 31 hours per year. This is acceptable because DR is activated only during primary region failures (which are rare) and the DR mechanism's unavailability window is shorter than most primary region recovery windows.</p>
+<hr/>
+<h2 id="cost-optimisation_1">Cost Optimisation<a class="headerlink" href="#cost-optimisation_1" title="Permanent link">¶</a></h2>
+<h3 id="dr-cost-model">DR Cost Model<a class="headerlink" href="#dr-cost-model" title="Permanent link">¶</a></h3>
+<p>The DR cost model distinguishes between warm standby (infrastructure always running, ready for immediate failover) and cold standby (infrastructure provisioned only when needed).</p>
+<p><strong>Warm standby components (always running, always billed):</strong>
+- DR HANA VM (M128s): HSR requires the secondary HANA instance to be running continuously. This is the largest single DR cost. Example: M128s ≈ $13,338/month on-demand in East US 2; with 1-year RI: ≈ $8,270/month (38% saving).
+- DR ExpressRoute Gateway (UltraPerformance): ≈ $1,120/month
+- DR Azure Firewall Premium: ≈ $2,500/month (includes processing cost)
+- ANF Cross-Region Replication: charged per GB replicated per month on the destination volume capacity</p>
+<p><strong>Cold standby components (billed only when running):</strong>
+- DR application server VMs (ASR-replicated): powered off until failover. ASR charges: ≈ $25/VM/month for replication (not compute). Compute charges only during DR activation and DR tests.
+- DR ASCS/ERS VMs: same as application servers — ASR replication charge only.</p>
+<p><strong>One-time costs per DR test (twice per year):</strong>
+- Test HANA VM (M64s for test, smaller than production): ≈ $120/hour × 4 hours = $480 per test
+- Test application server VMs: ≈ $2–3/hour per VM × 4 hours</p>
+<h3 id="dr-cost-table">DR Cost Table<a class="headerlink" href="#dr-cost-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Type</th>
+<th>Billing Model</th>
+<th>Estimated Monthly Cost (USD)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DR HANA VM (M128s)</td>
+<td>Warm standby</td>
+<td>1-year RI</td>
+<td>$8,270</td>
+<td>Mandatory for HSR logreplay mode</td>
+</tr>
+<tr>
+<td>DR ExpressRoute Gateway</td>
+<td>Warm standby</td>
+<td>Fixed</td>
+<td>$1,120</td>
+<td>UltraPerformance SKU</td>
+</tr>
+<tr>
+<td>DR Azure Firewall Premium</td>
+<td>Warm standby</td>
+<td>Fixed + traffic</td>
+<td>$2,500</td>
+<td>Shared with other DR workloads if applicable</td>
+</tr>
+<tr>
+<td>ANF DR capacity pool (Ultra, 8 TB)</td>
+<td>Warm standby</td>
+<td>Per provisioned capacity</td>
+<td>$1,120</td>
+<td><code>/sapmnt</code>, <code>/usr/sap/trans</code>, other volumes</td>
+</tr>
+<tr>
+<td>ANF CRR replication traffic</td>
+<td>Usage</td>
+<td>Per GB transferred</td>
+<td>~$200</td>
+<td>Based on 200 GB/day delta change rate</td>
+</tr>
+<tr>
+<td>ASR replication (app servers, 8 VMs)</td>
+<td>Cold standby</td>
+<td>Per VM per month</td>
+<td>$200</td>
+<td>$25/VM/month × 8 VMs</td>
+</tr>
+<tr>
+<td>ASR Vault</td>
+<td>Warm standby</td>
+<td>Per protected VM</td>
+<td>$64</td>
+<td>$8/VM/month license fee</td>
+</tr>
+<tr>
+<td>DR Azure Automation account</td>
+<td>Warm standby</td>
+<td>Per runbook minute</td>
+<td>~$20</td>
+<td>Runbook executions during DR test and operations</td>
+</tr>
+<tr>
+<td>Geo-Redundant RSV storage</td>
+<td>Always</td>
+<td>Per GB per month</td>
+<td>~$150</td>
+<td>HANA backup storage (GRS premium)</td>
+</tr>
+<tr>
+<td>DR subscription management overhead</td>
+<td>Fixed</td>
+<td>Resource fixed cost</td>
+<td>~$100</td>
+<td>DNS, Key Vault, Monitoring</td>
+</tr>
+<tr>
+<td><strong>Total estimated monthly DR cost</strong></td>
+<td></td>
+<td></td>
+<td><strong>~$13,744</strong></td>
+<td>Excluding DR HANA RI: ~$19,812 on-demand</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cost-optimisation-recommendations">Cost Optimisation Recommendations<a class="headerlink" href="#cost-optimisation-recommendations" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>1-Year Reserved Instance for DR HANA VM</strong>: Apply RI to the DR HANA VM for 38% savings ($5,068/month saving for M128s). The DR HANA VM runs continuously and is an ideal RI candidate.</li>
+<li><strong>Do not RI application server DR VMs</strong>: ASR-replicated application server VMs are powered off normally. Applying RI to powered-off VMs wastes RI commitment.</li>
+<li><strong>Consolidate DR ANF capacity pools</strong>: If multiple SAP SIDs share a DR landing zone, a single ANF capacity pool serves all SID DR volumes, reducing minimum capacity pool commitment overhead.</li>
+<li><strong>Use Standard ANF for non-HANA DR volumes</strong>: <code>/sapmnt</code> and <code>/usr/sap/trans</code> can use ANF Standard (not Ultra) in the DR region during standby — they are only required at Ultra performance during active DR. Downgrade and upgrade can be done in ≤ 5 minutes. This reduces ANF cost by ~50% for shared volumes.</li>
+<li><strong>Cold standby for Dev/Sandbox</strong>: No ongoing DR replication cost. Entire cost is the weekly backup storage in GRS RSV.</li>
+</ol>
+<hr/>
+<h2 id="operations-and-monitoring">Operations and Monitoring<a class="headerlink" href="#operations-and-monitoring" title="Permanent link">¶</a></h2>
+<h3 id="dr-monitoring-strategy">DR Monitoring Strategy<a class="headerlink" href="#dr-monitoring-strategy" title="Permanent link">¶</a></h3>
+<p>DR monitoring covers three distinct domains: replication health (is the DR mechanism continuously working?), DR readiness (is the DR environment configured correctly and ready to receive failover?), and DR activation (are DR operations proceeding according to the runbook?).</p>
+<p><strong>Replication health</strong> is monitored continuously via Azure Monitor:
+- HANA HSR replication lag: queried from HANA monitoring agent → Azure Monitor custom metrics → alert rule
+- ASR replication health: native ASR metric <code>ASRReplicationLagExceedingRPOThreshold</code> → Azure Monitor alert
+- ANF CRR replication status: Azure Monitor metric <code>VolumeReplicationStatus</code> on DR ANF volumes (0 = healthy, 1 = unhealthy)</p>
+<p><strong>DR readiness</strong> is assessed via a weekly automated DR readiness check runbook (<code>DR-Readiness-Check.ps1</code>) that verifies: HSR status on DR HANA, ASR replication health for all protected VMs, ANF CRR volume replication status, DR ExpressRoute connectivity ping from DR bastion to DR SAP VNet, DR Key Vault accessibility from DR Automation account. Readiness check results are posted to the SAP Operations Teams channel and logged to a Log Analytics custom table <code>DRReadinessCheck_CL</code>.</p>
+<p><strong>DR activation monitoring</strong> uses Azure Monitor alert rules that escalate during a declared DR event: HANA takeover progress, ASR failover job status, SAP instance start status.</p>
+<h3 id="alert-table">Alert Table<a class="headerlink" href="#alert-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Metric/Signal</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Runbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA HSR Replication Lag High</td>
+<td>Custom metric <code>hana_hsr_replication_lag_seconds</code> from HANA monitoring agent</td>
+<td>&gt; 900 seconds (15 min)</td>
+<td>Sev 2</td>
+<td><code>Investigate-HSR-Lag.md</code> — check network bandwidth, HANA log volume, HSR connection status</td>
+</tr>
+<tr>
+<td>HANA HSR Replication Disconnected</td>
+<td>Custom metric <code>hana_hsr_connection_status</code> = 0 (disconnected)</td>
+<td>Any disconnected state &gt; 5 min</td>
+<td>Sev 1</td>
+<td><code>HSR-Disconnected-Runbook.md</code> — immediate escalation, DR readiness assessment</td>
+</tr>
+<tr>
+<td>ASR RPO Threshold Exceeded</td>
+<td><code>ASRReplicationLagExceedingRPOThreshold</code> in ASR vault</td>
+<td>Any VM exceeding 15 min RPO</td>
+<td>Sev 2</td>
+<td><code>Investigate-ASR-Replication.md</code></td>
+</tr>
+<tr>
+<td>ASR Replication Health Critical</td>
+<td><code>ASRReplicationHealth</code> = Critical</td>
+<td>Any VM in Critical state</td>
+<td>Sev 1</td>
+<td><code>ASR-Critical-Runbook.md</code></td>
+</tr>
+<tr>
+<td>ANF CRR Replication Unhealthy</td>
+<td><code>VolumeReplicationStatus</code> on DR ANF volumes</td>
+<td>= 1 (unhealthy) for &gt; 30 min</td>
+<td>Sev 2</td>
+<td><code>Investigate-ANF-CRR.md</code></td>
+</tr>
+<tr>
+<td>DR ExpressRoute Gateway Down</td>
+<td><code>BgpAvailability</code> on DR ExpressRoute connection</td>
+<td>&lt; 100% for &gt; 10 min</td>
+<td>Sev 1</td>
+<td><code>DR-Network-Connectivity.md</code></td>
+</tr>
+<tr>
+<td>DR HANA VM Unreachable</td>
+<td>Heartbeat from DR HANA VM in Log Analytics</td>
+<td>No heartbeat &gt; 10 min</td>
+<td>Sev 1</td>
+<td><code>DR-HANA-VM-Unreachable.md</code> — check VM power state, OS health</td>
+</tr>
+<tr>
+<td>DR Readiness Check Failed</td>
+<td>Custom log alert on <code>DRReadinessCheck_CL</code> table</td>
+<td><code>readinessStatus_s = "FAIL"</code></td>
+<td>Sev 2</td>
+<td><code>DR-Readiness-Failed.md</code> — review failed check details in Log Analytics</td>
+</tr>
+<tr>
+<td>Primary Region Azure Service Health</td>
+<td>Azure Service Health alert on East US 2</td>
+<td>Active incident impacting Compute or Storage</td>
+<td>Sev 1</td>
+<td><code>DR-Declaration-Assessment.md</code></td>
+</tr>
+<tr>
+<td>ANF CRR Lag &gt; RPO Threshold</td>
+<td>Custom metric <code>anf_crr_lag_minutes</code></td>
+<td>&gt; 15 minutes</td>
+<td>Sev 2</td>
+<td><code>Investigate-ANF-CRR-Lag.md</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="dr-drill-scheduling">DR Drill Scheduling<a class="headerlink" href="#dr-drill-scheduling" title="Permanent link">¶</a></h3>
+<p>DR drills are scheduled in the SAP operations calendar managed in ServiceNow. The annual schedule:</p>
+<ul>
+<li><strong>Q1 (March)</strong>: Full DR simulation — snapshot-based HANA restore to test VM, application server IaC deploy, functional test, RTO measurement.</li>
+<li><strong>Q3 (September)</strong>: DR readiness assessment only — verify all replication health metrics, review runbooks, tabletop walkthrough of DR declaration process, update contact list.</li>
+<li><strong>Ad hoc</strong>: Triggered when a DR readiness check fails or when a significant infrastructure change (new SAP SID, HANA version upgrade, major VM SKU change) is made to production.</li>
+</ul>
+<p>Each DR drill has a pre-defined success criteria: all functional SAP transactions execute successfully in the DR environment, RTO measured ≤ 4 hours from simulated DR declaration, no production impact observed. Drill results are documented in the DR register and reviewed by IT management within 5 business days.</p>
+<h3 id="azure-monitor-dr-dashboard">Azure Monitor DR Dashboard<a class="headerlink" href="#azure-monitor-dr-dashboard" title="Permanent link">¶</a></h3>
+<p>A dedicated Azure Monitor Workbook <code>SAP DR Operations Dashboard</code> is deployed in the Management subscription Log Analytics workspace with the following tiles:</p>
+<ol>
+<li><strong>HSR Replication Health</strong>: Time series chart of <code>hana_hsr_replication_lag_seconds</code> for each production HANA SID, last 24 hours.</li>
+<li><strong>ASR Replication Health</strong>: Grid showing all ASR-protected SAP VMs with last replication time, replication health state, and RPO.</li>
+<li><strong>ANF CRR Status</strong>: Grid showing all DR ANF volumes with replication status, last successful sync time, and replication lag.</li>
+<li><strong>DR Readiness Score</strong>: KPI tile showing the percentage of DR readiness checks passing in the last 7 days.</li>
+<li><strong>ExpressRoute Global Reach Status</strong>: BGP availability for primary and DR ExpressRoute connections.</li>
+<li><strong>DR Drill History</strong>: Table from <code>DRDrillResults_CL</code> custom table showing last 4 drill results with RTO achieved, pass/fail, and date.</li>
+</ol>
+<hr/>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<h3 id="dr-subscription">DR Subscription<a class="headerlink" href="#dr-subscription" title="Permanent link">¶</a></h3>
+<p>The DR subscription (<code>sub-sap-dr-cus</code>) maps to the following Azure Landing Zone constructs:</p>
+<ul>
+<li><strong>Management Group</strong>: SAP Management Group (sibling to production subscription under the same management group)</li>
+<li><strong>Governance</strong>: Inherits all Azure Policy assignments from SAP Management Group: VM SKU restrictions, encryption enforcement, NSG baselines, Defender for Cloud enablement, tagging policy</li>
+<li><strong>Cost Management</strong>: Separate budget alert (<code>budget-sap-dr-monthly</code>) set to 120% of estimated monthly DR cost ($16,500) with alerts at 80%, 100%, and 120% thresholds</li>
+<li><strong>Service Health Alerts</strong>: DR subscription has its own Azure Service Health alert for Central US region, in addition to the primary subscription's East US 2 alert</li>
+</ul>
+<h3 id="dr-vnet-design">DR VNet Design<a class="headerlink" href="#dr-vnet-design" title="Permanent link">¶</a></h3>
+<p>The DR VNet (<code>vnet-sap-dr-cus</code>, 10.30.0.0/16) follows the same subnet segmentation as the production VNet:</p>
+<table>
+<thead>
+<tr>
+<th>Subnet Name</th>
+<th>CIDR</th>
+<th>Purpose</th>
+<th>NSG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>snet-sap-dr-app</code></td>
+<td>10.30.1.0/24</td>
+<td>SAP application servers (ASR failover target)</td>
+<td><code>nsg-sap-dr-app</code></td>
+</tr>
+<tr>
+<td><code>snet-sap-dr-ascs</code></td>
+<td>10.30.2.0/27</td>
+<td>SAP ASCS and ERS (ASR failover target)</td>
+<td><code>nsg-sap-dr-ascs</code></td>
+</tr>
+<tr>
+<td><code>snet-sap-dr-hana</code></td>
+<td>10.30.3.0/27</td>
+<td>HANA DR standby VM</td>
+<td><code>nsg-sap-dr-hana</code></td>
+</tr>
+<tr>
+<td><code>snet-sap-dr-mgmt</code></td>
+<td>10.30.4.0/27</td>
+<td>Bastion, monitoring agents, Automation workers</td>
+<td><code>nsg-sap-dr-mgmt</code></td>
+</tr>
+<tr>
+<td><code>snet-sap-dr-pe</code></td>
+<td>10.30.5.0/27</td>
+<td>Private Endpoints for Key Vault, Automation, Monitor</td>
+<td><code>nsg-sap-dr-pe</code></td>
+</tr>
+<tr>
+<td><code>AzureBastionSubnet</code></td>
+<td>10.30.6.0/26</td>
+<td>Azure Bastion Standard</td>
+<td>(Azure-managed)</td>
+</tr>
+</tbody>
+</table>
+<p>The DR VNet is peered to the DR Hub VNet in the DR Connectivity subscription. The DR Hub VNet hosts the DR ExpressRoute Gateway (connected to the DR ExpressRoute circuit) and the DR Azure Firewall Premium. All DR traffic flows: on-premises to DR SAP VMs traverse the DR Hub Firewall; inter-region replication (HSR, CRR) traverses ExpressRoute Global Reach through the Microsoft backbone.</p>
+<h3 id="dr-connectivity">DR Connectivity<a class="headerlink" href="#dr-connectivity" title="Permanent link">¶</a></h3>
+<p>The DR connectivity model:</p>
+<table>
+<thead>
+<tr>
+<th>Traffic Type</th>
+<th>Path</th>
+<th>Encryption</th>
+<th>Bandwidth Sizing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA HSR replication</td>
+<td>DR HANA VM → DR VNet → DR Hub → ExpressRoute Global Reach → Primary Hub → Primary VNet → Primary HANA VM</td>
+<td>HANA SSL</td>
+<td>Size for peak redo log rate × 2 (headroom). Example: 5 GB/hour peak = 12 Mbps average; ExpressRoute 1 Gbps circuit provides adequate headroom.</td>
+</tr>
+<tr>
+<td>ANF CRR replication</td>
+<td>Managed by ANF service, Microsoft backbone</td>
+<td>AES-256 (service-managed)</td>
+<td>ANF allocates bandwidth from its regional backbone capacity; no customer circuit sizing required.</td>
+</tr>
+<tr>
+<td>ASR block replication</td>
+<td>Source VM → cache storage account → ASR replication endpoint in DR region</td>
+<td>TLS 1.2</td>
+<td>ASR uses internet-facing endpoints by default; can be routed over ExpressRoute with Private Endpoints for ASR. For SAP, configure Private Endpoint for <code>siterecovery</code> in PE subnet.</td>
+</tr>
+<tr>
+<td>Operator access (DR runbooks)</td>
+<td>On-premises → DR ExpressRoute → DR Hub → DR Bastion → DR VMs</td>
+<td>ExpressRoute private peering + Bastion TLS</td>
+<td>Bastion concurrent sessions: Standard SKU supports 25 concurrent sessions.</td>
+</tr>
+<tr>
+<td>User access (Fiori in DR)</td>
+<td>User browser → Traffic Manager DNS → DR Web Dispatcher public IP (or Application Gateway)</td>
+<td>TLS 1.3</td>
+<td>Dimensioned to production peak concurrent Fiori sessions.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<ol>
+<li>SAP HANA System Replication on Azure: <a href="https://learn.microsoft.com/azure/sap/workloads/sap-hana-high-availability">https://learn.microsoft.com/azure/sap/workloads/sap-hana-high-availability</a></li>
+<li>Azure Site Recovery for SAP NetWeaver disaster recovery: <a href="https://learn.microsoft.com/azure/site-recovery/site-recovery-sap">https://learn.microsoft.com/azure/site-recovery/site-recovery-sap</a></li>
+<li>Azure paired regions documentation: <a href="https://learn.microsoft.com/azure/reliability/cross-region-replication-azure">https://learn.microsoft.com/azure/reliability/cross-region-replication-azure</a></li>
+<li>Azure NetApp Files Cross-Region Replication: <a href="https://learn.microsoft.com/azure/azure-netapp-files/cross-region-replication-introduction">https://learn.microsoft.com/azure/azure-netapp-files/cross-region-replication-introduction</a></li>
+<li>ExpressRoute Global Reach: <a href="https://learn.microsoft.com/azure/expressroute/expressroute-global-reach">https://learn.microsoft.com/azure/expressroute/expressroute-global-reach</a></li>
+<li>Azure Backup for SAP HANA: <a href="https://learn.microsoft.com/azure/backup/backup-azure-sap-hana-database">https://learn.microsoft.com/azure/backup/backup-azure-sap-hana-database</a></li>
+<li>SAP on Azure Landing Zone Accelerator — DR considerations: <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/sap/enterprise-scale-landing-zone">https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/sap/enterprise-scale-landing-zone</a></li>
+<li>Azure Traffic Manager for SAP Fiori: <a href="https://learn.microsoft.com/azure/traffic-manager/traffic-manager-overview">https://learn.microsoft.com/azure/traffic-manager/traffic-manager-overview</a></li>
+<li>SAP HANA disaster recovery with Azure Site Recovery: <a href="https://learn.microsoft.com/azure/site-recovery/azure-to-azure-how-to-enable-replication-s2d">https://learn.microsoft.com/azure/site-recovery/azure-to-azure-how-to-enable-replication-s2d</a></li>
+<li>SAP workload DR and HA on Azure Well-Architected Review: <a href="https://learn.microsoft.com/azure/well-architected/sap/reliability">https://learn.microsoft.com/azure/well-architected/sap/reliability</a></li>
+</ol>
+<hr/>
+<h2 id="validation-checklist">Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">¶</a></h2>
+<p>Use this checklist before declaring the DR architecture production-ready and before each DR drill.</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>HSR async replication configured</strong>: <code>hdbnsutil -sr_state</code> on production HANA shows DR site name in <code>ACTIVE</code> state with <code>REPLICATION_STATUS = YES</code> and <code>SECONDARY_ACTIVE_STATUS = YES</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>HSR replication lag within threshold</strong>: <code>M_SERVICE_REPLICATION.SECONDARY_SHIPPED_LOG_POSITION_TIME</code> lag is &lt; 15 minutes as verified via HANA monitoring alert.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>ANF CRR replication healthy</strong>: All DR protection volumes show <code>replicationStatus = Healthy</code> in Azure Portal ANF Cross-Region Replication view.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>ASR replication health green</strong>: All SAP VMs in ASR vault show <code>Replication health = Healthy</code> and <code>RPO threshold = Not breached</code> in the Azure Portal ASR Replicated Items view.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>DR HANA VM running</strong>: DR HANA VM is in <code>Running</code> state in the DR subscription. HANA processes verified with <code>HDB info</code> showing <code>hdbdaemon</code> and <code>hdbindexserver</code> running.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>DR ExpressRoute circuit up</strong>: DR ExpressRoute circuit <code>CircuitProvisioningState = Enabled</code>, <code>ServiceProviderProvisioningState = Provisioned</code>, and BGP peering <code>Status = Connected</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>ExpressRoute Global Reach active</strong>: Global Reach connection shows <code>ProvisioningState = Succeeded</code> and routes from DR VNet are visible in primary region route table.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>DR ANF volumes provisioned and correct capacity</strong>: DR ANF capacity pool and volumes are provisioned at correct service level (Ultra) and capacity matching CRR source volumes.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>ASR Recovery Plan complete and current</strong>: ASR Recovery Plan includes all production SAP VMs, recovery groups are in correct startup sequence, runbook scripts reference current Automation account and are tested.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Automation runbooks current and tested</strong>: All DR runbooks in <code>aa-sap-dr-&lt;region&gt;</code> Automation account are at current version, have passed test execution in the last 90 days, and are linked correctly in the ASR Recovery Plan.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>DR Key Vault accessible</strong>: DR Key Vault is accessible from DR Automation account managed identity. Secret <code>hana-system-password</code> and <code>sap-os-user-password</code> are present and not expired.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>SAP emergency licence pre-staged</strong>: A 28-day SAP emergency licence for the DR system's hardware key is stored in DR Key Vault secret <code>sap-emergency-licence-&lt;SID&gt;</code> and is within expiry date.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Private DNS DR records current</strong>: DR Private DNS zones contain A records for all SAP hostnames pointing to correct DR VM IPs.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>Traffic Manager DR endpoint configured</strong>: Traffic Manager profile has DR Web Dispatcher as Priority 2 endpoint, health probe is configured on TCP/443, endpoint is <code>Enabled</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>DR readiness check passing</strong>: The weekly <code>DR-Readiness-Check.ps1</code> runbook last execution result in <code>DRReadinessCheck_CL</code> Log Analytics table shows <code>readinessStatus_s = "PASS"</code>.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>DR drill completed within 6 months</strong>: The <code>DRDrillResults_CL</code> Log Analytics table contains a successful drill result dated within the last 6 months with RTO ≤ 4 hours.</li>
+</ul>
+<hr/>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-1-using-delta_datashipping-for-production-dr">Anti-Pattern 1: Using delta_datashipping for Production DR<a class="headerlink" href="#anti-pattern-1-using-delta_datashipping-for-production-dr" title="Permanent link">¶</a></h3>
+<p><strong>Description</strong>: Configuring HANA HSR operation mode as <code>delta_datashipping</code> for the DR site to reduce memory requirements on the DR HANA VM (by using a smaller, cheaper VM that does not need to hold the full data volume in memory).</p>
+<p><strong>Why it fails</strong>: At DR takeover, <code>delta_datashipping</code> requires loading the full HANA data volume from disk into memory. For a 2 TB HANA database at ANF Ultra throughput (~3 GB/s), loading into memory takes approximately 10–15 minutes, but full HANA initialisation including redo log replay adds 30–60 minutes. More critically, the smaller DR HANA VM may not have enough memory to load the full data volume — the error <code>[34014] The secondary system does not have enough memory</code> causes takeover failure, with no in-place remedy during a DR event.</p>
+<p><strong>Correct approach</strong>: Use <code>logreplay</code> mode with an identically sized DR HANA VM. Accept the DR HANA VM cost and offset with a 1-year Reserved Instance.</p>
+<h3 id="anti-pattern-2-not-pre-staging-the-sap-emergency-licence">Anti-Pattern 2: Not Pre-staging the SAP Emergency Licence<a class="headerlink" href="#anti-pattern-2-not-pre-staging-the-sap-emergency-licence" title="Permanent link">¶</a></h3>
+<p><strong>Description</strong>: Relying on the SAP support team to issue an emergency licence at the time of DR failover, rather than pre-staging a 28-day temporary licence in DR Key Vault.</p>
+<p><strong>Why it fails</strong>: SAP support response time for an emergency licence, even for P1 incidents, can be 30–60 minutes. During a production DR event, all teams are under pressure and the SAP licence wait blocks application server startup, extending RTO by 30–60 minutes. In a real disaster scenario, SAP support queues may be longer than usual.</p>
+<p><strong>Correct approach</strong>: Pre-stage a 28-day SAP emergency licence for the DR hardware key. Renew monthly via an automated SAP support API call in an Azure Automation runbook. Store the licence in DR Key Vault. Include licence retrieval and application in the DR runbook as a scripted step.</p>
+<h3 id="anti-pattern-3-sharing-the-dr-subscription-with-non-production-sap-workloads">Anti-Pattern 3: Sharing the DR Subscription with Non-Production SAP Workloads<a class="headerlink" href="#anti-pattern-3-sharing-the-dr-subscription-with-non-production-sap-workloads" title="Permanent link">¶</a></h3>
+<p><strong>Description</strong>: Placing DR infrastructure (DR HANA VM, ASR vault, DR ANF volumes) in the same subscription as non-production SAP workloads (development, sandbox) to reduce management overhead.</p>
+<p><strong>Why it fails</strong>: Non-production workloads introduce noise into DR monitoring, consume quota that DR VMs need at failover time (for example, M-series vCPU quota), and create RBAC blast radius — developers with Contributor access to non-production workloads gain access to DR infrastructure. During a DR event, resource contention in a shared subscription can cause ASR failover to fail with quota errors.</p>
+<p><strong>Correct approach</strong>: Use a dedicated DR subscription under the SAP Management Group. Apply M-series vCPU quota reservation to the DR subscription sufficient for all DR HANA VMs.</p>
+<h3 id="anti-pattern-4-configuring-hsr-replication-directly-off-the-ha-cluster-vip">Anti-Pattern 4: Configuring HSR Replication Directly Off the HA Cluster VIP<a class="headerlink" href="#anti-pattern-4-configuring-hsr-replication-directly-off-the-ha-cluster-vip" title="Permanent link">¶</a></h3>
+<p><strong>Description</strong>: When HANA HA is implemented with a Pacemaker cluster and a virtual IP (VIP), configuring HSR to replicate to the DR secondary using the HA cluster VIP as the source hostname.</p>
+<p><strong>Why it fails</strong>: The HSR configuration must reference physical hostnames (not VIPs) because HSR is configured at the HANA instance level on each physical node. Referencing a VIP as the HSR primary means that after an HA failover within the primary region (Pacemaker moves the VIP to the secondary node), the DR site's HSR source hostname no longer matches the active HANA node's physical hostname. HSR connection drops and does not automatically recover.</p>
+<p><strong>Correct approach</strong>: Configure HSR using the physical hostname of each HANA node. For the multi-target (1+1+1) topology, HSR to the DR secondary is configured from the HA secondary physical node, not from the VIP. This is documented in SAP Note 2057595 and the HANA High Availability Guide.</p>
+<h3 id="anti-pattern-5-skipping-anf-crr-for-the-sap-transport-directory">Anti-Pattern 5: Skipping ANF CRR for the SAP Transport Directory<a class="headerlink" href="#anti-pattern-5-skipping-anf-crr-for-the-sap-transport-directory" title="Permanent link">¶</a></h3>
+<p><strong>Description</strong>: Omitting <code>/usr/sap/trans</code> from ANF Cross-Region Replication to reduce ANF volume count and CRR replication costs, assuming the transport directory is not needed in DR since transports are frozen.</p>
+<p><strong>Why it fails</strong>: The SAP transport directory contains not only pending transports but also the compiled ABAP programs (<code>/usr/sap/trans/data/R&lt;nr&gt;/&lt;SID&gt;/</code>) which are referenced by running SAP work processes. While transports are frozen during DR, the R<nr> files are actively read during SAP instance startup and during program execution for any programs installed via transport. An SAP system starting without <code>/usr/sap/trans</code> mounted will fail with <code>TP_SYSTEM_CALL_FAILED</code> or missing programme objects, depending on which transports' compiled objects are not present in the database.</nr></p>
+<p><strong>Correct approach</strong>: Include <code>/usr/sap/trans</code> in ANF CRR. The volume is typically 512 GB at 10-minute replication intervals. Cost is approximately $70/month for the CRR destination volume in Standard service level, which is negligible relative to the DR HANA VM cost.</p>
+<h3 id="anti-pattern-6-not-testing-the-asr-recovery-plan-before-a-dr-event">Anti-Pattern 6: Not Testing the ASR Recovery Plan Before a DR Event<a class="headerlink" href="#anti-pattern-6-not-testing-the-asr-recovery-plan-before-a-dr-event" title="Permanent link">¶</a></h3>
+<p><strong>Description</strong>: Assuming ASR Recovery Plan scripts (PowerShell runbooks) are correct based on code review alone, without executing a test failover in a non-production environment.</p>
+<p><strong>Why it fails</strong>: ASR Recovery Plan scripts execute in a specific context during failover (Azure Automation runbook context, not interactive shell), with specific managed identity permissions, specific network connectivity, and specific VM state. Scripts that work in manual testing may fail in the Recovery Plan context due to: managed identity RBAC insufficient for target resource, SSH key not accessible from Automation account, ANF volume break-replication operation timing out, DNS update script missing required permissions on Private DNS zone. Each failure extends RTO and may require manual intervention under time pressure.</p>
+<p><strong>Correct approach</strong>: Execute a test failover (ASR test failover to an isolated network, not production DR network) at least twice per year. Test failover exercises the Recovery Plan scripts in full without impacting production. Document each script's execution in the test failover job log and validate output.</p>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="scenario-1-hana-hsr-replication-lag-exceeds-15-minutes">Scenario 1: HANA HSR Replication Lag Exceeds 15 Minutes<a class="headerlink" href="#scenario-1-hana-hsr-replication-lag-exceeds-15-minutes" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: Azure Monitor alert <code>HANA HSR Replication Lag High</code> fires. <code>M_SERVICE_REPLICATION.SECONDARY_SHIPPED_LOG_POSITION_TIME</code> shows a lag of 20+ minutes. Alert severity: Sev 2.</p>
+<p><strong>Root cause</strong>: HANA HSR async replication lag accumulates when the redo log generation rate on the primary exceeds available ExpressRoute bandwidth, or when a transient network disruption causes the DR secondary to fall behind and then attempt to catch up while normal transaction traffic continues. Secondary causes include DR HANA log apply backpressure (undersized DR VM disk I/O) and ExpressRoute circuit congestion from competing workloads.</p>
+<p><strong>Diagnosis steps</strong>:
+1. Log in to primary HANA VM via Azure Bastion.
+2. Check HSR status: <code>hdbnsutil -sr_state</code> — verify <code>SECONDARY_ACTIVE_STATUS</code> is <code>YES</code> (if <code>NO</code>, HSR connection is broken; escalate to Scenario 2).
+3. Check HANA redo log generation rate: <code>SELECT * FROM M_LOG_SEGMENTS WHERE STATE = 'Writing'</code> — a high generation rate (&gt; 5 GB/hour) combined with network constraint causes lag.
+4. Check ExpressRoute circuit bandwidth utilisation: Azure Monitor <code>ExpressRoute — BitsInPerSecond</code> and <code>BitsOutPerSecond</code> metrics on the ExpressRoute circuit. If utilisation &gt; 80% of circuit capacity, the HSR replication competes with other traffic.
+5. Check DR HANA log apply rate: <code>SELECT * FROM M_SERVICE_REPLICATION WHERE HOST = '&lt;dr-hana-hostname&gt;'</code> — check <code>LOG_POSITION_TIME</code> vs <code>SECONDARY_SHIPPED_LOG_POSITION_TIME</code> delta.</p>
+<p><strong>Resolution steps</strong>:
+- If caused by ExpressRoute saturation: open a Network Operations ticket to assess ExpressRoute capacity expansion or traffic prioritisation (HSR traffic should be marked DSCP EF for QoS prioritisation on ExpressRoute).
+- If caused by temporary HANA workload spike (month-end, batch): monitor for natural recovery once the batch completes. If lag persists &gt; 4 hours, escalate to Sev 1.
+- If the lag has not recovered after 4 hours, document the maximum lag value (this is the worst-case RPO breach) and notify the SAP Application Manager.</p>
+<h3 id="scenario-2-hana-hsr-replication-disconnected">Scenario 2: HANA HSR Replication Disconnected<a class="headerlink" href="#scenario-2-hana-hsr-replication-disconnected" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: Azure Monitor alert <code>HANA HSR Replication Disconnected</code> fires. <code>hdbnsutil -sr_state</code> on primary HANA shows <code>CONNECTION_STATUS = NO</code> or <code>SECONDARY_ACTIVE_STATUS = NO</code>. Alert severity: Sev 1.</p>
+<p><strong>Root cause</strong>: HSR disconnection has four common causes: (1) the DR HANA VM has been stopped or deallocated (manual action or Azure platform event); (2) the HANA process on the DR VM has crashed due to an OOM event, disk full condition, or HANA software fault; (3) the ExpressRoute Global Reach connection has dropped (BGP session failure, circuit maintenance); (4) an NSG rule change has blocked TCP port 40001–40007 (HSR ports) on the DR HANA subnet.</p>
+<p><strong>Diagnosis steps</strong>:
+1. Verify DR HANA VM is running: <code>az vm show -g rg-sap-dr-&lt;SID&gt;-cus -n &lt;dr-hana-vmname&gt; --query powerState</code>.
+2. If DR HANA VM is running, log in and check HANA process status: <code>HDB info</code>. If <code>hdbindexserver</code> is not running, HANA has crashed on DR — restart HANA (<code>HDB start</code>) and monitor HSR re-establishment.
+3. Verify network connectivity from primary HANA to DR HANA: <code>nc -zv &lt;dr-hana-ip&gt; 40001</code> (HSR port). If connection refused, check NSG rules on DR HANA subnet and ExpressRoute Global Reach route propagation.
+4. Check HSR error log on primary HANA: <code>grep "REPLICATION" /usr/sap/&lt;SID&gt;/HDB&lt;nr&gt;/&lt;hostname&gt;/trace/nameserver_&lt;hostname&gt;.*.trc</code> — look for disconnect reason.</p>
+<p><strong>Resolution steps</strong>:
+- If HANA crashed on DR: restart and wait for automatic HSR resync. Resync time depends on lag accumulated since disconnect. Monitor <code>SECONDARY_ACTIVE_STATUS</code> until it returns to <code>YES</code>.
+- If network connectivity is broken: open Priority 1 Network Operations ticket. During the network outage, production SAP continues unaffected (async mode). DR protection is suspended for the duration.
+- If DR HANA VM is stopped or deallocated (cost optimisation mistake): immediately start the VM. HANA auto-start (<code>sapservice</code> or <code>systemd</code> unit) will restart HANA. HSR resync begins automatically.
+- Document the disconnect event, duration, and maximum accumulated lag as a DR readiness finding.</p>
+<h3 id="scenario-3-asr-recovery-plan-fails-at-hana-takeover-step">Scenario 3: ASR Recovery Plan Fails at HANA Takeover Step<a class="headerlink" href="#scenario-3-asr-recovery-plan-fails-at-hana-takeover-step" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: During DR test or live DR activation, the ASR Recovery Plan <code>Execute-HANA-Takeover.ps1</code> runbook step fails with error. Failover halts at Recovery Group 2.</p>
+<p><strong>Root cause</strong>: The most frequent root causes are: (1) JIT VM access has not been activated on the DR HANA VM, causing the SSH connection from the Automation account to be refused on port 22; (2) the Automation account managed identity lacks <code>Key Vault Secrets User</code> on the DR Key Vault, preventing HANA system password retrieval before the SSH step; (3) the DR HANA VM is already in PRIMARY mode from a previous test that was not re-registered as a secondary.</p>
+<p><strong>Diagnosis steps</strong>:
+1. Check the Azure Automation job output for the <code>Execute-HANA-Takeover</code> runbook: Azure Portal → Automation Account → Jobs → select the failed job → Output tab.
+2. Common failure: SSH connection refused to DR HANA VM. Cause: DR HANA VM JIT access not activated, blocking SSH port 22. Resolution: activate JIT access from DR bastion host IP on port 22 before executing recovery plan.
+3. Common failure: <code>hdbnsutil -sr_takeover</code> returns <code>RC = 5 (ERR_ALREADY_PRIMARY)</code>. Cause: DR HANA is already in PRIMARY mode from a previous test that was not cleaned up. Resolution: re-register DR HANA as secondary and restart the DR procedure.
+4. Common failure: <code>hdbnsutil -sr_takeover</code> returns <code>RC = 129 (ERR_COULDNOT_REACHPRIMARY)</code>. This is normal when primary is failed — the takeover proceeds. Check HANA log for confirmation: <code>grep "takeover" /usr/sap/&lt;SID&gt;/HDB&lt;nr&gt;/&lt;hostname&gt;/trace/nameserver_&lt;hostname&gt;.*.trc</code>.
+5. Common failure: Managed identity RBAC missing <code>Key Vault Secrets User</code> on DR Key Vault — HANA password retrieval fails before SSH step. Verify: <code>az keyvault secret show --vault-name kv-sap-dr-&lt;region&gt; --name hana-system-password --query value</code>.</p>
+<p><strong>Resolution steps</strong>: Address the specific failure from the diagnosis. After resolving, re-run the failed recovery group from the ASR Recovery Plan (<code>Resume Recovery Plan</code> in Azure Portal) rather than re-running the entire plan from the start.</p>
+<h3 id="scenario-4-anf-crr-volumes-cannot-be-broken-stuck-in-replicating-state">Scenario 4: ANF CRR Volumes Cannot Be Broken (Stuck in Replicating State)<a class="headerlink" href="#scenario-4-anf-crr-volumes-cannot-be-broken-stuck-in-replicating-state" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: During DR activation Layer 2 (storage), the <code>Break-ANF-CRR.ps1</code> script fails. <code>az netappfiles volume replication status</code> shows <code>mirrorState = Mirroring</code> and <code>az netappfiles volume replication remove</code> returns an error.</p>
+<p><strong>Root cause</strong>: The ANF CRR <code>replication remove</code> API call is rejected when the volume replication relationship is mid-transfer (<code>Resyncing</code> state). ANF does not allow breaking an in-progress transfer to prevent partial-state volumes. The transfer was triggered by the 10-minute CRR schedule running concurrently with the DR activation. A secondary cause is the replication relationship being in an <code>Errored</code> state, which also blocks the <code>remove</code> operation until a re-initialize is performed.</p>
+<p><strong>Diagnosis steps</strong>:
+1. Check ANF volume replication status via Azure Portal: ANF → DR volume → Replication → check status.
+2. If status shows <code>Resyncing</code>, the volume is in mid-transfer; the <code>replication remove</code> operation is blocked until the current transfer completes or times out. Transfer completion time depends on delta size.
+3. If status shows <code>Errored</code>, the replication relationship is in an error state — check ANF service health for the DR region.</p>
+<p><strong>Resolution steps</strong>:
+- If <code>Resyncing</code>: wait for the current transfer to complete (check <code>az netappfiles volume replication status</code> every 2 minutes for status change to <code>Mirrored</code>). Then execute <code>replication remove</code>. Typical transfer completion: 5–15 minutes for &lt; 100 GB delta.
+- If <code>Errored</code>: use <code>az netappfiles volume replication re-initialize</code> to reset the replication, then wait for completion, then <code>replication remove</code>.
+- If the DR timeline cannot accommodate waiting: break replication using <code>az netappfiles volume replication remove --force-breaking</code> (if available for the ANF API version in use — verify current API support). The volume breaks immediately but the last transferred state may not include the most recent data, increasing effective RPO.
+- Document the additional RPO incurred from forced break in the DR event log.</p>
+<h3 id="scenario-5-sap-application-server-fails-to-start-after-asr-failover-profile-not-found">Scenario 5: SAP Application Server Fails to Start After ASR Failover — Profile Not Found<a class="headerlink" href="#scenario-5-sap-application-server-fails-to-start-after-asr-failover-profile-not-found" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: After ASR failover, the <code>Start-PAS.ps1</code> runbook step reports SAP start failure. Checking the OS log shows: <code>ERROR =&gt; NiGetDefaultDomain: hostname 'sapascs01' not resolved [nistd.c 1346]</code>. SAP instance fails to start.</p>
+<p><strong>Root cause</strong>: The <code>Update-DNS-Records.ps1</code> pre-failover script in ASR Recovery Group 1 failed to update the Private DNS A record for <code>sapascs01</code> from the primary region IP (10.10.2.4) to the DR region IP (10.30.2.4). As a result, when the PAS VM boots in the DR region and the SAP start sequence looks up the ASCS message server hostname, DNS returns the primary region IP, which is unreachable from the DR VNet, causing the SAP instance profile-load and message-server-registration steps to fail.</p>
+<p><strong>Diagnosis steps</strong>:
+1. The error indicates the ASCS hostname (<code>sapascs01</code>) is not resolving correctly on the DR application server VM.
+2. Verify Private DNS: on the DR PAS VM, run <code>nslookup sapascs01</code>. Expected: DR ASCS VM's IP (10.30.2.4). Actual: if returning primary region IP (10.10.2.4) or NXDOMAIN, the DNS update step failed.
+3. Check that <code>Update-DNS-Records.ps1</code> runbook executed successfully in ASR Recovery Group 1 (pre-failover). Review Automation job output.
+4. Check Private DNS zone <code>sap.internal</code> (or the SAP zone name used) in the DR subscription: verify A record for <code>sapascs01</code> points to DR IP.</p>
+<p><strong>Resolution steps</strong>:
+- If DNS A record is missing or incorrect: manually update the Private DNS zone record. Navigate to Private DNS zones in the DR subscription → <code>sap.internal</code> → Record sets → update A record for <code>sapascs01</code> to <code>10.30.2.4</code>.
+- After DNS fix: re-run <code>Start-ASCS-ERS.ps1</code> and <code>Start-PAS.ps1</code> runbooks manually (the ASR Recovery Plan allows manual runbook execution for individual steps via the Azure Automation portal).
+- Root cause: the <code>Update-DNS-Records.ps1</code> script likely has an incorrect record set name or zone name parameter. Update the script and ASR Recovery Plan after the DR event.
+- Prevention: add a DNS resolution verification step to the recovery plan (a dedicated runbook that runs <code>Resolve-DnsName</code> for all SAP hostnames and fails with a clear error if any resolution is incorrect) before the ASCS start step.</p>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

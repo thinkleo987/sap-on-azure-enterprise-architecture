@@ -1,0 +1,3201 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/landing-zone/" rel="canonical"/>
+<link href="../architecture-principles/" rel="prev"/>
+<link href="../networking/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Landing Zone Design - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#azure-landing-zone-for-sap">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Landing Zone Design
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+<nav aria-label="Architecture Overview" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram">
+<span class="md-ellipsis">
+      
+        Architecture diagram
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+<nav aria-label="SAP Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-component-roles-and-constraints">
+<span class="md-ellipsis">
+      
+        SAP component roles and constraints
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-sizing-principles">
+<span class="md-ellipsis">
+      
+        SAP sizing principles
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-integration-dependencies">
+<span class="md-ellipsis">
+      
+        SAP integration dependencies
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+<nav aria-label="Azure Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-service-mapping">
+<span class="md-ellipsis">
+      
+        Azure service mapping
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-landing-zone-integration">
+<span class="md-ellipsis">
+      
+        Azure Landing Zone integration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hub-spoke-network-integration">
+<span class="md-ellipsis">
+      
+        Hub-spoke network integration
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-architecture">
+<span class="md-ellipsis">
+      
+        Security Architecture
+      
+    </span>
+</a>
+<nav aria-label="Security Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#identity-and-access-management">
+<span class="md-ellipsis">
+      
+        Identity and access management
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-security">
+<span class="md-ellipsis">
+      
+        Network security
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#data-protection">
+<span class="md-ellipsis">
+      
+        Data protection
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-entra-id-integration">
+<span class="md-ellipsis">
+      
+        Microsoft Entra ID integration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-monitoring">
+<span class="md-ellipsis">
+      
+        Security monitoring
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability-and-high-availability">
+<span class="md-ellipsis">
+      
+        Reliability and High Availability
+      
+    </span>
+</a>
+<nav aria-label="Reliability and High Availability" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#high-availability-architecture">
+<span class="md-ellipsis">
+      
+        High availability architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rpo-and-rto-targets">
+<span class="md-ellipsis">
+      
+        RPO and RTO targets
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#disaster-recovery">
+<span class="md-ellipsis">
+      
+        Disaster recovery
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization">
+<span class="md-ellipsis">
+      
+        Cost Optimization
+      
+    </span>
+</a>
+<nav aria-label="Cost Optimization" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-model-and-drivers">
+<span class="md-ellipsis">
+      
+        Cost model and drivers
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-reservations-and-savings-plans">
+<span class="md-ellipsis">
+      
+        Azure Reservations and Savings Plans
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-governance">
+<span class="md-ellipsis">
+      
+        Cost governance
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operations-and-monitoring">
+<span class="md-ellipsis">
+      
+        Operations and Monitoring
+      
+    </span>
+</a>
+<nav aria-label="Operations and Monitoring" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#monitoring-architecture">
+<span class="md-ellipsis">
+      
+        Monitoring architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alert-strategy">
+<span class="md-ellipsis">
+      
+        Alert strategy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#log-collection-strategy">
+<span class="md-ellipsis">
+      
+        Log collection strategy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-and-recovery">
+<span class="md-ellipsis">
+      
+        Backup and recovery
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#patch-management">
+<span class="md-ellipsis">
+      
+        Patch management
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+<nav aria-label="Landing Zone Mapping" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#management-group-placement">
+<span class="md-ellipsis">
+      
+        Management group placement
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#policy-assignments">
+<span class="md-ellipsis">
+      
+        Policy assignments
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rbac-model">
+<span class="md-ellipsis">
+      
+        RBAC model
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#connectivity-integration">
+<span class="md-ellipsis">
+      
+        Connectivity integration
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#validation-checklist">
+<span class="md-ellipsis">
+      
+        Validation Checklist
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-deploying-sap-hana-vms-in-an-availability-set-instead-of-availability-zones">
+<span class="md-ellipsis">
+      
+        Anti-pattern: Deploying SAP HANA VMs in an availability set instead of Availability Zones
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-placing-hana-data-and-log-volumes-on-the-same-anf-capacity-pool-as-sap-transport-directories">
+<span class="md-ellipsis">
+      
+        Anti-pattern: Placing HANA data and log volumes on the same ANF capacity pool as SAP transport directories
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-using-basic-sku-azure-load-balancer-for-sap-cluster-vips">
+<span class="md-ellipsis">
+      
+        Anti-pattern: Using Basic SKU Azure Load Balancer for SAP cluster VIPs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-routing-hana-system-replication-traffic-through-azure-firewall">
+<span class="md-ellipsis">
+      
+        Anti-pattern: Routing HANA System Replication traffic through Azure Firewall
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-deploying-all-sap-environments-in-a-single-subscription-without-policy-isolation">
+<span class="md-ellipsis">
+      
+        Anti-pattern: Deploying all SAP environments in a single subscription without policy isolation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-using-ssh-key-pairs-stored-on-local-developer-workstations-to-access-sap-vms">
+<span class="md-ellipsis">
+      
+        Anti-pattern: Using SSH key pairs stored on local developer workstations to access SAP VMs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-enabling-the-azure-monitor-legacy-microsoft-monitoring-agent-mma-alongside-the-azure-monitor-agent-ama">
+<span class="md-ellipsis">
+      
+        Anti-pattern: Enabling the Azure Monitor legacy Microsoft Monitoring Agent (MMA) alongside the Azure Monitor Agent (AMA)
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#connectivity-sap-application-servers-cannot-reach-sap-hana-on-port-30015">
+<span class="md-ellipsis">
+      
+        Connectivity: SAP application servers cannot reach SAP HANA on port 30015
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#high-availability-ascs-pacemaker-cluster-resource-fails-to-fence-a-failed-node">
+<span class="md-ellipsis">
+      
+        High Availability: ASCS Pacemaker cluster resource fails to fence a failed node
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance-sap-hana-log-volume-write-throughput-below-250-mbs-threshold">
+<span class="md-ellipsis">
+      
+        Performance: SAP HANA log volume write throughput below 250 MB/s threshold
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-azure-key-vault-secrets-unreachable-from-sap-hana-vm">
+<span class="md-ellipsis">
+      
+        Security: Azure Key Vault secrets unreachable from SAP HANA VM
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operations-azure-monitor-agent-not-sending-data-to-log-analytics-workspace">
+<span class="md-ellipsis">
+      
+        Operations: Azure Monitor Agent not sending data to Log Analytics workspace
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#chapter-metadata">
+<span class="md-ellipsis">
+      
+        Chapter Metadata
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    Phase A — Foundations
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="azure-landing-zone-for-sap">Azure Landing Zone for SAP<a class="headerlink" href="#azure-landing-zone-for-sap" title="Permanent link">¶</a></h1>
+<hr/>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>The Azure Landing Zone for SAP defines the foundational subscription, network, identity, governance, and security scaffolding required before any SAP workload is deployed. This chapter covers the design decisions, policy assignments, network topology, and operational controls that constitute a production-ready Azure landing zone specific to SAP S/4HANA, SAP NetWeaver, and SAP HANA deployments. It addresses the structural differences between a generic Azure Landing Zone and one tuned for the strict certification, latency, and availability requirements of SAP workloads.</p>
+<p>The primary decisions addressed in this chapter are: management group hierarchy and subscription model for SAP environments, hub-spoke versus Azure Virtual WAN connectivity architecture, Azure Policy assignments that enforce SAP-specific constraints, and the RBAC model that governs least-privilege access across SAP infrastructure, basis, and security teams. Each decision is grounded in SAP certification requirements documented in the SAP Notes referenced throughout this chapter and in Microsoft's Azure Landing Zone guidance for SAP on Azure.</p>
+<p>This chapter is the prerequisite reference for all other chapters in this handbook. The networking chapter assumes the hub-spoke topology defined here. The HANA chapter assumes the subnet design and NSG baseline defined here. The security chapter extends the Microsoft Entra ID integration patterns established here. No SAP workload chapter should be implemented without first validating that the landing zone described in this chapter is in place and validated against the checklist at the end of this document.</p>
+<hr/>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>The Azure Landing Zone for SAP implements a hub-spoke topology where a centrally managed connectivity subscription hosts shared network infrastructure and a dedicated SAP subscription (or pair of subscriptions for production and non-production) hosts all SAP workloads. The hub virtual network contains Azure Firewall Premium, ExpressRoute Gateway, and VPN Gateway. The SAP spoke virtual network contains separate subnets for the SAP application layer, HANA database layer, ASCS/ERS cluster, management, and private endpoints. All inter-subnet traffic traverses Azure Firewall Premium, which enforces application-layer inspection rules aligned with SAP port requirements.</p>
+<p>Microsoft Entra ID serves as the identity plane for all Azure resource management and for SAP Fiori and SAP GUI access via SAP single sign-on integration. Azure Key Vault stores all secrets, certificates, and encryption keys for SAP workloads, with access governed by managed identities rather than service principal secrets. Azure Monitor Log Analytics provides a unified telemetry plane, with separate workspaces for production and non-production to enforce data segregation and independent retention policies.</p>
+<p>The landing zone is deployed using Azure Verified Modules (Bicep) aligned with the Cloud Adoption Framework enterprise-scale reference architecture. All management group policies are assigned at the SAP management group scope, inheriting platform-level policies from the Landing Zones management group and adding SAP-specific deny and deployIfNotExists policies on top. The entire landing zone is expressed as infrastructure-as-code in the repository's <code>bicep/</code> directory and is deployed through a GitHub Actions pipeline with manual approval gates for the production subscription.</p>
+<h3 id="architecture-diagram">Architecture diagram<a class="headerlink" href="#architecture-diagram" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>flowchart TD
+    subgraph root["Root Management Group"]
+        subgraph platform["Platform Management Group"]
+            subgraph connectivity_mg["Connectivity MG"]
+                conn_sub["Connectivity Subscription"]
+            end
+            subgraph identity_mg["Identity MG"]
+                identity_sub["Identity Subscription"]
+            end
+            subgraph mgmt_mg["Management MG"]
+                mgmt_sub["Management Subscription"]
+            end
+        end
+        subgraph landingzones["Landing Zones Management Group"]
+            subgraph sap_mg["SAP Management Group"]
+                sap_prod["SAP Production Subscription"]
+                sap_nonprod["SAP Non-Production Subscription"]
+            end
+        end
+    end
+
+    subgraph hub["Hub VNet — Connectivity Subscription"]
+        fw["Azure Firewall Premium"]
+        er_gw["ExpressRoute Gateway\nUltraPerformance"]
+        vpn_gw["VPN Gateway\nVpnGw2AZ"]
+        bastion["Azure Bastion\nStandard"]
+        dns_resolver["Azure DNS Private Resolver\nInbound + Outbound"]
+    end
+
+    subgraph sap_spoke["SAP Spoke VNet — SAP Production Subscription"]
+        subgraph ascs_subnet["ASCS Subnet 10.x.1.0/27"]
+            ascs1["ASCS VM-1\nM-series"]
+            ascs2["ERS VM-2\nM-series"]
+        end
+        subgraph app_subnet["Application Subnet 10.x.2.0/24"]
+            app1["SAP App Server 1\nEdsv5-series"]
+            app2["SAP App Server N\nEdsv5-series"]
+        end
+        subgraph hana_subnet["HANA DB Subnet 10.x.3.0/27"]
+            hana_p["SAP HANA Primary\nM-series"]
+            hana_s["SAP HANA Secondary\nM-series"]
+        end
+        subgraph mgmt_subnet["Management Subnet 10.x.4.0/28"]
+            backup_vm["Backup Proxy VM"]
+        end
+        subgraph pe_subnet["Private Endpoint Subnet 10.x.5.0/28"]
+            pe_kv["Key Vault PE"]
+            pe_stor["Storage PE"]
+            pe_acr["Container Registry PE"]
+        end
+    end
+
+    subgraph shared_svcs["Shared Services — Management Subscription"]
+        law_prod["Log Analytics Workspace\nProduction"]
+        law_nonprod["Log Analytics Workspace\nNon-Production"]
+        dcr["Data Collection Rules"]
+        kv["Azure Key Vault"]
+        monitor["Azure Monitor"]
+        defender["Microsoft Defender for Cloud"]
+    end
+
+    onprem[("On-Premises\nSAP Landscape")] --&gt;|"ExpressRoute\nPrivate Peering"| er_gw
+    er_gw --&gt;|"BGP routes"| fw
+    fw --&gt;|"RFC 33xx\nHTTPS 443"| ascs_subnet
+    fw --&gt;|"RFC 33xx\nHTTPS 443"| app_subnet
+    ascs1 --&gt;|"HANA SQL\nTCP 30015"| hana_p
+    app1 --&gt;|"HANA SQL\nTCP 30015"| hana_p
+    hana_p --&gt;|"HANA System Replication\nTCP 40001-40003"| hana_s
+    sap_spoke --&gt;|"VNet Peering"| hub
+    shared_svcs --&gt;|"Diagnostic settings\nAMA agent"| sap_spoke
+
+    style root fill:#f8f9fa,stroke:#6c757d
+    style platform fill:#e7f3ff,stroke:#0078d4
+    style landingzones fill:#fff3cd,stroke:#d4a017
+    style sap_mg fill:#ffeeba,stroke:#d4a017
+    style hub fill:#d4edda,stroke:#155724
+    style sap_spoke fill:#fff0e6,stroke:#d4780f
+    style shared_svcs fill:#f0fff0,stroke:#107c10</code></pre>
+<p>Diagram <code>landing-zone-topology-flowchart-01</code> shows the management group hierarchy, subscription placement, hub-spoke network topology, and the primary traffic paths between on-premises, hub shared services, and the SAP production spoke. The ExpressRoute Gateway and Azure Firewall Premium in the hub control all ingress from on-premises. The SAP HANA System Replication path between primary and secondary HANA VMs is contained within the HANA DB subnet and does not traverse the firewall, satisfying SAP Note 2407186 latency requirements for synchronous replication.</p>
+<hr/>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<h3 id="sap-component-roles-and-constraints">SAP component roles and constraints<a class="headerlink" href="#sap-component-roles-and-constraints" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Component</th>
+<th>Role in Architecture</th>
+<th>Certification Requirement</th>
+<th>SAP Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP S/4HANA Application Server (ABAP)</td>
+<td>Hosts ABAP work processes, RFC server, ICM</td>
+<td>Must run on certified Azure VM family; minimum 8 vCPUs per dialog instance</td>
+<td>SAP Note 1928533</td>
+</tr>
+<tr>
+<td>SAP ASCS (ABAP Central Services)</td>
+<td>Hosts message server and enqueue server; single point of failure requiring HA</td>
+<td>Must be clustered; Azure shared disk or Azure NetApp Files required for /sapmnt</td>
+<td>SAP Note 1928533; SAP Note 3007986</td>
+</tr>
+<tr>
+<td>SAP ERS (Enqueue Replication Server)</td>
+<td>Replicates enqueue lock table to survive ASCS failure</td>
+<td>Must run on a separate VM from ASCS; same availability zone or cross-zone with HSR</td>
+<td>SAP Note 2630416</td>
+</tr>
+<tr>
+<td>SAP HANA Database</td>
+<td>Primary persistence layer for S/4HANA; scale-up or scale-out</td>
+<td>Requires HANA-certified VM (M-series or Mv2-series); specific storage throughput mandated</td>
+<td>SAP Note 2235581; SAP Note 2382421</td>
+</tr>
+<tr>
+<td>SAP Web Dispatcher</td>
+<td>HTTP/HTTPS load balancer for Fiori and SAP GUI over HTTP</td>
+<td>Optional but required for Fiori production; can run on shared VM or dedicated</td>
+<td>SAP Note 908382</td>
+</tr>
+<tr>
+<td>SAP Solution Manager (SolMan)</td>
+<td>Landscape management, ABAP and Java stacks, diagnostic agents on all managed systems</td>
+<td>Required for SAP support; diagnostic agents must be installed on all application VMs</td>
+<td>SAP Note 1832249</td>
+</tr>
+<tr>
+<td>SAP Host Agent</td>
+<td>Monitors hardware and OS metrics; prerequisite for SAP monitoring</td>
+<td>Must be installed on all VMs in the SAP landscape</td>
+<td>SAP Note 1031096</td>
+</tr>
+<tr>
+<td>SAP Transport Management System (TMS)</td>
+<td>Controls ABAP transport routes between DEV, QAS, PRD</td>
+<td>/usr/sap/trans shared directory must be accessible from all application servers</td>
+<td>SAP Note 1745524</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sap-sizing-principles">SAP sizing principles<a class="headerlink" href="#sap-sizing-principles" title="Permanent link">¶</a></h3>
+<p>Sizing for the Azure Landing Zone for SAP begins with the SAP Quick Sizer output, which produces a SAPS (SAP Application Performance Standard) value representing the peak workload requirement. The SAPS value is mapped to Azure VM SKUs using the certified configurations in SAP Note 1928533. For SAP S/4HANA on SAP HANA, the HANA database sizing adds a second constraint: the total HANA working set (data, column store, row store, and buffer) must fit within the VM's physical memory with 50% overhead headroom to accommodate growth and online operations such as system copy and backup.</p>
+<p>M-series VMs (Standard_M32ms through Standard_M208ms_v2) are the primary HANA-certified SKUs for scale-up deployments. Scale-out deployments using Azure NetApp Files (ANF) for shared storage can extend to 16 HANA worker nodes on Mv2-series. For the application layer, Edsv5-series VMs provide the cost-optimal balance of compute and local NVMe storage used for SAP work process temporary files. The ASCS and ERS instances require minimal compute but must be deployed on Premium SSD or ANF to satisfy the /sapmnt shared filesystem requirement.</p>
+<p>SAPS requirements for the application layer are calculated as: total concurrent named users multiplied by the SAPS-per-user factor from the SAP Quick Sizer, rounded up to the next certified VM boundary. Do not size solely on user count; include batch job SAPS requirements from the customer's current SAP EarlyWatch Alert report.</p>
+<h3 id="sap-integration-dependencies">SAP integration dependencies<a class="headerlink" href="#sap-integration-dependencies" title="Permanent link">¶</a></h3>
+<p>The landing zone must accommodate the following integration flows at the network layer:</p>
+<ul>
+<li><strong>RFC connections</strong> between S/4HANA and external SAP systems (SAP BW/4HANA, SAP PI/PO, SAP GRC) over TCP ports 33xx and 48xx (RFC + SNC). These flows transit Azure Firewall Premium from the SAP spoke to external spokes or on-premises systems.</li>
+<li><strong>IDoc over IDOC_AAE</strong> or <strong>IDoc over ALE</strong> from S/4HANA to SAP PI/PO, requiring port 33xx outbound from the application subnet.</li>
+<li><strong>SAP Solution Manager diagnostic agent</strong> communication on TCP port 9010 (diagnostics) and TCP port 9000 (agent framework) from all SAP VMs to the SolMan server (on-premises or in a dedicated spoke).</li>
+<li><strong>SAP Host Agent</strong> metrics reporting to SAP CCMS on TCP port 1128 (HTTP) and TCP port 1129 (HTTPS).</li>
+<li><strong>Azure Backup agent (MABS or native)</strong> backup traffic from HANA VMs to Azure Backup Recovery Services Vault over HTTPS (TCP 443), routed through the private endpoint in the PE subnet.</li>
+</ul>
+<hr/>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<h3 id="azure-service-mapping">Azure service mapping<a class="headerlink" href="#azure-service-mapping" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Layer</th>
+<th>Azure Service</th>
+<th>SKU / Configuration</th>
+<th>Availability Model</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP HANA database (primary)</td>
+<td>Azure Virtual Machines — M-series</td>
+<td>Standard_M96ms_v2 (example; size per Quick Sizer)</td>
+<td>Zonal — Availability Zone 1</td>
+<td>Write Accelerator enabled for log disk per SAP Note 2235581</td>
+</tr>
+<tr>
+<td>SAP HANA database (secondary HSR)</td>
+<td>Azure Virtual Machines — M-series</td>
+<td>Standard_M96ms_v2 (same SKU as primary)</td>
+<td>Zonal — Availability Zone 2</td>
+<td>HSR synchronous replication; cross-zone latency tested per SAP Note 2015553</td>
+</tr>
+<tr>
+<td>SAP HANA data and log volumes</td>
+<td>Azure NetApp Files</td>
+<td>Ultra performance tier; Manual QoS</td>
+<td>Regional (zone-redundant replication optional)</td>
+<td>NFS 4.1; mount options per SAP Note 2382421</td>
+</tr>
+<tr>
+<td>SAP HANA shared volume</td>
+<td>Azure NetApp Files</td>
+<td>Premium performance tier; Manual QoS</td>
+<td>Regional</td>
+<td>/hana/shared; 1xRAM minimum per SAP Note 2235581</td>
+</tr>
+<tr>
+<td>ASCS / ERS cluster</td>
+<td>Azure Virtual Machines — Edsv5-series</td>
+<td>Standard_E4ds_v5 (2 nodes)</td>
+<td>Zonal — AZ1 / AZ2</td>
+<td>Azure shared disk for /sapmnt (Premium SSD ZRS) or ANF</td>
+</tr>
+<tr>
+<td>SAP application servers</td>
+<td>Azure Virtual Machines — Edsv5-series</td>
+<td>Standard_E16ds_v5 or E32ds_v5</td>
+<td>Zone-distributed (AZ1, AZ2, AZ3)</td>
+<td>Scale-out; Azure Load Balancer (Standard, zone-redundant) in front</td>
+</tr>
+<tr>
+<td>SAP Web Dispatcher</td>
+<td>Azure Virtual Machines — Edsv5-series</td>
+<td>Standard_E4ds_v5 (2 nodes, clustered)</td>
+<td>Zonal — AZ1 / AZ2</td>
+<td>Internal Azure Load Balancer; Azure Application Gateway for internet access</td>
+</tr>
+<tr>
+<td>Hub network — firewall</td>
+<td>Azure Firewall Premium</td>
+<td>Premium SKU, AZ-enabled</td>
+<td>Zone-redundant (3 AZs)</td>
+<td>IDPS enabled; TLS inspection for outbound SAP GUI HTTPS</td>
+</tr>
+<tr>
+<td>Hub network — ExpressRoute</td>
+<td>Azure ExpressRoute Gateway</td>
+<td>UltraPerformance SKU, AZ-enabled</td>
+<td>Zone-redundant</td>
+<td>10 Gbps circuit; FastPath enabled for HANA backup traffic</td>
+</tr>
+<tr>
+<td>Secrets and certificates</td>
+<td>Azure Key Vault</td>
+<td>Standard SKU (or Premium for HSM)</td>
+<td>Zone-redundant (ZRS)</td>
+<td>Managed identity access only; no service principal secrets</td>
+</tr>
+<tr>
+<td>OS and app log collection</td>
+<td>Azure Monitor — Log Analytics</td>
+<td>Dedicated workspace per environment tier</td>
+<td>Regional</td>
+<td>Azure Monitor Agent (AMA) replaces legacy MMA</td>
+</tr>
+<tr>
+<td>Backup vault</td>
+<td>Azure Backup — Recovery Services Vault</td>
+<td>GRS or ZRS (per RTO/RPO requirements)</td>
+<td>Geo-redundant or Zone-redundant</td>
+<td>HANA Backint integration via Azure Backup for SAP HANA</td>
+</tr>
+<tr>
+<td>DNS resolution</td>
+<td>Azure DNS Private Resolver</td>
+<td>Inbound + Outbound endpoints in hub</td>
+<td>Zone-redundant</td>
+<td>Resolves on-premises DNS for SAP hostnames; forwards Azure private DNS zones</td>
+</tr>
+<tr>
+<td>Bastion access</td>
+<td>Azure Bastion</td>
+<td>Standard SKU (native client support)</td>
+<td>Zone-redundant</td>
+<td>Replaces jump VM; file transfer and port forwarding for SAP GUI</td>
+</tr>
+</tbody>
+</table>
+<h3 id="azure-landing-zone-integration">Azure Landing Zone integration<a class="headerlink" href="#azure-landing-zone-integration" title="Permanent link">¶</a></h3>
+<p>The SAP workload subscriptions are placed under a dedicated SAP Management Group, which is a child of the Landing Zones Management Group in the Cloud Adoption Framework enterprise-scale hierarchy. This placement ensures that SAP subscriptions inherit all platform-level policies (diagnostic settings, Defender for Cloud, tagging) while allowing the SAP Management Group to apply additional SAP-specific deny policies that restrict certain configurations incompatible with SAP certification.</p>
+<p>The SAP Production subscription is separate from the SAP Non-Production subscription. This separation enforces blast radius isolation, independent budget controls, and independent lifecycle management. The connectivity subscription is shared with the rest of the enterprise; SAP does not deploy its own hub. SAP spoke virtual networks are peered to the existing hub with the <code>allowGatewayTransit</code> and <code>useRemoteGateways</code> flags set to route all SAP traffic through hub inspection services.</p>
+<p>The management subscription hosts the Log Analytics workspaces, Azure Monitor data collection rules, and Microsoft Defender for Cloud configuration. SAP VMs use Azure Monitor Agent (AMA) with data collection rules (DCRs) that target the production Log Analytics workspace, ensuring SAP-specific log sources (SAP system logs, OS syslog, HANA trace files via the SAP monitoring extension) flow to the correct workspace with the correct retention period.</p>
+<h3 id="hub-spoke-network-integration">Hub-spoke network integration<a class="headerlink" href="#hub-spoke-network-integration" title="Permanent link">¶</a></h3>
+<p>The SAP spoke virtual network requires a minimum of six subnets. Address space allocation must be planned at landing zone design time because subnets cannot overlap and resizing requires workload downtime.</p>
+<table>
+<thead>
+<tr>
+<th>Subnet</th>
+<th>Purpose</th>
+<th>Address Size</th>
+<th>NSG Required</th>
+<th>UDR Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>snet-sap-ascs-prod</td>
+<td>ASCS and ERS VMs</td>
+<td>/27 (32 addresses)</td>
+<td>Yes</td>
+<td>Yes — default route to firewall</td>
+</tr>
+<tr>
+<td>snet-sap-app-prod</td>
+<td>SAP application servers</td>
+<td>/24 (256 addresses)</td>
+<td>Yes</td>
+<td>Yes — default route to firewall</td>
+</tr>
+<tr>
+<td>snet-sap-hana-prod</td>
+<td>HANA primary and secondary VMs</td>
+<td>/27 (32 addresses)</td>
+<td>Yes</td>
+<td>Yes — default route to firewall</td>
+</tr>
+<tr>
+<td>snet-sap-mgmt-prod</td>
+<td>Backup proxy, management VMs</td>
+<td>/28 (16 addresses)</td>
+<td>Yes</td>
+<td>Yes — default route to firewall</td>
+</tr>
+<tr>
+<td>snet-sap-pe-prod</td>
+<td>Private endpoints</td>
+<td>/28 (16 addresses)</td>
+<td>No (PE network policies disabled)</td>
+<td>No</td>
+</tr>
+<tr>
+<td>snet-sap-wdisp-prod</td>
+<td>SAP Web Dispatcher VMs</td>
+<td>/28 (16 addresses)</td>
+<td>Yes</td>
+<td>Yes — default route to firewall</td>
+</tr>
+</tbody>
+</table>
+<p>All user-defined routes (UDRs) on SAP subnets send the default route (0.0.0.0/0) to the Azure Firewall private IP in the hub. This ensures no traffic leaves the SAP spoke without inspection. The private endpoint subnet is exempt from the UDR because private endpoint network policies are disabled and route injection is not applicable.</p>
+<p>DNS resolution for SAP private endpoints and SAP hostnames follows the hub DNS forwarder pattern: the DNS Private Resolver inbound endpoint is the DNS server for all SAP VMs. The resolver conditionally forwards private DNS zone queries (privatelink.vaultcore.azure.net, etc.) to the Azure DNS service (168.63.129.16) and forwards on-premises SAP hostname queries (e.g., corp.sap.example.com) to on-premises DNS servers via the ExpressRoute-connected resolver.</p>
+<hr/>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>SAP / Azure Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subscription model for SAP workloads</td>
+<td>Option A: Single subscription for all SAP environments; Option B: Dedicated subscription per environment (prod, non-prod); Option C: Dedicated subscription per SAP SID</td>
+<td>Option B: Dedicated production and non-production subscriptions</td>
+<td>Separating production from non-production enforces Azure Policy blast-radius isolation, independent budget controls via Azure Cost Management, and independent quota management. Per-SID subscriptions (Option C) were rejected due to operational overhead scaling non-linearly with landscape size.</td>
+<td><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/resource-org-subscriptions">Azure CAF subscription design</a></td>
+</tr>
+<tr>
+<td>Network topology for SAP connectivity</td>
+<td>Option A: Hub-spoke with Azure Firewall Premium; Option B: Azure Virtual WAN with routing intent; Option C: Flat VNet with NSG-only controls</td>
+<td>Option A: Hub-spoke with Azure Firewall Premium</td>
+<td>Azure Virtual WAN routing intent (Option B) was rejected because it introduces a managed routing plane that cannot be customized for SAP-specific route injection requirements (BGP AS path manipulation for SAP HANA System Replication). NSG-only controls (Option C) do not satisfy the requirement for application-layer IDPS inspection mandated by the customer's security policy.</td>
+<td><a href="https://learn.microsoft.com/azure/firewall/premium-features">Azure Firewall Premium</a>; SAP Note 2015553</td>
+</tr>
+<tr>
+<td>SAP HANA storage — data and log volumes</td>
+<td>Option A: Azure Managed Disk Premium SSD v2; Option B: Azure Managed Disk UltraDisk; Option C: Azure NetApp Files Ultra tier with NFS 4.1</td>
+<td>Option C: Azure NetApp Files Ultra tier with NFS 4.1</td>
+<td>ANF provides consistent sub-millisecond latency for HANA log I/O without the per-VM IOPS cap of Premium SSD v2. UltraDisk was rejected because it does not support shared volumes required for HANA scale-out, and its per-VM IOPS ceiling (160,000 IOPS per disk) is insufficient for the workload sizing target. ANF also enables online HANA backup without Backint agent overhead at this capacity tier.</td>
+<td>SAP Note 2382421; <a href="https://learn.microsoft.com/azure/azure-netapp-files/azure-netapp-files-solution-architectures">ANF HANA sizing</a></td>
+</tr>
+<tr>
+<td>ASCS/ERS cluster shared storage</td>
+<td>Option A: Azure Shared Disk (Premium SSD ZRS); Option B: Azure NetApp Files NFS share; Option C: NFS on SUSE/Red Hat cluster nodes</td>
+<td>Option A: Azure Shared Disk (Premium SSD ZRS) for single-region; Option B: ANF for multi-region or cross-zone</td>
+<td>Azure Shared Disk with ZRS replication is the simpler operational model for /sapmnt in single-region deployments and eliminates NFS server as a dependency. ANF is chosen when cross-zone ASCS clustering is required, as ZRS disk performance degrades under sustained IOPS in cross-zone configurations. NFS on cluster nodes (Option C) introduces a split-brain risk incompatible with the Azure shared-nothing clustering model.</td>
+<td>SAP Note 3007986; <a href="https://learn.microsoft.com/azure/sap/workloads/high-availability-guide-suse-pacemaker">ASCS HA on Azure</a></td>
+</tr>
+<tr>
+<td>Identity model for Azure resource management</td>
+<td>Option A: Service principal with client secret per workload; Option B: User-assigned managed identity per VM role; Option C: System-assigned managed identity per VM</td>
+<td>Option B: User-assigned managed identity per VM role</td>
+<td>User-assigned managed identities are detached from the VM lifecycle, enabling identity pre-provisioning and consistent RBAC assignments across VM replacements (scale events, OS updates). System-assigned identities (Option C) are tied to the VM resource and require RBAC re-assignment on VM replacement. Service principal secrets (Option A) require rotation and secret management infrastructure.</td>
+<td><a href="https://learn.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview">Azure managed identities</a></td>
+</tr>
+<tr>
+<td>DNS resolution architecture</td>
+<td>Option A: Custom DNS on Azure VMs (BIND/Windows DNS); Option B: Azure DNS Private Resolver in hub; Option C: Azure DNS only (no on-premises forwarding)</td>
+<td>Option B: Azure DNS Private Resolver in hub</td>
+<td>The DNS Private Resolver provides zone-redundant, managed DNS forwarding without requiring VM maintenance. It resolves private DNS zones for Azure private endpoints (required for Key Vault, Storage, Backup Vault) and conditionally forwards SAP-hostname queries to on-premises DNS. Custom VM DNS (Option A) was rejected due to the VM lifecycle management overhead. Azure DNS alone (Option C) cannot resolve on-premises SAP system hostnames required for RFC connections.</td>
+<td><a href="https://learn.microsoft.com/azure/dns/dns-private-resolver-overview">Azure DNS Private Resolver</a></td>
+</tr>
+<tr>
+<td>Azure Firewall SKU selection</td>
+<td>Option A: Azure Firewall Standard; Option B: Azure Firewall Premium</td>
+<td>Option B: Azure Firewall Premium</td>
+<td>The customer's security policy mandates IDPS (intrusion detection and prevention) for all production workload traffic, which is only available in the Premium SKU. TLS inspection for HTTPS-based SAP Fiori traffic also requires the Premium SKU. The additional cost is offset by consolidating NVA functionality into a single managed service.</td>
+<td><a href="https://learn.microsoft.com/azure/firewall/premium-features">Azure Firewall Premium features</a></td>
+</tr>
+<tr>
+<td>SAP HANA high availability model</td>
+<td>Option A: HSR (HANA System Replication) + Pacemaker (same-zone); Option B: HSR + Pacemaker (cross-zone); Option C: HANA scale-out with shared ANF storage</td>
+<td>Option B: HSR + Pacemaker cross-zone with Azure Fence Agent</td>
+<td>Cross-zone deployment protects against single-zone failure, which accounts for the highest-risk availability event in Azure. Same-zone (Option A) was rejected because it provides no protection against zone-level outages. Scale-out (Option C) is reserved for BW/4HANA workloads where data volume exceeds single-VM memory capacity. Azure Fence Agent is the certified fencing mechanism for Azure VMs in Pacemaker clusters.</td>
+<td>SAP Note 2015553; <a href="https://learn.microsoft.com/azure/sap/workloads/sap-hana-high-availability-scale-up-anf-suse">HANA HA cross-zone</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Architecture Decision Records</p>
+<p>Each decision in this table has a corresponding ADR file under <code>adr/</code>. The ADR captures the full decision context, participants, and date. Reference ADR-0001 through ADR-0008 for expanded decision history.</p>
+</div>
+<hr/>
+<h2 id="sap-notes-reference">SAP Notes Reference<a class="headerlink" href="#sap-notes-reference" title="Permanent link">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">SAP Notes access</p>
+<p>SAP Notes require an active SAP Support Portal account (S-user). Verify note applicability against your SAP product version and support package level before implementing. Note content changes; verify the current version before implementing guidance.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>SAP Note ID</th>
+<th>Title / Purpose</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+<th>Last Verified</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Azure: Supported Products and Azure VM Types</td>
+<td>Defines which Azure VM families and SKUs are certified for each SAP product version. Restricts HANA to M-series and Mv2-series. Restricts application layer to specific Edsv5, Eds_v4, and other certified families.</td>
+<td>VM SKU selection for all SAP layers; Azure Architecture section</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>2235581</td>
+<td>SAP HANA: Supported Operating Systems</td>
+<td>Defines supported OS versions for SAP HANA on Azure, required kernel parameters, and storage configuration minimums for /hana/data, /hana/log, /hana/shared. Mandates Write Accelerator on M-series for log volumes.</td>
+<td>HANA VM OS selection; storage configuration; Write Accelerator enablement</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>Network Configuration for SAP HANA</td>
+<td>Mandates dedicated NFS storage network for HANA scale-out, NFS 4.1 mount options (hard,timeo=600,rsize=262144,wsize=262144,nconnect=4), and maximum acceptable latency for HANA log I/O (250 microseconds).</td>
+<td>ANF mount options; HANA subnet NSG design; storage subnet isolation</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>SAP on Microsoft Azure: Support Prerequisites</td>
+<td>Defines the minimum Azure infrastructure requirements that SAP Support requires before opening incidents: ExpressRoute or VPN (no public internet SAP traffic), Azure Monitor agent on all VMs, and SAP Host Agent on all VMs.</td>
+<td>ExpressRoute requirement; monitoring agent deployment; support model</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>2630416</td>
+<td>Support for Standalone Enqueue Server 2</td>
+<td>Mandates use of Enqueue Server 2 (ENSA2) for new SAP S/4HANA deployments. Defines the ERS2 clustering configuration and the failover behavior difference from ENSA1.</td>
+<td>ASCS/ERS cluster design; Pacemaker resource agent selection</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>3007986</td>
+<td>SAP HANA on Azure: Large Instances Retirement / Azure VM guidance</td>
+<td>Provides updated guidance on HANA VM SKU selection following HANA Large Instance (HLI) retirement. Defines the Mv2-series as the replacement for most HLI configurations.</td>
+<td>VM SKU selection for large HANA workloads; migration from HLI</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>2407186</td>
+<td>SAP HANA System Replication latency requirements</td>
+<td>Defines the maximum round-trip latency acceptable for synchronous HANA System Replication (HSR): 1 millisecond for synchronous mode. Cross-zone RTT in Azure regions must be measured and documented before production go-live.</td>
+<td>HANA HA cross-zone design; Availability Zone pair selection</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>1745524</td>
+<td>SAP Transport Management System on Azure</td>
+<td>Defines requirements for the /usr/sap/trans shared transport directory: NFS mount performance requirements, locking behavior, and the prohibition against placing transport directories on SMB shares for ABAP stacks.</td>
+<td>Transport directory design; ANF or Azure Files NFS for /usr/sap/trans</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>2578899</td>
+<td>SUSE Linux Enterprise Server 15: Installation Note</td>
+<td>Required OS configuration for SLES 15 as the SAP HANA database OS: kernel parameters, grub configuration, swap size, and required RPM packages.</td>
+<td>HANA VM OS configuration; IaC provisioning scripts</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>1031096</td>
+<td>Installing SAP Host Agent</td>
+<td>Mandates SAP Host Agent installation on all VMs in the SAP landscape. Defines the minimum SAP Host Agent version compatible with Azure infrastructure monitoring extensions.</td>
+<td>VM provisioning; monitoring agent deployment pipeline</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>2369910</td>
+<td>SAP Software on Linux: General information</td>
+<td>Defines general Linux OS requirements for SAP workloads: file descriptor limits, kernel semaphore configuration, IP stack parameters. All values must be set via Azure VM extensions or cloud-init at provisioning time.</td>
+<td>VM OS hardening; IaC provisioning</td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td>908382</td>
+<td>SAP Web Dispatcher: Configuration</td>
+<td>Defines Web Dispatcher configuration for SAP Fiori and SAP GUI over HTTP. Mandates HTTPS termination at the Web Dispatcher for internet-facing Fiori deployments. Relevant to Azure Application Gateway integration.</td>
+<td>Web Dispatcher subnet design; Application Gateway WAF integration</td>
+<td>2025-06</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Pillar</th>
+<th>Relevant Guidance</th>
+<th>Implementation in This Chapter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Reliability</strong></td>
+<td>Design for failure at zone level; single points of failure must be clustered</td>
+<td>ASCS/ERS deployed as Pacemaker cluster across AZ1/AZ2; HANA deployed with HSR synchronous replication across AZ1/AZ2; Azure Load Balancer Standard (zone-redundant) fronts all clustered resources; ExpressRoute Gateway deployed as zone-redundant UltraPerformance SKU</td>
+</tr>
+<tr>
+<td><strong>Reliability</strong></td>
+<td>Define and test recovery time and recovery point objectives before go-live</td>
+<td>RPO of 15 minutes and RTO of 4 hours defined in HA/DR section; HANA backup via Azure Backup for SAP HANA (Backint) with RPO validation; cross-zone HSR provides RPO near-zero for infrastructure failures</td>
+</tr>
+<tr>
+<td><strong>Reliability</strong></td>
+<td>Automate health probes and self-healing for clustered resources</td>
+<td>Azure Internal Load Balancer health probes on TCP port 62500 (ASCS) and 62501 (ERS) with probe interval 5 seconds; Pacemaker resource monitor with monitor interval 20 seconds; Azure Fence Agent for STONITH fencing</td>
+</tr>
+<tr>
+<td><strong>Security</strong></td>
+<td>Enforce least-privilege access with managed identities; no long-lived secrets</td>
+<td>All SAP VM access to Azure Key Vault, Azure Storage, and Azure Backup uses user-assigned managed identities; no service principal secrets stored in VM configuration; Key Vault access policies replaced with Azure RBAC</td>
+</tr>
+<tr>
+<td><strong>Security</strong></td>
+<td>Encrypt data at rest and in transit; use customer-managed keys for regulated workloads</td>
+<td>Azure Disk Encryption (ADE) with customer-managed keys in Key Vault for all SAP VM OS and data disks; ANF volumes encrypted with platform-managed keys (CMK available for regulated deployments); all traffic to Azure PaaS services via private endpoints (no public endpoints)</td>
+</tr>
+<tr>
+<td><strong>Security</strong></td>
+<td>Inspect and filter all network traffic between workload segments</td>
+<td>Azure Firewall Premium with IDPS enabled inspects all east-west traffic between SAP subnets and all north-south traffic between SAP spoke and on-premises; NSGs on all subnets enforce subnet-level default-deny with explicit allow rules; flow logs enabled on all NSGs</td>
+</tr>
+<tr>
+<td><strong>Cost Optimization</strong></td>
+<td>Right-size compute resources; use Azure Reservations for predictable workloads</td>
+<td>SAP HANA and application server VMs sized to SAP Quick Sizer output with 20% headroom; 3-year Reserved Instances applied to production HANA and ASCS VMs (committed baseline); non-production uses pay-as-you-go with auto-shutdown schedules</td>
+</tr>
+<tr>
+<td><strong>Cost Optimization</strong></td>
+<td>Use Azure Hybrid Benefit for eligible OS licenses</td>
+<td>SUSE Linux Enterprise Server licenses applied via Azure Hybrid Benefit where customer holds active SUSE subscriptions; reduces OS cost per VM by up to 40% versus pay-as-you-go SLES pricing</td>
+</tr>
+<tr>
+<td><strong>Operational Excellence</strong></td>
+<td>Deploy all infrastructure as code; no manual portal configurations in production</td>
+<td>All landing zone components (management groups, subscriptions, hub VNet, SAP spoke VNet, NSGs, UDRs, policies) deployed via Bicep modules in the repository's <code>bicep/</code> directory; GitHub Actions pipeline enforces code review and manual approval for production</td>
+</tr>
+<tr>
+<td><strong>Operational Excellence</strong></td>
+<td>Centralize monitoring; minimize alert fatigue with severity-tiered alerting</td>
+<td>Single Log Analytics workspace per environment tier; Azure Monitor Alerts consolidated into Action Groups by severity; SAP-specific alert rules (HANA memory, ASCS cluster state, replication lag) defined as IaC in <code>bicep/monitoring/</code></td>
+</tr>
+<tr>
+<td><strong>Performance Efficiency</strong></td>
+<td>Ensure storage meets SAP-mandated IOPS and throughput minimums</td>
+<td>ANF Ultra tier for HANA data and log volumes; throughput allocated via Manual QoS per SAP Note 2382421 minimums (HANA log: minimum 250 MB/s per volume; HANA data: minimum 400 MB/s per volume); Write Accelerator enabled on M-series HANA log disks</td>
+</tr>
+<tr>
+<td><strong>Performance Efficiency</strong></td>
+<td>Measure and validate performance before go-live and after each major change</td>
+<td>HANA volume throughput validated using <code>fio</code> benchmark post-deployment per SAP Note 2382421; cross-zone HSR latency measured using <code>hdbnsutil -sr_stateConfiguration</code> and must be below 1 ms RTT per SAP Note 2407186; SAP EarlyWatch Alert review within 30 days of go-live</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="security-architecture">Security Architecture<a class="headerlink" href="#security-architecture" title="Permanent link">¶</a></h2>
+<h3 id="identity-and-access-management">Identity and access management<a class="headerlink" href="#identity-and-access-management" title="Permanent link">¶</a></h3>
+<p>Microsoft Entra ID is the single identity provider for all Azure resource management and for SAP application access. All human operator access to SAP VMs is brokered through Azure Bastion (Standard SKU) with native client support, eliminating the need for public IP addresses on any SAP VM. SAP basis administrators authenticate to Azure Bastion using their Entra ID credentials with Conditional Access enforcing MFA and requiring a managed or compliant device.</p>
+<p>SAP application access (SAP GUI, SAP Fiori) is federated through Microsoft Entra ID using SAML 2.0. The SAP NetWeaver ABAP stack is registered as an Enterprise Application in Entra ID. Conditional Access policies enforce MFA for all SAP Fiori access from outside the corporate network. SAP GUI access from on-premises is authenticated via SNC (Secure Network Communications) using Kerberos through the on-premises Active Directory forest, which is synchronized to Entra ID via Microsoft Entra Connect.</p>
+<p>User-assigned managed identities are created for each VM role (HANA primary, HANA secondary, ASCS, application server, Web Dispatcher) and assigned the minimum required RBAC roles:</p>
+<table>
+<thead>
+<tr>
+<th>Managed Identity</th>
+<th>RBAC Role</th>
+<th>Scope</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id-sap-hana-prod</td>
+<td>Key Vault Secrets User</td>
+<td>Key Vault resource</td>
+<td>Read HANA SSL certificates and backup encryption keys</td>
+</tr>
+<tr>
+<td>id-sap-hana-prod</td>
+<td>Storage Blob Data Contributor</td>
+<td>Backup storage account</td>
+<td>Write HANA Backint backups to Azure Blob Storage</td>
+</tr>
+<tr>
+<td>id-sap-ascs-prod</td>
+<td>Key Vault Secrets User</td>
+<td>Key Vault resource</td>
+<td>Read cluster certificates</td>
+</tr>
+<tr>
+<td>id-sap-app-prod</td>
+<td>Key Vault Secrets User</td>
+<td>Key Vault resource</td>
+<td>Read SAP SSL certificates for SNC</td>
+</tr>
+<tr>
+<td>id-sap-mgmt-prod</td>
+<td>Virtual Machine Contributor</td>
+<td>SAP spoke resource group</td>
+<td>Fence (power-off) VMs during Pacemaker STONITH</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition danger">
+<p class="admonition-title">Privileged access to SAP HANA</p>
+<p>Direct SSH access to HANA VMs using OS-level passwords is prohibited in production. All privileged access must use Azure Bastion with Entra ID authentication and MFA. The HANA system database <code>SYSTEM</code> user password must be stored in Azure Key Vault and rotated quarterly. Emergency break-glass access uses a separate Entra ID account enrolled in Azure PIM, with access time-limited to 8 hours and all activity logged to a dedicated Log Analytics workspace with a 365-day immutable retention policy.</p>
+</div>
+<h3 id="network-security">Network security<a class="headerlink" href="#network-security" title="Permanent link">¶</a></h3>
+<p>The network security model follows a default-deny posture. All SAP subnets have NSGs with an explicit DenyAll inbound rule at priority 4096. Allow rules are added for only the specific source/destination/port combinations required for SAP operation.</p>
+<h4 id="required-nsg-rules-hana-database-subnet">Required NSG rules — HANA database subnet<a class="headerlink" href="#required-nsg-rules-hana-database-subnet" title="Permanent link">¶</a></h4>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Source</th>
+<th>Destination</th>
+<th>Port / Protocol</th>
+<th>Purpose</th>
+<th>SAP Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inbound</td>
+<td>snet-sap-app-prod (CIDR)</td>
+<td>snet-sap-hana-prod</td>
+<td>TCP 30013-30015</td>
+<td>HANA SQL and system database access from application servers</td>
+<td>SAP Note 2382421</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>snet-sap-ascs-prod (CIDR)</td>
+<td>snet-sap-hana-prod</td>
+<td>TCP 30013-30015</td>
+<td>HANA access from ASCS VMs</td>
+<td>SAP Note 2382421</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>snet-sap-hana-prod (CIDR)</td>
+<td>snet-sap-hana-prod</td>
+<td>TCP 40001-40003</td>
+<td>HANA System Replication between primary and secondary</td>
+<td>SAP Note 2407186</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>snet-sap-mgmt-prod (CIDR)</td>
+<td>snet-sap-hana-prod</td>
+<td>TCP 22</td>
+<td>SSH via Azure Bastion for HANA administration</td>
+<td>Azure Bastion</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>AzureMonitor service tag</td>
+<td>snet-sap-hana-prod</td>
+<td>TCP 443</td>
+<td>Azure Monitor Agent health reporting</td>
+<td>Azure Monitor</td>
+</tr>
+<tr>
+<td>Outbound</td>
+<td>snet-sap-hana-prod</td>
+<td>snet-sap-pe-prod (CIDR)</td>
+<td>TCP 443</td>
+<td>HTTPS to Key Vault and Storage private endpoints</td>
+<td>Azure Private Endpoint</td>
+</tr>
+<tr>
+<td>Outbound</td>
+<td>snet-sap-hana-prod</td>
+<td>AzureBackup service tag</td>
+<td>TCP 443</td>
+<td>Azure Backup Backint integration</td>
+<td>Azure Backup</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>DenyAll</td>
+<td>All</td>
+<td>All</td>
+<td>Default deny all</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h4 id="required-nsg-rules-sap-application-subnet">Required NSG rules — SAP application subnet<a class="headerlink" href="#required-nsg-rules-sap-application-subnet" title="Permanent link">¶</a></h4>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Source</th>
+<th>Destination</th>
+<th>Port / Protocol</th>
+<th>Purpose</th>
+<th>SAP Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inbound</td>
+<td>snet-sap-ascs-prod (CIDR)</td>
+<td>snet-sap-app-prod</td>
+<td>TCP 33xx, 48xx</td>
+<td>RFC and SNC from ASCS to application servers</td>
+<td>SAP Note 2015553</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>AzureLoadBalancer service tag</td>
+<td>snet-sap-app-prod</td>
+<td>TCP 62500-62502</td>
+<td>Load balancer health probes</td>
+<td>Azure LB</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>snet-sap-mgmt-prod (CIDR)</td>
+<td>snet-sap-app-prod</td>
+<td>TCP 22</td>
+<td>SSH via Azure Bastion</td>
+<td>Azure Bastion</td>
+</tr>
+<tr>
+<td>Outbound</td>
+<td>snet-sap-app-prod</td>
+<td>snet-sap-hana-prod (CIDR)</td>
+<td>TCP 30013-30015</td>
+<td>HANA SQL access from application servers</td>
+<td>SAP Note 2382421</td>
+</tr>
+<tr>
+<td>Outbound</td>
+<td>snet-sap-app-prod</td>
+<td>snet-sap-ascs-prod (CIDR)</td>
+<td>TCP 33xx, 36xx</td>
+<td>RFC and message server access</td>
+<td>SAP Note 1928533</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>DenyAll</td>
+<td>All</td>
+<td>All</td>
+<td>Default deny all</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-protection">Data protection<a class="headerlink" href="#data-protection" title="Permanent link">¶</a></h3>
+<p>All SAP VM OS disks and data disks are encrypted using Azure Disk Encryption (ADE) with customer-managed keys stored in Azure Key Vault. The Key Vault uses the Premium SKU with HSM-backed keys for the production encryption key. Key rotation is automated through Azure Key Vault key rotation policy with a 1-year rotation interval and a 30-day pre-expiry notification.</p>
+<p>ANF volumes are encrypted at rest using platform-managed keys by default. For regulated deployments requiring customer-managed key (CMK) encryption on ANF, the deployment uses the ANF CMK feature with a dedicated Key Vault instance, as the CMK Key Vault must be separate from the SAP secrets Key Vault.</p>
+<p>All data in transit between SAP VMs and Azure PaaS services (Key Vault, Storage, Backup) flows through private endpoints within the spoke VNet. TLS 1.2 is enforced on all private endpoint connections. SAP GUI connections from on-premises use SNC with AES-256 encryption per SAP NetWeaver SNC configuration requirements.</p>
+<h3 id="microsoft-entra-id-integration">Microsoft Entra ID integration<a class="headerlink" href="#microsoft-entra-id-integration" title="Permanent link">¶</a></h3>
+<p>The SAP S/4HANA Fiori launchpad is integrated with Microsoft Entra ID using SAML 2.0 via the SAP NetWeaver BTP Identity Authentication Service (IAS) as a proxy. This allows the customer's Entra ID Conditional Access policies to govern all SAP Fiori access without requiring direct SAML federation between Entra ID and each SAP system SID.</p>
+<p>For privileged SAP Basis access, Azure Privileged Identity Management (PIM) is configured for the Entra ID group that grants VM Administrator access to SAP production VMs. PIM requires business justification and MFA at time of activation, with a maximum activation duration of 4 hours. All PIM activation events are forwarded to the production Log Analytics workspace.</p>
+<h3 id="security-monitoring">Security monitoring<a class="headerlink" href="#security-monitoring" title="Permanent link">¶</a></h3>
+<p>Microsoft Defender for Cloud is enabled at the subscription level with the following plans active for SAP subscriptions: Defender for Servers (Plan 2), Defender for Storage, and Defender for Key Vault. Defender for Servers Plan 2 includes file integrity monitoring (FIM), which is configured to monitor the SAP kernel directory (/usr/sap/*/exe) and HANA data directory (/hana) for unauthorized file modifications.</p>
+<p>The Microsoft Sentinel solution for SAP applications is deployed, collecting SAP audit log, change document log, and security audit log via the SAP data connector (agentless, using SAP RFC). Sentinel analytics rules detect privilege escalation (SAP_BASIS role assignments outside change window), mass data export (report RSDBAJOB with large output), and critical table access (SE16 on client-independent tables).</p>
+<div class="admonition tip">
+<p class="admonition-title">Microsoft Sentinel for SAP</p>
+<p>The Microsoft Sentinel solution for SAP applications requires the SAP Audit Log to be configured with a minimum logging level of 3 (LOGXL_MASK_3) in SAP transaction SM19. Lower logging levels will cause the Sentinel analytics rules for privilege escalation and data exfiltration to produce false negatives. Verify SM19 configuration in all SAP system clients after go-live.</p>
+</div>
+<hr/>
+<h2 id="reliability-and-high-availability">Reliability and High Availability<a class="headerlink" href="#reliability-and-high-availability" title="Permanent link">¶</a></h2>
+<h3 id="high-availability-architecture">High availability architecture<a class="headerlink" href="#high-availability-architecture" title="Permanent link">¶</a></h3>
+<p>The landing zone implements high availability at three layers: the SAP application layer (ASCS/ERS cluster), the SAP HANA database layer (HSR with Pacemaker), and the Azure infrastructure layer (Availability Zones and zone-redundant services). The HA design targets SAP's definition of high availability: the ability to tolerate any single component failure — including an entire Azure Availability Zone — without requiring manual intervention and with automatic failover completing within the defined RTO window.</p>
+<p><strong>ASCS/ERS cluster</strong>: Two VMs in AZ1 and AZ2 run the ASCS and ERS instances respectively, managed by Pacemaker with Azure Fence Agent for STONITH fencing. The cluster uses the ENSA2 (Enqueue Server 2) architecture per SAP Note 2630416, which allows ERS to retain the lock table during a failover, reducing the risk of lock loss. The cluster VIP is hosted by an Azure Internal Load Balancer (Standard SKU, zone-redundant) with health probes on TCP port 62500 (ASCS) and TCP port 62501 (ERS).</p>
+<p><strong>HANA database cluster</strong>: Two M-series VMs in AZ1 and AZ2 run SAP HANA with HSR in synchronous mode (SYNC). Pacemaker with the SAPHanaController and SAPHanaTopology resource agents manages automatic failover. The takeover time for cross-zone HSR failover is expected to be 60-120 seconds including Azure Fence Agent fencing, ILB health probe failure detection (30 seconds), and HANA takeover. This determines the lower bound of the RTO for the database tier.</p>
+<p><strong>Application server availability</strong>: SAP application servers are distributed across AZ1, AZ2, and AZ3 in equal thirds. The SAP logon group configuration distributes user sessions across available application servers. When an application server VM fails, users in active sessions receive an RFC connection error and must reconnect, which the SAP GUI handles with automatic reconnect if the connection error occurs at a safe point. Application server statelessness means no data is lost on application server failure.</p>
+<h3 id="rpo-and-rto-targets">RPO and RTO targets<a class="headerlink" href="#rpo-and-rto-targets" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Failure Scenario</th>
+<th>RPO Target</th>
+<th>RTO Target</th>
+<th>Recovery Mechanism</th>
+<th>Validated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP HANA database</td>
+<td>Single disk failure</td>
+<td>0 (RAID via ANF)</td>
+<td>&lt; 5 minutes (ANF self-healing)</td>
+<td>ANF volume redundancy (3-way replication internally)</td>
+<td>Yes — ANF SLA</td>
+</tr>
+<tr>
+<td>SAP HANA database</td>
+<td>VM failure (same zone)</td>
+<td>Near-zero (HSR synchronous)</td>
+<td>&lt; 5 minutes (Pacemaker auto-failover)</td>
+<td>HSR takeover via Pacemaker SAPHanaController</td>
+<td>Validated in staging</td>
+</tr>
+<tr>
+<td>SAP HANA database</td>
+<td>Availability Zone failure</td>
+<td>Near-zero (HSR synchronous)</td>
+<td>&lt; 10 minutes (cross-zone failover)</td>
+<td>Cross-zone HSR + Pacemaker + Azure Fence Agent</td>
+<td>Validated in staging</td>
+</tr>
+<tr>
+<td>SAP HANA database</td>
+<td>Regional failure (DR)</td>
+<td>15 minutes (async HSR to DR region)</td>
+<td>4 hours (manual failover procedure)</td>
+<td>HSR async replication to DR region; manual takeover</td>
+<td>Planned quarterly test</td>
+</tr>
+<tr>
+<td>ASCS / ERS cluster</td>
+<td>ASCS VM failure</td>
+<td>0 (ENSA2 ERS holds lock table)</td>
+<td>&lt; 3 minutes (Pacemaker failover)</td>
+<td>Pacemaker moves ASCS resource to surviving node</td>
+<td>Validated in staging</td>
+</tr>
+<tr>
+<td>ASCS / ERS cluster</td>
+<td>Availability Zone failure</td>
+<td>0</td>
+<td>&lt; 5 minutes</td>
+<td>ASCS moves to surviving AZ node</td>
+<td>Validated in staging</td>
+</tr>
+<tr>
+<td>SAP application server</td>
+<td>VM failure</td>
+<td>0 (stateless)</td>
+<td>&lt; 2 minutes (Azure VMSS replacement) or manual</td>
+<td>User reconnects to surviving application server</td>
+<td>Validated</td>
+</tr>
+<tr>
+<td>SAP Web Dispatcher</td>
+<td>VM failure</td>
+<td>0 (stateless)</td>
+<td>&lt; 30 seconds (ILB health probe detects; routes to survivor)</td>
+<td>Azure ILB with health probes</td>
+<td>Validated</td>
+</tr>
+<tr>
+<td>Azure Key Vault</td>
+<td>Zone failure</td>
+<td>N/A</td>
+<td>Transparent (ZRS)</td>
+<td>Azure Key Vault ZRS built-in</td>
+<td>Azure SLA</td>
+</tr>
+<tr>
+<td>Azure Backup Recovery Services Vault</td>
+<td>Zone failure</td>
+<td>N/A</td>
+<td>Transparent (ZRS)</td>
+<td>GRS/ZRS vault redundancy</td>
+<td>Azure SLA</td>
+</tr>
+</tbody>
+</table>
+<h3 id="disaster-recovery">Disaster recovery<a class="headerlink" href="#disaster-recovery" title="Permanent link">¶</a></h3>
+<p>The disaster recovery site is in a paired Azure region. SAP HANA is replicated to the DR site using HSR in asynchronous mode (ASYNC). The DR HANA VM is the same SKU as production to eliminate resizing delays during failover. The DR site runs in a cold standby configuration (HANA VM started but SAP application layer not running) to minimize DR cost while meeting the 4-hour RTO.</p>
+<p>DR failover is a documented manual procedure, not an automated Pacemaker failover. Automation would require a fully replicated application layer in the DR region (hot standby), which is reserved for Tier 0 SAP workloads requiring RTO under 1 hour. The DR procedure is stored in the runbook directory and tested quarterly.</p>
+<p>Azure Site Recovery (ASR) is not used for the SAP HANA VM because HSR provides superior database-consistent replication. ASR is used for the ASCS and application server VMs to replicate OS disks to the DR region, providing a recovery path for the application layer independent of SAP-level replication.</p>
+<div class="admonition warning">
+<p class="admonition-title">DR test requirement</p>
+<p>The disaster recovery procedure must be tested in a non-production environment before production go-live. DR tests that execute the full failover and failback procedure on the production systems without a preceding staging validation violate the SAP Support prerequisite in SAP Note 2015553. Schedule a full DR test in the staging environment within 60 days of production go-live.</p>
+</div>
+<hr/>
+<h2 id="cost-optimization">Cost Optimization<a class="headerlink" href="#cost-optimization" title="Permanent link">¶</a></h2>
+<h3 id="cost-model-and-drivers">Cost model and drivers<a class="headerlink" href="#cost-model-and-drivers" title="Permanent link">¶</a></h3>
+<p>The SAP landing zone cost model has four primary cost categories: compute (VM reservations), storage (ANF and managed disks), networking (ExpressRoute, Azure Firewall, data transfer), and platform services (Defender for Cloud, Azure Monitor, Azure Backup). Compute and storage together represent approximately 70-75% of total monthly spend for a production SAP S/4HANA deployment on Azure.</p>
+<table>
+<thead>
+<tr>
+<th>Cost Component</th>
+<th>Estimated Monthly Range</th>
+<th>Optimization Lever</th>
+<th>Savings Potential</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA M-series VMs (production, 2x for HA)</td>
+<td>High (largest single cost item)</td>
+<td>3-year Reserved Instances; Azure Hybrid Benefit for SUSE or RHEL</td>
+<td>40-60% vs pay-as-you-go with 3-year RI + AHB</td>
+</tr>
+<tr>
+<td>Application server Edsv5 VMs</td>
+<td>Medium</td>
+<td>1-year Reserved Instances for predictable baseline; auto-shutdown for non-production</td>
+<td>30-40% vs pay-as-you-go with 1-year RI</td>
+</tr>
+<tr>
+<td>Azure NetApp Files (Ultra tier, HANA data+log+shared)</td>
+<td>Medium-High</td>
+<td>Right-size capacity pool at 120% of peak usage; periodic unused volume cleanup</td>
+<td>15-25% through accurate capacity sizing</td>
+</tr>
+<tr>
+<td>Azure Firewall Premium</td>
+<td>Medium</td>
+<td>Single Firewall instance shared across all SAP and non-SAP spoke VNets (hub sharing)</td>
+<td>N/A if already shared — cost is per deployment unit</td>
+</tr>
+<tr>
+<td>ExpressRoute circuit</td>
+<td>Medium</td>
+<td>Scale circuit bandwidth to 80% utilization target; downsize circuit if telemetry shows sustained &lt;50% utilization</td>
+<td>20-30% per bandwidth tier reduction</td>
+</tr>
+<tr>
+<td>Azure Backup (HANA Backint + VM snapshots)</td>
+<td>Low-Medium</td>
+<td>Lifecycle management: move backups to Cool tier after 30 days; delete expired backups automatically</td>
+<td>30-40% on backup storage through tiering policy</td>
+</tr>
+<tr>
+<td>Microsoft Defender for Cloud (Defender for Servers P2)</td>
+<td>Low</td>
+<td>Enable only on production SAP subscription; use Foundational CSPM for non-production</td>
+<td>50% on Defender for Servers cost for non-production</td>
+</tr>
+<tr>
+<td>Azure Monitor Log Analytics (ingestion + retention)</td>
+<td>Low-Medium</td>
+<td>Data collection rules to filter verbose logs (OS debug logs, verbose RFC traces) before ingestion; Basic tier for archive logs beyond 90 days</td>
+<td>20-30% on ingestion cost through pre-ingestion filtering</td>
+</tr>
+<tr>
+<td>Non-production SAP VMs (dev/test)</td>
+<td>Medium</td>
+<td>Auto-shutdown schedule (18:00-08:00 weekdays, full weekend); deallocate rather than stop</td>
+<td>40-60% on non-production compute</td>
+</tr>
+</tbody>
+</table>
+<h3 id="azure-reservations-and-savings-plans">Azure Reservations and Savings Plans<a class="headerlink" href="#azure-reservations-and-savings-plans" title="Permanent link">¶</a></h3>
+<p>For the production SAP HANA VMs (M-series), 3-year Reserved Instances provide the maximum discount against pay-as-you-go rates. M-series VMs are always-on by design (HANA database is rarely shut down), making them ideal RI candidates. The reservation must match the exact VM SKU, region, and tenancy (shared or single).</p>
+<p>For SAP application server VMs (Edsv5-series), 1-year Reserved Instances are preferred over 3-year because application server sizing changes more frequently as the workload grows or as SAP landscape consolidation occurs. Azure Savings Plans are evaluated quarterly as an alternative to RI when the application server fleet SKU changes frequently.</p>
+<p>Azure Hybrid Benefit (AHB) for Linux applies when the customer holds active SUSE Linux Enterprise Server for SAP Applications (SLES for SAP) or Red Hat Enterprise Linux for SAP (RHEL for SAP) subscriptions. AHB eliminates the OS license surcharge from the Azure VM price. For M-series VMs, the OS license surcharge is significant relative to the total VM price; AHB should be applied at deployment time via the <code>licenseType: SLES_SAP</code> or <code>licenseType: RHEL_SAP</code> property in the Bicep module.</p>
+<h3 id="cost-governance">Cost governance<a class="headerlink" href="#cost-governance" title="Permanent link">¶</a></h3>
+<p>Azure Cost Management budgets are configured at the subscription level with monthly spend alert thresholds at 80% and 100% of the monthly budget. A second budget alert at 20% month-over-month increase detects unexpected compute or storage growth. Budget alerts trigger email notifications to the cloud FinOps team and the SAP project owner.</p>
+<p>All SAP Azure resources must carry the following tags at deployment time. The tagging policy is enforced by an Azure Policy <code>Deny</code> effect at the SAP Management Group scope.</p>
+<table>
+<thead>
+<tr>
+<th>Tag Key</th>
+<th>Required</th>
+<th>Example Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sap-system-id</code></td>
+<td>Required</td>
+<td><code>PRD</code>, <code>QAS</code>, <code>DEV</code></td>
+<td>Identifies the SAP System ID (SID) for cost allocation per SAP system</td>
+</tr>
+<tr>
+<td><code>sap-component</code></td>
+<td>Required</td>
+<td><code>HANA</code>, <code>APP</code>, <code>ASCS</code>, <code>WDISP</code></td>
+<td>Identifies the SAP component layer for cost reporting</td>
+</tr>
+<tr>
+<td><code>environment</code></td>
+<td>Required</td>
+<td><code>production</code>, <code>non-production</code></td>
+<td>Environment classification for budget segregation</td>
+</tr>
+<tr>
+<td><code>cost-center</code></td>
+<td>Required</td>
+<td><code>CC-SAP-PROD-001</code></td>
+<td>Finance cost allocation code</td>
+</tr>
+<tr>
+<td><code>owner</code></td>
+<td>Required</td>
+<td><code>sap-platform-team@example.com</code></td>
+<td>Ownership for operational accountability</td>
+</tr>
+<tr>
+<td><code>managed-by</code></td>
+<td>Required</td>
+<td><code>bicep-pipeline</code></td>
+<td>Identifies IaC-managed resources; alerts on manual drift</td>
+</tr>
+<tr>
+<td><code>dr-tier</code></td>
+<td>Optional</td>
+<td><code>tier-1</code>, <code>tier-2</code>, <code>none</code></td>
+<td>DR priority tier for failover sequencing</td>
+</tr>
+</tbody>
+</table>
+<p>A monthly cost review cadence is established between the SAP platform team and the FinOps team. The review consumes the Azure Cost Management export (daily granularity, resource-level detail) and compares actual spend against the landing zone cost model. Deviations above 10% trigger a right-sizing review.</p>
+<hr/>
+<h2 id="operations-and-monitoring">Operations and Monitoring<a class="headerlink" href="#operations-and-monitoring" title="Permanent link">¶</a></h2>
+<h3 id="monitoring-architecture">Monitoring architecture<a class="headerlink" href="#monitoring-architecture" title="Permanent link">¶</a></h3>
+<p>SAP workloads on Azure require a layered monitoring architecture that spans infrastructure telemetry, OS-level metrics, database internals, and application-layer health signals. The canonical design uses a single Azure Monitor Log Analytics workspace per SAP environment tier (non-production and production separated), with Azure Monitor serving as the unified collection and query plane.</p>
+<p><strong>Log Analytics workspace design</strong></p>
+<p>Deploy one Log Analytics workspace per environment tier. The production workspace uses a 90-day interactive retention period and a 365-day total retention period (archive tier at 90+ days). The non-production workspace uses 30-day interactive and 90-day total retention. Workspace pricing uses the Commitment Tier (100 GB/day commitment or higher depending on ingestion volume) to reduce per-GB ingestion cost relative to pay-as-you-go.</p>
+<p>Data collection rules (DCRs) replace legacy workspace-level collection settings. DCRs are defined per VM role (HANA DCR, ASCS DCR, application server DCR) and assigned to the corresponding managed identity-based VM association. This allows fine-grained control over which log sources and performance counters are collected per role, reducing ingestion noise and cost.</p>
+<p><strong>Azure Monitor Agent deployment</strong></p>
+<p>Azure Monitor Agent (AMA) is deployed to all SAP VMs via the <code>AzureMonitorLinuxAgent</code> VM extension, provisioned through the Bicep landing zone modules. AMA replaces the legacy Microsoft Monitoring Agent (MMA) and the OMS agent. Do not deploy both AMA and MMA on the same VM; the dual-agent configuration causes duplicate data ingestion and alert noise.</p>
+<p><strong>SAP monitoring extension (Azure Extension for SAP)</strong></p>
+<p>The Azure Extension for SAP (formerly SAP Enhanced Monitoring) is installed on all SAP VMs. This extension exposes infrastructure metrics (CPU, memory, disk I/O, network I/O) to the SAP host agent in the format required by SAP transaction ST05, ST12, and DBACOCKPIT. The extension is a prerequisite for SAP Support per SAP Note 2015553. Deploy the <code>new</code> version of the extension (not the <code>classic</code> version) for all VMs running on hypervisor generations Gen2.</p>
+<h3 id="alert-strategy">Alert strategy<a class="headerlink" href="#alert-strategy" title="Permanent link">¶</a></h3>
+<p>Alerts are tiered by severity. Severity 0 (critical) alerts page the on-call engineer immediately. Severity 1 (high) alerts create incidents in the ITSM system within 5 minutes. Severity 2 (medium) alerts create incidents in normal business hours. Severity 3 (informational) alerts are logged only.</p>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Source</th>
+<th>Metric / Query</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Action Group</th>
+<th>Remediation Runbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA memory utilization critical</td>
+<td>Azure Monitor Metrics</td>
+<td>Percentage Memory on HANA VM</td>
+<td>&gt; 95% for 5 minutes</td>
+<td>0 — Critical</td>
+<td>ag-sap-oncall-prod</td>
+<td>runbook-hana-memory-high</td>
+</tr>
+<tr>
+<td>HANA memory utilization warning</td>
+<td>Azure Monitor Metrics</td>
+<td>Percentage Memory on HANA VM</td>
+<td>&gt; 90% for 10 minutes</td>
+<td>1 — High</td>
+<td>ag-sap-prod</td>
+<td>runbook-hana-memory-high</td>
+</tr>
+<tr>
+<td>HANA disk I/O throughput degradation</td>
+<td>Log Analytics KQL</td>
+<td>AzureMetrics where MetricName == "Disk Write Bytes/sec"</td>
+<td>&lt; 200 MB/s for 5 minutes on /hana/log</td>
+<td>1 — High</td>
+<td>ag-sap-prod</td>
+<td>runbook-hana-storage-throughput</td>
+</tr>
+<tr>
+<td>HANA System Replication lag</td>
+<td>SAP HANA monitoring view</td>
+<td>SYS.M_SERVICE_REPLICATION.LOG_POSITION_TIME lag</td>
+<td>&gt; 30 seconds</td>
+<td>0 — Critical</td>
+<td>ag-sap-oncall-prod</td>
+<td>runbook-hana-hsr-lag</td>
+</tr>
+<tr>
+<td>ASCS cluster resource failed</td>
+<td>Pacemaker log via AMA</td>
+<td>Custom log table: Heartbeat failure or resource in FAILED state</td>
+<td>Any FAILED resource</td>
+<td>0 — Critical</td>
+<td>ag-sap-oncall-prod</td>
+<td>runbook-ascs-cluster-failed</td>
+</tr>
+<tr>
+<td>SAP application server unreachable</td>
+<td>Azure Monitor — VM heartbeat</td>
+<td>Heartbeat | summarize LastCall=max(TimeGenerated) by Computer</td>
+<td>&gt; 5 minutes since last heartbeat</td>
+<td>1 — High</td>
+<td>ag-sap-prod</td>
+<td>runbook-appserver-unreachable</td>
+</tr>
+<tr>
+<td>ExpressRoute circuit utilization</td>
+<td>Azure Monitor Metrics</td>
+<td>BitsInPerSecond on ER circuit</td>
+<td>&gt; 8 Gbps (80% of 10 Gbps circuit) for 30 minutes</td>
+<td>2 — Medium</td>
+<td>ag-sap-prod</td>
+<td>runbook-expressroute-saturation</td>
+</tr>
+<tr>
+<td>Azure Firewall SNAT port exhaustion</td>
+<td>Azure Monitor Metrics</td>
+<td>SNATPortUtilization on Azure Firewall</td>
+<td>&gt; 80% for 15 minutes</td>
+<td>1 — High</td>
+<td>ag-sap-prod</td>
+<td>runbook-firewall-snat</td>
+</tr>
+<tr>
+<td>SAP VM CPU saturation</td>
+<td>Azure Monitor Metrics</td>
+<td>Percentage CPU on application server VMs</td>
+<td>&gt; 90% for 15 minutes</td>
+<td>2 — Medium</td>
+<td>ag-sap-prod</td>
+<td>runbook-appserver-cpu</td>
+</tr>
+<tr>
+<td>Azure Backup job failure</td>
+<td>Azure Backup alert</td>
+<td>Backup job status != Completed</td>
+<td>Any backup job failure</td>
+<td>1 — High</td>
+<td>ag-sap-prod</td>
+<td>runbook-backup-failure</td>
+</tr>
+<tr>
+<td>Key Vault availability</td>
+<td>Azure Monitor Metrics</td>
+<td>Availability on Key Vault</td>
+<td>&lt; 100% for 5 minutes</td>
+<td>0 — Critical</td>
+<td>ag-sap-oncall-prod</td>
+<td>runbook-keyvault-unavailable</td>
+</tr>
+<tr>
+<td>Defender for Cloud high severity finding</td>
+<td>Microsoft Defender for Cloud</td>
+<td>Security recommendation severity</td>
+<td>High or Critical recommendation on SAP resource</td>
+<td>1 — High</td>
+<td>ag-sap-security</td>
+<td>runbook-defender-finding</td>
+</tr>
+</tbody>
+</table>
+<h3 id="log-collection-strategy">Log collection strategy<a class="headerlink" href="#log-collection-strategy" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Log Source</th>
+<th>Log Category</th>
+<th>Retention (Interactive)</th>
+<th>Retention (Archive)</th>
+<th>Workspace</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA VM — OS syslog</td>
+<td>Linux syslog (AMA)</td>
+<td>90 days</td>
+<td>365 days</td>
+<td>law-sap-prod</td>
+<td>OS-level errors; kernel OOM events; NFS mount failures</td>
+</tr>
+<tr>
+<td>HANA VM — SAP HANA trace logs</td>
+<td>Custom log via AMA file collection</td>
+<td>90 days</td>
+<td>365 days</td>
+<td>law-sap-prod</td>
+<td>HANA internal errors; backup failures; replication errors</td>
+</tr>
+<tr>
+<td>ASCS VM — OS syslog</td>
+<td>Linux syslog (AMA)</td>
+<td>90 days</td>
+<td>365 days</td>
+<td>law-sap-prod</td>
+<td>Pacemaker cluster events; fence agent actions</td>
+</tr>
+<tr>
+<td>ASCS VM — Pacemaker log</td>
+<td>Custom log via AMA file collection (/var/log/pacemaker.log)</td>
+<td>90 days</td>
+<td>365 days</td>
+<td>law-sap-prod</td>
+<td>Cluster resource state changes; failover events</td>
+</tr>
+<tr>
+<td>Application server VMs — SAP system log</td>
+<td>Custom log via AMA</td>
+<td>90 days</td>
+<td>365 days</td>
+<td>law-sap-prod</td>
+<td>SAP work process restarts; RFC connection errors</td>
+</tr>
+<tr>
+<td>All SAP VMs — Azure Monitor Agent heartbeat</td>
+<td>Heartbeat table (built-in)</td>
+<td>30 days</td>
+<td>90 days</td>
+<td>law-sap-prod</td>
+<td>VM availability monitoring</td>
+</tr>
+<tr>
+<td>Azure Firewall — network rule logs</td>
+<td>AzureDiagnostics / Azure Firewall logs</td>
+<td>30 days</td>
+<td>90 days</td>
+<td>law-sap-prod</td>
+<td>Firewall allow/deny decisions for SAP ports</td>
+</tr>
+<tr>
+<td>NSG flow logs — all SAP subnets</td>
+<td>NSG flow logs (via DCR)</td>
+<td>30 days</td>
+<td>90 days</td>
+<td>law-sap-prod</td>
+<td>Network traffic analysis; security investigation</td>
+</tr>
+<tr>
+<td>Key Vault — audit logs</td>
+<td>AzureDiagnostics (KVAuditLogs)</td>
+<td>90 days</td>
+<td>365 days</td>
+<td>law-sap-prod</td>
+<td>Secret access auditing; certificate operations</td>
+</tr>
+<tr>
+<td>Microsoft Entra ID — sign-in logs</td>
+<td>SigninLogs</td>
+<td>30 days</td>
+<td>90 days</td>
+<td>law-sap-prod</td>
+<td>SAP Fiori authentication events; Conditional Access results</td>
+</tr>
+<tr>
+<td>Microsoft Sentinel — SAP audit log</td>
+<td>SAP Audit Log via SAP data connector</td>
+<td>90 days</td>
+<td>365 days</td>
+<td>law-sap-prod</td>
+<td>SAP security events; privilege escalation; mass data export</td>
+</tr>
+</tbody>
+</table>
+<h3 id="backup-and-recovery">Backup and recovery<a class="headerlink" href="#backup-and-recovery" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Backup Solution</th>
+<th>Frequency</th>
+<th>Interactive Retention</th>
+<th>Archive Retention</th>
+<th>RTO</th>
+<th>RPO</th>
+<th>Test Frequency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP HANA database — full</td>
+<td>Azure Backup for SAP HANA (Backint)</td>
+<td>Daily (00:00 UTC)</td>
+<td>30 days</td>
+<td>90 days (Cool tier)</td>
+<td>4 hours</td>
+<td>24 hours (full backup RPO)</td>
+<td>Quarterly restore test</td>
+</tr>
+<tr>
+<td>SAP HANA database — incremental</td>
+<td>Azure Backup for SAP HANA (Backint)</td>
+<td>Every 4 hours</td>
+<td>7 days</td>
+<td>N/A</td>
+<td>4 hours</td>
+<td>4 hours</td>
+<td>Monthly restore test</td>
+</tr>
+<tr>
+<td>SAP HANA database — log backup</td>
+<td>Azure Backup for SAP HANA (Backint)</td>
+<td>Every 15 minutes</td>
+<td>3 days</td>
+<td>N/A</td>
+<td>4 hours</td>
+<td>15 minutes</td>
+<td>Monthly restore test</td>
+</tr>
+<tr>
+<td>ASCS VM — OS disk snapshot</td>
+<td>Azure Backup VM snapshot</td>
+<td>Daily</td>
+<td>14 days</td>
+<td>N/A</td>
+<td>1 hour</td>
+<td>24 hours</td>
+<td>Quarterly restore test</td>
+</tr>
+<tr>
+<td>Application server VMs — OS disk</td>
+<td>Azure Backup VM snapshot</td>
+<td>Daily</td>
+<td>14 days</td>
+<td>N/A</td>
+<td>30 minutes (redeploy from image)</td>
+<td>24 hours</td>
+<td>Quarterly</td>
+</tr>
+<tr>
+<td>/usr/sap/trans (transport directory)</td>
+<td>Azure Backup — ANF snapshot via backup vault</td>
+<td>Every 6 hours</td>
+<td>7 days</td>
+<td>30 days</td>
+<td>2 hours</td>
+<td>6 hours</td>
+<td>Quarterly</td>
+</tr>
+<tr>
+<td>Azure Key Vault — soft delete</td>
+<td>Key Vault built-in soft delete</td>
+<td>Continuous</td>
+<td>90 days (purge protection)</td>
+<td>N/A</td>
+<td>Minutes</td>
+<td>Near-zero</td>
+<td>Annual review</td>
+</tr>
+</tbody>
+</table>
+<h3 id="patch-management">Patch management<a class="headerlink" href="#patch-management" title="Permanent link">¶</a></h3>
+<p>SAP systems have a strict patching sequence that must be followed to avoid HANA database corruption or cluster instability. Azure Update Manager is configured with maintenance windows aligned to this sequence.</p>
+<p><strong>SAP patching sequence for production</strong>:
+1. Patch the HANA secondary node first. Verify HSR replication catches up (log position delta = 0) before patching the primary.
+2. Execute a planned HANA System Replication takeover to promote the patched secondary to primary.
+3. Patch the original primary (now secondary). Verify replication re-establishes.
+4. Execute a planned takeover back to restore the original primary/secondary assignment (optional; organizations that track primary/secondary assignment in their runbooks may defer this step to the next scheduled maintenance window).
+5. Patch ASCS ERS node first, then ASCS active node (Pacemaker moves ASCS to ERS node during maintenance).
+6. Patch application servers in batches of 33% to maintain application layer availability throughout patching.</p>
+<div class="admonition warning">
+<p class="admonition-title">SAP kernel updates require patching sequence validation</p>
+<p>When the patching cycle includes a SAP kernel update (not just OS patches), the SAP kernel must be updated on the HANA secondary before promoting it to primary. Updating the kernel on the active primary while HANA is running risks a mid-update crash that cannot be recovered by HSR failover. Coordinate OS and SAP kernel patching windows to occur simultaneously.</p>
+</div>
+<hr/>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<h3 id="management-group-placement">Management group placement<a class="headerlink" href="#management-group-placement" title="Permanent link">¶</a></h3>
+<p>The SAP workload subscriptions are placed in the management group hierarchy as follows. This placement is fixed at landing zone creation time and changes require a formal architecture review.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>Root Management Group
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>└── Platform Management Group
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>    ├── Connectivity Management Group
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>    │   └── Connectivity Subscription (hub VNet, ExpressRoute, Firewall)
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>    ├── Identity Management Group
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>    │   └── Identity Subscription (Microsoft Entra Domain Services, if used)
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>    └── Management Management Group
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>        └── Management Subscription (Log Analytics, Defender for Cloud, Update Manager)
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>└── Landing Zones Management Group
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>    └── SAP Management Group          ← SAP-specific management group
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>        ├── SAP Production Subscription       ← Production SAP workloads
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>        ├── SAP Non-Production Subscription   ← Dev, QAS, sandbox SAP workloads
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a>        └── SAP Connectivity Subscription     ← Optional: SAP-specific edge services
+</span></code></pre></div>
+<p>The SAP Management Group inherits all policies from the Landing Zones Management Group and the Root Management Group. Additional SAP-specific policies are assigned at the SAP Management Group scope, not at the individual subscription scope, to ensure they apply consistently to both production and non-production.</p>
+<h3 id="policy-assignments">Policy assignments<a class="headerlink" href="#policy-assignments" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Assignment Scope</th>
+<th>Effect</th>
+<th>SAP Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Require <code>sap-system-id</code> tag on all resources</td>
+<td>SAP Management Group</td>
+<td>Deny</td>
+<td>Enforces cost allocation tagging; prevents untagged resources from being deployed</td>
+</tr>
+<tr>
+<td>Require <code>environment</code> tag on all resources</td>
+<td>SAP Management Group</td>
+<td>Deny</td>
+<td>Enforces environment classification for budget management</td>
+</tr>
+<tr>
+<td>Deny public IP addresses on VM NICs</td>
+<td>SAP Management Group</td>
+<td>Deny</td>
+<td>All SAP VMs must be accessed via Azure Bastion; public IPs on SAP VMs violate SAP security baseline</td>
+</tr>
+<tr>
+<td>Allowed VM SKUs for SAP production</td>
+<td>SAP Production Subscription</td>
+<td>Deny</td>
+<td>Restricts VM SKUs to certified SAP SKUs listed in SAP Note 1928533; prevents deployment of uncertified SKUs</td>
+</tr>
+<tr>
+<td>Deploy Azure Monitor Agent on Linux VMs</td>
+<td>SAP Management Group</td>
+<td>DeployIfNotExists</td>
+<td>Ensures AMA is installed on all SAP VMs; required for SAP Support per SAP Note 2015553</td>
+</tr>
+<tr>
+<td>Deploy Azure Extension for SAP on VMs</td>
+<td>SAP Management Group</td>
+<td>DeployIfNotExists</td>
+<td>Ensures the SAP enhanced monitoring extension is present; required for SAP Support</td>
+</tr>
+<tr>
+<td>Enable Defender for Servers Plan 2 on subscriptions</td>
+<td>SAP Production Subscription</td>
+<td>DeployIfNotExists</td>
+<td>Enforces FIM and endpoint protection on production SAP VMs</td>
+</tr>
+<tr>
+<td>Require Azure Disk Encryption on VM disks</td>
+<td>SAP Production Subscription</td>
+<td>Audit (promote to Deny post-migration)</td>
+<td>Enforces encryption at rest on all production SAP VM disks</td>
+</tr>
+<tr>
+<td>Deny storage accounts with public blob access</td>
+<td>SAP Management Group</td>
+<td>Deny</td>
+<td>SAP backup storage must use private endpoints; public blob access is prohibited</td>
+</tr>
+<tr>
+<td>Require private endpoints for Key Vault</td>
+<td>SAP Management Group</td>
+<td>Deny</td>
+<td>Key Vault must be accessed via private endpoint from SAP VMs; no public endpoint access</td>
+</tr>
+<tr>
+<td>Deny inbound SSH from internet on NSGs</td>
+<td>SAP Management Group</td>
+<td>Deny</td>
+<td>SSH access is via Azure Bastion only; direct SSH from internet is prohibited</td>
+</tr>
+<tr>
+<td>Require zone-redundant Load Balancer SKU</td>
+<td>SAP Production Subscription</td>
+<td>Deny</td>
+<td>Standard (zone-redundant) SKU required for SAP cluster VIP; Basic SKU does not support HA port rules</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rbac-model">RBAC model<a class="headerlink" href="#rbac-model" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Scope</th>
+<th>Principal Type</th>
+<th>Permissions Granted</th>
+<th>SAP Workload Context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP Platform Engineer (custom role)</td>
+<td>SAP Production Subscription</td>
+<td>Entra ID Group</td>
+<td>VM Start/Stop/Restart; Disk snapshot create; NSG rule read; Log Analytics query</td>
+<td>SAP infrastructure engineers who manage VMs without full Owner access</td>
+</tr>
+<tr>
+<td>SAP Basis Administrator (custom role)</td>
+<td>SAP Production Subscription</td>
+<td>Entra ID Group</td>
+<td>VM extension deploy; Run Command on VMs; Key Vault Secret read; Storage Blob read</td>
+<td>SAP Basis team; required for SAP kernel update and SAP system administration</td>
+</tr>
+<tr>
+<td>Virtual Machine Contributor</td>
+<td>SAP spoke resource groups</td>
+<td>Managed identity (id-sap-mgmt-prod)</td>
+<td>VM stop/start (for STONITH fencing by Pacemaker Azure Fence Agent)</td>
+<td>Pacemaker cluster fencing; no human-assigned role</td>
+</tr>
+<tr>
+<td>Key Vault Secrets User</td>
+<td>SAP Key Vault</td>
+<td>Managed identity per VM role</td>
+<td>Secret read, Certificate read</td>
+<td>HANA SSL certificate retrieval; SAP SNC certificate access</td>
+</tr>
+<tr>
+<td>Storage Blob Data Contributor</td>
+<td>SAP backup storage account</td>
+<td>Managed identity (id-sap-hana-prod)</td>
+<td>Blob write, Blob read, Blob delete</td>
+<td>HANA Backint backup writes to Azure Blob Storage</td>
+</tr>
+<tr>
+<td>Reader</td>
+<td>SAP Production Subscription</td>
+<td>Entra ID Group (SAP Project team, read-only)</td>
+<td>All resource read operations</td>
+<td>Audit access for SAP project managers and architects without change rights</td>
+</tr>
+<tr>
+<td>Network Contributor</td>
+<td>SAP spoke VNet resource group</td>
+<td>Entra ID Group (SAP Platform Engineers)</td>
+<td>NSG rule management; subnet configuration</td>
+<td>Required for NSG rule updates during SAP port change requests</td>
+</tr>
+<tr>
+<td>Security Reader</td>
+<td>SAP Production Subscription</td>
+<td>Entra ID Group (SAP Security team)</td>
+<td>Defender for Cloud read; Security findings read</td>
+<td>SAP security team reviews Defender for Cloud recommendations without change access</td>
+</tr>
+<tr>
+<td>Monitoring Contributor</td>
+<td>Management Subscription (Log Analytics)</td>
+<td>Entra ID Group (SRE team)</td>
+<td>Alert rule create/modify; DCR create/modify; Workbook create/modify</td>
+<td>SRE team configures monitoring without subscription-level Owner access</td>
+</tr>
+<tr>
+<td>Cost Management Reader</td>
+<td>SAP Management Group</td>
+<td>Entra ID Group (FinOps team)</td>
+<td>Cost Management read; Budget read</td>
+<td>FinOps team monitors SAP spend across all subscriptions in the management group</td>
+</tr>
+</tbody>
+</table>
+<h3 id="connectivity-integration">Connectivity integration<a class="headerlink" href="#connectivity-integration" title="Permanent link">¶</a></h3>
+<p>The SAP spoke virtual network is peered to the hub virtual network using Azure Virtual Network Peering with the following settings:</p>
+<ul>
+<li><code>allowVirtualNetworkAccess: true</code> — allows SAP spoke VMs to reach hub resources</li>
+<li><code>allowForwardedTraffic: true</code> — allows traffic forwarded from on-premises via the hub</li>
+<li><code>allowGatewayTransit: false</code> (set on hub side: <code>allowGatewayTransit: true</code>)</li>
+<li><code>useRemoteGateways: true</code> — routes SAP spoke traffic through the hub ExpressRoute and VPN gateways</li>
+</ul>
+<p>The SAP spoke does not deploy its own gateways. All on-premises connectivity routes through the hub ExpressRoute gateway. The ExpressRoute circuit uses Private Peering to connect the on-premises SAP landscape to the Azure hub. The on-premises BGP AS number and the Azure BGP peer AS number are configured per the ExpressRoute circuit provider requirements.</p>
+<p>FastPath is enabled on the ExpressRoute connection to bypass the hub gateway for high-throughput flows (HANA backup traffic, bulk data loads). FastPath routes traffic directly from the on-premises MSEE routers to the SAP spoke VMs without traversing the gateway VM, reducing latency for high-bandwidth operations.</p>
+<p>DNS resolution for SAP private endpoints follows this path: SAP VM sends DNS query to Azure DNS Private Resolver inbound endpoint (in hub). The resolver evaluates conditional forwarder rules. If the query matches a privatelink.* zone, it forwards to Azure DNS (168.63.129.16), which resolves to the private IP of the private endpoint. If the query matches the on-premises SAP domain (e.g., corp.sap.example.com), it forwards to the on-premises DNS server reachable via ExpressRoute.</p>
+<hr/>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/azure/sap/workloads/get-started">SAP workloads on Azure — overview and planning</a> — Primary Microsoft entry point for SAP on Azure architecture, covering supported configurations, planning considerations, and reference architectures</li>
+<li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/sap/enterprise-scale-landing-zone">Azure Landing Zone for SAP</a> — Cloud Adoption Framework enterprise-scale landing zone design for SAP, including subscription topology and management group structure</li>
+<li><a href="https://learn.microsoft.com/azure/sap/workloads/hana-vm-operations">SAP HANA infrastructure configurations and operations on Azure</a> — Detailed guidance on HANA VM configuration, storage layout, OS tuning, and network configuration for Azure</li>
+<li><a href="https://learn.microsoft.com/azure/azure-netapp-files/azure-netapp-files-solution-architectures#sap-hana">Azure NetApp Files for SAP HANA</a> — ANF sizing guidance, NFS mount options, and capacity pool design for SAP HANA volumes</li>
+<li><a href="https://learn.microsoft.com/azure/sap/workloads/high-availability-guide-suse-pacemaker">SAP HANA high availability on Azure VMs (SUSE)</a> — Pacemaker cluster configuration for HANA HSR with Azure Fence Agent on SUSE Linux Enterprise Server</li>
+<li><a href="https://learn.microsoft.com/azure/sap/workloads/high-availability-guide-rhel-pacemaker">SAP HANA high availability on Azure VMs (Red Hat)</a> — Pacemaker cluster configuration for HANA HSR with Azure Fence Agent on Red Hat Enterprise Linux</li>
+<li><a href="https://learn.microsoft.com/azure/sap/workloads/high-availability-guide-suse-shared-disk">ASCS/ERS high availability with Azure shared disk</a> — ASCS/ERS cluster configuration using Azure Shared Disk for /sapmnt on SUSE</li>
+<li><a href="https://learn.microsoft.com/azure/sap/monitor/about-azure-monitor-sap-solutions">Azure Monitor for SAP solutions</a> — Azure Monitor for SAP solutions (AMS) overview; note that AMS and Azure Monitor are complementary and both are referenced in this chapter</li>
+<li><a href="https://learn.microsoft.com/azure/sentinel/sap/deployment-overview">Microsoft Sentinel solution for SAP applications</a> — SAP data connector deployment, analytics rules, and workbook configuration for Sentinel SAP integration</li>
+<li><a href="https://learn.microsoft.com/azure/expressroute/expressroute-erdirect-about">Azure ExpressRoute for SAP workloads</a> — ExpressRoute circuit design for SAP, including FastPath enablement and bandwidth sizing</li>
+<li><a href="https://learn.microsoft.com/azure/well-architected/sap/overview">Azure Well-Architected Framework — SAP workloads</a> — WAF guidance specific to SAP on Azure across all five pillars</li>
+<li><a href="https://learn.microsoft.com/azure/virtual-machines/linux/disk-encryption-overview">Azure Disk Encryption for Linux VMs</a> — ADE prerequisites, key management, and enablement for Linux SAP VMs</li>
+<li><a href="https://learn.microsoft.com/azure/firewall/premium-features">Azure Firewall Premium features</a> — IDPS, TLS inspection, and URL filtering capabilities of Azure Firewall Premium</li>
+<li><a href="https://learn.microsoft.com/azure/dns/dns-private-resolver-overview">Azure DNS Private Resolver</a> — Architecture and deployment guidance for hub-based DNS resolution in enterprise landing zones</li>
+<li><a href="https://learn.microsoft.com/azure/backup/sap-hana-backup-support-matrix">Azure Backup for SAP HANA</a> — Azure Backup support matrix for SAP HANA, including Backint integration, supported HANA versions, and VM SKUs</li>
+<li><a href="https://learn.microsoft.com/azure/active-directory/privileged-identity-management/pim-configure">Azure Privileged Identity Management</a> — PIM configuration for time-limited privileged access to SAP production resources</li>
+<li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/sap/">Cloud Adoption Framework — SAP scenario</a> — Full CAF guidance for SAP migration and modernization on Azure, including strategy, planning, readiness, adoption, and governance phases</li>
+</ul>
+<hr/>
+<h2 id="validation-checklist">Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">¶</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> SAP Notes present and mapped — all 12 SAP Notes in the SAP Notes Reference section have been reviewed and verified against the customer's SAP product versions and SP levels</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Well-Architected alignment complete — all five WAF pillars addressed with specific implementation details, no generic statements</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Mermaid diagram renders correctly — <code>landing-zone-topology-flowchart-01</code> diagram renders in MkDocs without syntax errors; all subgraph labels and edge labels display correctly</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> All design decisions documented with rationale — eight design decisions in the Design Decisions table each contain at least two rejected alternatives with technical rationale for rejection</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> No vague statements — no sentences containing "typically", "generally", "usually" without specific qualifying conditions</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Landing Zone mapping present — Management group hierarchy, policy assignments, RBAC model, and connectivity integration sections are complete</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Security section complete — IAM, network security (with NSG rule tables for HANA and application subnets), data protection, Entra ID integration, and security monitoring sections are present</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Cost optimization section complete — cost model table with 9 cost components, Reservations guidance, and full tagging requirements table with 7 tag keys</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Operations section complete — monitoring architecture, 12-row alert table, log collection table, backup table, and patch management guidance present</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> HA/DR section with RPO/RTO table — 9-row RPO/RTO table covering all SAP layers, DR architecture with cross-region HSR async, and ASR for application layer present</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure subscription quotas verified for M-series and Edsv5-series VM families in the target region before deployment</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> ExpressRoute circuit bandwidth verified to support peak SAP workload plus HANA backup transfer load</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Hub VNet peering configured with <code>useRemoteGateways: true</code> on SAP spoke and <code>allowGatewayTransit: true</code> on hub</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> DNS Private Resolver inbound endpoint IP configured as the DNS server on all SAP spoke VNet DNS settings</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Policy <code>Deny public IP on VM NIC</code> assignment active on SAP Management Group before any VM is deployed</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> AMA extension deployed on all SAP VMs and heartbeat data visible in production Log Analytics workspace</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Extension for SAP (new version) installed on all SAP VMs; verified via SAP transaction SAPOSCOL</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Backup Recovery Services Vault configured with GRS or ZRS; HANA Backint policy applied and first backup completed</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Pacemaker cluster state verified clean (no resources in FAILED or UNMANAGED state) post-deployment</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Cross-zone HSR latency measured and documented: must be below 1 ms RTT per SAP Note 2407186</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> HANA volume throughput verified with fio benchmark: /hana/log &gt;= 250 MB/s; /hana/data &gt;= 400 MB/s</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> NSG flow logs enabled on all SAP subnets and flow data visible in Log Analytics workspace</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Microsoft Sentinel SAP data connector operational; first SAP audit log events ingested</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Defender for Cloud overall secure score for SAP production subscription above 80%</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> DR failover runbook documented, reviewed, and tested in staging environment</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Reservations applied for production HANA VMs; utilization rate confirmed above 95% after first month</li>
+</ul>
+<hr/>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-deploying-sap-hana-vms-in-an-availability-set-instead-of-availability-zones">Anti-pattern: Deploying SAP HANA VMs in an availability set instead of Availability Zones<a class="headerlink" href="#anti-pattern-deploying-sap-hana-vms-in-an-availability-set-instead-of-availability-zones" title="Permanent link">¶</a></h3>
+<p><strong>Configuration:</strong> SAP HANA primary and secondary VMs are placed in an Azure Availability Set (fault domain separation within a single datacenter) rather than in separate Azure Availability Zones.</p>
+<p><strong>Failure mode:</strong> An Availability Set provides fault domain isolation within a single physical zone but does not protect against a zone-level failure (datacenter power loss, cooling failure, network failure). A zone-level outage takes down both VMs in the Availability Set simultaneously, causing an unplanned HANA outage with no automatic failover. Azure SLA for Availability Sets (99.95%) is lower than the SLA for cross-zone deployments (99.99%).</p>
+<p><strong>Correct approach:</strong> Deploy HANA primary in Availability Zone 1 and HANA secondary in Availability Zone 2. Verify that the required M-series VM SKU is available in both target zones in the target region before committing to the zone assignment. Use the Azure CLI command <code>az vm list-skus --location eastus --size Standard_M96ms_v2 --query "[].locationInfo[].zones"</code> to verify zone availability.</p>
+<p><strong>Reference:</strong> SAP Note 2015553; <a href="https://learn.microsoft.com/azure/sap/workloads/sap-ha-availability-zones">Azure Availability Zones for SAP HANA</a></p>
+<hr/>
+<h3 id="anti-pattern-placing-hana-data-and-log-volumes-on-the-same-anf-capacity-pool-as-sap-transport-directories">Anti-pattern: Placing HANA data and log volumes on the same ANF capacity pool as SAP transport directories<a class="headerlink" href="#anti-pattern-placing-hana-data-and-log-volumes-on-the-same-anf-capacity-pool-as-sap-transport-directories" title="Permanent link">¶</a></h3>
+<p><strong>Configuration:</strong> A single ANF capacity pool of the Premium or Ultra tier is used for HANA data volumes, HANA log volumes, and the SAP transport directory (/usr/sap/trans).</p>
+<p><strong>Failure mode:</strong> Burst I/O from large SAP transport imports (especially during project go-live phases when many transports are released simultaneously) saturates the capacity pool's throughput budget. With Manual QoS, this manifests as HANA log volume throughput dropping below the 250 MB/s minimum required by SAP Note 2382421, causing HANA redo log write latency to exceed 250 microseconds. HANA responds by stalling savepoints and eventually causing application timeout errors that appear as intermittent SAP system hangs to end users.</p>
+<p><strong>Correct approach:</strong> Deploy HANA data and log volumes in a dedicated ANF capacity pool with Manual QoS, allocating a guaranteed minimum throughput per SAP Note 2382421 requirements. Deploy the transport directory volume in a separate ANF capacity pool. With separate pools, transport I/O burst cannot consume HANA volume throughput. Use the ANF throughput calculator to validate that the HANA pool's allocated throughput covers peak HANA workload requirements with 20% headroom.</p>
+<p><strong>Reference:</strong> SAP Note 2382421; <a href="https://learn.microsoft.com/azure/azure-netapp-files/azure-netapp-files-performance-considerations">ANF performance considerations</a></p>
+<hr/>
+<h3 id="anti-pattern-using-basic-sku-azure-load-balancer-for-sap-cluster-vips">Anti-pattern: Using Basic SKU Azure Load Balancer for SAP cluster VIPs<a class="headerlink" href="#anti-pattern-using-basic-sku-azure-load-balancer-for-sap-cluster-vips" title="Permanent link">¶</a></h3>
+<p><strong>Configuration:</strong> An Azure Load Balancer with the Basic SKU is deployed to front the ASCS cluster virtual IP and the HANA ILB virtual IP.</p>
+<p><strong>Failure mode:</strong> The Basic SKU Load Balancer does not support Availability Zone redundancy. When the zone hosting the load balancer resource experiences a failure, the VIP becomes unreachable even if both cluster nodes in the other zones are healthy. This means a zone failure takes down the cluster VIP despite the underlying SAP resources surviving. Additionally, the Basic SKU does not support HA port rules, requiring explicit port-by-port rules for each SAP service port, which creates an operational gap when SAP port configurations change.</p>
+<p><strong>Correct approach:</strong> Deploy the Standard SKU Azure Load Balancer for all SAP cluster VIPs. The Standard SKU supports zone-redundant frontend IPs, HA port rules (allowing all TCP/UDP traffic to the cluster VIP without enumerating ports), and a 99.99% SLA when deployed across Availability Zones. Set <code>enableFloatingIP: true</code> (Direct Server Return) on the load balancer rule; this is required for SAP Pacemaker cluster VIP configuration.</p>
+<p><strong>Reference:</strong> <a href="https://learn.microsoft.com/azure/sap/workloads/high-availability-guide-suse-pacemaker#create-azure-load-balancer">Azure Load Balancer Standard for SAP</a>; SAP Note 2562965</p>
+<hr/>
+<h3 id="anti-pattern-routing-hana-system-replication-traffic-through-azure-firewall">Anti-pattern: Routing HANA System Replication traffic through Azure Firewall<a class="headerlink" href="#anti-pattern-routing-hana-system-replication-traffic-through-azure-firewall" title="Permanent link">¶</a></h3>
+<p><strong>Configuration:</strong> The user-defined route table on the HANA database subnet sends all traffic, including the HANA System Replication traffic between primary and secondary VMs in the same subnet, through the Azure Firewall in the hub.</p>
+<p><strong>Failure mode:</strong> HANA System Replication in synchronous mode (SYNC) requires round-trip latency below 1 millisecond per SAP Note 2407186. Azure Firewall adds 1-3 milliseconds of latency for each packet, causing the HSR transport to exceed the synchronous replication latency budget. HANA responds by either: (a) reverting to asynchronous replication mode silently, which increases the RPO to minutes instead of near-zero, or (b) logging replication timeout errors and eventually suspending replication entirely, leaving the HANA system unprotected.</p>
+<p><strong>Correct approach:</strong> Intra-subnet traffic between HANA primary and secondary VMs does not require UDR routing because Azure routes within a subnet directly between VMs without traversing any gateway or firewall. Remove the UDR default route from the HANA subnet for intra-subnet destinations, or implement a more specific UDR that only routes non-HANA traffic to the firewall while leaving HANA-to-HANA traffic on the direct path. Validate HSR latency using <code>hdbnsutil -sr_stateConfiguration --detail</code> after UDR changes.</p>
+<p><strong>Reference:</strong> SAP Note 2407186; <a href="https://learn.microsoft.com/azure/sap/workloads/sap-hana-high-availability-scale-up-anf-suse#configure-sap-hana-system-replication">HANA System Replication network requirements</a></p>
+<hr/>
+<h3 id="anti-pattern-deploying-all-sap-environments-in-a-single-subscription-without-policy-isolation">Anti-pattern: Deploying all SAP environments in a single subscription without policy isolation<a class="headerlink" href="#anti-pattern-deploying-all-sap-environments-in-a-single-subscription-without-policy-isolation" title="Permanent link">¶</a></h3>
+<p><strong>Configuration:</strong> SAP production, quality assurance, development, and sandbox environments are all deployed within a single Azure subscription, differentiated only by resource group naming convention.</p>
+<p><strong>Failure mode:</strong> A misconfigured Azure Policy assignment intended for non-production can affect production resources if the policy scope is accidentally set at the subscription level rather than the resource group level. A developer with Contributor access on the development resource group can access production Key Vault secrets if Key Vault RBAC is configured at the subscription scope. A quota exhaustion event in a non-production environment depletes the shared subscription's quota, potentially blocking production VM scale operations. Blast radius is unrestricted across all environments.</p>
+<p><strong>Correct approach:</strong> Maintain separate subscriptions for production and non-production SAP environments. Place both subscriptions under the SAP Management Group to inherit shared governance policies. Apply production-specific policies (VM SKU restriction, Defender for Servers P2, strict NSG requirements) at the production subscription scope. Non-production subscriptions use relaxed policies that allow lower-cost VM SKUs and reduced monitoring overhead. Budget isolation and quota isolation are independent per subscription.</p>
+<p><strong>Reference:</strong> <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/sap/eslz-identity-and-access-management">Azure CAF subscription design for SAP</a>; <a href="https://learn.microsoft.com/azure/azure-resource-manager/management/azure-subscription-service-limits">Azure subscription limits</a></p>
+<hr/>
+<h3 id="anti-pattern-using-ssh-key-pairs-stored-on-local-developer-workstations-to-access-sap-vms">Anti-pattern: Using SSH key pairs stored on local developer workstations to access SAP VMs<a class="headerlink" href="#anti-pattern-using-ssh-key-pairs-stored-on-local-developer-workstations-to-access-sap-vms" title="Permanent link">¶</a></h3>
+<p><strong>Configuration:</strong> SAP VM SSH access is granted using SSH key pairs where the private key is stored on individual developer or administrator workstations. No central SSH key management is in place. The SAP VM NSG allows inbound TCP 22 from on-premises corporate IP ranges.</p>
+<p><strong>Failure mode:</strong> SSH private keys stored on developer workstations are subject to workstation compromise, accidental disclosure, and key loss when workstations are replaced. There is no audit trail for which administrator connected to which SAP VM at what time. SSH keys do not expire and are not automatically rotated. A terminated employee's SSH private key remains valid until the corresponding public key is manually removed from all SAP VMs — an error-prone manual process at scale. NSG rules allowing SSH from on-premises CIDR ranges provide no protection if the on-premises network is compromised.</p>
+<p><strong>Correct approach:</strong> Remove all NSG rules allowing inbound SSH from on-premises or internet. Require all VM access through Azure Bastion (Standard SKU) with Microsoft Entra ID authentication. Azure Bastion provides a web-based and native client SSH experience with full session logging to Log Analytics. Entra ID Conditional Access enforces MFA for all Bastion sessions. SSH keys are not required because Bastion with Entra ID authentication replaces the SSH key authentication model. For automation pipelines requiring SSH access, use managed identity authentication with Azure Bastion tunneling.</p>
+<p><strong>Reference:</strong> <a href="https://learn.microsoft.com/azure/bastion/connect-native-client-windows">Azure Bastion native client</a>; <a href="https://learn.microsoft.com/azure/bastion/session-monitoring">Azure Bastion session recording</a></p>
+<hr/>
+<h3 id="anti-pattern-enabling-the-azure-monitor-legacy-microsoft-monitoring-agent-mma-alongside-the-azure-monitor-agent-ama">Anti-pattern: Enabling the Azure Monitor legacy Microsoft Monitoring Agent (MMA) alongside the Azure Monitor Agent (AMA)<a class="headerlink" href="#anti-pattern-enabling-the-azure-monitor-legacy-microsoft-monitoring-agent-mma-alongside-the-azure-monitor-agent-ama" title="Permanent link">¶</a></h3>
+<p><strong>Configuration:</strong> The landing zone deploys both the MMA (OMSAgentForLinux extension) and AMA (AzureMonitorLinuxAgent extension) on SAP VMs during a migration or upgrade cycle, with both agents configured to send data to the same Log Analytics workspace.</p>
+<p><strong>Failure mode:</strong> Dual-agent deployments cause duplicate data ingestion into Log Analytics, doubling the ingestion cost for all overlapping log sources (syslog, performance counters, heartbeat). Alert rules based on log queries return duplicate results, triggering double the number of alerts for each condition. Data collection rules (DCRs) used by AMA conflict with legacy workspace-level collection settings used by MMA, producing inconsistent data across alert windows. The MMA has a documented end-of-support date (August 2024); continuing to run MMA after EOL means running an unpatched monitoring agent on all SAP VMs.</p>
+<p><strong>Correct approach:</strong> During the AMA migration, run AMA and MMA in parallel for a maximum of 30 days in a staging environment to validate data parity. After validation, remove the MMA extension from all VMs before deploying AMA to production. Use the Azure Policy <code>DeployIfNotExists</code> for AMA and a companion <code>Deny</code> policy for MMA to prevent re-installation. The migration sequence is: deploy AMA with DCRs to staging → validate data completeness for 7 days → remove MMA from staging → replicate to production with the same sequence.</p>
+<p><strong>Reference:</strong> <a href="https://learn.microsoft.com/azure/azure-monitor/agents/azure-monitor-agent-migration">MMA to AMA migration guide</a>; SAP Note 2015553 (AMA is the supported agent for the Azure Extension for SAP new version)</p>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="connectivity-sap-application-servers-cannot-reach-sap-hana-on-port-30015">Connectivity: SAP application servers cannot reach SAP HANA on port 30015<a class="headerlink" href="#connectivity-sap-application-servers-cannot-reach-sap-hana-on-port-30015" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> SAP application servers log RFC connection errors or HANA SQL connection failures. The SAP system log (transaction SM21) shows <code>HANA connection refused</code> or <code>TCP connection timed out</code> errors on TCP port 30015. SAP work processes restart repeatedly.</p>
+<p><strong>Root Cause:</strong> NSG rules on the HANA database subnet are blocking inbound traffic from the application server subnet on port 30015. This commonly occurs when a new application server subnet is added (scale-out) and the HANA NSG is not updated to include the new subnet CIDR, or when an NSG rule was modified during a firewall policy review without SAP port awareness.</p>
+<p><strong>Diagnostic Steps:</strong></p>
+<ol>
+<li>
+<p>Check the effective NSG rules on the HANA VM NIC for inbound TCP 30015 from the application subnet:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>az<span class="w"> </span>network<span class="w"> </span>nic<span class="w"> </span>show-effective-nsg<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span>--name<span class="w"> </span>&lt;hana-vm-nic-name&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span>--resource-group<span class="w"> </span>&lt;resource-group&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"effectiveSecurityRules[?destinationPortRange=='30015']"</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>Check NSG flow logs in Log Analytics for denied traffic from the application subnet to the HANA subnet on port 30015:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>az<span class="w"> </span>monitor<span class="w"> </span>log-analytics<span class="w"> </span>query<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span>--workspace<span class="w"> </span>&lt;workspace-id&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span>--analytics-query<span class="w"> </span><span class="s2">"AzureNetworkAnalytics_CL | where FlowDirection_s == 'I' and FlowStatus_s == 'D' and DestPort_d == 30015 | order by TimeGenerated desc | take 50"</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>Test TCP connectivity from an application server VM to the HANA VIP on port 30015:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># Run on the SAP application server VM via Azure Bastion</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>nc<span class="w"> </span>-zv<span class="w"> </span>&lt;hana-ilb-ip&gt;<span class="w"> </span><span class="m">30015</span>
+</span></code></pre></div>
+</li>
+</ol>
+<p><strong>Resolution:</strong> Add or restore the NSG inbound allow rule on the HANA subnet NSG permitting TCP 30015 from the application server subnet CIDR. If using Azure Firewall application rules in addition to NSGs, verify the Firewall network rule collection also permits this traffic. After updating the NSG, test connectivity using the <code>nc</code> command above before restarting SAP work processes.</p>
+<p><strong>Prevention:</strong> Automate NSG rule deployment through IaC (Bicep). Manually edited NSG rules drift from the IaC definition. Implement Azure Policy <code>Audit</code> effect to detect NSG rules that do not match the approved rule set in the repository.</p>
+<hr/>
+<h3 id="high-availability-ascs-pacemaker-cluster-resource-fails-to-fence-a-failed-node">High Availability: ASCS Pacemaker cluster resource fails to fence a failed node<a class="headerlink" href="#high-availability-ascs-pacemaker-cluster-resource-fails-to-fence-a-failed-node" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> After an ASCS VM failure, Pacemaker logs show <code>stonith-fence_azure_arm</code> returning <code>failed</code> or <code>not seen</code> status. The cluster enters a split-brain protection state and moves all resources to the <code>stopped</code> state, causing SAP to be completely unavailable rather than failing over. The Pacemaker log (/var/log/pacemaker.log) shows <code>ERROR: fence_azure_arm: not configured</code> or <code>authentication failed</code>.</p>
+<p><strong>Root Cause:</strong> The Azure Fence Agent (<code>fence_azure_arm</code>) uses the managed identity assigned to the cluster VMs to call the Azure Resource Manager API and power off the failed node (STONITH). If the managed identity does not have the <code>Virtual Machine Contributor</code> role on the resource group containing the ASCS VMs, the fencing call fails with an authorization error. This can occur if the RBAC assignment was removed during a subscription policy remediation sweep or if the VMs were moved to a different resource group.</p>
+<p><strong>Diagnostic Steps:</strong></p>
+<ol>
+<li>
+<p>Verify the managed identity assigned to the ASCS VMs has <code>Virtual Machine Contributor</code> on the ASCS resource group:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>list<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">  </span>--assignee<span class="w"> </span>&lt;managed-identity-principal-id&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">  </span>--scope<span class="w"> </span>/subscriptions/&lt;subscription-id&gt;/resourceGroups/&lt;ascs-resource-group&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"[?roleDefinitionName=='Virtual Machine Contributor']"</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>Test the fence agent manually from one ASCS node (this powers off the other node — do not run in production without coordination):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1"># On the ASCS node that is NOT being fenced (run as root)</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>fence_azure_arm<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span>--msi<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">  </span>--resourceGroup<span class="w"> </span>&lt;ascs-resource-group&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-5"><a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">  </span>--action<span class="w"> </span>status<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-6"><a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">  </span>--plug<span class="w"> </span>&lt;ascs-vm-2-name&gt;
+</span></code></pre></div>
+</li>
+<li>
+<p>Review Pacemaker log for fence agent error details:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">"stonith\|fence"</span><span class="w"> </span>/var/log/pacemaker.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-50
+</span></code></pre></div>
+</li>
+</ol>
+<p><strong>Resolution:</strong> Restore the <code>Virtual Machine Contributor</code> RBAC assignment for the managed identity on the ASCS resource group. After restoring the assignment, allow 5 minutes for the RBAC propagation to complete (Azure RBAC propagation latency), then run the <code>fence_azure_arm --action status</code> test above to confirm the fence agent can reach the Azure Resource Manager API. Restart Pacemaker only after confirming fencing is operational.</p>
+<p><strong>Prevention:</strong> Include the RBAC assignment in the IaC Bicep module for the ASCS cluster. Configure an Azure Monitor alert that triggers when the <code>Virtual Machine Contributor</code> role assignment count on the ASCS resource group drops below the expected value.</p>
+<hr/>
+<h3 id="performance-sap-hana-log-volume-write-throughput-below-250-mbs-threshold">Performance: SAP HANA log volume write throughput below 250 MB/s threshold<a class="headerlink" href="#performance-sap-hana-log-volume-write-throughput-below-250-mbs-threshold" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> SAP HANA traces show savepoint stalls or <code>REDO LOG FULL</code> conditions. SAP transaction DB02 shows increasing log segment consumption. HANA alert <code>log volume full</code> is triggered. SAP users experience slow dialog response times and occasional short dumps with time limit exceeded errors.</p>
+<p><strong>Root Cause:</strong> The ANF volume hosting the HANA log (/hana/log) has a throughput allocation lower than the SAP Note 2382421 minimum of 250 MB/s. This occurs when: (1) the ANF capacity pool was provisioned with Auto QoS and the log volume size was set too small (Auto QoS allocates throughput proportionally to volume size within the pool), or (2) the ANF capacity pool was provisioned with Manual QoS but the volume throughput was set below 250 MB/s to reduce cost.</p>
+<p><strong>Diagnostic Steps:</strong></p>
+<ol>
+<li>
+<p>Check current ANF volume throughput allocation and actual throughput from Azure Monitor:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>az<span class="w"> </span>monitor<span class="w"> </span>metrics<span class="w"> </span>list<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">  </span>--resource<span class="w"> </span>&lt;anf-volume-resource-id&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">  </span>--metric<span class="w"> </span><span class="s2">"WriteIops"</span><span class="w"> </span><span class="s2">"WriteThroughput"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">  </span>--interval<span class="w"> </span>PT1M<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">  </span>--start-time<span class="w"> </span>&lt;iso8601-start-time&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-6"><a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">  </span>--end-time<span class="w"> </span>&lt;iso8601-end-time&gt;
+</span></code></pre></div>
+</li>
+<li>
+<p>Check NFS mount options on the HANA VM to confirm <code>nconnect=4</code> is set (single TCP connection limits throughput to ~100 MB/s):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1"># On the HANA VM via Azure Bastion</span>
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>grep<span class="w"> </span><span class="s2">"/hana/log"</span><span class="w"> </span>/proc/mounts
+</span></code></pre></div>
+</li>
+<li>
+<p>Run a fio throughput test against the HANA log volume to determine current maximum throughput:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="c1"># Run on HANA VM with HANA STOPPED — do not run with HANA running</span>
+</span><span id="__span-9-4"><a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a>fio<span class="w"> </span>--filename<span class="o">=</span>/hana/log/throughput_test<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-5"><a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">    </span>--direct<span class="o">=</span><span class="m">1</span><span class="w"> </span>--rw<span class="o">=</span>write<span class="w"> </span>--bs<span class="o">=</span>256k<span class="w"> </span>--ioengine<span class="o">=</span>libaio<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-6"><a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="w">    </span>--iodepth<span class="o">=</span><span class="m">64</span><span class="w"> </span>--numjobs<span class="o">=</span><span class="m">4</span><span class="w"> </span>--runtime<span class="o">=</span><span class="m">30</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-7"><a href="#__codelineno-9-7" id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">    </span>--group_reporting<span class="w"> </span>--name<span class="o">=</span>hana-log-write-throughput
+</span></code></pre></div>
+</li>
+</ol>
+<p><strong>Resolution:</strong> If the issue is insufficient ANF throughput allocation: modify the ANF volume throughput allocation using the Azure portal or Azure CLI to set the throughput to a minimum of 250 MB/s. If the pool uses Auto QoS, either increase the volume size (throughput scales with size at Auto QoS) or convert the pool to Manual QoS. If the issue is missing <code>nconnect</code> mount option: update /etc/fstab on the HANA VM to add <code>nconnect=4</code> to the /hana/log NFS mount options, then remount the volume (<code>umount /hana/log &amp;&amp; mount /hana/log</code>) with HANA stopped.</p>
+<p><strong>Prevention:</strong> Validate ANF volume throughput and NFS mount options as part of the post-deployment validation checklist. The <code>fio</code> benchmark must pass before HANA is started for the first time. Alert on ANF <code>WriteThroughput</code> metric dropping below 200 MB/s for 5 minutes.</p>
+<hr/>
+<h3 id="security-azure-key-vault-secrets-unreachable-from-sap-hana-vm">Security: Azure Key Vault secrets unreachable from SAP HANA VM<a class="headerlink" href="#security-azure-key-vault-secrets-unreachable-from-sap-hana-vm" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> HANA VM startup scripts or SAP software provisioning scripts report <code>HTTP 403 Forbidden</code> or <code>HTTP 404 Not Found</code> when calling the Key Vault secrets API. HANA SSL certificate retrieval fails at startup. The error message includes <code>The vault may not exist</code> even though the vault is visible in the Azure portal.</p>
+<p><strong>Root Cause:</strong> The most common cause is DNS resolution failure for the Key Vault private endpoint. The HANA VM resolves the Key Vault FQDN (e.g., kv-sap-prod-001.vault.azure.net) to the Key Vault's public IP instead of the private endpoint IP, and the Key Vault has the public endpoint disabled. This occurs when: (1) the DNS Private Resolver is not configured as the DNS server for the SAP spoke VNet, or (2) the Azure private DNS zone <code>privatelink.vaultcore.azure.net</code> is not linked to the hub VNet where the DNS resolver resides.</p>
+<p><strong>Diagnostic Steps:</strong></p>
+<ol>
+<li>
+<p>Verify DNS resolution from the HANA VM resolves to the private endpoint IP (10.x.x.x range), not the public Key Vault IP:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="c1"># On the HANA VM via Azure Bastion</span>
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a>nslookup<span class="w"> </span>kv-sap-prod-001.vault.azure.net
+</span><span id="__span-10-3"><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="c1"># Expected: returns 10.x.x.x (private endpoint IP)</span>
+</span><span id="__span-10-4"><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="c1"># Failure: returns a public IP in the 52.x.x.x range</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>Verify the private DNS zone link from the Azure portal or CLI:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a>az<span class="w"> </span>network<span class="w"> </span>private-dns<span class="w"> </span>link<span class="w"> </span>vnet<span class="w"> </span>list<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="w">  </span>--resource-group<span class="w"> </span>&lt;dns-private-zone-resource-group&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-3"><a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="w">  </span>--zone-name<span class="w"> </span><span class="s2">"privatelink.vaultcore.azure.net"</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>Verify the managed identity has the <code>Key Vault Secrets User</code> role on the Key Vault:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a>az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>list<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="w">  </span>--scope<span class="w"> </span>/subscriptions/&lt;sub-id&gt;/resourceGroups/&lt;rg&gt;/providers/Microsoft.KeyVault/vaults/&lt;vault-name&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-12-3"><a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"[?principalId=='&lt;managed-identity-principal-id&gt;']"</span>
+</span></code></pre></div>
+</li>
+</ol>
+<p><strong>Resolution:</strong> If DNS resolves to a public IP: link the <code>privatelink.vaultcore.azure.net</code> private DNS zone to the hub VNet (or the SAP spoke VNet, if the resolver is in the spoke). Verify that the DNS Private Resolver conditional forwarder for <code>privatelink.vaultcore.azure.net</code> points to 168.63.129.16. If DNS resolves correctly but access is still denied: verify the RBAC assignment for the managed identity. Key Vault access policies are deprecated in favor of Azure RBAC; ensure the vault's <code>enableRbacAuthorization</code> property is <code>true</code> and the RBAC assignment is at the vault scope.</p>
+<p><strong>Prevention:</strong> Include a DNS resolution test (<code>nslookup kv-sap-prod-001.vault.azure.net</code>) and a managed identity RBAC test (<code>az keyvault secret show</code> from the VM) in the post-deployment validation script run at the end of the Bicep pipeline.</p>
+<hr/>
+<h3 id="operations-azure-monitor-agent-not-sending-data-to-log-analytics-workspace">Operations: Azure Monitor Agent not sending data to Log Analytics workspace<a class="headerlink" href="#operations-azure-monitor-agent-not-sending-data-to-log-analytics-workspace" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> The Log Analytics workspace shows no heartbeat events from one or more SAP VMs. Azure Monitor alert rules based on VM heartbeat fire. AMA-dependent alerts (HANA memory, CPU, syslog) produce no data. The VM appears healthy in the Azure portal.</p>
+<p><strong>Root Cause:</strong> Common causes include: (1) Data Collection Rule (DCR) association missing or misconfigured — the DCR exists but is not associated with the VM, or the DCR targets a different workspace, (2) AMA extension in a failed state due to a provisioning error or an OS-level permission issue, (3) network connectivity from the VM to the Azure Monitor ingestion endpoint (*.ods.opinsights.azure.com) is blocked by the NSG or Azure Firewall.</p>
+<p><strong>Diagnostic Steps:</strong></p>
+<ol>
+<li>
+<p>Check AMA extension state on the VM:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a>az<span class="w"> </span>vm<span class="w"> </span>extension<span class="w"> </span>show<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-13-2"><a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="w">  </span>--resource-group<span class="w"> </span>&lt;resource-group&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-13-3"><a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="w">  </span>--vm-name<span class="w"> </span>&lt;vm-name&gt;<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-13-4"><a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="w">  </span>--name<span class="w"> </span>AzureMonitorLinuxAgent<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-13-5"><a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="w">  </span>--query<span class="w"> </span><span class="s2">"{state: provisioningState, status: instanceView.statuses[0].displayStatus}"</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>Verify DCR association with the VM:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a>az<span class="w"> </span>monitor<span class="w"> </span>data-collection<span class="w"> </span>rule<span class="w"> </span>association<span class="w"> </span>list<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-2"><a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="w">  </span>--resource<span class="w"> </span>/subscriptions/&lt;sub-id&gt;/resourceGroups/&lt;rg&gt;/providers/Microsoft.Compute/virtualMachines/&lt;vm-name&gt;
+</span></code></pre></div>
+</li>
+<li>
+<p>Check AMA agent logs on the VM for connectivity or configuration errors:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="c1"># On the VM via Azure Bastion</span>
+</span><span id="__span-15-2"><a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a>sudo<span class="w"> </span>cat<span class="w"> </span>/var/log/azure/Microsoft.Azure.Monitor.AzureMonitorLinuxAgent/extension.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-100
+</span><span id="__span-15-3"><a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>azuremonitoragent
+</span></code></pre></div>
+</li>
+<li>
+<p>Test network connectivity from the VM to the AMA ingestion endpoint:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="c1"># On the VM via Azure Bastion</span>
+</span><span id="__span-16-2"><a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a>curl<span class="w"> </span>-I<span class="w"> </span>https://&lt;workspace-id&gt;.ods.opinsights.azure.com/api/health
+</span></code></pre></div>
+</li>
+</ol>
+<p><strong>Resolution:</strong> If the DCR association is missing: create the association using <code>az monitor data-collection rule association create</code>. If the AMA extension is in a failed state: uninstall and reinstall the extension using <code>az vm extension delete</code> followed by <code>az vm extension set</code>. If network connectivity fails (curl returns connection refused or timeout): verify the NSG on the VM's subnet allows outbound HTTPS (TCP 443) to the <code>AzureMonitor</code> service tag, and verify the Azure Firewall network rules permit outbound from the SAP spoke to the AzureMonitor service tag.</p>
+<p><strong>Prevention:</strong> Deploy the AMA extension and DCR association via IaC in the Bicep provisioning pipeline. The post-deployment validation checklist must include a step that queries the Log Analytics workspace for heartbeat events from newly provisioned VMs within 15 minutes of deployment completion.</p>
+<hr/>
+<h2 id="chapter-metadata">Chapter Metadata<a class="headerlink" href="#chapter-metadata" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter Status</strong></td>
+<td>Approved</td>
+</tr>
+<tr>
+<td><strong>SAP Products Covered</strong></td>
+<td>SAP S/4HANA, SAP HANA 2.0, SAP NetWeaver 7.5, SAP ECC 6.0 EHP8</td>
+</tr>
+<tr>
+<td><strong>Azure Services Covered</strong></td>
+<td>Azure Virtual Machines (M-series, Mv2-series, Edsv5-series), Azure NetApp Files, Azure Firewall Premium, Azure ExpressRoute, Azure Virtual Network, Azure DNS Private Resolver, Azure Bastion, Azure Key Vault, Azure Monitor, Log Analytics, Azure Backup, Microsoft Defender for Cloud, Microsoft Sentinel, Microsoft Entra ID</td>
+</tr>
+<tr>
+<td><strong>Last Updated</strong></td>
+<td>2026-06-29</td>
+</tr>
+<tr>
+<td><strong>Reviewed By</strong></td>
+<td>SAP on Azure Architecture Review Board</td>
+</tr>
+<tr>
+<td><strong>SAP Notes Verified</strong></td>
+<td>2025-06</td>
+</tr>
+<tr>
+<td><strong>Azure Docs Verified</strong></td>
+<td>2026-06-29</td>
+</tr>
+<tr>
+<td><strong>ADR References</strong></td>
+<td>ADR-0001, ADR-0002, ADR-0003, ADR-0004, ADR-0005, ADR-0006, ADR-0007, ADR-0008</td>
+</tr>
+<tr>
+<td><strong>Related Chapters</strong></td>
+<td>networking.md, security.md, hana.md, high-availability.md, operations.md, cost-optimization.md</td>
+</tr>
+</tbody>
+</table>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

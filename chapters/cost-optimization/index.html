@@ -1,0 +1,2700 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/cost-optimization/" rel="canonical"/>
+<link href="../performance/" rel="prev"/>
+<link href="../sap-notes-index/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Cost Optimization - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-on-azure-cost-optimization">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Cost Optimization
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+<nav aria-label="Architecture Overview" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-sap-cost-governance-architecture">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: SAP Cost Governance Architecture
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+<nav aria-label="SAP Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-sizing-methodology-impact-on-cost">
+<span class="md-ellipsis">
+      
+        SAP Sizing Methodology Impact on Cost
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-cost-architecture-impact">
+<span class="md-ellipsis">
+      
+        SAP Notes -- Cost Architecture Impact
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+<nav aria-label="Azure Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-cost-management-billing-for-sap">
+<span class="md-ellipsis">
+      
+        Azure Cost Management + Billing for SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-allocation-tags">
+<span class="md-ellipsis">
+      
+        Cost Allocation Tags
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#chargeback-model">
+<span class="md-ellipsis">
+      
+        Chargeback Model
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reserved-instances-for-sap-vms">
+<span class="md-ellipsis">
+      
+        Reserved Instances for SAP VMs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-savings-plans">
+<span class="md-ellipsis">
+      
+        Azure Savings Plans
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-hybrid-benefit">
+<span class="md-ellipsis">
+      
+        Azure Hybrid Benefit
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#devtest-pricing">
+<span class="md-ellipsis">
+      
+        Dev/Test Pricing
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#spot-vms-for-non-production-sap">
+<span class="md-ellipsis">
+      
+        Spot VMs for Non-Production SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-management-architecture-diagram">
+<span class="md-ellipsis">
+      
+        Cost Management Architecture Diagram
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vm-cost-optimization">
+<span class="md-ellipsis">
+      
+        VM Cost Optimization
+      
+    </span>
+</a>
+<nav aria-label="VM Cost Optimization" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-certified-vm-families-cost-and-performance-comparison">
+<span class="md-ellipsis">
+      
+        SAP-Certified VM Families: Cost and Performance Comparison
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vm-rightsizing-process">
+<span class="md-ellipsis">
+      
+        VM Rightsizing Process
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#scheduled-startstop-for-non-production-vms">
+<span class="md-ellipsis">
+      
+        Scheduled Start/Stop for Non-Production VMs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-automation-runbooks-for-vm-lifecycle">
+<span class="md-ellipsis">
+      
+        Azure Automation Runbooks for VM Lifecycle
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#storage-cost-optimization">
+<span class="md-ellipsis">
+      
+        Storage Cost Optimization
+      
+    </span>
+</a>
+<nav aria-label="Storage Cost Optimization" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ultra-disk-vs-premium-ssd-v2-vs-premium-ssd-decision-matrix">
+<span class="md-ellipsis">
+      
+        Ultra Disk vs Premium SSD v2 vs Premium SSD Decision Matrix
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-netapp-files-capacity-pool-optimization">
+<span class="md-ellipsis">
+      
+        Azure NetApp Files Capacity Pool Optimization
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-storage-tiering">
+<span class="md-ellipsis">
+      
+        Backup Storage Tiering
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-blob-coldarchive-for-long-term-sap-backups">
+<span class="md-ellipsis">
+      
+        Azure Blob Cold/Archive for Long-Term SAP Backups
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#license-cost-optimization">
+<span class="md-ellipsis">
+      
+        License Cost Optimization
+      
+    </span>
+</a>
+<nav aria-label="License Cost Optimization" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#windows-server-byos">
+<span class="md-ellipsis">
+      
+        Windows Server BYOS
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rhelsles-byos-vs-pay-as-you-go">
+<span class="md-ellipsis">
+      
+        RHEL/SLES BYOS vs Pay-As-You-Go
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql-server-byol-for-sap">
+<span class="md-ellipsis">
+      
+        SQL Server BYOL for SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-license-compliance-on-azure">
+<span class="md-ellipsis">
+      
+        Oracle License Compliance on Azure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-software-licensing-model-on-azure">
+<span class="md-ellipsis">
+      
+        SAP Software Licensing Model on Azure
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+<nav aria-label="Azure Well-Architected Alignment" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization-pillar">
+<span class="md-ellipsis">
+      
+        Cost Optimization Pillar
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability-pillar">
+<span class="md-ellipsis">
+      
+        Reliability Pillar
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-pillar">
+<span class="md-ellipsis">
+      
+        Security Pillar
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operational-excellence-pillar">
+<span class="md-ellipsis">
+      
+        Operational Excellence Pillar
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance-efficiency-pillar">
+<span class="md-ellipsis">
+      
+        Performance Efficiency Pillar
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-architecture">
+<span class="md-ellipsis">
+      
+        Security Architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability-and-high-availability">
+<span class="md-ellipsis">
+      
+        Reliability and High Availability
+      
+    </span>
+</a>
+<nav aria-label="Reliability and High Availability" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rpo-rto-table">
+<span class="md-ellipsis">
+      
+        RPO / RTO Table
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization-summary">
+<span class="md-ellipsis">
+      
+        Cost Optimization Summary
+      
+    </span>
+</a>
+<nav aria-label="Cost Optimization Summary" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#savings-table">
+<span class="md-ellipsis">
+      
+        Savings Table
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operations-and-monitoring">
+<span class="md-ellipsis">
+      
+        Operations and Monitoring
+      
+    </span>
+</a>
+<nav aria-label="Operations and Monitoring" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-management-budgets-and-alerts">
+<span class="md-ellipsis">
+      
+        Cost Management Budgets and Alerts
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-anomaly-detection">
+<span class="md-ellipsis">
+      
+        Cost Anomaly Detection
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#showback-and-chargeback-reports">
+<span class="md-ellipsis">
+      
+        Showback and Chargeback Reports
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#finops-tooling-integration">
+<span class="md-ellipsis">
+      
+        FinOps Tooling Integration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alert-table">
+<span class="md-ellipsis">
+      
+        Alert Table
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-governance-maturity-model">
+<span class="md-ellipsis">
+      
+        Cost Governance Maturity Model
+      
+    </span>
+</a>
+<nav aria-label="Cost Governance Maturity Model" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#stage-1-reactive-months-0-3-post-migration">
+<span class="md-ellipsis">
+      
+        Stage 1: Reactive (Months 0-3 Post-Migration)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#stage-2-informed-months-3-6">
+<span class="md-ellipsis">
+      
+        Stage 2: Informed (Months 3-6)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#stage-3-optimized-months-6-12">
+<span class="md-ellipsis">
+      
+        Stage 3: Optimized (Months 6-12)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#stage-4-continuous-optimization-month-12">
+<span class="md-ellipsis">
+      
+        Stage 4: Continuous Optimization (Month 12+)
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#finops-practices-for-sap-lifecycle-events">
+<span class="md-ellipsis">
+      
+        FinOps Practices for SAP Lifecycle Events
+      
+    </span>
+</a>
+<nav aria-label="FinOps Practices for SAP Lifecycle Events" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-system-upgrades-and-migrations">
+<span class="md-ellipsis">
+      
+        SAP System Upgrades and Migrations
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-support-pack-stack-upgrades">
+<span class="md-ellipsis">
+      
+        SAP Support Pack Stack Upgrades
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-system-decommissions">
+<span class="md-ellipsis">
+      
+        SAP System Decommissions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#quarter-end-and-year-end-sap-batch-peaks">
+<span class="md-ellipsis">
+      
+        Quarter-End and Year-End SAP Batch Peaks
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#implementation-reference">
+<span class="md-ellipsis">
+      
+        Implementation Reference
+      
+    </span>
+</a>
+<nav aria-label="Implementation Reference" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-cli-commands-for-cost-operations">
+<span class="md-ellipsis">
+      
+        Azure CLI Commands for Cost Operations
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#validation-checklist">
+<span class="md-ellipsis">
+      
+        Validation Checklist
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-1-procuring-ris-before-vm-sku-stabilization">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 1: Procuring RIs Before VM SKU Stabilization
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-2-applying-spot-vms-to-sap-workloads-without-eviction-handling">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 2: Applying Spot VMs to SAP Workloads Without Eviction Handling
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-3-tagging-non-enforcement-leading-to-cost-allocation-blind-spots">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 3: Tagging Non-Enforcement Leading to Cost Allocation Blind Spots
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-4-ignoring-anf-snapshot-storage-accumulation">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 4: Ignoring ANF Snapshot Storage Accumulation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-5-purchasing-ri-at-shared-scope-without-production-isolation">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 5: Purchasing RI at Shared Scope Without Production Isolation
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#symptom-production-hana-ri-utilization-consistently-below-95">
+<span class="md-ellipsis">
+      
+        Symptom: Production HANA RI Utilization Consistently Below 95%
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#symptom-non-production-sap-vms-running-24x7-despite-startstop-schedule">
+<span class="md-ellipsis">
+      
+        Symptom: Non-Production SAP VMs Running 24x7 Despite Start/Stop Schedule
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#symptom-azure-cost-management-export-to-blob-storage-contains-incomplete-data-missing-resource-groups">
+<span class="md-ellipsis">
+      
+        Symptom: Azure Cost Management Export to Blob Storage Contains Incomplete Data (Missing Resource Groups)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#symptom-anf-capacity-pool-approaching-limit-unexpectedly">
+<span class="md-ellipsis">
+      
+        Symptom: ANF Capacity Pool Approaching Limit Unexpectedly
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#symptom-chargeback-report-costs-do-not-reconcile-with-azure-invoice">
+<span class="md-ellipsis">
+      
+        Symptom: Chargeback Report Costs Do Not Reconcile With Azure Invoice
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../performance/">
+<span class="md-ellipsis">
+    Phase F — Optimization and Performance
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="sap-on-azure-cost-optimization">SAP on Azure Cost Optimization<a class="headerlink" href="#sap-on-azure-cost-optimization" title="Permanent link">¶</a></h1>
+<hr/>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>Total cost of ownership for SAP on Azure is driven by four primary levers: compute (VM SKU selection and utilization rate), storage (disk type, provisioned capacity versus consumed capacity, and snapshot retention), licensing (operating system, database, and SAP application licensing model choices), and operational overhead (labor hours for patching, monitoring, incident response, and change management). Azure's consumption-based billing model rewards deliberate sizing; an M208ms_v2 VM running at 12% CPU utilization costs the same per hour as one running at 90%. Rightsizing decisions that are deferred at project inception accumulate into the most significant and most preventable cost overruns in SAP cloud migrations.</p>
+<p>Azure's billing model for SAP workloads combines three cost structures that must be managed independently. On-demand pricing provides flexibility but is the highest rate tier; a single Standard_M192ims_v2 (4 TiB RAM) costs approximately USD 43/hour pay-as-you-go in East US 2, or approximately USD 23/hour with a 3-year Reserved Instance commitment--a 46% reduction. Azure Hybrid Benefit allows customers to apply existing Windows Server and SQL Server Software Assurance licenses against the Azure VM base rate, eliminating the OS/database license surcharge on covered VMs. Azure Savings Plans (compute-scoped) provide rate discounts of 17-37% across any compute type in exchange for a 1- or 3-year hourly spend commitment, complementing Reserved Instances for workloads with variable VM SKU requirements such as SAP application servers. Understanding how these three instruments interact--and when they conflict--is prerequisite to any cost optimization engagement.</p>
+<p>FinOps Framework alignment structures this chapter. The FinOps Foundation's three-phase cycle (Inform, Optimize, Operate) maps directly to the SAP on Azure lifecycle: the Inform phase covers tagging, cost allocation, and showback reporting; the Optimize phase covers Reserved Instance purchases, Azure Hybrid Benefit activation, and storage tiering; the Operate phase covers automated start/stop for non-production, anomaly alerting, and continuous rightsizing using Azure Advisor and SAP EarlyWatch Alert data. Cost governance for SAP workloads must be a standing operational practice, not a one-time migration exercise, because SAP landscapes grow organically through transport landscape expansions, sandbox provisioning requests, and temporary capacity additions that are rarely decommissioned.</p>
+<hr/>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>The SAP on Azure cost governance architecture layers Azure-native controls over the SAP landscape's organizational model. At the subscription level, SAP production and non-production workloads occupy separate subscriptions within a dedicated SAP Management Group, which enables subscription-scoped budgets, cost alerts, and policy enforcement without interference from non-SAP workloads. Azure Cost Management + Billing aggregates consumption data across subscriptions and presents it through cost views that can be filtered and grouped by the resource tags applied at deployment time.</p>
+<p>Tag-based cost allocation is the mechanism that translates raw Azure billing data into actionable chargeback or showback reports for SAP business owners. A consistent tagging schema--applied through Azure Policy deployIfNotExists at the resource group level--ensures that every VM, disk, load balancer, and storage account carries the fields required for allocation: SAPSystemID (three-character SID), SAPEnvironment (Production/QA/Development/Sandbox), SAPComponent (HANA/AppServer/ASCS/WebDispatcher/ANF), CostCenter, and ApplicationOwner. Without policy enforcement, tag drift is inevitable across landscapes with dozens of systems and multiple deployment teams.</p>
+<p>Reserved Instance procurement for SAP HANA VMs requires a top-down approach: identify the stable production HANA VM SKU and term commitment first, then procure non-production RI coverage for the SKUs that run predictably in QA and pre-production. The M-series VMs used for SAP HANA qualify for both Azure Reserved Virtual Machine Instances and Azure Savings Plans, but the two instruments cannot stack on the same VM hour. For M-series VMs with a known stable SKU, Reserved Instances consistently outperform Savings Plans because the per-SKU discount depth (up to 46% for 3-year) exceeds the Savings Plan depth (up to 37%) for heavy compute types.</p>
+<p>Continuous cost optimization for SAP is operationalized through three automation loops. The first is a daily Azure Automation runbook that evaluates SAP non-production VM power state schedules and enforces defined start/stop windows, targeting an 80-hour/week runtime reduction from a 168-hour baseline (a 52% compute cost reduction on non-production VMs). The second is a weekly Azure Advisor rightsizing review, integrated into the SAP operations team's Change Advisory Board, which surfaces VMs with sustained CPU utilization below 5% or memory utilization below 20%. The third is a monthly RI utilization review that compares purchased commitment against consumed hours and identifies any stranded commitments from decommissioned SAP systems.</p>
+<h3 id="architecture-diagram-sap-cost-governance-architecture">Architecture Diagram: SAP Cost Governance Architecture<a class="headerlink" href="#architecture-diagram-sap-cost-governance-architecture" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>flowchart TD
+    subgraph mgmtGroup["SAP Management Group"]
+        subgraph prodSub["SAP Production Subscription"]
+            prodRG1["RG: sap-prd-hana\nSID: PRD, Env: Production"]
+            prodRG2["RG: sap-prd-app\nSID: PRD, Env: Production"]
+        end
+        subgraph nonprodSub["SAP Non-Production Subscription"]
+            qaRG["RG: sap-qa-hana\nSID: QAS, Env: QA"]
+            devRG["RG: sap-dev-app\nSID: DEV, Env: Development"]
+            sbxRG["RG: sap-sbx\nSID: SBX, Env: Sandbox"]
+        end
+    end
+
+    subgraph billingPlane["Azure Cost Management + Billing"]
+        budgets["Budgets\nProd: $50k/month\nNon-Prod: $15k/month"]
+        alerts["Cost Alerts\n80%/100%/110% thresholds"]
+        anomaly["Anomaly Detection\nAI-driven daily scan"]
+        costViews["Cost Views\nBy SID / By Environment\nBy Component"]
+    end
+
+    subgraph riPlane["Commitment Instruments"]
+        ri3yr["Reserved Instances 3-Year\nM192ims_v2 x2 (HANA PRD)\nM96s_v2 x1 (HANA QAS)"]
+        ri1yr["Reserved Instances 1-Year\nEdsv5 pool (App Servers)"]
+        ahb["Azure Hybrid Benefit\nWindows Server BYOS\nSQL Server BYOL"]
+        savingsPlan["Savings Plan 1-Year\n$8/hr compute commitment\nNon-production flex coverage"]
+    end
+
+    subgraph automationPlane["Cost Automation -- Azure Automation Account"]
+        startStop["Start/Stop Runbook\nNon-prod schedule 07:00-19:00 Mon-Fri"]
+        taggingPolicy["Azure Policy: deployIfNotExists\nTag enforcement on resource groups"]
+        advisorExport["Advisor Recommendations Export\nWeekly to Log Analytics"]
+    end
+
+    subgraph reportingPlane["FinOps Reporting"]
+        showback["Showback Report\nMonthly by CostCenter tag"]
+        chargeback["Chargeback Export\nCSV to SAP BI via Logic App"]
+        dashboard["Azure Monitor Workbook\nSAP Cost Dashboard"]
+    end
+
+    mgmtGroup --&gt; billingPlane
+    billingPlane --&gt; alerts
+    billingPlane --&gt; anomaly
+    billingPlane --&gt; costViews
+    costViews --&gt; reportingPlane
+    riPlane --&gt; prodSub
+    riPlane --&gt; nonprodSub
+    automationPlane --&gt; nonprodSub
+    taggingPolicy --&gt; mgmtGroup
+    advisorExport --&gt; dashboard</code></pre>
+<hr/>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<h3 id="sap-sizing-methodology-impact-on-cost">SAP Sizing Methodology Impact on Cost<a class="headerlink" href="#sap-sizing-methodology-impact-on-cost" title="Permanent link">¶</a></h3>
+<p>SAP sizing directly determines VM SKU selection, which is the single largest cost driver in an SAP on Azure landscape. The two primary SAP sizing tools--SAP QuickSizer and SAP EarlyWatch Alert--serve different lifecycle phases and produce different outputs that must both feed the Azure VM selection process.</p>
+<p>SAP QuickSizer (available at quicksizer.sap.com) translates business process volumes--document postings per hour, concurrent dialog users, background job runtime--into SAPS (SAP Application Performance Standard) values. One SAPS represents the throughput to process 2,000 fully business-processed order line items per hour. The SAPS value then maps to an Azure VM SKU using the SAPS ratings published in SAP Note 1928533, which lists certified Azure VM types with their benchmark SAPS values. Critically, QuickSizer produces a peak sizing based on user-provided volumes; production systems routinely run at 30-50% of QuickSizer output during typical business hours, making right-sizing at go-live a near-universal opportunity.</p>
+<p>SAP HANA TDI (Tailored Datacenter Integration) sizing applies specifically to HANA in-memory database sizing on non-HANA-appliance (cloud) infrastructure. SAP requires that the HANA host meet the memory, storage throughput, and CPU performance thresholds defined in SAP Note 1943937. Azure VMs are certified against TDI requirements through formal SAP certification; the full certified list is published at the SAP Certified IaaS Platforms directory. For cost purposes, TDI sizing establishes the minimum compliant VM; it does not mandate the maximum. A system sized for 1 TiB HANA memory can deploy on an M96s_v2 (1,873 GiB usable) rather than an M192ims_v2 (4 TiB) if the HANA data footprint is below the M96s_v2 memory capacity.</p>
+<p>SAP EarlyWatch Alert (EWA) is the production rightsizing instrument. EWA reports, generated by SAP Solution Manager or SAP Cloud ALM on a weekly schedule, include CPU utilization percentiles (P50, P95), HANA memory consumption trends, database growth rates, and I/O throughput patterns. These metrics directly inform whether a production HANA VM can be downsized--for example, from M192ims_v2 to M96s_v2 when the EWA report shows HANA data + delta memory consistently below 900 GiB and CPU P95 below 40%. A single VM downsize of this type produces approximately USD 18,000/month in savings on a 3-year Reserved Instance basis.</p>
+<p>SAP transport landscape design has a disproportionate impact on cost because it determines the number of SAP systems required. A three-tier transport landscape (DEV -&gt; QAS -&gt; PRD) requires a minimum of three complete SAP system stacks. Each stack includes a HANA database VM, one or more application server VMs, and ASCS/ERS VMs. Consolidating the development and quality assurance HANA databases onto a single multi-tenant HANA (MDC) instance--where SAP Note 1661202 and the HANA database size permit--can eliminate one full HANA VM from the landscape. At M64s_v2 Reserved Instance pricing of approximately USD 8,400/month (3-year commitment), this consolidation represents a meaningful recurring saving.</p>
+<h3 id="sap-notes-cost-architecture-impact">SAP Notes -- Cost Architecture Impact<a class="headerlink" href="#sap-notes-cost-architecture-impact" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>Defines the complete list of Azure VM SKUs certified for each SAP product; mandatory reference for any VM selection decision</td>
+<td>VM SKU selection for all SAP components</td>
+</tr>
+<tr>
+<td>1943937</td>
+<td>Hardware Configuration Check Tool -- Prerequisites</td>
+<td>Defines minimum storage KPIs (throughput, IOPS, latency) for HANA TDI certification; prevents under-provisioning that causes HANA certification failures</td>
+<td>HANA storage sizing; ANF/disk selection</td>
+</tr>
+<tr>
+<td>2388694</td>
+<td>SAP HANA DB: Recommended OS settings for RHEL 7/RHEL 8</td>
+<td>OS tuning parameters that affect HANA memory usage and swap behavior; incorrect settings inflate HANA memory footprint, preventing downsizing</td>
+<td>RHEL OS baseline for HANA VMs</td>
+</tr>
+<tr>
+<td>1661202</td>
+<td>Multi-tenancy in SAP HANA</td>
+<td>Conditions under which multiple SAP systems can share a single HANA MDC instance; enables database consolidation to reduce HANA VM count</td>
+<td>Transport landscape design (DEV/QAS consolidation)</td>
+</tr>
+<tr>
+<td>3014176</td>
+<td>SAP HANA DB: Use of SAP HANA Dynamic Tiering and SAP HANA Native Storage Extension</td>
+<td>NSE moves warm data to disk; reduces HANA memory footprint, enabling use of smaller (cheaper) HANA VM SKUs</td>
+<td>HANA memory optimization on production systems</td>
+</tr>
+<tr>
+<td>2399079</td>
+<td>Elimination of patch for HANA 2.0</td>
+<td>Applies to HANA 2.0 SPS patch eligibility; patch currency affects support scope and compliance; out-of-support HANA versions cannot be migrated to lower-cost VM SKUs without risk</td>
+<td>HANA patch planning</td>
+</tr>
+<tr>
+<td>2586205</td>
+<td>Latest SAP HANA 2.0 Releases and Their End of Maintenance Date</td>
+<td>Maintenance timeline planning; running post-EOM HANA versions requires SAP Extended Maintenance contracts, adding license cost</td>
+<td>HANA version roadmap</td>
+</tr>
+<tr>
+<td>3299480</td>
+<td>Azure M-series VM support for SAP HANA</td>
+<td>Specifies which exact Msv2/Mdsv3/Mv2 configurations are supported per HANA version/SPS; prevents selection of a certified VM SKU that is incompatible with the installed HANA version</td>
+<td>VM SKU validation for HANA upgrades</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<h3 id="azure-cost-management-billing-for-sap">Azure Cost Management + Billing for SAP<a class="headerlink" href="#azure-cost-management-billing-for-sap" title="Permanent link">¶</a></h3>
+<p>Azure Cost Management + Billing is the primary tool for SAP cost visibility on Azure. It ingests billing data from all subscriptions within the SAP Management Group and makes it queryable with up to 13 months of history. For SAP environments, three custom views are essential: a view grouped by SAPSystemID tag to show per-SID cost; a view grouped by SAPEnvironment tag to compare production versus non-production spend; and a view grouped by resource type to identify the split between compute, storage, networking, and backup costs. These views are created as saved views in the Azure portal and exported as scheduled reports to a designated Azure Blob Storage account for integration with external reporting tools.</p>
+<p>Cost export to Azure Blob Storage (Daily granularity, CSV format) enables downstream processing. A Logic App or Azure Data Factory pipeline reads the daily export, maps CostCenter tag values to internal cost center codes, and pushes the enriched data to an SAP BI or Power BI report. This pipeline forms the chargeback feed for SAP business units. The Logic App runs on a consumption plan; at SAP-scale export volumes (typically 5,000-50,000 rows/day), the execution cost is under USD 5/month.</p>
+<h3 id="cost-allocation-tags">Cost Allocation Tags<a class="headerlink" href="#cost-allocation-tags" title="Permanent link">¶</a></h3>
+<p>The following mandatory tags are enforced via Azure Policy (effect: deployIfNotExists) at the resource group level, with inheritance propagated to child resources at billing time:</p>
+<table>
+<thead>
+<tr>
+<th>Tag Key</th>
+<th>Example Values</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAPSystemID</td>
+<td>PRD, QAS, DEV, SBX</td>
+<td>Per-SID cost allocation; maps to SAP system landscape</td>
+</tr>
+<tr>
+<td>SAPEnvironment</td>
+<td>Production, QA, Development, Sandbox</td>
+<td>Environment-level budget enforcement and alert thresholds</td>
+</tr>
+<tr>
+<td>SAPComponent</td>
+<td>HANA, AppServer, ASCS, WebDispatcher, ANF, Backup</td>
+<td>Component-level analysis to identify storage vs compute cost distribution</td>
+</tr>
+<tr>
+<td>CostCenter</td>
+<td>CC-1234, CC-5678</td>
+<td>Chargeback mapping to financial cost centers</td>
+</tr>
+<tr>
+<td>ApplicationOwner</td>
+<td>firstname.lastname@domain.com</td>
+<td>Escalation contact for anomaly alerts</td>
+</tr>
+<tr>
+<td>Project</td>
+<td>S4H-Migration, BW4HANA-Upgrade</td>
+<td>Project-level cost tracking for CapEx/OpEx reclassification</td>
+</tr>
+</tbody>
+</table>
+<p>Tags are enforced at resource group creation. Individual resource-level tags are treated as overrides; absent a resource-level tag, the resource group tag value propagates in the billing export. Azure Policy initiative <code>sap-cost-tagging-governance</code> bundles all six tag enforcement policies and is assigned at the SAP Management Group scope.</p>
+<h3 id="chargeback-model">Chargeback Model<a class="headerlink" href="#chargeback-model" title="Permanent link">¶</a></h3>
+<p>The SAP chargeback model operates on a monthly cycle aligned to Azure billing periods. Raw Azure costs (compute + storage + networking + backup) for each SAPSystemID are extracted from the Cost Management export. A loading factor of 1.12 is applied to cover shared services not directly attributable to a single SID: shared ANF capacity pool overhead, Azure Bastion hours, Azure Firewall processing units, and Azure Monitor Log Analytics ingestion. The loaded cost per SID is posted to the internal financial system against the CostCenter tag value. A separate showback report--provided for visibility without financial posting--breaks down cost by SAPComponent to help application teams understand where spend is concentrated.</p>
+<h3 id="reserved-instances-for-sap-vms">Reserved Instances for SAP VMs<a class="headerlink" href="#reserved-instances-for-sap-vms" title="Permanent link">¶</a></h3>
+<p>Reserved Instances (RIs) for SAP HANA VMs represent the highest-value commitment instrument in the SAP cost optimization portfolio. M-series VMs run 24x7 without exception for production HANA; the 3-year RI discount of 40-47% over pay-as-you-go is realized in full because there is no idle time. RI scope should be set to the production subscription (not shared) to prevent RI benefit from being consumed by non-production VMs running the same SKU in the non-production subscription.</p>
+<p>Key RI procurement decisions for SAP:</p>
+<ul>
+<li>Procure production HANA RI before non-production RI; production VM SKUs are fixed by SAP certification requirements and do not change without a major HANA upgrade.</li>
+<li>Use instance size flexibility (ISF) for application server RIs: Edsv5-series VMs qualify for ISF within the E-series instance family, allowing the RI to cover E4ds_v5 (ASCS/ERS) and E32ds_v5 (PAS) interchangeably.</li>
+<li>Do not procure RIs for Spot VMs; Spot pricing already provides 60-90% discount and RIs cannot apply to interrupted capacity.</li>
+<li>Review RI utilization monthly; an RI with less than 70% utilization over 30 days indicates a VM has been stopped, resized, or decommissioned.</li>
+</ul>
+<p>Reference pricing (East US 2, Linux, as of mid-2025 estimates; verify current pricing at azure.microsoft.com/pricing/reserved-vm-instances):</p>
+<table>
+<thead>
+<tr>
+<th>VM SKU</th>
+<th>RAM</th>
+<th>Pay-as-you-go/hour</th>
+<th>1-Year RI/hour</th>
+<th>3-Year RI/hour</th>
+<th>3-Year Saving</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard_M96s_v2</td>
+<td>1,873 GiB</td>
+<td>~USD 27.00</td>
+<td>~USD 17.80</td>
+<td>~USD 14.60</td>
+<td>~46%</td>
+</tr>
+<tr>
+<td>Standard_M192ims_v2</td>
+<td>4,096 GiB</td>
+<td>~USD 43.50</td>
+<td>~USD 28.60</td>
+<td>~USD 23.50</td>
+<td>~46%</td>
+</tr>
+<tr>
+<td>Standard_M32ms_v2</td>
+<td>875 GiB</td>
+<td>~USD 12.90</td>
+<td>~USD 8.50</td>
+<td>~USD 6.90</td>
+<td>~46%</td>
+</tr>
+<tr>
+<td>Standard_E32ds_v5</td>
+<td>256 GiB</td>
+<td>~USD 2.70</td>
+<td>~USD 1.90</td>
+<td>~USD 1.55</td>
+<td>~43%</td>
+</tr>
+<tr>
+<td>Standard_E16ds_v5</td>
+<td>128 GiB</td>
+<td>~USD 1.35</td>
+<td>~USD 0.95</td>
+<td>~USD 0.78</td>
+<td>~42%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="azure-savings-plans">Azure Savings Plans<a class="headerlink" href="#azure-savings-plans" title="Permanent link">¶</a></h3>
+<p>Azure Savings Plans (compute-scoped) provide a discount of 17-37% in exchange for a 1- or 3-year hourly spend commitment denominated in USD/hour. For SAP landscapes, Savings Plans are best suited to non-production application server capacity that varies in SKU (e.g., DevOps pipelines resize application servers) but maintains a consistent spend level. Savings Plans apply after Reserved Instances; a VM already covered by an RI does not also consume Savings Plan commitment.</p>
+<p>A typical non-production SAP application server pool running USD 800/hour of on-demand compute can be covered by a Savings Plan commitment of USD 600/hour (75% of expected spend), achieving the plan discount on the committed portion while retaining pay-as-you-go flexibility for burst above the commitment. The remaining 25% pays on-demand rates; this is intentional headroom that avoids stranded commitment during system decommissions or migrations.</p>
+<h3 id="azure-hybrid-benefit">Azure Hybrid Benefit<a class="headerlink" href="#azure-hybrid-benefit" title="Permanent link">¶</a></h3>
+<p>Azure Hybrid Benefit (AHB) eliminates the embedded OS and database license charges from Azure VM pricing when the customer applies qualifying Software Assurance licenses. For SAP workloads:</p>
+<ul>
+<li><strong>Windows Server AHB</strong>: Eliminates the Windows Server license component from VM pricing. On an E32ds_v5, this saves approximately USD 0.50/hour (about USD 360/month). Applied across 20 Windows-based SAP application servers, AHB generates approximately USD 7,200/month in savings without any infrastructure change.</li>
+<li><strong>SQL Server BYOL on Azure</strong>: Customers running SAP on SQL Server with active Software Assurance can apply SQL Server BYOL on Azure VMs. A Standard_E32ds_v5 running SQL Server Enterprise edition saves approximately USD 4.60/hour in SQL Server license cost--approximately USD 3,310/month per VM.</li>
+<li>AHB is activated per VM at deployment time or retroactively through the VM's licensing configuration in the Azure portal or via ARM template/Bicep. Policy enforcement via Azure Policy (effect: audit or deny) prevents new VMs from being deployed without AHB when the required licenses are held.</li>
+</ul>
+<h3 id="devtest-pricing">Dev/Test Pricing<a class="headerlink" href="#devtest-pricing" title="Permanent link">¶</a></h3>
+<p>Azure Dev/Test subscriptions (Enterprise Agreement Dev/Test or Pay-As-You-Go Dev/Test offer) provide discounted rates for non-production workloads. For Visual Studio subscribers:</p>
+<ul>
+<li>Windows Server VMs are provided at Linux base rates (no Windows license charge) for Visual Studio subscribers.</li>
+<li>SQL Server Developer and Enterprise editions are available at no additional license cost under the Dev/Test offer.</li>
+<li>For SAP landscapes, the non-production subscription (SAP Non-Production Subscription in the Management Group) should be created as an EA Dev/Test subscription where contractually permitted, enabling these rate reductions across the entire non-production SAP landscape.</li>
+<li>Dev/Test pricing does not include an SLA; it is not appropriate for any SAP QA system used for production validation or disaster recovery testing under defined RTO/RPO commitments.</li>
+</ul>
+<h3 id="spot-vms-for-non-production-sap">Spot VMs for Non-Production SAP<a class="headerlink" href="#spot-vms-for-non-production-sap" title="Permanent link">¶</a></h3>
+<p>Azure Spot VMs provide access to unused Azure capacity at 60-90% discount over pay-as-you-go rates with the risk of eviction when Azure reclaims the capacity. For SAP landscapes, Spot VM usage is constrained to workloads that can tolerate interruption:</p>
+<ul>
+<li>SAP sandbox systems (SBX) with no active user sessions during off-hours</li>
+<li>SAP build and CI/CD infrastructure for transport-level testing</li>
+<li>Batch processing workloads (e.g., SAP BW process chains run outside business hours)</li>
+</ul>
+<p>Spot VMs are not suitable for SAP HANA production, SAP ASCS/ERS, SAP application servers serving active users, or any system in a transport landscape that an interrupted operation would leave in an inconsistent state. An evicted SAP application server with an active RFC call mid-execution results in a stranded SM66 work process that requires BASIS intervention.</p>
+<p>Spot VM eviction handling for SAP sandbox systems uses Azure Automation: an eviction alert triggers a runbook that records the system state, waits for capacity restoration, and re-starts the VM. The HANA database auto-starts via the sapinit systemd service; application server auto-start uses the SAP start profile <code>Autostart = 1</code> parameter with a 120-second delay to allow HANA to complete crash recovery.</p>
+<h3 id="cost-management-architecture-diagram">Cost Management Architecture Diagram<a class="headerlink" href="#cost-management-architecture-diagram" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>flowchart LR
+    subgraph sources["Cost Data Sources"]
+        prodSub["Production Subscription\nSAP PRD / DR"]
+        npSub["Non-Prod Subscription\nQAS / DEV / SBX"]
+        sharedSvc["Shared Services\nFirewall / Bastion / DNS"]
+    end
+
+    subgraph acm["Azure Cost Management + Billing"]
+        budgetEngine["Budget Engine\nMonthly spend limits\nPer-subscription"]
+        anomalyEngine["Anomaly Detection\nML-based daily analysis"]
+        exportEngine["Scheduled Export\nDaily CSV to Blob Storage\nActual + Amortized costs"]
+        costAlloc["Cost Allocation Rules\nShared services split\n12% loading factor"]
+    end
+
+    subgraph storage["Export Storage"]
+        blobExport["Azure Blob Storage\nHierarchy: year/month/day\nRetention: 13 months"]
+    end
+
+    subgraph downstream["Downstream Consumers"]
+        logicApp["Logic App\nCostCenter tag enrichment\nChargeback calculation"]
+        powerBI["Power BI\nSAP Cost Dashboard\nRI utilization view"]
+        sapBi["SAP Analytics Cloud\nChargeback posting\nFinancial reconciliation"]
+        itsm["ServiceNow / ITSM\nCost anomaly tickets\nBudget alert incidents"]
+    end
+
+    subgraph riMgmt["Commitment Management"]
+        riInventory["RI Inventory\nPurchased RIs\nExpiry tracking"]
+        riUtil["RI Utilization Report\nWeekly review\n&lt; 70% triggers review"]
+        savingsPlan["Savings Plan\nNon-prod compute\nHourly commitment"]
+    end
+
+    sources --&gt; acm
+    acm --&gt; exportEngine
+    exportEngine --&gt; blobExport
+    blobExport --&gt; logicApp
+    logicApp --&gt; powerBI
+    logicApp --&gt; sapBi
+    acm --&gt; budgetEngine
+    budgetEngine --&gt;|Alert| itsm
+    anomalyEngine --&gt;|Alert| itsm
+    riMgmt --&gt; powerBI
+    costAlloc --&gt; logicApp</code></pre>
+<hr/>
+<h2 id="vm-cost-optimization">VM Cost Optimization<a class="headerlink" href="#vm-cost-optimization" title="Permanent link">¶</a></h2>
+<h3 id="sap-certified-vm-families-cost-and-performance-comparison">SAP-Certified VM Families: Cost and Performance Comparison<a class="headerlink" href="#sap-certified-vm-families-cost-and-performance-comparison" title="Permanent link">¶</a></h3>
+<p>The following table covers the primary Azure VM families used for SAP HANA and SAP application tier workloads. All pricing is approximate pay-as-you-go East US 2 (Linux), mid-2025; validate current rates at the Azure pricing calculator before procurement decisions.</p>
+<table>
+<thead>
+<tr>
+<th>VM Family</th>
+<th>Representative SKUs</th>
+<th>RAM Range</th>
+<th>HANA Certified</th>
+<th>SAPS Rating</th>
+<th>~PAYG Cost/hr</th>
+<th>Use Case</th>
+<th>Cost/Performance Position</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mv2</td>
+<td>M208s_v2, M416s_v2</td>
+<td>2,850-11,400 GiB</td>
+<td>Yes (scale-up to 11.4 TiB)</td>
+<td>180,000-480,000</td>
+<td>USD 25-100</td>
+<td>Very large HANA (BW/4HANA, scale-out)</td>
+<td>Highest absolute cost; justified only for multi-TiB HANA footprints; 3-year RI partially offsets</td>
+</tr>
+<tr>
+<td>Msv2 (no local disk)</td>
+<td>M32s_v2, M64s_v2, M96s_v2, M192ims_v2</td>
+<td>438-4,096 GiB</td>
+<td>Yes (all sizes)</td>
+<td>50,000-250,000</td>
+<td>USD 7-44</td>
+<td>Production SAP HANA S/4HANA and BW/4HANA</td>
+<td>Best current-generation HANA option; lower cost than Mv2 for equivalent memory; preferred for new deployments</td>
+</tr>
+<tr>
+<td>Mdsv3 (with local NVMe)</td>
+<td>M176s_4_v3, M176ds_4_v3</td>
+<td>2,794 GiB</td>
+<td>Yes (via SAP Note 3299480)</td>
+<td>~280,000</td>
+<td>USD 30-35</td>
+<td>HANA workloads benefiting from local NVMe cache</td>
+<td>Local NVMe reduces ANF dependency for log volumes; cost-effective for high-throughput HANA; evaluate vs Msv2</td>
+</tr>
+<tr>
+<td>Edsv5</td>
+<td>E8ds_v5, E16ds_v5, E32ds_v5, E64ds_v5</td>
+<td>64-512 GiB</td>
+<td>HANA up to 672 GiB via E-series certified</td>
+<td>11,000-80,000</td>
+<td>USD 0.70-5.40</td>
+<td>SAP NetWeaver application servers, ASCS/ERS, small HANA</td>
+<td>Most cost-effective application server family; ISF enables RI flexibility across E-series sizes</td>
+</tr>
+<tr>
+<td>Ev5 (no local disk)</td>
+<td>E32_v5, E64_v5</td>
+<td>256-512 GiB</td>
+<td>No</td>
+<td>N/A</td>
+<td>USD 2.20-4.50</td>
+<td>SAP application servers in Spot or Dev/Test scenarios</td>
+<td>Lower base rate than Edsv5; absence of local SSD acceptable for application server workloads using Premium SSD v2 OS disk</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vm-rightsizing-process">VM Rightsizing Process<a class="headerlink" href="#vm-rightsizing-process" title="Permanent link">¶</a></h3>
+<p>The rightsizing process for SAP VMs follows a structured four-step cycle anchored to production EarlyWatch Alert data.</p>
+<p><strong>Step 1: Baseline collection (weeks 1-4)</strong>. Extract CPU, memory, and storage I/O metrics from Azure Monitor for all SAP VMs over a representative four-week period covering month-end, quarter-end, and at least one batch processing run. SAP recommends P95 CPU utilization as the sizing reference; Azure Monitor <code>Percentage CPU</code> metric at P95 over 30 days surfaces through the Azure Monitor Metrics Explorer or through a KQL query against the <code>AzureMetrics</code> table in Log Analytics.</p>
+<p><strong>Step 2: SAP EarlyWatch Alert alignment</strong>. Map Azure Monitor data to the HANA memory consumption figures from EWA. The EWA HANA memory section reports <code>Used Memory</code>, <code>Allocated Memory</code>, and <code>Configured Memory</code>. Rightsizing can proceed when <code>Used Memory</code> (including delta merge buffers) is consistently below 75% of the current VM's RAM for at least 30 days, and when no planned HANA table growth (new modules, data migrations) is expected within six months.</p>
+<p><strong>Step 3: Change control and testing</strong>. Downsizing an SAP HANA VM requires a maintenance window with HANA shutdown. Azure VM resize is performed through <code>az vm resize</code> or the Azure portal. HANA restart after resize includes a full crash recovery scan if the shutdown was not clean; plan for 20-40 minutes of HANA startup time on a multi-TiB database. Application server VM resizes do not require HANA shutdown; they require only SAP instance stop and VM restart.</p>
+<p><strong>Step 4: Post-resize validation</strong>. Run the HANA Hardware Configuration Check Tool (HWCCT, SAP Note 1943937) after any HANA VM resize to confirm storage KPI compliance at the new VM size. HANA storage throughput requirements are tied to HANA memory size, not VM size; however, available network bandwidth for NFS I/O is VM-size-dependent. An undersized VM can fail HWCCT storage latency checks, which constitutes a TDI certification violation.</p>
+<h3 id="scheduled-startstop-for-non-production-vms">Scheduled Start/Stop for Non-Production VMs<a class="headerlink" href="#scheduled-startstop-for-non-production-vms" title="Permanent link">¶</a></h3>
+<p>Non-production SAP systems (QAS, DEV, SBX tiers) typically require availability only during business hours. Defining and enforcing a power schedule reduces compute costs without architectural change.</p>
+<p>Reference schedule for a European SAP team (CET timezone):</p>
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Start</th>
+<th>Stop</th>
+<th>Runtime/Week</th>
+<th>Runtime Reduction vs 24x7</th>
+<th>Compute Saving</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QAS (Quality Assurance)</td>
+<td>Monday-Friday 06:30</td>
+<td>Monday-Friday 20:00</td>
+<td>67.5 hours</td>
+<td>60%</td>
+<td>~60% of QAS compute cost</td>
+</tr>
+<tr>
+<td>DEV (Development)</td>
+<td>Monday-Friday 07:00</td>
+<td>Monday-Friday 19:00</td>
+<td>60 hours</td>
+<td>64%</td>
+<td>~64% of DEV compute cost</td>
+</tr>
+<tr>
+<td>SBX (Sandbox)</td>
+<td>Monday-Friday 08:00</td>
+<td>Monday-Friday 18:00</td>
+<td>50 hours</td>
+<td>70%</td>
+<td>~70% of SBX compute cost</td>
+</tr>
+</tbody>
+</table>
+<h3 id="azure-automation-runbooks-for-vm-lifecycle">Azure Automation Runbooks for VM Lifecycle<a class="headerlink" href="#azure-automation-runbooks-for-vm-lifecycle" title="Permanent link">¶</a></h3>
+<p>Two Azure Automation runbooks implement the start/stop schedule and a complementary VM lifecycle management function.</p>
+<p><strong>Runbook: SAP-StartStop-Schedule</strong>. Triggered by Azure Automation schedules (one trigger per start time, one per stop time). The runbook reads a configuration table stored in Azure Table Storage that maps VM resource IDs to schedules and overrides. Before stopping a VM, the runbook calls the SAP Host Agent <code>sapcontrol</code> web service (port 1128) to check for active SM66 work processes; if active processes are found, the stop is deferred by 15 minutes and retried twice before forcing a graceful SAP shutdown sequence (<code>stopsap</code> -&gt; HANA stop -&gt; VM deallocate). The runbook is written in PowerShell 7.2 and uses a system-assigned managed identity for Azure resource operations, eliminating stored credentials.</p>
+<p><strong>Runbook: SAP-RightsizingAlert</strong>. Runs weekly. Queries Azure Monitor Metrics API for P95 CPU and average memory utilization across all SAP VMs. For any VM where P95 CPU is below 10% and average memory utilization is below 30% for 21 consecutive days, the runbook posts an alert to an Azure Monitor action group (which sends to ServiceNow and notifies the SAP Basis team). The alert includes the current VM SKU, suggested downsize target, estimated monthly saving at 3-year RI rates, and a direct link to the Azure VM resize blade.</p>
+<hr/>
+<h2 id="storage-cost-optimization">Storage Cost Optimization<a class="headerlink" href="#storage-cost-optimization" title="Permanent link">¶</a></h2>
+<h3 id="ultra-disk-vs-premium-ssd-v2-vs-premium-ssd-decision-matrix">Ultra Disk vs Premium SSD v2 vs Premium SSD Decision Matrix<a class="headerlink" href="#ultra-disk-vs-premium-ssd-v2-vs-premium-ssd-decision-matrix" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Ultra Disk</th>
+<th>Premium SSD v2</th>
+<th>Premium SSD (v1)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IOPS (max)</td>
+<td>Up to 400,000/disk</td>
+<td>Up to 80,000/disk</td>
+<td>Up to 20,000/disk (P80)</td>
+</tr>
+<tr>
+<td>Throughput (max)</td>
+<td>Up to 10,000 MB/s</td>
+<td>Up to 1,200 MB/s</td>
+<td>Up to 900 MB/s (P80)</td>
+</tr>
+<tr>
+<td>Latency</td>
+<td>Sub-millisecond</td>
+<td>~1 ms</td>
+<td>2-5 ms</td>
+</tr>
+<tr>
+<td>Pricing model</td>
+<td>Provisioned IOPS + throughput (billed regardless of use)</td>
+<td>Provisioned IOPS + throughput (independent of disk size)</td>
+<td>Tiered by disk size; IOPS/throughput fixed per tier</td>
+</tr>
+<tr>
+<td>Availability Zone constraint</td>
+<td>Must deploy in same zone as VM</td>
+<td>Zone-redundant available</td>
+<td>Zone-redundant available</td>
+</tr>
+<tr>
+<td>Resizable without downtime</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No (size increase only, no decrease)</td>
+</tr>
+<tr>
+<td>SAP HANA suitability</td>
+<td>HANA log volume (ultra-low latency required)</td>
+<td>HANA restart, shared, and OS volumes; app server storage</td>
+<td>Legacy deployments; avoid for new SAP workloads</td>
+</tr>
+<tr>
+<td>Cost (1 TiB, 10,000 IOPS, 400 MB/s, East US 2)</td>
+<td>~USD 280/month</td>
+<td>~USD 185/month</td>
+<td>Not achievable in single disk at these specs</td>
+</tr>
+<tr>
+<td>Recommended for SAP</td>
+<td>HANA log where ANF is not used; latency-critical scenarios</td>
+<td>All managed disk workloads: OS, HANA non-log, app servers</td>
+<td>Only where Premium SSD v2 availability constraints apply</td>
+</tr>
+</tbody>
+</table>
+<p>For SAP HANA deployments on Azure NetApp Files (the architecture defined in the storage chapter), managed disks are used only for OS disks, HANA shared, and HANA restart volumes. In this configuration:</p>
+<ul>
+<li>OS disk: Premium SSD v2, 128 GiB, 3,000 IOPS, 125 MB/s (~USD 18/month)</li>
+<li>HANA shared: Premium SSD v2, 512 GiB, 10,000 IOPS, 400 MB/s (~USD 95/month)</li>
+<li>HANA restart: Premium SSD v2, 1,024 GiB, 30,000 IOPS, 500 MB/s (~USD 215/month)</li>
+</ul>
+<p>Ultra Disk is not required in this architecture because ANF Ultra tier handles HANA data and log volumes. The primary scenario for Ultra Disk is a fallback deployment where ANF is unavailable in the target region and managed disks must serve HANA data and log volumes.</p>
+<h3 id="azure-netapp-files-capacity-pool-optimization">Azure NetApp Files Capacity Pool Optimization<a class="headerlink" href="#azure-netapp-files-capacity-pool-optimization" title="Permanent link">¶</a></h3>
+<p>Azure NetApp Files (ANF) charges are based on provisioned capacity pool size and tier, not consumed volume size. A capacity pool provisioned at 4 TiB Ultra tier costs approximately USD 1,200/month regardless of whether 1 TiB or 4 TiB of that pool is consumed by volumes. Three optimization levers exist:</p>
+<p><strong>1. Volume-to-pool ratio optimization.</strong> ANF volumes can be allocated any size up to the capacity pool size. The sum of all volume quotas can exceed the pool size if individual volumes are not simultaneously at maximum. For a four-volume HANA layout (data, log, shared, backup), use thin provisioning: allocate data and log volumes generously (the I/O characteristics demand the capacity pool size anyway) but size shared and backup volumes conservatively, monitoring with ANF volume capacity alerts.</p>
+<p><strong>2. Tier selection by workload phase.</strong> ANF offers three tiers: Standard (16 MiB/s per TiB), Premium (64 MiB/s per TiB), and Ultra (128 MiB/s per TiB). The SAP transport volume (<code>/usr/sap/trans</code>) does not require Ultra tier throughput; downsizing the transport volume's capacity pool from Ultra to Standard tier--or moving it to a separate Standard pool--saves approximately USD 520/month per TiB (Ultra vs Standard price differential in East US 2).</p>
+<p><strong>3. Snapshot reserve and schedule optimization.</strong> ANF snapshots consume capacity from the volume quota. The default SAP ANF snapshot schedule (hourly for 48 hours, daily for 14 days) can retain 62 snapshots simultaneously. For a 2 TiB HANA data volume with moderate change rate, snapshots can consume 300-500 GiB of the volume quota. Review and tune snapshot retention to business requirements; a 14-day daily schedule (14 snapshots) is sufficient for most disaster recovery policies and reduces snapshot capacity consumption by 40-60% compared to the default schedule.</p>
+<h3 id="backup-storage-tiering">Backup Storage Tiering<a class="headerlink" href="#backup-storage-tiering" title="Permanent link">¶</a></h3>
+<p>SAP HANA backups generate large volumes of backup data that accumulate over time. Azure Backup with backint stores HANA backups in a Recovery Services Vault (RSV), which uses a geo-redundant (GRS) storage model by default. GRS pricing is approximately 2x locally redundant storage (LRS) pricing. For backup data, evaluate the trade-off:</p>
+<table>
+<thead>
+<tr>
+<th>Backup Storage Option</th>
+<th>Cost/GiB/month (East US 2, approx.)</th>
+<th>Durability</th>
+<th>Recovery Speed</th>
+<th>Suitable For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RSV GRS (default)</td>
+<td>~USD 0.032</td>
+<td>16 nines (geo-redundant)</td>
+<td>Fast (within-region)</td>
+<td>Production HANA backups where cross-region restore is a DR requirement</td>
+</tr>
+<tr>
+<td>RSV LRS</td>
+<td>~USD 0.016</td>
+<td>11 nines (local)</td>
+<td>Fast</td>
+<td>Non-production HANA backups where cross-region recovery is not required</td>
+</tr>
+<tr>
+<td>Azure Blob Hot Tier</td>
+<td>~USD 0.018</td>
+<td>11-16 nines (LRS/GRS configurable)</td>
+<td>Fast</td>
+<td>Manual backup scripts; not backint-integrated</td>
+</tr>
+<tr>
+<td>Azure Blob Cool Tier</td>
+<td>~USD 0.01</td>
+<td>Same as hot</td>
+<td>Delayed (no practical difference for restore)</td>
+<td>Backups older than 30 days; lifecycle policy auto-tiers</td>
+</tr>
+<tr>
+<td>Azure Blob Archive Tier</td>
+<td>~USD 0.00099</td>
+<td>Same</td>
+<td>Rehydration: 1-15 hours</td>
+<td>Annual backups retained for compliance; not suitable for operational recovery</td>
+</tr>
+</tbody>
+</table>
+<p>Implement Azure Blob Storage lifecycle management policies to automatically tier backups:</p>
+<ul>
+<li>Day 0-30: Blob Hot tier (for RSV vault archive use Azure Backup's archive tier integration)</li>
+<li>Day 31-90: Azure Backup Vault Archive tier (approximately 75% cheaper than standard vault tier)</li>
+<li>Day 91+: Delete unless regulatory retention applies</li>
+</ul>
+<p>For HANA log backups (backed up every 15 minutes), the volume is high but individual objects are small. Log backups older than the point covered by the last successful full backup can be deleted; Azure Backup's <code>az backup protection enable-for-vm</code> log backup retention policy enforces this automatically.</p>
+<h3 id="azure-blob-coldarchive-for-long-term-sap-backups">Azure Blob Cold/Archive for Long-Term SAP Backups<a class="headerlink" href="#azure-blob-coldarchive-for-long-term-sap-backups" title="Permanent link">¶</a></h3>
+<p>SAP audit and compliance requirements in regulated industries often mandate 7-10 year retention of database backups (GDPR audit trails, GxP validation records, SOX financial system archives). Azure Blob Archive tier at ~USD 0.00099/GiB/month (East US 2) is the only economically viable option at this retention horizon.</p>
+<p>A 10 TiB annual HANA full backup retained for 7 years at archive tier costs approximately USD 72/year (USD 0.00099 x 10,240 GiB x 12 months). The equivalent cost in RSV GRS would be approximately USD 3,932/year. The trade-off is rehydration time (up to 15 hours for archive rehydration) and per-GB read cost (~USD 0.022/GiB for early deletion and rehydration combined). For compliance archives, this trade-off is acceptable because the recovery requirement is audit access, not operational restoration.</p>
+<p>Implement archive tiering through an Azure Blob Storage lifecycle policy on the target storage account, with the policy configured to transition blobs to archive tier after 90 days. The archive storage account should be in a separate subscription or resource group from operational backup storage to prevent accidental deletion and to apply a time-based immutability retention lock using Azure Immutable Blob Storage (minimum 13-month retention period aligned to the billing export retention requirement).</p>
+<hr/>
+<h2 id="license-cost-optimization">License Cost Optimization<a class="headerlink" href="#license-cost-optimization" title="Permanent link">¶</a></h2>
+<h3 id="windows-server-byos">Windows Server BYOS<a class="headerlink" href="#windows-server-byos" title="Permanent link">¶</a></h3>
+<p>Windows Server licenses applied through Azure Hybrid Benefit eliminate the Windows Server component from Azure VM pricing. For customers with Windows Server Datacenter Software Assurance, a single Datacenter license covers two VMs of any size. For SAP landscapes deploying multiple Windows application servers, Datacenter licensing provides better economics than Standard licensing above two VMs per license.</p>
+<p>Activation procedure: set <code>LicenseType = Windows_Server</code> in the VM ARM resource. For existing VMs not deployed with AHB, update via <code>az vm update --resource-group &lt;RG&gt; --name &lt;VM&gt; --license-type Windows_Server</code>. The change takes effect immediately with no VM restart required. An Azure Policy (effect: audit) should report any Windows VMs not using AHB where the license inventory confirms coverage, surfacing compliance gaps in the monthly cost review.</p>
+<h3 id="rhelsles-byos-vs-pay-as-you-go">RHEL/SLES BYOS vs Pay-As-You-Go<a class="headerlink" href="#rhelsles-byos-vs-pay-as-you-go" title="Permanent link">¶</a></h3>
+<p>Red Hat Enterprise Linux and SUSE Linux Enterprise Server on Azure are available in two licensing models:</p>
+<ul>
+<li><strong>Pay-as-you-go (PAYG)</strong>: The OS subscription is included in the VM hourly rate. For RHEL E32ds_v5, the RHEL surcharge is approximately USD 0.12/hour (~USD 87/month). For SLES for SAP E32ds_v5, approximately USD 0.15/hour (~USD 108/month). No license management required; patching and support are covered through the Azure Marketplace offer.</li>
+<li><strong>BYOS (Bring Your Own Subscription)</strong>: Customer provides Red Hat or SUSE subscriptions through an existing enterprise agreement. The VM is deployed from a BYOS marketplace image; the customer registers it with their RH Satellite or SUSE Manager server. BYOS pricing removes the OS surcharge from the VM rate. For a fleet of 20 RHEL application servers, BYOS versus PAYG represents approximately USD 1,740/month in savings--if the customer already holds the Red Hat subscriptions.</li>
+</ul>
+<p>For most enterprises with existing Red Hat Enterprise Agreement or SUSE subscription contracts that cover cloud deployments, BYOS provides cost savings with the trade-off of subscription lifecycle management responsibility. For greenfield customers without existing Linux subscriptions, PAYG eliminates the overhead of subscription registration and patch channel management; the higher per-VM rate is offset by operational simplicity.</p>
+<p>SAP-specific consideration: SAP certifies RHEL for SAP Applications and SLES for SAP Applications specifically. BYOS deployments must use the RHEL for SAP BYOS or SLES for SAP BYOS marketplace images (not generic RHEL/SLES BYOS), as they include the SAP-specific repository channels and kernel parameters required for SAP certification per SAP Notes 2002167 and 1984787.</p>
+<h3 id="sql-server-byol-for-sap">SQL Server BYOL for SAP<a class="headerlink" href="#sql-server-byol-for-sap" title="Permanent link">¶</a></h3>
+<p>SAP NetWeaver on SQL Server deployments can apply SQL Server BYOL on Azure to eliminate the SQL Server license charge from Azure VM pricing. The SQL Server Enterprise edition surcharge on an E32ds_v5 is approximately USD 4.62/hour (~USD 3,330/month). For a landscape with five SQL Server-based SAP systems, SQL Server BYOL with active Software Assurance provides approximately USD 16,650/month in savings.</p>
+<p>Requirements: SQL Server BYOL requires active Software Assurance. Under License Mobility, a single SQL Server Enterprise license covers the VM running on Azure without core restrictions (subject to SA terms). Activate by deploying from the SQL Server BYOL marketplace image or by setting the license type on an existing SQL Server VM resource.</p>
+<p>Note on dual-use: SQL Server licenses applied to Azure VMs cannot simultaneously cover on-premises SQL Server instances unless the on-premises instances are in a passive failover configuration. License compliance auditing should verify that BYOL activations on Azure are matched against the on-premises license withdrawal in the customer's SAM (Software Asset Management) tool.</p>
+<h3 id="oracle-license-compliance-on-azure">Oracle License Compliance on Azure<a class="headerlink" href="#oracle-license-compliance-on-azure" title="Permanent link">¶</a></h3>
+<p>SAP on Oracle Database deployments require careful license compliance management on Azure. Oracle licenses are governed by Oracle's cloud licensing policy, which requires customers to license all vCPUs on the Azure host (not just the VM vCPU count) unless the Azure VM is running on Oracle Cloud Infrastructure (OCI). Microsoft Azure is listed in Oracle's "Authorized Cloud Environments" policy for Standard 2 and SE2 editions; Enterprise Edition licensing on Azure requires per-vCPU licensing of the VM (not the host) under current Oracle policy as of 2024.</p>
+<p>For SAP on Oracle on Azure, use Oracle Database Enterprise Edition BYOL (Bring Your Own License) through the Azure Marketplace Oracle BYOL image. License the number of vCPUs on the VM x 0.5 (Oracle's factor for Azure authorized cloud environments for EE). A 32-vCPU E32ds_v5 running Oracle EE requires 16 Oracle EE processor licenses. At Oracle list pricing of approximately USD 47,500 per processor license, compliance for a single Azure VM represents a USD 760,000 license commitment; verify current Oracle negotiated pricing and audit rights with Oracle licensing support before deployment.</p>
+<p>SAP Note 2369910 provides SAP's guidance on Oracle license compliance for Azure deployments. Always verify with Oracle License Management Services (LMS) before deploying SAP on Oracle on Azure.</p>
+<h3 id="sap-software-licensing-model-on-azure">SAP Software Licensing Model on Azure<a class="headerlink" href="#sap-software-licensing-model-on-azure" title="Permanent link">¶</a></h3>
+<p>SAP software (NetWeaver, S/4HANA, BW/4HANA application licenses) is not purchased from Azure; it is licensed directly from SAP. However, the SAP licensing model interacts with Azure architecture decisions in two ways that affect total cost:</p>
+<p><strong>SAP Named User licenses</strong>: SAP's primary S/4HANA licensing model counts professional, limited professional, and employee users. Azure infrastructure design does not affect named user counts directly, but system consolidation (reducing the number of DEV/QAS systems through MDC multi-tenancy) reduces the SAP landscape size, which can simplify SAP license audits and reduce the SAP USMM (User and System Measurement) overhead.</p>
+<p><strong>SAP HANA Runtime versus full HANA licenses</strong>: SAP HANA Runtime license is included with SAP S/4HANA and BW/4HANA licenses for the database serving those applications. A separate standalone HANA Enterprise license is required for side-car HANA systems (e.g., HANA used for custom reporting, SAP Data Intelligence). Azure cost optimization must account for the SAP license cost of any side-car HANA VMs; an unplanned side-car HANA instance on Azure can trigger a USD 50,000+ SAP license engagement.</p>
+<hr/>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>SAP/Azure Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA VM RI term for production</td>
+<td>Pay-as-you-go; 1-year RI; 3-year RI</td>
+<td>3-year Reserved Instance</td>
+<td>Production HANA VMs run 24x7 with no planned decommission within 3 years; 3-year RI provides 46% discount vs PAYG; SKU is locked by SAP certification requirements, removing resize risk</td>
+<td>Azure Reserved VM Instances documentation; SAP Note 1928533</td>
+</tr>
+<tr>
+<td>HANA VM RI scope</td>
+<td>Shared (all subscriptions); Single subscription (production)</td>
+<td>Single subscription (production)</td>
+<td>Prevents non-production VMs (same SKU, lower priority) from consuming production RI benefit; production RI utilization rate target is 95%+</td>
+<td>Azure Cost Management RI utilization recommendations</td>
+</tr>
+<tr>
+<td>Non-production Linux OS licensing</td>
+<td>RHEL PAYG; RHEL BYOS</td>
+<td>RHEL BYOS where existing RHEA subscriptions cover Azure</td>
+<td>Customer holds active Red Hat Enterprise Agreement with cloud subscription riders; BYOS eliminates ~USD 0.12/hr per VM; RHEL for SAP BYOS image maintains SAP certification</td>
+<td>SAP Note 2002167; Red Hat Cloud Access documentation</td>
+</tr>
+<tr>
+<td>Non-production storage tier</td>
+<td>ANF Ultra for all volumes; ANF Premium for non-HANA volumes; Mixed ANF tier</td>
+<td>Mixed tier: Ultra for HANA data/log; Premium for sapmnt; Standard for transport</td>
+<td>ANF Ultra required only for HANA storage KPIs (SAP Note 1943937); sapmnt and transport do not require Ultra throughput; mixing tiers reduces ANF cost by 30-40% vs all-Ultra</td>
+<td>SAP Note 1943937; Azure NetApp Files performance documentation</td>
+</tr>
+<tr>
+<td>Non-production VM scheduling</td>
+<td>Always-on (no schedule); Business-hours-only schedule; Demand-based auto-scale</td>
+<td>Business-hours-only schedule via Azure Automation</td>
+<td>80% of non-production SAP runtime is unused off-hours; scheduled start/stop reduces non-production compute cost by 55-65%; automation runbook verifies active SAP sessions before shutdown</td>
+<td>Azure Automation Start/Stop VMs solution</td>
+</tr>
+<tr>
+<td>Backup storage tiering</td>
+<td>RSV GRS for all backups; RSV LRS for non-production; Azure Blob Archive for long-term</td>
+<td>RSV GRS for production (RPO requirement); RSV LRS for non-production; Azure Blob Archive tier after 90 days</td>
+<td>Production cross-region restore requires GRS; non-production does not require geo-redundancy; archive tier reduces long-term backup storage cost by 97% vs RSV GRS</td>
+<td>Azure Backup pricing; SAP Note 1943937</td>
+</tr>
+<tr>
+<td>Azure Hybrid Benefit enforcement</td>
+<td>Optional (applied per deployment); Mandatory via Azure Policy</td>
+<td>Mandatory via Azure Policy (deny unlicensed Windows VMs)</td>
+<td>License inventory confirms coverage for all Windows Server SKUs in use; AHB saves ~USD 0.50/hr per Windows VM; Policy enforcement prevents inadvertent PAYG deployments</td>
+<td>Azure Policy built-in: "Windows VMs should use Azure Hybrid Benefit"</td>
+</tr>
+<tr>
+<td>Savings Plan vs additional RIs for non-production app servers</td>
+<td>Additional RI for each non-prod E-series VM; Savings Plan commitment</td>
+<td>Savings Plan (compute, 1-year) at 75% of expected non-production compute spend</td>
+<td>Non-production app server SKUs change during SAP upgrades and transport system rearrangements; ISF partially mitigates this for E-series RIs, but Savings Plans provide broader flexibility; 1-year term limits commitment exposure</td>
+<td>Azure Savings Plans documentation</td>
+</tr>
+<tr>
+<td>MDC consolidation for DEV/QAS HANA</td>
+<td>Separate HANA VMs per system; HANA MDC multi-tenant on shared VM</td>
+<td>HANA MDC for DEV and QAS sharing M32ms_v2</td>
+<td>SAP Note 1661202 permits MDC for non-production; eliminates one full HANA VM (M32ms_v2 ~USD 8,400/month 3yr RI equivalent); acceptable risk for non-production workloads</td>
+<td>SAP Note 1661202; SAP HANA MDC Administration Guide</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="sap-notes-reference">SAP Notes Reference<a class="headerlink" href="#sap-notes-reference" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Relevance to Cost Optimization</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>Primary reference for VM SKU selection; defines the minimum-cost certified VM for each SAP product and version</td>
+</tr>
+<tr>
+<td>1943937</td>
+<td>Hardware Configuration Check Tool Prerequisites</td>
+<td>Defines minimum storage throughput/IOPS/latency for HANA TDI; prevents under-provisioning that causes certification failure and prevents over-provisioning driven by uncertainty</td>
+</tr>
+<tr>
+<td>1661202</td>
+<td>Multi-tenancy in SAP HANA (MDC)</td>
+<td>Enables HANA MDC consolidation of non-production systems, reducing HANA VM count and associated cost</td>
+</tr>
+<tr>
+<td>2369910</td>
+<td>SAP Software on Microsoft Azure: General Information</td>
+<td>Oracle licensing guidance on Azure; prevents license compliance gaps that generate unbudgeted Oracle audit costs</td>
+</tr>
+<tr>
+<td>2002167</td>
+<td>Red Hat Enterprise Linux 7.x: Installation and Upgrade</td>
+<td>RHEL for SAP installation requirements; confirms BYOS image eligibility to maintain SAP certification while avoiding PAYG OS surcharge</td>
+</tr>
+<tr>
+<td>1984787</td>
+<td>SUSE Linux Enterprise Server 12: Installation Notes</td>
+<td>SLES for SAP installation requirements; confirms BYOS eligibility for SAP-certified SLES deployments</td>
+</tr>
+<tr>
+<td>3014176</td>
+<td>SAP HANA Native Storage Extension</td>
+<td>NSE configuration for warm data offload to disk, reducing HANA memory footprint and enabling use of smaller VM SKUs</td>
+</tr>
+<tr>
+<td>2586205</td>
+<td>Latest SAP HANA 2.0 Releases and Their End of Maintenance</td>
+<td>Maintenance timeline for HANA versions; EOM versions require paid extended maintenance; upgrading to supported HANA versions is prerequisite for VM rightsizing</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<h3 id="cost-optimization-pillar">Cost Optimization Pillar<a class="headerlink" href="#cost-optimization-pillar" title="Permanent link">¶</a></h3>
+<p>The Azure Well-Architected Framework's Cost Optimization pillar defines five design principles: choose the right resources, set spending goals and budgets, dynamically allocate and deallocate resources, optimize over time, and adopt a cost culture. The SAP cost architecture in this chapter implements all five. Right-sized VM SKUs based on EWA data address the first principle. Azure Budget alerts enforce the second. Automated start/stop runbooks implement the third. Monthly RI utilization reviews and Azure Advisor integration address the fourth. FinOps Framework alignment and showback reporting embed cost awareness in SAP operations teams, addressing the fifth.</p>
+<h3 id="reliability-pillar">Reliability Pillar<a class="headerlink" href="#reliability-pillar" title="Permanent link">¶</a></h3>
+<p>Cost optimization decisions must be evaluated against reliability requirements. Reserved Instances do not affect VM availability or SLA; they are a billing instrument only. Spot VM eviction creates an availability risk; the architecture restricts Spot usage to sandbox workloads where eviction is tolerable. Automated start/stop runbooks include pre-stop session checks to prevent ungraceful SAP shutdown. Backup storage tiering to archive tier is acceptable for compliance archives but must not apply to backups within the operational recovery window.</p>
+<h3 id="security-pillar">Security Pillar<a class="headerlink" href="#security-pillar" title="Permanent link">¶</a></h3>
+<p>Cost Management access is governed by Azure RBAC. The <code>Cost Management Reader</code> role provides read access to cost data and budgets without the ability to modify resources. The <code>Cost Management Contributor</code> role allows budget creation and alert management. Finance and FinOps team members are assigned <code>Cost Management Reader</code> at the SAP Management Group scope. Azure Policy assignments that enforce tagging are managed by the platform team with <code>Resource Policy Contributor</code> at the Management Group scope; this prevents individual subscription owners from bypassing tag enforcement to circumvent chargeback.</p>
+<p>Billing export data stored in Azure Blob Storage is protected by a private endpoint; the storage account does not allow public access. Access to the billing export storage account is granted through managed identity to the Logic App and Power BI gateway; no storage account keys are distributed.</p>
+<h3 id="operational-excellence-pillar">Operational Excellence Pillar<a class="headerlink" href="#operational-excellence-pillar" title="Permanent link">¶</a></h3>
+<p>Cost optimization is integrated into the SAP operations runbook. The weekly operations review includes: RI utilization report review, Azure Advisor rightsizing recommendations review, anomaly alert status, and non-production start/stop schedule compliance report. Monthly operations reviews include: budget vs. actual comparison, chargeback report validation, RI expiry pipeline (identify RIs expiring within 90 days), and Savings Plan coverage rate report. These reviews are documented in the SAP operations wiki and have assigned owners from the SAP Basis and FinOps teams.</p>
+<h3 id="performance-efficiency-pillar">Performance Efficiency Pillar<a class="headerlink" href="#performance-efficiency-pillar" title="Permanent link">¶</a></h3>
+<p>Performance and cost are directly correlated for SAP: a VM that is sized too small for the workload causes SAP performance degradation and is not cost-efficient per SAPS delivered. The rightsizing process described in this chapter explicitly validates that downsized VMs maintain SAP EarlyWatch Alert green status for response time, CPU utilization, and dialog step throughput. No cost optimization change is approved through change control without a defined rollback plan and a post-implementation EWA review at the next weekly cycle.</p>
+<hr/>
+<h2 id="security-architecture">Security Architecture<a class="headerlink" href="#security-architecture" title="Permanent link">¶</a></h2>
+<p>Cost management infrastructure handles sensitive financial and organizational data and must be secured to the same standard as other Azure management plane components.</p>
+<p><strong>Azure Cost Management access control</strong>: Cost data is sensitive because it reveals workload capacity, business activity patterns, and organizational structure. RBAC assignments for Cost Management follow least-privilege: SAP Basis engineers receive <code>Reader</code> on the SAP production subscription (sufficient to view resource metrics, insufficient to view billing data); Finance team members receive <code>Cost Management Reader</code> at the Management Group scope; the FinOps team lead receives <code>Cost Management Contributor</code> at the Management Group scope for budget management.</p>
+<p><strong>Billing export security</strong>: The Azure Blob Storage account receiving daily billing exports is configured with: public access disabled, private endpoint in the management subnet, Azure Defender for Storage enabled, soft delete retention 30 days, and immutability policy on the container (append-only, 13-month lock). These controls prevent cost data exfiltration and inadvertent deletion of historical billing records needed for year-over-year comparison.</p>
+<p><strong>Azure Automation security</strong>: The Azure Automation account hosting the start/stop and rightsizing alert runbooks uses a system-assigned managed identity with the following minimum permissions: <code>Virtual Machine Contributor</code> on the SAP non-production resource groups (to start/stop VMs), <code>Monitoring Reader</code> on the SAP production subscription (for metric queries), and <code>Storage Blob Data Contributor</code> on the schedule configuration storage account. No automation runbook stores credentials in variables; all secrets are retrieved from Azure Key Vault at runtime through the managed identity.</p>
+<p><strong>Tag enforcement policy audit logs</strong>: Azure Policy compliance state changes (resource non-compliance, remediation task execution) are written to Azure Activity Log and forwarded to the Log Analytics workspace. Security Information and Event Management (SIEM) correlation rules alert on policies being disabled or excluded without change management approval.</p>
+<hr/>
+<h2 id="reliability-and-high-availability">Reliability and High Availability<a class="headerlink" href="#reliability-and-high-availability" title="Permanent link">¶</a></h2>
+<p>Cost optimization controls must not introduce single points of failure or degrade the availability of SAP production systems.</p>
+<p><strong>Reserved Instance and Availability</strong>: RI procurement does not affect Azure infrastructure availability. An RI is a billing discount applied to matching VM hours; the underlying Azure capacity commitment is handled by Azure capacity reservations (a separate feature from RIs). For mission-critical SAP HANA VMs, consider pairing an RI purchase with an Azure Capacity Reservation to guarantee that the reserved VM SKU is available in the target zone following a regional failover or scale event.</p>
+<p><strong>Automated Start/Stop Reliability</strong>: The Azure Automation start/stop runbook is a potential operational risk if misconfigured. Safeguards in the implementation: (1) runbooks operate only on VMs tagged <code>SAPEnvironment = Development | Sandbox | QA</code>; a deny policy prevents the <code>SAPEnvironment = Production</code> tag from being applied to non-production resource groups; (2) runbooks log all start/stop actions and results to a Log Analytics workspace; (3) a manual override mechanism--a tag <code>StartStopOverride = Exempt</code> on a VM resource--suspends automated power management for that VM; (4) the runbook sends a completion report email to the SAP Basis distribution list after each execution.</p>
+<h3 id="rpo-rto-table">RPO / RTO Table<a class="headerlink" href="#rpo-rto-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>RPO</th>
+<th>RTO</th>
+<th>Cost Impact</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Production HANA failure (HSR active/passive)</td>
+<td>0 (synchronous replication)</td>
+<td>2-5 minutes (automated Pacemaker failover)</td>
+<td>RI for both primary and secondary HANA VMs; secondary runs 24x7 at full cost</td>
+<td>HANA HSR + Pacemaker; both VMs must be RI-covered</td>
+</tr>
+<tr>
+<td>Production HANA zone failure (cross-zone HSR)</td>
+<td>0</td>
+<td>5-10 minutes (zone failover, Pacemaker)</td>
+<td>Two RIs (one per zone); cannot reduce secondary cost without reducing availability</td>
+<td>Standard_M-series in AZ1 + AZ2</td>
+</tr>
+<tr>
+<td>Non-production HANA scheduled stop</td>
+<td>N/A (no replication)</td>
+<td>VM start time (~5 min) + HANA startup (~20-40 min crash recovery)</td>
+<td>Compute cost saved during scheduled stop; planned downtime window communicated to users</td>
+<td>Azure Automation start/stop runbook</td>
+</tr>
+<tr>
+<td>Backup restore (operational recovery within 30 days)</td>
+<td>15 minutes (log backup frequency)</td>
+<td>2-4 hours for full + log apply on HANA restore</td>
+<td>RSV LRS or GRS (see backup tiering section); no impact on recovery speed</td>
+<td>Azure Backup backint + HANA full+log restore</td>
+</tr>
+<tr>
+<td>Backup restore (compliance archive, &gt;90 days)</td>
+<td>Point-in-time of archived full backup</td>
+<td>15 hours (archive rehydration) + 4-8 hours restore</td>
+<td>Archive tier cost savings: ~97% vs RSV GRS; rehydration cost applies per GiB restored</td>
+<td>Azure Blob Archive + rehydration to hot tier before restore</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="cost-optimization-summary">Cost Optimization Summary<a class="headerlink" href="#cost-optimization-summary" title="Permanent link">¶</a></h2>
+<p>The following table summarizes the primary cost optimization measures defined in this chapter with estimated monthly savings, implementation effort, and risk assessment. Savings are illustrative based on a reference landscape of two production HANA VMs (M96s_v2), four production application servers (E32ds_v5), and an equivalent non-production landscape. Validate against actual Azure pricing at the time of procurement.</p>
+<h3 id="savings-table">Savings Table<a class="headerlink" href="#savings-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Monthly Saving Estimate</th>
+<th>Implementation Effort</th>
+<th>Risk Level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3-year RI for production HANA (2x M96s_v2, replacing PAYG)</td>
+<td>~USD 18,600</td>
+<td>Low (billing change only; no infrastructure impact)</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>3-year RI for production app servers (4x E32ds_v5, replacing PAYG)</td>
+<td>~USD 2,870</td>
+<td>Low</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Azure Hybrid Benefit -- Windows Server on all non-production VMs (10 VMs)</td>
+<td>~USD 1,500</td>
+<td>Low (VM property update, no restart)</td>
+<td>Negligible</td>
+</tr>
+<tr>
+<td>Azure Hybrid Benefit -- SQL Server BYOL on SAP SQL Server VMs (2 VMs)</td>
+<td>~USD 6,660</td>
+<td>Low-Medium (redeploy from BYOL image or license type update)</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>RHEL BYOS for all SAP Linux VMs (20 VMs x ~USD 87/month PAYG surcharge)</td>
+<td>~USD 1,740</td>
+<td>Medium (RHEL re-registration to BYOS image; requires RHEA contract validation)</td>
+<td>Medium (subscription management overhead)</td>
+</tr>
+<tr>
+<td>Non-production scheduled start/stop (50% runtime reduction on 10 non-prod VMs averaging E32ds_v5)</td>
+<td>~USD 4,500</td>
+<td>Medium (Automation runbook deployment, schedule tuning, session check testing)</td>
+<td>Medium (risk of ungraceful SAP shutdown mitigated by session checks)</td>
+</tr>
+<tr>
+<td>HANA MDC consolidation (eliminate 1x M32ms_v2 HANA VM from non-production)</td>
+<td>~USD 5,200</td>
+<td>High (HANA MDC migration, testing, SAP landscape validation)</td>
+<td>Medium (shared HANA MDC failure affects multiple systems)</td>
+</tr>
+<tr>
+<td>ANF tier optimization (move transport volume to Standard tier, ~1 TiB)</td>
+<td>~USD 520</td>
+<td>Low (ANF volume recreation or tier change where available)</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Backup tiering (archive tier for backups &gt;90 days, estimated 5 TiB/year)</td>
+<td>~USD 1,100</td>
+<td>Medium (lifecycle policy configuration, archive policy testing)</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Savings Plan (non-production compute, 1-year, 75% commitment)</td>
+<td>~USD 1,200</td>
+<td>Low (purchasing decision; no infrastructure change)</td>
+<td>Low (1-year commitment; overcommit risk minimal at 75% coverage)</td>
+</tr>
+<tr>
+<td><strong>Total estimated monthly saving</strong></td>
+<td><strong>~USD 43,890</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="operations-and-monitoring">Operations and Monitoring<a class="headerlink" href="#operations-and-monitoring" title="Permanent link">¶</a></h2>
+<h3 id="cost-management-budgets-and-alerts">Cost Management Budgets and Alerts<a class="headerlink" href="#cost-management-budgets-and-alerts" title="Permanent link">¶</a></h3>
+<p>Azure Budgets are configured at two scopes: subscription-level budgets for overall spend control and resource-group-level budgets for per-SID chargeback enforcement. Budgets use "Actual cost" (not amortized) for real-time alert accuracy; amortized budgets are maintained as a separate view for internal reporting to smooth RI cost distribution.</p>
+<p>Budget structure:</p>
+<table>
+<thead>
+<tr>
+<th>Budget Name</th>
+<th>Scope</th>
+<th>Monthly Amount</th>
+<th>Alert Thresholds</th>
+<th>Notification Recipients</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP-Production-Budget</td>
+<td>SAP Production Subscription</td>
+<td>USD 52,000</td>
+<td>80% (forecast), 100% (actual), 110% (actual)</td>
+<td>SAP Basis Lead, FinOps Lead, CIO</td>
+</tr>
+<tr>
+<td>SAP-NonProd-Budget</td>
+<td>SAP Non-Production Subscription</td>
+<td>USD 16,000</td>
+<td>80% (forecast), 100% (actual)</td>
+<td>SAP Basis Lead, FinOps Lead</td>
+</tr>
+<tr>
+<td>HANA-PRD-Budget</td>
+<td>RG: sap-prd-hana</td>
+<td>USD 35,000</td>
+<td>90% (actual), 110% (actual)</td>
+<td>SAP Basis Lead</td>
+</tr>
+<tr>
+<td>DEV-SBX-Budget</td>
+<td>RG: sap-dev-app, RG: sap-sbx</td>
+<td>USD 4,000</td>
+<td>100% (actual)</td>
+<td>Development Lead</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cost-anomaly-detection">Cost Anomaly Detection<a class="headerlink" href="#cost-anomaly-detection" title="Permanent link">¶</a></h3>
+<p>Azure Cost Management anomaly detection uses ML-based analysis on daily cost telemetry. Anomaly alerts are configured at the subscription scope and are sent to an action group that creates a P3 ServiceNow incident. SAP cost anomalies with common root causes include:</p>
+<ul>
+<li>Unscheduled HANA VM restart that disabled the scheduled stop (VM runs 24x7 instead of business-hours-only)</li>
+<li>ANF capacity pool auto-grow triggered by snapshot accumulation exceeding volume quota</li>
+<li>Azure Backup encountering a failed full backup that triggers repeated retries</li>
+<li>A new SAP sandbox system deployed without cost allocation tags, bypassing the budget</li>
+</ul>
+<h3 id="showback-and-chargeback-reports">Showback and Chargeback Reports<a class="headerlink" href="#showback-and-chargeback-reports" title="Permanent link">¶</a></h3>
+<p>Monthly showback reports are generated from the Azure Cost Management daily export using a Logic App pipeline. The reports are delivered as CSV and PDF to SAP system owners by the 5th business day of the following month. The chargeback report--which posts costs to the internal financial system--is delivered to Finance by the 3rd business day. Both reports include:</p>
+<ul>
+<li>Total cost by SAPSystemID</li>
+<li>Cost breakdown by SAPComponent (compute / storage / networking / backup / management services)</li>
+<li>Month-over-month cost change with variance explanation (automated from Azure Advisor recommendation status)</li>
+<li>RI utilization rate and stranded RI cost (if any)</li>
+<li>Open rightsizing recommendations from Azure Advisor with estimated saving</li>
+</ul>
+<h3 id="finops-tooling-integration">FinOps Tooling Integration<a class="headerlink" href="#finops-tooling-integration" title="Permanent link">¶</a></h3>
+<p>Azure Cost Management integrates natively with Power BI through the Azure Cost Management connector. The SAP Cost Dashboard Power BI report includes: subscription spend trend (13-month rolling), RI coverage and utilization heatmap, anomaly alert log, top 10 cost resources by SAPSystemID, and Savings Plan coverage rate. The dashboard is published to the FinOps team's Power BI workspace and shared with SAP system owners through row-level security based on CostCenter tag values.</p>
+<p>For organizations using third-party FinOps platforms (Apptio, CloudHealth, Spot.io), the Azure Cost Management export to Blob Storage provides a standardized ingestion source. The CSV export format follows the Azure Cost and Usage schema; field mapping to FinOps platform ingestion formats is straightforward.</p>
+<h3 id="alert-table">Alert Table<a class="headerlink" href="#alert-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Metric/Signal</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Runbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP-Prod-BudgetForecast-80</td>
+<td>Azure Budget forecast: SAP Production Subscription</td>
+<td>80% of USD 52,000 monthly budget (forecast model)</td>
+<td>Warning (P3)</td>
+<td>Review current-month cost drivers in Cost Management; identify trending resource groups; notify SAP Basis Lead</td>
+</tr>
+<tr>
+<td>SAP-Prod-BudgetActual-100</td>
+<td>Azure Budget actual: SAP Production Subscription</td>
+<td>100% of USD 52,000</td>
+<td>High (P2)</td>
+<td>Immediate review; identify overage source; escalate to FinOps Lead and CIO; determine if emergency procurement approval needed</td>
+</tr>
+<tr>
+<td>SAP-CostAnomaly-Daily</td>
+<td>Azure Cost Management anomaly detection score</td>
+<td>Anomaly detected (ML threshold, subscription scope)</td>
+<td>Warning (P3)</td>
+<td>Identify anomalous resource; verify against change management log; resolve or escalate to responsible team</td>
+</tr>
+<tr>
+<td>SAP-RI-LowUtilization</td>
+<td>Azure RI utilization (7-day rolling average)</td>
+<td>Below 70% on any purchased RI</td>
+<td>Warning (P3)</td>
+<td>Identify VMs that stopped consuming RI; check for VM decommission, resize, or stop; initiate RI exchange or cancellation if permanent</td>
+</tr>
+<tr>
+<td>SAP-VM-Untagged</td>
+<td>Azure Policy compliance: SAPSystemID tag</td>
+<td>Any resource in SAP subscription without SAPSystemID tag</td>
+<td>Informational (P4)</td>
+<td>Apply mandatory tags via remediation task; identify deployment that bypassed policy; investigate and fix IaC template</td>
+</tr>
+<tr>
+<td>SAP-NonProd-StartStop-Failure</td>
+<td>Azure Automation runbook last execution status</td>
+<td>Runbook job status = Failed or VM still running after scheduled stop + 30 minutes</td>
+<td>High (P2)</td>
+<td>Check Automation account job log; verify managed identity permissions; manually stop VMs if runbook failed; investigate root cause</td>
+</tr>
+<tr>
+<td>SAP-Backup-StorageCostSpike</td>
+<td>Azure Backup storage consumed (RSV)</td>
+<td>Greater than 15% week-over-week increase in vault storage consumption</td>
+<td>Warning (P3)</td>
+<td>Review backup policy; check for failed backups retried multiple times; verify snapshot and log backup retention settings</td>
+</tr>
+<tr>
+<td>SAP-ANF-CapPoolNearFull</td>
+<td>Azure NetApp Files capacity pool consumed capacity</td>
+<td>Greater than 85% of provisioned pool size</td>
+<td>High (P2)</td>
+<td>Review snapshot consumption; delete expired snapshots; increase pool size if volume growth is legitimate; alert SAP Basis team</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<p>The cost optimization architecture maps to the Azure Landing Zone design as follows:</p>
+<p><strong>Management Group scope</strong>: All budgets, Azure Policy cost-governance assignments, and RI inventory visibility are configured at the SAP Management Group scope. This scope encompasses both the SAP Production and SAP Non-Production subscriptions, enabling consolidated budget views and policy coverage without cross-subscription configuration duplication.</p>
+<p><strong>Subscription design</strong>: The split between production and non-production subscriptions is a cost governance prerequisite. It enables separate budget alerts with different thresholds, separate RI scope targeting, and independent Dev/Test offer enrollment for the non-production subscription. Mixing production and non-production SAP workloads in a single subscription collapses budget visibility and prevents RI scope isolation.</p>
+<p><strong>Network cost considerations</strong>: Azure Firewall Premium processing units (approximately USD 7.20/hour for Premium tier) and ExpressRoute circuit charges are allocated to the Connectivity subscription's budget, not the SAP subscription budgets. The 12% loading factor in the chargeback model covers the SAP workload's proportional share of shared connectivity costs. ExpressRoute data transfer charges (USD 0.025-0.05/GB for outbound) are monitored separately; SAP RFC traffic between on-premises and Azure can generate significant ExpressRoute data costs at high transaction volumes.</p>
+<p><strong>Private Endpoints</strong>: Private endpoints for ANF, Azure Backup, Azure Blob Storage, and Azure Key Vault eliminate Public IP egress charges that would otherwise apply to HANA backup streaming and billing export downloads. Each private endpoint costs approximately USD 0.01/hour (~USD 7.30/month) plus USD 0.01/GB processed; for SAP-scale backup volumes, the elimination of public egress charges significantly outweighs private endpoint charges.</p>
+<p><strong>Azure Monitor Log Analytics</strong>: Log Analytics ingestion cost for SAP workload metrics and logs is approximately USD 2.30/GB ingested (Pay-As-You-Go) or USD 1.15/GB at 100 GB/day Commitment Tier. A typical SAP HANA production system generates 5-15 GB/day of logs and metrics depending on the verbosity of HANA trace and the number of performance counters collected. Use Log Analytics workspace data export limits and Azure Monitor metric alerts (which query without ingestion charges) to reduce Log Analytics ingestion costs: set workspace daily cap to 20 GB for non-production workspaces and use metric alerts (free) for threshold-based alerting instead of log-based alerts.</p>
+<hr/>
+<h2 id="cost-governance-maturity-model">Cost Governance Maturity Model<a class="headerlink" href="#cost-governance-maturity-model" title="Permanent link">¶</a></h2>
+<p>SAP on Azure cost governance matures through four stages. Most organizations begin at Stage 1 after migration and should target Stage 3 within 12 months of production go-live.</p>
+<h3 id="stage-1-reactive-months-0-3-post-migration">Stage 1: Reactive (Months 0-3 Post-Migration)<a class="headerlink" href="#stage-1-reactive-months-0-3-post-migration" title="Permanent link">¶</a></h3>
+<p>At Stage 1, cost visibility is limited to the Azure portal Cost Management overview. Tags are partially applied--applied at deployment but not enforced by policy, so drift accumulates. Budgets exist at the subscription level but thresholds are guesses based on migration estimates rather than measured baselines. Reserved Instances are not yet purchased; production HANA VMs are on pay-as-you-go because the team wants to confirm VM SKU stability before committing. Non-production VMs run 24x7. There is no formal chargeback; cost is reported informally via screenshots from the Azure portal.</p>
+<p>Actions to exit Stage 1: (1) Deploy the tag enforcement Azure Policy initiative at the Management Group scope. (2) Run Azure Advisor Cost recommendations and create a prioritized backlog. (3) Establish the daily Cost Management export to Blob Storage. (4) Define and communicate the non-production start/stop schedule even before automating it (manual daily discipline reduces cost while automation is deployed).</p>
+<h3 id="stage-2-informed-months-3-6">Stage 2: Informed (Months 3-6)<a class="headerlink" href="#stage-2-informed-months-3-6" title="Permanent link">¶</a></h3>
+<p>At Stage 2, tagging compliance is above 90% (policy in audit mode; remaining gaps are documented and assigned). Budgets have been refined using two months of actual billing data. The daily Cost Management export feeds a basic Power BI report showing cost by SAPSystemID. Non-production VMs operate on a defined schedule (manual or automated). The FinOps team has reviewed Azure Advisor recommendations and approved the top three rightsizing items for change control. RIs have been purchased for the stable production HANA SKUs.</p>
+<p>Actions to exit Stage 2: (1) Move tag policy from audit to deny/deployIfNotExists enforcement. (2) Automate non-production start/stop with the Azure Automation runbook. (3) Implement the formal monthly chargeback report with financial system posting. (4) Activate Azure Hybrid Benefit across all eligible VMs. (5) Configure cost anomaly detection with ServiceNow integration.</p>
+<h3 id="stage-3-optimized-months-6-12">Stage 3: Optimized (Months 6-12)<a class="headerlink" href="#stage-3-optimized-months-6-12" title="Permanent link">¶</a></h3>
+<p>At Stage 3, tagging compliance is 100% (enforced by policy; zero untagged resources in monthly compliance report). Chargeback is operating on monthly cycle with Finance reconciliation. RIs are purchased for both production and non-production predictable workloads. Non-production VMs are on automated schedules. Azure Advisor rightsizing recommendations are reviewed in the Change Advisory Board and the actionable items have &gt;= 80% implementation rate. HANA EarlyWatch Alert data is used as a quarterly rightsizing trigger. Backup storage tiering is operational with archive tier for backups older than 90 days.</p>
+<p>Stage 3 is the target steady state for most organizations. It delivers the majority of available cost optimization value (estimated 60-70% of total achievable savings) with manageable operational overhead.</p>
+<h3 id="stage-4-continuous-optimization-month-12">Stage 4: Continuous Optimization (Month 12+)<a class="headerlink" href="#stage-4-continuous-optimization-month-12" title="Permanent link">¶</a></h3>
+<p>At Stage 4, cost optimization is embedded in every SAP change process. New SAP system provisioning requires a cost estimate (generated from a standard template) and a defined decommission date or review date. Transport landscape changes are evaluated for HANA MDC consolidation opportunities before new HANA VMs are provisioned. Reserved Instance coverage rate and Savings Plan commitment levels are reviewed quarterly and adjusted for planned landscape changes. The FinOps team uses Azure Cost Management's cost allocation rules to automatically split shared service costs across SIDs without manual spreadsheet calculation. SAP EarlyWatch Alert outputs are consumed programmatically and correlated with Azure Monitor metrics to produce automated rightsizing recommendations without manual data extraction.</p>
+<hr/>
+<h2 id="finops-practices-for-sap-lifecycle-events">FinOps Practices for SAP Lifecycle Events<a class="headerlink" href="#finops-practices-for-sap-lifecycle-events" title="Permanent link">¶</a></h2>
+<p>Cost governance must adapt to SAP-specific lifecycle events that create spikes or structural changes in Azure spend.</p>
+<h3 id="sap-system-upgrades-and-migrations">SAP System Upgrades and Migrations<a class="headerlink" href="#sap-system-upgrades-and-migrations" title="Permanent link">¶</a></h3>
+<p>SAP S/4HANA migrations (from SAP ECC or SAP ECC on HANA) typically require parallel system operation for 4-8 weeks: the legacy system continues to run while the target S/4HANA system is built, tested, and cut over. During this period, Azure costs double for the affected landscape tier. This temporary cost increase must be budgeted separately from steady-state operational budgets.</p>
+<p>Recommended approach: create a time-bounded budget for the migration project (e.g., <code>S4H-Migration-2025-Budget</code>) scoped to the specific resource groups used for the migration build system. Alert thresholds for the migration budget are set at the project estimate, not at steady-state operational levels. The migration budget is closed and resource groups are deleted within 30 days of cutover completion; decommission of the migration build system is a tracked project deliverable with a named owner.</p>
+<h3 id="sap-support-pack-stack-upgrades">SAP Support Pack Stack Upgrades<a class="headerlink" href="#sap-support-pack-stack-upgrades" title="Permanent link">¶</a></h3>
+<p>Support Pack Stack (SPS) upgrades for SAP HANA require a maintenance window where the HANA database is shut down, the HANA software is upgraded, and the system is restarted. For cost purposes, SPS upgrades have two impacts: (1) if the SPS upgrade involves a change in the minimum certified VM SKU (rare but documented in SAP Note 3299480 for Msv2 changes), a VM resize may be needed, triggering an RI exchange decision; (2) HANA downtime for SPS upgrade is typically 2-4 hours, which is covered by the existing RI (RIs cover allocated VM hours, not running VM hours; the RI discount applies to the deallocated VM hour as well, but only if the VM is in a "deallocated" state, not if it is still allocated with HANA stopped).</p>
+<h3 id="sap-system-decommissions">SAP System Decommissions<a class="headerlink" href="#sap-system-decommissions" title="Permanent link">¶</a></h3>
+<p>SAP system decommissions are the most common source of stranded RI cost. When a DEV or SBX system is decommissioned at the end of a project, the VM is deleted but the RI (if purchased) continues to be charged unless it is exchanged or cancelled. The decommission process must include: (1) RI inventory check to identify any RI associated with the decommissioned VM SKU; (2) RI exchange or cancellation request submitted to Microsoft within the 365-day exchange window; (3) tag <code>SAPSystemID = DECOMM</code> applied to the resource group before deletion to maintain billing record attribution. Automate decommission RI checks using the Azure Automation rightsizing alert runbook, which surfaces any RI with zero utilization for 7+ consecutive days.</p>
+<h3 id="quarter-end-and-year-end-sap-batch-peaks">Quarter-End and Year-End SAP Batch Peaks<a class="headerlink" href="#quarter-end-and-year-end-sap-batch-peaks" title="Permanent link">¶</a></h3>
+<p>SAP landscapes experience predictable compute peaks during financial quarter-end and year-end close: batch jobs (FAGLGVTR, KALRUN, F.16 foreign currency valuation) run concurrently, application server CPU utilization reaches P95 levels that normal business hours do not, and HANA buffer pool pressure increases due to large aggregation queries. These peaks last 2-5 days. The cost optimization implication: application servers should not be downsized to a SKU that cannot handle the peak load, even if average utilization is low. EarlyWatch Alert data for rightsizing decisions must include peak periods; a rightsizing recommendation based on 30-day P95 CPU is sound only if the measurement period includes at least one month-end close.</p>
+<p>For quarter-end, the option to temporarily scale out application servers (add AAS instances) using pay-as-you-go (not RI-covered) is more cost-effective than permanently sizing the application server SKU for peak load. An E32ds_v5 at pay-as-you-go for 5 days costs approximately USD 324; permanently upgrading from E16ds_v5 to E32ds_v5 to handle the peak costs approximately USD 540/month additional on RI. If peak occurs 4 times per year (5 days each = 20 days), the scale-out approach costs approximately USD 1,296/year versus USD 6,480/year for the permanent upsize--a USD 5,184/year saving per application server scaled during peaks.</p>
+<hr/>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<ol>
+<li>Azure Pricing Calculator -- https://azure.microsoft.com/en-us/pricing/calculator/</li>
+<li>Azure Reserved Virtual Machine Instances -- https://learn.microsoft.com/en-us/azure/cost-management-billing/reservations/save-compute-costs-reservations</li>
+<li>Azure Savings Plans for Compute -- https://learn.microsoft.com/en-us/azure/cost-management-billing/savings-plan/savings-plan-compute-overview</li>
+<li>Azure Hybrid Benefit for Windows Server -- https://learn.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit</li>
+<li>Azure Cost Management + Billing documentation -- https://learn.microsoft.com/en-us/azure/cost-management-billing/</li>
+<li>SAP on Azure: Cost Management and Optimization guidance -- https://learn.microsoft.com/en-us/azure/sap/workloads/sap-azure-cost-management</li>
+<li>Azure NetApp Files Performance and Pricing -- https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-cost-model</li>
+<li>SAP Workloads on Azure Virtual Machines -- supported VM types (SAP Note 1928533 companion) -- https://learn.microsoft.com/en-us/azure/sap/workloads/planning-guide</li>
+<li>Azure Well-Architected Framework -- Cost Optimization pillar -- https://learn.microsoft.com/en-us/azure/well-architected/cost/overview</li>
+<li>FinOps Foundation -- FinOps Framework -- https://www.finops.org/framework/</li>
+<li>Azure Automation Start/Stop VMs solution -- https://learn.microsoft.com/en-us/azure/automation/automation-solution-vm-management</li>
+<li>Azure Backup pricing -- https://azure.microsoft.com/en-us/pricing/details/backup/</li>
+</ol>
+<hr/>
+<h2 id="implementation-reference">Implementation Reference<a class="headerlink" href="#implementation-reference" title="Permanent link">¶</a></h2>
+<h3 id="azure-cli-commands-for-cost-operations">Azure CLI Commands for Cost Operations<a class="headerlink" href="#azure-cli-commands-for-cost-operations" title="Permanent link">¶</a></h3>
+<p>The following Azure CLI commands support the day-to-day cost operations tasks described in this chapter. All commands assume the <code>az</code> CLI version 2.50+. Required RBAC assignments: <code>Cost Management Contributor</code> at the subscription scope for budget and export operations, and <code>Reader</code> at the subscription scope for read-only queries.</p>
+<p><strong>Create a monthly budget with email alert:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>az<span class="w"> </span>consumption<span class="w"> </span>budget<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span>--budget-name<span class="w"> </span><span class="s2">"SAP-Production-Budget"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span>--amount<span class="w"> </span><span class="m">52000</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">  </span>--category<span class="w"> </span>Cost<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">  </span>--time-grain<span class="w"> </span>Monthly<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">  </span>--start-date<span class="w"> </span><span class="s2">"2025-01-01"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">  </span>--end-date<span class="w"> </span><span class="s2">"2028-12-31"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">  </span>--subscription<span class="w"> </span><span class="s2">"&lt;production-subscription-id&gt;"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">  </span>--notifications<span class="w"> </span><span class="s2">"{\"Actual_GreaterThan_80Percent\":{\"enabled\":true,\"operator\":\"GreaterThan\",\"threshold\":80,\"contactEmails\":[\"sapbasis@company.com\",\"finops@company.com\"],\"contactRoles\":[\"Owner\"]},\"Actual_GreaterThan_100Percent\":{\"enabled\":true,\"operator\":\"GreaterThan\",\"threshold\":100,\"contactEmails\":[\"sapbasis@company.com\",\"cio@company.com\"]}}"</span>
+</span></code></pre></div>
+<p><strong>Create a daily cost export to Blob Storage:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>az<span class="w"> </span>costmanagement<span class="w"> </span><span class="nb">export</span><span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span>--name<span class="w"> </span><span class="s2">"sap-daily-actual-export"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span>--type<span class="w"> </span>ActualCost<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">  </span>--scope<span class="w"> </span><span class="s2">"/subscriptions/&lt;production-subscription-id&gt;"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">  </span>--storage-account-id<span class="w"> </span><span class="s2">"/subscriptions/&lt;mgmt-sub-id&gt;/resourceGroups/rg-cost-exports/providers/Microsoft.Storage/storageAccounts/sacostexportsap"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">  </span>--storage-container<span class="w"> </span><span class="s2">"sap-cost-exports"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">  </span>--storage-directory<span class="w"> </span><span class="s2">"production"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">  </span>--recurrence<span class="w"> </span>Daily<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="w">  </span>--recurrence-period<span class="w"> </span><span class="nv">from</span><span class="o">=</span><span class="s2">"2025-01-01"</span><span class="w"> </span><span class="nv">to</span><span class="o">=</span><span class="s2">"2028-12-31"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="w">  </span>--schedule-status<span class="w"> </span>Active<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="w">  </span>--dataset-granularity<span class="w"> </span>Daily<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="w">  </span>--dataset-configuration<span class="w"> </span><span class="nv">columns</span><span class="o">=</span><span class="s2">"['Date','SubscriptionId','ResourceGroup','ResourceType','ResourceId','MeterCategory','MeterSubcategory','MeterName','Quantity','EffectivePrice','CostInBillingCurrency','Tags']"</span>
+</span></code></pre></div>
+<p><strong>Apply Azure Hybrid Benefit to an existing VM:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>az<span class="w"> </span>vm<span class="w"> </span>update<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">  </span>--resource-group<span class="w"> </span>rg-sap-prd-app<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">  </span>--name<span class="w"> </span>vm-prd-pas-01<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">  </span>--license-type<span class="w"> </span>Windows_Server
+</span></code></pre></div>
+<p><strong>Trigger manual export re-run for a missed date:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>az<span class="w"> </span>costmanagement<span class="w"> </span><span class="nb">export</span><span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span>--name<span class="w"> </span><span class="s2">"sap-daily-actual-export"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span>--scope<span class="w"> </span><span class="s2">"/subscriptions/&lt;production-subscription-id&gt;"</span>
+</span></code></pre></div>
+<hr/>
+<h2 id="validation-checklist">Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">¶</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> All SAP VMs carry mandatory tags: SAPSystemID, SAPEnvironment, SAPComponent, CostCenter, ApplicationOwner, Project; verified through Azure Policy compliance report showing 100% compliance</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Policy <code>sap-cost-tagging-governance</code> initiative is assigned at the SAP Management Group scope and is in enforcement (not audit) mode</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Reserved Instances are purchased for all production SAP HANA VMs and scoped to the production subscription only; RI utilization report shows &gt;= 95% utilization over the last 30 days</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Hybrid Benefit is activated on all Windows Server VMs in the SAP landscape; confirmed via Azure Policy compliance report for the AHB audit policy</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Hybrid Benefit is activated on all SQL Server VMs where SQL Server SA coverage is confirmed in the SAM inventory</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Non-production SAP VMs (QAS, DEV, SBX) are enrolled in the Azure Automation start/stop schedule; last 7-day execution log shows no failed jobs and VMs are deallocated outside business hours</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Cost Management budgets are configured for both the production and non-production subscriptions with alert thresholds at 80% (forecast), 100% (actual), and 110% (actual)</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Cost anomaly detection is enabled at the subscription scope for both production and non-production SAP subscriptions; action group is configured to create ServiceNow incidents</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Monthly chargeback report has been delivered for the last two months and reconciled with the internal financial system; variance from expected budget is documented</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure NetApp Files capacity pool utilization is below 80% on all pools; snapshot retention schedule has been reviewed and aligned to the backup policy</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Backup archive tier lifecycle policy is configured on the backup export storage account to tier objects to archive after 90 days</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> RI utilization is reviewed monthly; any RI with utilization below 70% has an open change request for exchange or cancellation</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> HANA EarlyWatch Alert rightsizing review has been completed for production HANA VMs in the last 90 days; findings are documented and any rightsizing recommendations are tracked in the change backlog</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> The SAP Cost Dashboard (Power BI) is accessible to SAP system owners filtered by their CostCenter; last data refresh is within 24 hours</li>
+</ul>
+<hr/>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-1-procuring-ris-before-vm-sku-stabilization">Anti-Pattern 1: Procuring RIs Before VM SKU Stabilization<a class="headerlink" href="#anti-pattern-1-procuring-ris-before-vm-sku-stabilization" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: RI purchases are made during the migration project before the target SAP HANA VM SKU is confirmed through production load testing and EarlyWatch Alert data. The initially selected VM SKU (e.g., M192ims_v2) is later downsized to M96s_v2, leaving a 3-year RI for the M192ims_v2 that cannot be fully utilized.</p>
+<p><strong>Impact</strong>: RI exchange is possible but incurs a 12% early termination fee on the residual value of the exchanged RI. A USD 23.50/hour M192ims_v2 3-year RI with 24 months remaining has a residual value of approximately USD 16,920; the 12% fee is USD 2,030 of stranded cost. Additionally, the replacement M96s_v2 RI is purchased at current pricing, which may differ from the price at original procurement.</p>
+<p><strong>Correct approach</strong>: Deploy production HANA VMs on pay-as-you-go for the first 90 days of production operation. Extract EarlyWatch Alert data after go-live and one full month-end close cycle. Purchase the RI only after the HANA memory footprint is stable and no planned growth events (new modules, data migrations) are within 12 months. The 90-day PAYG period costs approximately USD 3,150 more than RI pricing for M96s_v2; this is the option premium for SKU confirmation.</p>
+<h3 id="anti-pattern-2-applying-spot-vms-to-sap-workloads-without-eviction-handling">Anti-Pattern 2: Applying Spot VMs to SAP Workloads Without Eviction Handling<a class="headerlink" href="#anti-pattern-2-applying-spot-vms-to-sap-workloads-without-eviction-handling" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Spot VMs are applied to SAP QA or DEV application servers to achieve 60-80% cost savings without implementing eviction detection, automated re-start, or session state management. An eviction during an active SAP transport import leaves the target system in an inconsistent state with partially applied objects and a blocked transport queue.</p>
+<p><strong>Impact</strong>: SAP transport import failures caused by evicted application servers require BASIS intervention to reset the transport request status, re-import the affected requests, and validate object activation. Recovery time is typically 2-8 hours; in regulated environments, re-import requires documented change management approval. The cost saving from Spot is negated by the labor cost of recovery and project schedule risk.</p>
+<p><strong>Correct approach</strong>: Restrict Spot VMs to isolated sandbox systems (SBX SIDs) that are not in the transport landscape and have no active transport import jobs during the Spot VM's operating window. Implement eviction notification handling (Azure Scheduled Events API) to initiate a graceful SAP system shutdown before the eviction completes. Do not use Spot for any system with a defined transport path (DEV -&gt; QAS -&gt; PRD).</p>
+<h3 id="anti-pattern-3-tagging-non-enforcement-leading-to-cost-allocation-blind-spots">Anti-Pattern 3: Tagging Non-Enforcement Leading to Cost Allocation Blind Spots<a class="headerlink" href="#anti-pattern-3-tagging-non-enforcement-leading-to-cost-allocation-blind-spots" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Azure Policy for tag enforcement is deployed in audit mode rather than deny mode, or is assigned at the resource group level rather than at the Management Group level. New resources deployed by automated pipelines bypass the audit policy (no enforcement), resulting in untagged VMs, disks, and ANF volumes that cannot be attributed to a SAPSystemID in the chargeback model.</p>
+<p><strong>Impact</strong>: Untagged resources appear as unallocated cost in the Cost Management export. Finance cannot charge the cost back to a business unit. The SAP Basis team manually investigates untagged resources monthly, consuming 4-8 hours of engineering time per review cycle. Long-running untagged resources (e.g., a forgotten sandbox HANA VM) accumulate months of unallocated cost before discovery.</p>
+<p><strong>Correct approach</strong>: Assign tag enforcement policies at the SAP Management Group scope in deployIfNotExists (for resource groups) and deny (for specific resource types) mode. Include tag validation in the Azure DevOps/GitHub Actions deployment pipeline: fail the pipeline if mandatory tags are absent before resource deployment reaches Azure Resource Manager. Review Azure Policy compliance in the monthly cost operations meeting and remediate any non-compliant resources before the billing export is finalized.</p>
+<h3 id="anti-pattern-4-ignoring-anf-snapshot-storage-accumulation">Anti-Pattern 4: Ignoring ANF Snapshot Storage Accumulation<a class="headerlink" href="#anti-pattern-4-ignoring-anf-snapshot-storage-accumulation" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Azure NetApp Files volumes are provisioned at a fixed quota (e.g., 2 TiB for HANA data volume) with a default snapshot schedule of hourly (48 hours) and daily (14 days). Snapshots consume capacity from the volume quota. After several months, snapshot consumption reaches 30-40% of the volume quota, triggering an auto-grow event that increases the volume quota (and therefore the effective ANF capacity pool cost) without any change in the actual HANA database size.</p>
+<p><strong>Impact</strong>: An ANF capacity pool that was sized for 4 TiB grows to 6 TiB due to snapshot accumulation, increasing ANF Ultra tier cost from approximately USD 1,200/month to USD 1,800/month--a 50% cost increase with no corresponding workload growth. The growth is invisible in the Azure Cost Management resource-level view because it appears as "storage volume increase" rather than a discrete billable event.</p>
+<p><strong>Correct approach</strong>: Monitor ANF volume capacity utilization and snapshot consumed bytes through Azure Monitor ANF metrics (<code>VolumeLogicalSize</code> vs <code>VolumeSnapshotSize</code>). Set an alert at 70% volume utilization. Configure the ANF snapshot schedule with explicit retention limits aligned to recovery requirements (not defaults). Use the ANF snapshot deletion policy to enforce maximum snapshot count per volume. Review snapshot-to-volume-quota ratios monthly as part of the storage cost review.</p>
+<h3 id="anti-pattern-5-purchasing-ri-at-shared-scope-without-production-isolation">Anti-Pattern 5: Purchasing RI at Shared Scope Without Production Isolation<a class="headerlink" href="#anti-pattern-5-purchasing-ri-at-shared-scope-without-production-isolation" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: RIs for M-series SAP HANA VMs are purchased at shared scope, making the RI benefit available across all subscriptions in the enrollment. The non-production subscription runs an M96s_v2 HANA VM for QAS and consumes the production RI benefit during off-peak production hours when the production VM is running but not at full CPU.</p>
+<p><strong>Impact</strong>: Azure applies the RI benefit to the first matching VM hour it finds across shared-scope subscriptions. If both production and QAS M96s_v2 VMs are running simultaneously, the RI covers only one of them (the one Azure billing finds first based on subscription ordering). The second VM is billed at pay-as-you-go rates. In the worst case, QAS (which should be covered by a separate, cheaper RI or Savings Plan) consumes the production RI while production pays PAYG rates--the opposite of the intended outcome.</p>
+<p><strong>Correct approach</strong>: Set production HANA RI scope to the production subscription only. Purchase separate, lower-cost RI or Savings Plan coverage for non-production HANA VMs. This guarantees that the production RI is consumed by the production HANA VM 24x7, achieving the target 95%+ RI utilization rate. Monitor RI utilization by VM (not aggregate) in the monthly RI utilization report to detect any unexpected consumption patterns.</p>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="symptom-production-hana-ri-utilization-consistently-below-95">Symptom: Production HANA RI Utilization Consistently Below 95%<a class="headerlink" href="#symptom-production-hana-ri-utilization-consistently-below-95" title="Permanent link">¶</a></h3>
+<p><strong>Root cause</strong>: The RI was purchased at shared scope and is being partially consumed by a non-production VM running the same SKU. Alternatively, the production HANA VM was resized (VM downsize after rightsizing) and the RI SKU no longer matches the running VM SKU. A third cause is an RI purchased for a VM that was since deallocated as part of a landscape change without an RI cancellation/exchange being initiated.</p>
+<p><strong>Resolution</strong>: Navigate to Azure portal &gt; Reservations &gt; select the affected RI &gt; Utilization. Identify which VMs are consuming the RI by reviewing the utilization details by subscription and resource. If a non-production VM is consuming the RI, change the RI scope from shared to the production subscription. If the VM SKU was changed, initiate an RI exchange (within the 12% fee window) for the new SKU. If the VM is decommissioned, initiate RI cancellation (12% fee) or exchange within the 365-day exchange policy window.</p>
+<h3 id="symptom-non-production-sap-vms-running-24x7-despite-startstop-schedule">Symptom: Non-Production SAP VMs Running 24x7 Despite Start/Stop Schedule<a class="headerlink" href="#symptom-non-production-sap-vms-running-24x7-despite-startstop-schedule" title="Permanent link">¶</a></h3>
+<p><strong>Root cause</strong>: The Azure Automation runbook job failed silently due to (a) managed identity permission expiry or RBAC change, (b) the VM's <code>StartStopOverride = Exempt</code> tag was applied and not removed after the override period, (c) the runbook reached the Azure Automation fair-share limit (3-hour job runtime) and was suspended before completing all VM stops, or (d) the schedule trigger was accidentally disabled.</p>
+<p><strong>Resolution</strong>: Check the Azure Automation account's job history for the start/stop runbook: navigate to Automation Account &gt; Jobs &gt; filter by runbook name and date. If jobs are failing, review the error output--common errors are <code>AuthorizationFailed</code> (RBAC issue on managed identity) and <code>ResourceNotFound</code> (VM was renamed or moved). Verify the managed identity has <code>Virtual Machine Contributor</code> on the target resource groups. Check all VMs for <code>StartStopOverride = Exempt</code> tags. Verify the Automation schedule is enabled and the next run time is in the expected future window. For fair-share limit issues, split the stop operations across two runbook executions staggered by 5 minutes.</p>
+<h3 id="symptom-azure-cost-management-export-to-blob-storage-contains-incomplete-data-missing-resource-groups">Symptom: Azure Cost Management Export to Blob Storage Contains Incomplete Data (Missing Resource Groups)<a class="headerlink" href="#symptom-azure-cost-management-export-to-blob-storage-contains-incomplete-data-missing-resource-groups" title="Permanent link">¶</a></h3>
+<p><strong>Root cause</strong>: The cost export was created with an older export definition that does not include resource groups created after the export was configured. Azure Cost Management exports with a subscription scope include all resource groups at the time of export; this is not a scoping issue. The more common cause is that the export encountered a transient error on specific billing dates (observable in the export job history) and those dates have empty or partial CSV files. A third cause is that new resources were deployed without mandatory tags; they appear in the export but cannot be attributed in the downstream pipeline because the tag field is null.</p>
+<p><strong>Resolution</strong>: Verify the export job history in Azure portal &gt; Cost Management &gt; Exports &gt; select the export &gt; Export run history. Re-trigger a manual export for the affected dates using <code>az costmanagement export trigger</code>. Validate the exported CSV row count against expected resource count using a Logic App step that compares row count to the previous day's export +/- 15%. For the tagging gap, identify the untagged resources using the Azure Policy compliance report and apply tags via <code>az resource tag update</code>; the next day's export will include the corrected tag values (tags are applied retroactively in subsequent exports for the current billing period).</p>
+<h3 id="symptom-anf-capacity-pool-approaching-limit-unexpectedly">Symptom: ANF Capacity Pool Approaching Limit Unexpectedly<a class="headerlink" href="#symptom-anf-capacity-pool-approaching-limit-unexpectedly" title="Permanent link">¶</a></h3>
+<p><strong>Root cause</strong>: HANA azacsnap snapshots are accumulating faster than the configured snapshot deletion schedule can remove them, typically because a failed azacsnap run left dangling snapshots that the subsequent run did not clean up due to a <code>--dbuser</code> authentication failure. A secondary cause is that the HANA data volume's change rate exceeded the estimate at design time (e.g., a large HANA table rebuild or data migration increased the daily changed bytes, causing snapshots to be larger than expected).</p>
+<p><strong>Resolution</strong>: Run <code>azacsnap --action backup --type data --prefix hana-data --retention 4 --trim</code> on the HANA backup server to force snapshot cleanup. Check the azacsnap log (<code>/home/azacsnap/.azacsnap/</code>) for authentication errors; HANA backint credentials used by azacsnap rotate with the HANA SYSTEM user password and must be updated in the azacsnap configuration file after password changes. Monitor ANF volume snapshot size via Azure Monitor metric <code>VolumeSnapshotSize</code>; if snapshot size exceeds 30% of volume quota, consider reducing azacsnap hourly retention from 48 to 24 hours as an interim measure while investigating the change rate increase.</p>
+<h3 id="symptom-chargeback-report-costs-do-not-reconcile-with-azure-invoice">Symptom: Chargeback Report Costs Do Not Reconcile With Azure Invoice<a class="headerlink" href="#symptom-chargeback-report-costs-do-not-reconcile-with-azure-invoice" title="Permanent link">¶</a></h3>
+<p><strong>Root cause</strong>: The most common cause is that the chargeback report uses "Actual cost" (RI charges billed in the month of purchase) while the invoice shows amortized RI cost (RI cost spread across the reservation term). A secondary cause is that the loading factor (12%) applied for shared services differs from the actual shared service cost in a given month (e.g., Azure Firewall had an unusual traffic spike that increased processing unit charges). A third cause is that the billing export captured data before the end of the billing period, excluding the last 1-3 days of the month.</p>
+<p><strong>Resolution</strong>: Standardize the chargeback model on "Amortized cost" to align with monthly invoice cost distribution. Amortized cost spreads the upfront RI cost across the reservation term, making month-over-month comparison consistent. Recalculate the shared services loading factor quarterly using actual Connectivity subscription costs divided by total SAP subscription costs over the trailing 3 months. Ensure the billing export schedule runs on the 3rd day of the following month (not the 1st) to allow Azure to finalize the previous month's billing data; Azure billing data for a month is typically finalized within 2 business days of month-end.</p>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

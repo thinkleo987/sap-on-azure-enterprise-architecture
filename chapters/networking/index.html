@@ -1,0 +1,2127 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/networking/" rel="canonical"/>
+<link href="../landing-zone/" rel="prev"/>
+<link href="../compute/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Networking Architecture - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-on-azure-networking-architecture">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Networking Architecture
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+<nav aria-label="Architecture Overview" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-hub-spoke-topology">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: Hub-Spoke Topology
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+<nav aria-label="SAP Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-components-in-scope">
+<span class="md-ellipsis">
+      
+        SAP Components in Scope
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-hana-latency-requirements">
+<span class="md-ellipsis">
+      
+        SAP HANA Latency Requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-specific-networking-constraints-on-azure">
+<span class="md-ellipsis">
+      
+        SAP-Specific Networking Constraints on Azure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference-table">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference Table
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+<nav aria-label="Azure Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#expressroute-connectivity">
+<span class="md-ellipsis">
+      
+        ExpressRoute Connectivity
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#virtual-network-topology">
+<span class="md-ellipsis">
+      
+        Virtual Network Topology
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-firewall-premium-policy-structure">
+<span class="md-ellipsis">
+      
+        Azure Firewall Premium Policy Structure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#nsg-baseline-rules-hana-subnet">
+<span class="md-ellipsis">
+      
+        NSG Baseline Rules: HANA Subnet
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#nsg-baseline-rules-ascs-subnet">
+<span class="md-ellipsis">
+      
+        NSG Baseline Rules: ASCS Subnet
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-dns-private-resolver">
+<span class="md-ellipsis">
+      
+        Azure DNS Private Resolver
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#private-endpoints">
+<span class="md-ellipsis">
+      
+        Private Endpoints
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-azure-service-detail">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: Azure Service Detail
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rporto-table">
+<span class="md-ellipsis">
+      
+        RPO/RTO Table
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization">
+<span class="md-ellipsis">
+      
+        Cost Optimization
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#monitoring-and-alerts">
+<span class="md-ellipsis">
+      
+        Monitoring and Alerts
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-1-routing-sap-application-to-hana-traffic-through-azure-firewall">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 1: Routing SAP Application-to-HANA Traffic Through Azure Firewall
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-2-using-azure-internal-load-balancer-basic-sku-for-sap-ascsers">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 2: Using Azure Internal Load Balancer Basic SKU for SAP ASCS/ERS
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-3-placing-sap-private-dns-zones-in-the-sap-application-subscription">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 3: Placing SAP Private DNS Zones in the SAP Application Subscription
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-4-disabling-accelerated-networking-on-sap-vms-to-reduce-cost">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 4: Disabling Accelerated Networking on SAP VMs to Reduce Cost
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-5-using-a-single-nsg-for-all-sap-subnets">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 5: Using a Single NSG for All SAP Subnets
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-6-not-setting-azure-load-balancer-idle-timeout-to-30-minutes">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 6: Not Setting Azure Load Balancer Idle Timeout to 30 Minutes
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-1-sap-hana-system-replication-status-shows-error-after-az-failover">
+<span class="md-ellipsis">
+      
+        Issue 1: SAP HANA System Replication Status Shows ERROR After AZ Failover
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-2-sap-rfc-connections-fail-intermittently-with-rfc_communication_failure">
+<span class="md-ellipsis">
+      
+        Issue 2: SAP RFC Connections Fail Intermittently with RFC_COMMUNICATION_FAILURE
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-3-sap-fiori-users-report-502-bad-gateway-from-azure-application-gateway">
+<span class="md-ellipsis">
+      
+        Issue 3: SAP Fiori Users Report 502 Bad Gateway from Azure Application Gateway
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-4-azure-dns-private-resolver-fails-to-resolve-on-premises-sap-hostnames">
+<span class="md-ellipsis">
+      
+        Issue 4: Azure DNS Private Resolver Fails to Resolve On-Premises SAP Hostnames
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-5-pacemaker-fence-agent-fails-ascs-cluster-cannot-fence-nodes">
+<span class="md-ellipsis">
+      
+        Issue 5: Pacemaker Fence Agent Fails: ASCS Cluster Cannot Fence Nodes
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-6-azure-netapp-files-nfs-mount-drops-on-hana-vms-during-hana-startup">
+<span class="md-ellipsis">
+      
+        Issue 6: Azure NetApp Files NFS Mount Drops on HANA VMs During HANA Startup
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+<nav aria-label="Landing Zone Mapping" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#management-group-policy-assignments-sap-management-group-scope">
+<span class="md-ellipsis">
+      
+        Management Group Policy Assignments (SAP Management Group Scope)
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    Phase A — Foundations
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="sap-on-azure-networking-architecture">SAP on Azure Networking Architecture<a class="headerlink" href="#sap-on-azure-networking-architecture" title="Permanent link">¶</a></h1>
+<hr/>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>This chapter defines the complete networking architecture for SAP workloads deployed on Microsoft Azure. The scope includes SAP S/4HANA, SAP ECC 6.0, SAP BW/4HANA, SAP NetWeaver Application Server (ABAP and Java stacks), and SAP HANA database instances. It addresses ExpressRoute circuit sizing, hub virtual network design, SAP spoke virtual network subnet segmentation, Azure Firewall Premium rule sets for SAP traffic, Private Endpoint placement, Private DNS Zone configuration, Azure DNS Private Resolver forwarding rules, and NSG baseline rules for each SAP subnet.</p>
+<p>Key architecture decisions: ExpressRoute as the mandatory connectivity method for production SAP landscapes; Azure Firewall Premium as the single egress and inter-spoke inspection point; hub-spoke topology with dedicated SAP spokes per environment tier; Private Endpoints for all PaaS services; Azure DNS Private Resolver for split-horizon DNS; and Accelerated Networking enabled on all SAP VM NICs. These decisions are grounded in SAP Note 1928533, SAP Note 2015553, and Microsoft SAP on Azure Landing Zone Accelerator guidance.</p>
+<p>SAP HANA imposes strict latency constraints between application and database tiers: round-trip latency below 0.7 ms for production HANA scale-up as documented in SAP Note 1943937. Every network component selection in this chapter is validated against these constraints.</p>
+<hr/>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>The architecture follows the Azure Cloud Adoption Framework enterprise-scale hub-spoke pattern. The hub virtual network (10.0.0.0/16) contains the Azure ExpressRoute Gateway, Azure VPN Gateway, Azure Firewall Premium, Azure Bastion Standard, and Azure DNS Private Resolver. The SAP production spoke (10.10.0.0/16) and SAP non-production spoke (10.20.0.0/16) are peered to the hub and route all internet-bound and inter-spoke traffic through Azure Firewall Premium via user-defined routes.</p>
+<p>Five subnets are defined per SAP spoke: application subnet (PAS, AAS, Web Dispatcher), central services subnet (ASCS, ERS), HANA subnet (primary and secondary HANA VMs), management subnet (jump servers, monitoring agents), and private endpoint subnet (all PaaS Private Endpoints).</p>
+<h3 id="architecture-diagram-hub-spoke-topology">Architecture Diagram: Hub-Spoke Topology<a class="headerlink" href="#architecture-diagram-hub-spoke-topology" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph TB
+  subgraph OnPrem["On-Premises Data Center"]
+    CorpNet["Corporate Network 10.100.0.0/8"]
+    OnPremDNS["On-Premises DNS 10.100.1.53"]
+  end
+  subgraph ConnSub["Connectivity Subscription"]
+    subgraph HubVNet["Hub VNet 10.0.0.0/16"]
+      ERGW["ExpressRoute Gateway UltraPerformance"]
+      AzFW["Azure Firewall Premium IDPS Alert+Deny"]
+      DNSRes["DNS Private Resolver In:10.0.2.4 Out:10.0.2.68"]
+      Bastion["Azure Bastion Standard"]
+    end
+  end
+  subgraph SAPProd["SAP Production Subscription"]
+    subgraph ProdSpoke["SAP Prod Spoke 10.10.0.0/16"]
+      AppSub["App Subnet 10.10.1.0/24"]
+      AscsSub["ASCS Subnet 10.10.2.0/27"]
+      HanaSub["HANA Subnet 10.10.3.0/27"]
+      MgmtSub["Mgmt Subnet 10.10.4.0/27"]
+      PeSub["PE Subnet 10.10.5.0/27"]
+    end
+  end
+  subgraph SAPNonProd["SAP Non-Prod Subscription"]
+    NonProdSpoke["Non-Prod Spoke 10.20.0.0/16"]
+  end
+  OnPrem --&gt;|ExpressRoute Private Peering| ERGW
+  ERGW --&gt; AzFW
+  AzFW --&gt;|VNet Peering + UDR| ProdSpoke
+  AzFW --&gt;|VNet Peering + UDR| NonProdSpoke
+  OnPremDNS &lt;--&gt;|DNS Forwarding| DNSRes</code></pre>
+<hr/>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<h3 id="sap-components-in-scope">SAP Components in Scope<a class="headerlink" href="#sap-components-in-scope" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>SAP S/4HANA Application Server (ABAP)</strong>: PAS and AAS VMs in the application subnet. Each instance opens ICM HTTP/HTTPS ports (80xx/443xx), RFC/CPIC ports (33xx), and message server registration ports.</li>
+<li><strong>SAP Central Services (ASCS/SCS)</strong>: Hosts SAP Message Server (port 36xx) and ENSA2 Enqueue Server (port 32xx). Two-node Pacemaker cluster with Azure Internal Load Balancer Standard SKU providing a floating IP for the cluster virtual hostname.</li>
+<li><strong>SAP Enqueue Replication Server (ERS)</strong>: Runs on the second ASCS cluster node for ENSA2 lock replication. Uses a separate Azure Internal Load Balancer IP.</li>
+<li><strong>SAP HANA Database</strong>: Two-node HSR across two Availability Zones in SYNC mode. HANA replication requires unrestricted TCP between the two HANA VMs on ports 40000-40099 (SAP Note 2080991).</li>
+<li><strong>SAP Web Dispatcher</strong>: Reverse proxy for SAP Fiori deployed behind Azure Application Gateway WAF v2.</li>
+<li><strong>SAP Cloud Connector</strong>: VM in management subnet, outbound HTTPS port 443 to SAP BTP endpoints.</li>
+</ul>
+<h3 id="sap-hana-latency-requirements">SAP HANA Latency Requirements<a class="headerlink" href="#sap-hana-latency-requirements" title="Permanent link">¶</a></h3>
+<p>SAP Note 1943937 defines maximum acceptable network round-trip latency between the SAP application layer and SAP HANA as <strong>0.7 ms</strong> for production workloads. Azure deployments must place application VMs and HANA VMs in the same Availability Zone. The niping tool must be run before production cutover. All routing between the application subnet and HANA subnet must not traverse Azure Firewall or any NVA.</p>
+<h3 id="sap-specific-networking-constraints-on-azure">SAP-Specific Networking Constraints on Azure<a class="headerlink" href="#sap-specific-networking-constraints-on-azure" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>Accelerated Networking is mandatory</strong> for all SAP VMs with 4 or more vCPUs (SAP Note 1928533, Table 5).</li>
+<li><strong>Multiple NICs for HANA</strong> are required to separate application traffic, HANA System Replication traffic, and management/backup traffic (SAP Note 2080991).</li>
+<li><strong>IP forwarding must not be enabled</strong> on SAP application or database VM NICs (SAP Note 2015553).</li>
+<li><strong>Azure Load Balancer idle timeout</strong> must be set to <strong>30 minutes</strong> for all load balancers fronting SAP ASCS/ERS instances (SAP Note 1999351).</li>
+<li><strong>NVA placement between SAP application tier and HANA database tier is prohibited</strong> in production because any additional hop exceeds the 0.7 ms HANA latency threshold.</li>
+</ol>
+<h3 id="sap-notes-reference-table">SAP Notes Reference Table<a class="headerlink" href="#sap-notes-reference-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Azure: Supported Products and Azure VM Types</td>
+<td>Mandates Accelerated Networking for VMs with 4+ vCPUs</td>
+<td>VM NIC configuration</td>
+</tr>
+<tr>
+<td>1943937</td>
+<td>Hardware Configuration Check Tool: Azure Support</td>
+<td>Maximum 0.7 ms round-trip latency app-to-HANA; niping validation before go-live</td>
+<td>No NVA on app-to-HANA routing path</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>SAP on Microsoft Azure: Support Prerequisites</td>
+<td>Prohibits IP forwarding on SAP VM NICs</td>
+<td>NIC configuration validation</td>
+</tr>
+<tr>
+<td>2080991</td>
+<td>SAP HANA on Azure: Network Requirements</td>
+<td>HSR ports 40000-40099; dedicated NIC for HSR traffic</td>
+<td>HANA subnet NSG rules; multi-NIC HANA VM design</td>
+</tr>
+<tr>
+<td>2694118</td>
+<td>SAP HANA HA with ENSA2 on Azure</td>
+<td>Requires ILB floating IP (DSR); health probe port 621xx</td>
+<td>Azure ILB configuration for ASCS/ERS</td>
+</tr>
+<tr>
+<td>1999351</td>
+<td>Troubleshooting Enhanced Azure Monitoring for SAP</td>
+<td>30-minute idle timeout requirement for Azure ILBs</td>
+<td>Azure ILB idle timeout on all SAP ILBs</td>
+</tr>
+<tr>
+<td>3007991</td>
+<td>Pacemaker Fencing with Azure Fence Agent</td>
+<td>Outbound HTTPS 443 from ASCS VMs to management.azure.com</td>
+<td>ASCS subnet NSG outbound rules</td>
+</tr>
+<tr>
+<td>2778954</td>
+<td>SAP on Azure: Port and Firewall Configuration</td>
+<td>Comprehensive SAP port reference for all components</td>
+<td>All NSG and Azure Firewall rule sets</td>
+</tr>
+<tr>
+<td>2854226</td>
+<td>Azure NetApp Files for SAP Applications</td>
+<td>NFS v4.1 requirements; Ultra tier criteria for HANA</td>
+<td>Azure NetApp Files configuration</td>
+</tr>
+<tr>
+<td>2523032</td>
+<td>SAP Web Dispatcher Security Hardening</td>
+<td>Prohibits direct internet exposure without WAF</td>
+<td>Application Gateway WAF v2 placement</td>
+</tr>
+<tr>
+<td>3114876</td>
+<td>Azure NetApp Files for SAP HANA Scale-Up</td>
+<td>Throughput and IOPS requirements for HANA data and log volumes</td>
+<td>ANF volume sizing and mount options</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<h3 id="expressroute-connectivity">ExpressRoute Connectivity<a class="headerlink" href="#expressroute-connectivity" title="Permanent link">¶</a></h3>
+<p>ExpressRoute is mandatory for production SAP landscapes.</p>
+<ul>
+<li><strong>Minimum bandwidth</strong>: 1 Gbps for up to 3 SAP production SIDs; 2 Gbps for 4-8 SIDs; 4 Gbps for larger landscapes.</li>
+<li><strong>ExpressRoute Gateway SKU</strong>: UltraPerformance (10 Gbps) for production, HighPerformance (2 Gbps) for non-production.</li>
+<li><strong>ExpressRoute FastPath</strong>: Enable to bypass the gateway dataplane for on-premises to spoke VM traffic, reducing latency.</li>
+<li><strong>Zone-redundant Gateway</strong>: Deploy with ErGwUltraAZ SKU to prevent single Availability Zone failure from severing connectivity.</li>
+<li><strong>ExpressRoute Private Peering only</strong>: Microsoft Peering is for Microsoft 365 and must not carry SAP application traffic.</li>
+</ul>
+<h3 id="virtual-network-topology">Virtual Network Topology<a class="headerlink" href="#virtual-network-topology" title="Permanent link">¶</a></h3>
+<p><strong>SAP Production Spoke Virtual Network</strong> (10.10.0.0/16):</p>
+<table>
+<thead>
+<tr>
+<th>Subnet</th>
+<th>Address</th>
+<th>NSG</th>
+<th>UDR</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sap-app-subnet</td>
+<td>10.10.1.0/24</td>
+<td>nsg-sap-app-prod</td>
+<td>udr-sap-spoke-prod</td>
+<td>PAS, AAS, Web Dispatcher VMs</td>
+</tr>
+<tr>
+<td>sap-ascs-subnet</td>
+<td>10.10.2.0/27</td>
+<td>nsg-sap-ascs-prod</td>
+<td>udr-sap-spoke-prod</td>
+<td>ASCS, ERS cluster VMs</td>
+</tr>
+<tr>
+<td>sap-hana-subnet</td>
+<td>10.10.3.0/27</td>
+<td>nsg-sap-hana-prod</td>
+<td>udr-sap-hana-prod</td>
+<td>HANA primary and secondary VMs</td>
+</tr>
+<tr>
+<td>sap-mgmt-subnet</td>
+<td>10.10.4.0/27</td>
+<td>nsg-sap-mgmt-prod</td>
+<td>udr-sap-spoke-prod</td>
+<td>Jump server, AMS agent, Cloud Connector</td>
+</tr>
+<tr>
+<td>sap-pe-subnet</td>
+<td>10.10.5.0/27</td>
+<td>nsg-sap-pe-prod</td>
+<td>None</td>
+<td>Private Endpoints for all PaaS services</td>
+</tr>
+<tr>
+<td>sap-appgw-subnet</td>
+<td>10.10.6.0/26</td>
+<td>nsg-sap-appgw-prod</td>
+<td>None</td>
+<td>Azure Application Gateway WAF v2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Route Table: udr-sap-hana-prod</strong> (applied to HANA subnet only):</p>
+<table>
+<thead>
+<tr>
+<th>Route Name</th>
+<th>Address Prefix</th>
+<th>Next Hop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>default-to-firewall</td>
+<td>0.0.0.0/0</td>
+<td>Azure Firewall private IP 10.0.1.4</td>
+</tr>
+<tr>
+<td>app-subnet-direct</td>
+<td>10.10.1.0/24</td>
+<td>Virtual Network (satisfies 0.7 ms HANA latency requirement)</td>
+</tr>
+<tr>
+<td>ascs-subnet-direct</td>
+<td>10.10.2.0/27</td>
+<td>Virtual Network (satisfies 0.7 ms HANA latency requirement)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="azure-firewall-premium-policy-structure">Azure Firewall Premium Policy Structure<a class="headerlink" href="#azure-firewall-premium-policy-structure" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Application Rule Collection SAP-Outbound-Allow</strong> (Priority 200): Permits outbound HTTPS to SAP support portal, SAP BTP (*.hana.ondemand.com), OS update repositories.</li>
+<li><strong>Network Rule Collection SAP-Inter-Subnet-Allow</strong> (Priority 300): Permits TCP 3300-3399 (RFC/CPIC), TCP 36xx (Message Server) from app to ASCS subnet.</li>
+<li><strong>Network Rule Collection SAP-HANA-Replication</strong> (Priority 310): Permits TCP 40000-40099 between HANA primary and secondary VM private IPs.</li>
+<li><strong>DNAT Rule Collection SAP-Inbound-Management</strong> (Priority 100): Emergency inbound management access restricted to SAP Basis team source IPs.</li>
+</ul>
+<p>All Azure Firewall logs (AzureFirewallApplicationRule, AzureFirewallNetworkRule, AzureFirewallDnsProxy, AzureFirewallIDPSSignature) are sent to the central Log Analytics workspace with 90-day retention and archived to Azure Storage for 2 years.</p>
+<h3 id="nsg-baseline-rules-hana-subnet">NSG Baseline Rules: HANA Subnet<a class="headerlink" href="#nsg-baseline-rules-hana-subnet" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Priority</th>
+<th>Name</th>
+<th>Protocol</th>
+<th>Source</th>
+<th>Destination</th>
+<th>Port</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inbound</td>
+<td>100</td>
+<td>Allow-HANA-from-App</td>
+<td>TCP</td>
+<td>10.10.1.0/24</td>
+<td>10.10.3.0/27</td>
+<td>30013-30015</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>110</td>
+<td>Allow-HANA-HSR</td>
+<td>TCP</td>
+<td>10.10.3.0/27</td>
+<td>10.10.3.0/27</td>
+<td>40000-40099</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>120</td>
+<td>Allow-HANA-from-Mgmt</td>
+<td>TCP</td>
+<td>10.10.4.0/27</td>
+<td>10.10.3.0/27</td>
+<td>22,443</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>130</td>
+<td>Allow-AzureLoadBalancer</td>
+<td>TCP</td>
+<td>AzureLoadBalancer</td>
+<td>10.10.3.0/27</td>
+<td>62500-62599</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>4000</td>
+<td>Deny-All-Inbound</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Deny</td>
+</tr>
+<tr>
+<td>Outbound</td>
+<td>100</td>
+<td>Allow-HANA-to-App</td>
+<td>TCP</td>
+<td>10.10.3.0/27</td>
+<td>10.10.1.0/24</td>
+<td>Any</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Outbound</td>
+<td>110</td>
+<td>Allow-HANA-HSR-Out</td>
+<td>TCP</td>
+<td>10.10.3.0/27</td>
+<td>10.10.3.0/27</td>
+<td>40000-40099</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Outbound</td>
+<td>4000</td>
+<td>Deny-All-Outbound</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Deny</td>
+</tr>
+</tbody>
+</table>
+<h3 id="nsg-baseline-rules-ascs-subnet">NSG Baseline Rules: ASCS Subnet<a class="headerlink" href="#nsg-baseline-rules-ascs-subnet" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Priority</th>
+<th>Name</th>
+<th>Protocol</th>
+<th>Source</th>
+<th>Destination</th>
+<th>Port</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inbound</td>
+<td>100</td>
+<td>Allow-MsgSrv-from-App</td>
+<td>TCP</td>
+<td>10.10.1.0/24</td>
+<td>10.10.2.0/27</td>
+<td>3600-3699</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>110</td>
+<td>Allow-Enqueue-from-App</td>
+<td>TCP</td>
+<td>10.10.1.0/24</td>
+<td>10.10.2.0/27</td>
+<td>3200-3299,3900-3999</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>120</td>
+<td>Allow-AzureLB-HealthProbe</td>
+<td>TCP</td>
+<td>AzureLoadBalancer</td>
+<td>10.10.2.0/27</td>
+<td>62100-62199</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>130</td>
+<td>Allow-Pacemaker-Corosync</td>
+<td>UDP</td>
+<td>10.10.2.0/27</td>
+<td>10.10.2.0/27</td>
+<td>5404-5412</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Inbound</td>
+<td>4000</td>
+<td>Deny-All-Inbound</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Deny</td>
+</tr>
+<tr>
+<td>Outbound</td>
+<td>100</td>
+<td>Allow-ASCS-FenceAgent</td>
+<td>TCP</td>
+<td>10.10.2.0/27</td>
+<td>AzureResourceManager</td>
+<td>443</td>
+<td>Allow</td>
+</tr>
+<tr>
+<td>Outbound</td>
+<td>4000</td>
+<td>Deny-All-Outbound</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Deny</td>
+</tr>
+</tbody>
+</table>
+<h3 id="azure-dns-private-resolver">Azure DNS Private Resolver<a class="headerlink" href="#azure-dns-private-resolver" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Inbound Endpoint</strong> (10.0.2.4): On-premises DNS servers configure conditional forwarders here for all Azure-hosted SAP hostnames and <em>.privatelink.</em> domains.</li>
+<li><strong>Outbound Endpoint</strong> (10.0.2.68): Forwarding ruleset routes on-premises SAP domain queries (<em>.corp.example.com, </em>.sap.example.com) to on-premises DNS server 10.100.1.53.</li>
+<li><strong>Default rule</strong>: All other queries forwarded to Azure DNS (168.63.129.16).</li>
+</ul>
+<h3 id="private-endpoints">Private Endpoints<a class="headerlink" href="#private-endpoints" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Private DNS Zone</th>
+<th>Endpoint Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure NetApp Files</td>
+<td>privatelink.netapp.azure.com</td>
+<td>pe-anf-prod</td>
+</tr>
+<tr>
+<td>Azure Key Vault</td>
+<td>privatelink.vaultcore.azure.net</td>
+<td>pe-kv-sap-prod</td>
+</tr>
+<tr>
+<td>Azure Blob Storage</td>
+<td>privatelink.blob.core.windows.net</td>
+<td>pe-blob-sap-prod</td>
+</tr>
+<tr>
+<td>Azure Files</td>
+<td>privatelink.file.core.windows.net</td>
+<td>pe-file-sap-prod</td>
+</tr>
+<tr>
+<td>Azure Monitor</td>
+<td>privatelink.monitor.azure.com</td>
+<td>pe-monitor-sap-prod</td>
+</tr>
+<tr>
+<td>Azure Backup</td>
+<td>privatelink.backup.windowsazure.com</td>
+<td>pe-backup-sap-prod</td>
+</tr>
+</tbody>
+</table>
+<p>All Private DNS Zones are created in the connectivity subscription and linked to the hub VNet and both SAP spoke VNets. Azure Policy initiative Deploy-Private-DNS-Zones is assigned at the SAP management group scope to auto-create A records when Private Endpoints are provisioned.</p>
+<h3 id="architecture-diagram-azure-service-detail">Architecture Diagram: Azure Service Detail<a class="headerlink" href="#architecture-diagram-azure-service-detail" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph LR
+  subgraph AppLayer["App Layer sap-app-subnet 10.10.1.0/24"]
+    WebDisp["Web Dispatcher x2 E16ds_v5"]
+    PAS["PAS E32ds_v5 Accel.Net"]
+    AAS["AAS x4 E32ds_v5 Accel.Net"]
+  end
+  subgraph ASCSLayer["Central Svc sap-ascs-subnet 10.10.2.0/27"]
+    ILBASCS["ILB Standard Floating IP ON 30min idle"]
+    ASCS["ASCS Zone 1 E4ds_v5 Pacemaker"]
+    ERS["ERS Zone 2 E4ds_v5 Pacemaker"]
+  end
+  subgraph HANALayer["HANA sap-hana-subnet 10.10.3.0/27"]
+    ILBHANA["ILB Standard Floating IP ON"]
+    HANAPri["HANA Primary M64s_v2 Zone 1 HSR SYNC"]
+    HANASec["HANA Secondary M64s_v2 Zone 2 HSR SYNC"]
+  end
+  subgraph SharedSvc["Shared Services"]
+    ANF["Azure NetApp Files Ultra NFS v4.1"]
+    KV["Azure Key Vault Premium CMK"]
+    AzB["Azure Backup GRS"]
+    LAW["Log Analytics 90d"]
+  end
+  WebDisp --&gt;|RFC/ICM| PAS
+  PAS --&gt;|TCP 3600| ILBASCS
+  ILBASCS --&gt; ASCS
+  ILBASCS --&gt; ERS
+  PAS --&gt;|TCP 30013 Direct no NVA| ILBHANA
+  ILBHANA --&gt; HANAPri
+  HANAPri --&gt;|HSR TCP 40000-40099| HANASec
+  HANAPri --&gt;|NFS v4.1 nconnect=8| ANF
+  HANASec --&gt;|NFS v4.1 nconnect=8| ANF
+  ASCS --&gt;|NFS sapmnt| ANF</code></pre>
+<hr/>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>On-premises connectivity for production</td>
+<td>(1) ExpressRoute only; (2) VPN only; (3) ExpressRoute + VPN failover</td>
+<td>ExpressRoute Private Peering with VPN as non-production fallback</td>
+<td>ExpressRoute provides guaranteed bandwidth and predictable latency. VPN introduces 10-50 ms jitter incompatible with 0.7 ms HANA requirement.</td>
+<td>SAP Note 1943937</td>
+</tr>
+<tr>
+<td>NVA placement between app and HANA tiers</td>
+<td>(1) All traffic through Firewall; (2) Only internet/inter-spoke through Firewall; (3) Dedicated HANA NVA</td>
+<td>App-to-HANA as Virtual Network (no NVA); all other traffic through Azure Firewall Premium</td>
+<td>Azure Firewall on app-to-HANA path adds 0.5-2 ms latency exceeding the 0.7 ms HANA threshold. NSG provides sufficient L4 control within the spoke.</td>
+<td>SAP Note 1943937</td>
+</tr>
+<tr>
+<td>DNS resolution architecture</td>
+<td>(1) Azure DNS only; (2) Custom DNS VMs; (3) Azure DNS Private Resolver</td>
+<td>Azure DNS Private Resolver with outbound forwarding ruleset</td>
+<td>Fully managed PaaS requiring no VM patching. Custom DNS VMs introduce single-point-of-failure risk and patching overhead.</td>
+<td>Azure Private DNS Resolver docs</td>
+</tr>
+<tr>
+<td>SAP Fiori exposure</td>
+<td>(1) Application Gateway WAF v2 only; (2) Azure Front Door + Application Gateway; (3) Direct Web Dispatcher</td>
+<td>Application Gateway WAF v2 in SAP spoke</td>
+<td>Direct internet exposure of SAP Web Dispatcher without WAF is unsupported per SAP Note 2523032.</td>
+<td>SAP Note 2523032</td>
+</tr>
+<tr>
+<td>Shared file storage for /sapmnt</td>
+<td>(1) Azure Files Premium SMB; (2) ANF NFS v4.1; (3) ANF NFS v3</td>
+<td>Azure NetApp Files Ultra tier with NFS v4.1</td>
+<td>ANF Ultra tier delivers required HANA IOPS and throughput (up to 128 MiB/s per TiB). Azure Files Premium does not meet SAP HANA storage KPIs.</td>
+<td>SAP Note 2854226, 3114876</td>
+</tr>
+<tr>
+<td>Azure ILB for ASCS/ERS</td>
+<td>(1) Basic SKU; (2) Standard SKU with floating IP; (3) Application Load Balancer</td>
+<td>Azure ILB Standard SKU with floating IP and 30-minute idle timeout</td>
+<td>Standard SKU is the only SAP-certified option. Floating IP (DSR) required for SAP Message Server protocol. Basic SKU deprecated September 2025.</td>
+<td>SAP Note 2694118, 1999351</td>
+</tr>
+<tr>
+<td>Network segmentation</td>
+<td>(1) Single flat subnet; (2) Two subnets; (3) Five dedicated subnets</td>
+<td>Five dedicated subnets with individual NSGs per tier</td>
+<td>Dedicated subnets enable precise least-privilege NSG rules per SAP tier. Matches Azure Landing Zone Accelerator for SAP reference design.</td>
+<td>Azure Landing Zone Accelerator for SAP</td>
+</tr>
+<tr>
+<td>Azure Firewall SKU</td>
+<td>(1) Standard; (2) Premium; (3) Third-party NVA</td>
+<td>Azure Firewall Premium</td>
+<td>IDPS in alert-and-deny mode required for PCI-DSS and ISO 27001 compliance. Auto-scales without VM patching overhead.</td>
+<td>Azure WAF Security pillar</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Pillar</th>
+<th>Requirement</th>
+<th>Implementation</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reliability</td>
+<td>Single AZ failure must not impact SAP production</td>
+<td>ASCS/ERS across Zone 1 and Zone 2; HANA HSR primary Zone 1 secondary Zone 2; ErGwUltraAZ zone-redundant gateway</td>
+<td>Azure WAF Reliability; SAP Note 2694118</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>ExpressRoute failure must not permanently sever connectivity</td>
+<td>VPN Gateway VpnGw2AZ as secondary path; BGP auto-failover within 60-180 seconds</td>
+<td>Azure ExpressRoute reliability docs</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>No SAP VM NIC must have a public IP</td>
+<td>Azure Policy Deny-Public-IP at SAP management group scope; all admin access via Azure Bastion</td>
+<td>CIS Azure Benchmark; Azure Policy</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>All data in transit must use TLS 1.2 minimum</td>
+<td>Application Gateway policy AppGwSslPolicy20220101; SAP Web Dispatcher ssl/min_protocol = TLSv1.2</td>
+<td>SAP Note 510007; Azure App Gateway TLS</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Network traffic between SAP tiers must be logged</td>
+<td>Azure Firewall diagnostic logs to Log Analytics; NSG flow logs on all SAP subnet NSGs with 90-day retention</td>
+<td>Azure NSG Flow Logs docs</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>PaaS services must not traverse public internet</td>
+<td>All PaaS via Private Endpoints; Azure Policy Deny-PublicEndpoint on all relevant PaaS resource types</td>
+<td>Azure Private Link docs</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>ExpressRoute bandwidth must not be overprovisioned</td>
+<td>Quarterly utilization review via Network Watcher Connection Monitor; online circuit bandwidth downgrade available</td>
+<td>Azure ExpressRoute pricing</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>Azure Firewall cost must be shared across environments</td>
+<td>Single Azure Firewall Premium in hub VNet with separate Firewall Policy per environment</td>
+<td>Azure Firewall pricing</td>
+</tr>
+<tr>
+<td>Operational Excellence</td>
+<td>Network changes must go through IaC pipeline</td>
+<td>All VNet, NSG, UDR, DNS configs in Bicep modules under /bicep/networking/; PR required with two approvals</td>
+<td>Azure Landing Zone Accelerator Bicep</td>
+</tr>
+<tr>
+<td>Performance Efficiency</td>
+<td>HANA round-trip latency must be validated before production cutover</td>
+<td>niping from each PAS VM to HANA primary; mean RTT below 0.7 ms over 1000 iterations; results in Architecture Decision Record</td>
+<td>SAP Note 1943937; SAP niping tool</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="rporto-table">RPO/RTO Table<a class="headerlink" href="#rporto-table" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Tier</th>
+<th>RPO Target</th>
+<th>RTO Target</th>
+<th>HA Method</th>
+<th>DR Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Production SAP S/4HANA ABAP</td>
+<td>0 seconds (synchronous HSR)</td>
+<td>4 hours (full region DR)</td>
+<td>HANA HSR SYNC + Pacemaker AZ failover under 5 minutes</td>
+<td>HANA HSR ASYNC to secondary region + Azure Site Recovery for app servers</td>
+</tr>
+<tr>
+<td>Production SAP ASCS/ERS</td>
+<td>0 seconds (ENSA2 in-memory replication)</td>
+<td>2 minutes (Pacemaker fence)</td>
+<td>Pacemaker two-node cluster across AZ1/AZ2 with Azure Fence Agent</td>
+<td>ASR replication of ASCS VMs to secondary region</td>
+</tr>
+<tr>
+<td>Production SAP Web Dispatcher</td>
+<td>0 seconds (stateless)</td>
+<td>5 minutes (ILB health probe failover)</td>
+<td>Two instances across AZ1/AZ2 behind Azure ILB</td>
+<td>ASR replication to secondary region</td>
+</tr>
+<tr>
+<td>Quality Assurance</td>
+<td>4 hours</td>
+<td>8 hours</td>
+<td>Single-VM with Azure Backup daily</td>
+<td>Azure Backup cross-region restore</td>
+</tr>
+<tr>
+<td>Development</td>
+<td>24 hours</td>
+<td>24 hours</td>
+<td>Single-VM with Azure Backup daily</td>
+<td>Rebuild from Azure Backup if needed</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="cost-optimization">Cost Optimization<a class="headerlink" href="#cost-optimization" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Potential Saving</th>
+<th>Implementation</th>
+<th>Prerequisites</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ExpressRoute Gateway Reserved Instance 1-year</td>
+<td>~19% vs. pay-as-you-go; ~$600/month saving on $3,200/month ERGW cost</td>
+<td>Purchase 1-year reserved capacity for ERGW via Azure Reservations portal</td>
+<td>12-month commitment to production SAP landscape</td>
+</tr>
+<tr>
+<td>Azure Bastion off-hours scale-in</td>
+<td>~40% reduction; ~$280/month saving (6 units peak to 2 units off-hours)</td>
+<td>Azure Automation runbook: scale to 2 units at 20:00 UTC, back to 6 at 07:00 UTC Monday-Friday</td>
+<td>Azure Automation account with Contributor role on Bastion resource</td>
+</tr>
+<tr>
+<td>Single Azure Firewall for all SAP environments</td>
+<td>~$3,200/month saving vs. separate firewall per environment</td>
+<td>Single Azure Firewall Premium in hub VNet with separate Firewall Policy per environment</td>
+<td>Hub-spoke topology with centralized connectivity subscription</td>
+</tr>
+<tr>
+<td>Azure NetApp Files capacity pool right-sizing</td>
+<td>15-25% cost reduction</td>
+<td>Monthly review via Azure Monitor ANF metrics; reduce capacity pool when average utilization below 70% for 30 days</td>
+<td>Azure Monitor alert on ANF utilization below 70% for 30+ days</td>
+</tr>
+<tr>
+<td>NSG Flow Logs storage tiering</td>
+<td>~$50/month saving</td>
+<td>Azure Storage lifecycle policy: cool tier after 30 days, archive after 90 days</td>
+<td>Azure Storage Account lifecycle management policy</td>
+</tr>
+<tr>
+<td>Azure Hybrid Benefit for Windows VMs</td>
+<td>40% license cost reduction on Windows VMs</td>
+<td>Apply AHB to Web Dispatcher and jump server Windows VMs</td>
+<td>Software Assurance-covered Windows Server licenses</td>
+</tr>
+<tr>
+<td>ExpressRoute circuit bandwidth right-sizing</td>
+<td>Variable</td>
+<td>Monthly utilization review; downgrade if sustained peak below 50% of provisioned bandwidth</td>
+<td>ExpressRoute provider supports online bandwidth reduction</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="monitoring-and-alerts">Monitoring and Alerts<a class="headerlink" href="#monitoring-and-alerts" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Metric/Signal</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Action Group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA-Memory-Critical</td>
+<td>AMS HANA provider memory utilization %</td>
+<td>Above 90% for 5 minutes</td>
+<td>Sev 1</td>
+<td>sap-hana-dba-oncall</td>
+</tr>
+<tr>
+<td>HANA-HSR-Replication-Broken</td>
+<td>AMS HA provider HSR replication status</td>
+<td>Status not ACTIVE for 2 minutes</td>
+<td>Sev 1</td>
+<td>sap-hana-dba-oncall</td>
+</tr>
+<tr>
+<td>ASCS-Cluster-Node-Fenced</td>
+<td>AMS HA provider Pacemaker node count</td>
+<td>Node count below 2 for 2 minutes</td>
+<td>Sev 1</td>
+<td>sap-basis-oncall</td>
+</tr>
+<tr>
+<td>HANA-Disk-Latency-High</td>
+<td>ANF volume read latency AMS NetApp provider</td>
+<td>Above 1 ms for 5 minutes</td>
+<td>Sev 2</td>
+<td>sap-hana-dba-oncall</td>
+</tr>
+<tr>
+<td>ExpressRoute-BandwidthUtilization</td>
+<td>ERGW NetworkIn + NetworkOut vs provisioned capacity</td>
+<td>Above 80% for 15 minutes</td>
+<td>Sev 2</td>
+<td>sap-network-ops</td>
+</tr>
+<tr>
+<td>AzureFirewall-IDPS-Alert</td>
+<td>AzureFirewallIDPSSignature log Action=Alert</td>
+<td>Any IDPS alert in 5-minute window</td>
+<td>Sev 2</td>
+<td>sap-security-ops</td>
+</tr>
+<tr>
+<td>ASCS-LoadBalancer-HealthProbe-Down</td>
+<td>Azure ILB health probe success rate</td>
+<td>Below 100% for 2 minutes</td>
+<td>Sev 1</td>
+<td>sap-basis-oncall</td>
+</tr>
+<tr>
+<td>SAP-VM-Disk-IOPS-Throttled</td>
+<td>VM OS metric Disk IOPS throttled count</td>
+<td>Above 0 for 5 minutes on HANA VM</td>
+<td>Sev 2</td>
+<td>sap-hana-dba-oncall</td>
+</tr>
+<tr>
+<td>ANF-CapacityPool-Full</td>
+<td>ANF capacity pool used throughput %</td>
+<td>Above 85% for 10 minutes</td>
+<td>Sev 2</td>
+<td>sap-storage-ops</td>
+</tr>
+<tr>
+<td>DNS-Resolver-Query-Failure</td>
+<td>AzureDiagnostics DNS Private Resolver failure count</td>
+<td>Above 10 failures in 5 minutes</td>
+<td>Sev 2</td>
+<td>sap-network-ops</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-1-routing-sap-application-to-hana-traffic-through-azure-firewall">Anti-Pattern 1: Routing SAP Application-to-HANA Traffic Through Azure Firewall<a class="headerlink" href="#anti-pattern-1-routing-sap-application-to-hana-traffic-through-azure-firewall" title="Permanent link">¶</a></h3>
+<p>A UDR with default route 0.0.0.0/0 pointing to Azure Firewall applied to the application subnet, without a specific route for the HANA subnet, causes all application-to-HANA TCP traffic to traverse Azure Firewall, adding 0.5-2 ms per connection. For a typical SAP S/4HANA production system with 50-200 SQL SELECT calls per dialog step, adding 1 ms per call to 100 SQL calls adds 100 ms to dialog response time, causing SLA breaches. Azure Firewall TCP state table capacity can also be exhausted by HANA connection pool traffic under load.</p>
+<p><strong>Correct approach:</strong> Add an explicit route on the application subnet UDR for the HANA subnet CIDR pointing to Virtual Network next hop. Apply NSG rules on the HANA subnet to restrict inbound access from the application subnet on HANA ports 30013-30015 per SAP Note 2080991.</p>
+<h3 id="anti-pattern-2-using-azure-internal-load-balancer-basic-sku-for-sap-ascsers">Anti-Pattern 2: Using Azure Internal Load Balancer Basic SKU for SAP ASCS/ERS<a class="headerlink" href="#anti-pattern-2-using-azure-internal-load-balancer-basic-sku-for-sap-ascsers" title="Permanent link">¶</a></h3>
+<p>Basic SKU does not support Availability Zone-spanning deployments, does not support floating IP (DSR) required for SAP Message Server protocol behavior, and has been deprecated with new creation disabled in Azure public cloud regions (retirement 30 September 2025). SAP Note 2694118 explicitly states only Standard SKU is supported for SAP ASCS/ERS.</p>
+<p><strong>Correct approach:</strong> Deploy Azure ILB Standard SKU with floating IP enabled, idle timeout 30 minutes, and health probe on TCP port 621xx. Ensure the ASCS subnet NSG permits inbound from AzureLoadBalancer service tag on port 621xx.</p>
+<h3 id="anti-pattern-3-placing-sap-private-dns-zones-in-the-sap-application-subscription">Anti-Pattern 3: Placing SAP Private DNS Zones in the SAP Application Subscription<a class="headerlink" href="#anti-pattern-3-placing-sap-private-dns-zones-in-the-sap-application-subscription" title="Permanent link">¶</a></h3>
+<p>Private DNS Zones created in the SAP production subscription and linked only to the SAP production spoke cause three failures: on-premises systems forwarding to Azure DNS Private Resolver cannot resolve private endpoint addresses because zones are not linked to hub VNet; non-production systems cannot resolve private endpoint hostnames; during DR failover zones may contain stale records pointing to primary-region private endpoint IPs.</p>
+<p><strong>Correct approach:</strong> Create all Private DNS Zones in the connectivity subscription and link to hub and all spoke virtual networks. Use Azure Policy initiative Deploy-Private-DNS-Zones at SAP management group scope for automatic A record creation.</p>
+<h3 id="anti-pattern-4-disabling-accelerated-networking-on-sap-vms-to-reduce-cost">Anti-Pattern 4: Disabling Accelerated Networking on SAP VMs to Reduce Cost<a class="headerlink" href="#anti-pattern-4-disabling-accelerated-networking-on-sap-vms-to-reduce-cost" title="Permanent link">¶</a></h3>
+<p>Accelerated Networking is not a separate cost item. Disabling it does not save money but reduces network throughput and increases CPU utilization for network processing. SAP Note 1928533 mandates it for all SAP VMs with 4+ vCPUs; production systems without it are out of SAP support scope.</p>
+<p><strong>Correct approach:</strong> Enable Accelerated Networking on all SAP VM NICs at VM creation time. Enabling on an existing running VM requires a VM stop/start during a maintenance window. Use Azure Policy to deny SAP VM deployments without Accelerated Networking.</p>
+<h3 id="anti-pattern-5-using-a-single-nsg-for-all-sap-subnets">Anti-Pattern 5: Using a Single NSG for All SAP Subnets<a class="headerlink" href="#anti-pattern-5-using-a-single-nsg-for-all-sap-subnets" title="Permanent link">¶</a></h3>
+<p>A single shared NSG with broad allow rules across all SAP subnets eliminates the security boundary between tiers. A compromised SAP application server can directly access HANA administrative ports. NSG rules for all tiers become intermixed, making auditing against the SAP port baseline impossible.</p>
+<p><strong>Correct approach:</strong> Deploy one NSG per subnet with minimum necessary rules using the SAP port baseline from SAP Note 2778954. Use NSG Flow Logs to validate actual traffic patterns before applying deny-all rules.</p>
+<h3 id="anti-pattern-6-not-setting-azure-load-balancer-idle-timeout-to-30-minutes">Anti-Pattern 6: Not Setting Azure Load Balancer Idle Timeout to 30 Minutes<a class="headerlink" href="#anti-pattern-6-not-setting-azure-load-balancer-idle-timeout-to-30-minutes" title="Permanent link">¶</a></h3>
+<p>The default 4-minute idle timeout causes SAP RFC connections idle for more than 4 minutes to receive TCP RST on the next packet, producing RFC_COMMUNICATION_FAILURE short dumps in SM21. This commonly occurs during off-peak periods between batch job steps or during low-traffic windows.</p>
+<p><strong>Correct approach:</strong> Set Azure ILB idle timeout to 30 minutes on all rules fronting SAP ASCS/ERS VIPs per SAP Note 1999351. Also configure TCP keepalive at OS level: net.ipv4.tcp_keepalive_time=300, net.ipv4.tcp_keepalive_intvl=60, net.ipv4.tcp_keepalive_probes=10 in /etc/sysctl.d/99-sap-tcp.conf.</p>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="issue-1-sap-hana-system-replication-status-shows-error-after-az-failover">Issue 1: SAP HANA System Replication Status Shows ERROR After AZ Failover<a class="headerlink" href="#issue-1-sap-hana-system-replication-status-shows-error-after-az-failover" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> After Pacemaker failover of HANA from Zone 1 to Zone 2, hdbnsutil -sr_state shows the old primary in ERROR state. The HANA ILB health probe shows both backends unhealthy for 30-120 seconds.</p>
+<p><strong>Root cause:</strong> HANA ILB health probe timeout is too low. The probe marks both nodes unhealthy before the new primary completes Pacemaker resource startup (30-90 seconds for SAPHana resource agent to complete takeover and start the health probe listener on port 62500).</p>
+<p><strong>Resolution:</strong> Set ILB probe interval to 5 seconds with unhealthy threshold of 2 (10 seconds total to mark unhealthy). Verify Pacemaker SAPHana resource is fully started: crm_mon -Afr1. Verify probe port 62500 listening: ss -tlnp | grep 62500. If old primary remains in ERROR, re-register as secondary: hdbnsutil -sr_register --name --remoteHost --remoteInstance=00 --replicationMode=SYNC --operationMode=logreplay. Reference: SAP Note 3007991.</p>
+<h3 id="issue-2-sap-rfc-connections-fail-intermittently-with-rfc_communication_failure">Issue 2: SAP RFC Connections Fail Intermittently with RFC_COMMUNICATION_FAILURE<a class="headerlink" href="#issue-2-sap-rfc-connections-fail-intermittently-with-rfc_communication_failure" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> RFC_COMMUNICATION_FAILURE short dumps at irregular intervals during low-load periods. SM21 shows ThIErrHandle NWRFC entries.</p>
+<p><strong>Root cause:</strong> Azure ILB fronting SAP ASCS message server VIP has default 4-minute idle timeout. RFC connections idle for more than 4 minutes have their NAT table entry removed, resulting in TCP RST to the application server.</p>
+<p><strong>Resolution:</strong> Set idle timeout to 30 minutes on all ILB rules fronting SAP VIPs: az network lb rule update --set idleTimeoutInMinutes=30. Configure TCP keepalive in /etc/sysctl.d/99-sap-tcp.conf. Monitor SM21 for NWRFC errors over 48 hours after the change. Reference: SAP Note 1999351.</p>
+<h3 id="issue-3-sap-fiori-users-report-502-bad-gateway-from-azure-application-gateway">Issue 3: SAP Fiori Users Report 502 Bad Gateway from Azure Application Gateway<a class="headerlink" href="#issue-3-sap-fiori-users-report-502-bad-gateway-from-azure-application-gateway" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> SAP Fiori users intermittently receive HTTP 502 Bad Gateway. Application Gateway access logs show ERRORINFO: FailedToConnect for SAP Web Dispatcher backends.</p>
+<p><strong>Root cause:</strong> Application Gateway backend health probe timeout (default 30 seconds) is too aggressive. SAP Web Dispatcher under CPU load during peak Fiori usage may take up to 60 seconds to respond to a probe, causing Application Gateway to mark the backend unhealthy.</p>
+<p><strong>Resolution:</strong> Increase Application Gateway backend health probe timeout from 30 to 120 seconds. Configure probe path to /sap/public/ping. Enable Application Gateway Access Logs to Log Analytics workspace. Verify SAP Web Dispatcher profile parameter wdisp/system_auto_configuration=true.</p>
+<h3 id="issue-4-azure-dns-private-resolver-fails-to-resolve-on-premises-sap-hostnames">Issue 4: Azure DNS Private Resolver Fails to Resolve On-Premises SAP Hostnames<a class="headerlink" href="#issue-4-azure-dns-private-resolver-fails-to-resolve-on-premises-sap-hostnames" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> SAP RFC calls from Azure to on-premises SAP systems fail with RFC destination could not be resolved. SM59 RFC destination test returns Host or service name not known.</p>
+<p><strong>Root cause:</strong> Azure DNS Private Resolver outbound forwarding ruleset has a rule for the parent zone corp.example.com but not for the subdomain sap.corp.example.com. Some resolver versions require explicit subdomain forwarding rules.</p>
+<p><strong>Resolution:</strong> Add explicit forwarding rule for sap.corp.example.com pointing to on-premises DNS server 10.100.1.53. Verify ruleset is linked to SAP spoke VNet: az dns-resolver vnet-link list --ruleset-name. Test from test VM: dig @10.0.2.68 solman01.sap.corp.example.com. Verify NSG on dns-resolver-inbound subnet permits inbound UDP 53 from SAP spoke CIDRs.</p>
+<h3 id="issue-5-pacemaker-fence-agent-fails-ascs-cluster-cannot-fence-nodes">Issue 5: Pacemaker Fence Agent Fails: ASCS Cluster Cannot Fence Nodes<a class="headerlink" href="#issue-5-pacemaker-fence-agent-fails-ascs-cluster-cannot-fence-nodes" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> During ASCS cluster failover test, cluster remains in PENDING state for fencing. pacemaker.log shows: fence_azure_arm: Unable to connect to ARM API: HTTPS connection to management.azure.com failed.</p>
+<p><strong>Root cause:</strong> NSG outbound allow rule for TCP 443 to AzureResourceManager service tag from the ASCS subnet was accidentally deleted or overridden.</p>
+<p><strong>Resolution:</strong> Re-add NSG outbound rule: TCP 443 from 10.10.2.0/27 to AzureResourceManager service tag at priority 100. Test from ASCS VM: curl -v https://management.azure.com. Verify also in Azure Firewall application rules. Verify fence agent managed identity has Virtual Machine Contributor role on both ASCS VMs: az role assignment list. Reference: SAP Note 3007991.</p>
+<h3 id="issue-6-azure-netapp-files-nfs-mount-drops-on-hana-vms-during-hana-startup">Issue 6: Azure NetApp Files NFS Mount Drops on HANA VMs During HANA Startup<a class="headerlink" href="#issue-6-azure-netapp-files-nfs-mount-drops-on-hana-vms-during-hana-startup" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> SAP HANA fails to start after VM restart. hdbdaemon trace shows I/O errors on /hana/data. dmesg shows NFS mount timeout errors. mount -a returns mount.nfs4: Connection timed out.</p>
+<p><strong>Root cause:</strong> /etc/fstab uses soft mount option. With soft mounts, if the ANF NFS endpoint is not reachable when the VM restarts, the mount fails immediately without retry. Also missing nconnect=8 and incorrect rsize/wsize (should be 1048576 bytes per ANF recommendations).</p>
+<p><strong>Resolution:</strong> Update /etc/fstab to use hard mount with bg (background retry), nconnect=8, rsize=1048576, wsize=1048576. The correct mount options for ANF NFS v4.1 are: rw,hard,nointr,bg,timeo=600,retrans=2,proto=tcp,nconnect=8,rsize=1048576,wsize=1048576,vers=4.1,minorversion=1. Test during maintenance window by stopping HANA, unmounting, updating fstab, remounting, then restarting HANA. Reference: SAP Note 3114876.</p>
+<hr/>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Subscription</th>
+<th>Management Group</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hub VNet, ExpressRoute GW, VPN GW, Azure Firewall Premium, DNS Private Resolver</td>
+<td>Connectivity Subscription</td>
+<td>Platform &gt; Connectivity</td>
+<td>Shared infrastructure managed by central network team; separate billing and RBAC from SAP application teams</td>
+</tr>
+<tr>
+<td>SAP Production Spoke VNet, NSGs, UDRs, App Gateway WAF, ILBs, SAP VMs</td>
+<td>SAP Production Subscription</td>
+<td>Landing Zones &gt; SAP</td>
+<td>Isolated billing and RBAC for production SAP workloads; Defender for Cloud Plan 2 active</td>
+</tr>
+<tr>
+<td>SAP Non-Production Spoke VNet, NSGs, UDRs, non-prod VMs</td>
+<td>SAP Non-Production Subscription</td>
+<td>Landing Zones &gt; SAP</td>
+<td>Separate subscription for Dev/Test pricing eligibility; lower Defender plan acceptable</td>
+</tr>
+</tbody>
+</table>
+<h3 id="management-group-policy-assignments-sap-management-group-scope">Management Group Policy Assignments (SAP Management Group Scope)<a class="headerlink" href="#management-group-policy-assignments-sap-management-group-scope" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Effect</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deny-Public-IP-on-NIC</td>
+<td>Deny</td>
+<td>Prevents accidental public IP on SAP VM NICs</td>
+</tr>
+<tr>
+<td>Require-AcceleratedNetworking-4plus-vCPU</td>
+<td>Deny</td>
+<td>Enforces SAP Note 1928533 mandatory Accelerated Networking requirement</td>
+</tr>
+<tr>
+<td>Audit-NSG-SAP-Ports</td>
+<td>AuditIfNotExists</td>
+<td>Detects NSG rules deviating from SAP port baseline in SAP Note 2778954</td>
+</tr>
+<tr>
+<td>Deploy-NSG-FlowLogs</td>
+<td>DeployIfNotExists</td>
+<td>Ensures NSG flow logs enabled on all SAP subnet NSGs</td>
+</tr>
+<tr>
+<td>Deploy-AzureMonitorAgent</td>
+<td>DeployIfNotExists</td>
+<td>Ensures Azure Monitor Agent deployed on all SAP VMs</td>
+</tr>
+<tr>
+<td>Deny-PublicEndpoint-Storage</td>
+<td>Deny</td>
+<td>Prevents backup storage accounts from enabling public network access</td>
+</tr>
+<tr>
+<td>Deny-PublicEndpoint-KeyVault</td>
+<td>Deny</td>
+<td>Prevents SAP Key Vault from enabling public network access</td>
+</tr>
+<tr>
+<td>Deploy-ActivityLog-Diagnostic</td>
+<td>DeployIfNotExists</td>
+<td>Ensures Activity Log forwarding to central Log Analytics workspace</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/sap/workloads/planning-guide-network">SAP on Azure: Network planning</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/sap/workloads/hana-vm-operations-network">SAP HANA infrastructure configurations: Networking</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/sap/enterprise-scale-introduction">Azure Landing Zone Accelerator for SAP on Azure</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/sap/workloads/high-availability-guide-rhel">SAP ASCS/ERS with Pacemaker on RHEL</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/sap/workloads/hana-vm-operations-netapp">Azure NetApp Files for SAP HANA</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/sap/monitor/about-azure-monitor-sap-solutions">Azure Monitor for SAP Solutions</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/hub-spoke">Hub-spoke network topology in Azure</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/dns/dns-private-resolver-overview">Azure DNS Private Resolver overview</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/firewall/premium-features">Azure Firewall Premium features</a></li>
+</ul>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

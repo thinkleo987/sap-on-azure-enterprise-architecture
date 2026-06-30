@@ -1,0 +1,2403 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/governance/" rel="canonical"/>
+<link href="../security/" rel="prev"/>
+<link href="../hana/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Governance Framework - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-on-azure-governance-architecture">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Governance Framework
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+<nav aria-label="Architecture Overview" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-sap-on-azure-governance-hierarchy">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: SAP on Azure Governance Hierarchy
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+<nav aria-label="SAP Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-basis-governance">
+<span class="md-ellipsis">
+      
+        SAP Basis Governance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-transport-governance">
+<span class="md-ellipsis">
+      
+        SAP Transport Governance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-authorization-concept">
+<span class="md-ellipsis">
+      
+        SAP Authorization Concept
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-audit-architecture">
+<span class="md-ellipsis">
+      
+        SAP Audit Architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-grc-alignment">
+<span class="md-ellipsis">
+      
+        SAP GRC Alignment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference-for-governance-architecture">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference for Governance Architecture
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+<nav aria-label="Azure Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#management-group-hierarchy-for-sap">
+<span class="md-ellipsis">
+      
+        Management Group Hierarchy for SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#subscription-design">
+<span class="md-ellipsis">
+      
+        Subscription Design
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-policy-assignments-for-sap-workloads">
+<span class="md-ellipsis">
+      
+        Azure Policy Assignments for SAP Workloads
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-blueprints-and-deployment-environments">
+<span class="md-ellipsis">
+      
+        Azure Blueprints and Deployment Environments
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#resource-graph-for-sap-inventory">
+<span class="md-ellipsis">
+      
+        Resource Graph for SAP Inventory
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rbac-model">
+<span class="md-ellipsis">
+      
+        RBAC Model
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#managed-identities">
+<span class="md-ellipsis">
+      
+        Managed Identities
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-arc-for-hybrid-sap">
+<span class="md-ellipsis">
+      
+        Azure Arc for Hybrid SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-azure-policy-and-rbac-structure-for-sap">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: Azure Policy and RBAC Structure for SAP
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#governance-framework">
+<span class="md-ellipsis">
+      
+        Governance Framework
+      
+    </span>
+</a>
+<nav aria-label="Governance Framework" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-policy-initiative-for-sap">
+<span class="md-ellipsis">
+      
+        Azure Policy Initiative for SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#compliance-reporting-via-azure-policy-compliance-dashboard">
+<span class="md-ellipsis">
+      
+        Compliance Reporting via Azure Policy Compliance Dashboard
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#regulatory-compliance-for-sap-soc-2-iso-27001-and-gdpr">
+<span class="md-ellipsis">
+      
+        Regulatory Compliance for SAP: SOC 2, ISO 27001, and GDPR
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+<nav aria-label="Azure Well-Architected Alignment" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability">
+<span class="md-ellipsis">
+      
+        Reliability
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security">
+<span class="md-ellipsis">
+      
+        Security
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization">
+<span class="md-ellipsis">
+      
+        Cost Optimization
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operational-excellence">
+<span class="md-ellipsis">
+      
+        Operational Excellence
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance-efficiency">
+<span class="md-ellipsis">
+      
+        Performance Efficiency
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-architecture">
+<span class="md-ellipsis">
+      
+        Security Architecture
+      
+    </span>
+</a>
+<nav aria-label="Security Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-entra-id-governance">
+<span class="md-ellipsis">
+      
+        Microsoft Entra ID Governance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pim-for-sap-admin-roles">
+<span class="md-ellipsis">
+      
+        PIM for SAP Admin Roles
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#access-reviews">
+<span class="md-ellipsis">
+      
+        Access Reviews
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#conditional-access-policies-for-sap">
+<span class="md-ellipsis">
+      
+        Conditional Access Policies for SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#just-in-time-vm-access">
+<span class="md-ellipsis">
+      
+        Just-in-Time VM Access
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-defender-for-cloud-governance-posture">
+<span class="md-ellipsis">
+      
+        Microsoft Defender for Cloud Governance Posture
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability-and-high-availability">
+<span class="md-ellipsis">
+      
+        Reliability and High Availability
+      
+    </span>
+</a>
+<nav aria-label="Reliability and High Availability" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rpo-and-rto-targets">
+<span class="md-ellipsis">
+      
+        RPO and RTO Targets
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#governance-control-plane-ha-considerations">
+<span class="md-ellipsis">
+      
+        Governance Control Plane HA Considerations
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization_1">
+<span class="md-ellipsis">
+      
+        Cost Optimization
+      
+    </span>
+</a>
+<nav aria-label="Cost Optimization" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#governance-cost-optimization-strategies">
+<span class="md-ellipsis">
+      
+        Governance Cost Optimization Strategies
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-governance-enforcement">
+<span class="md-ellipsis">
+      
+        Cost Governance Enforcement
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operations-and-monitoring">
+<span class="md-ellipsis">
+      
+        Operations and Monitoring
+      
+    </span>
+</a>
+<nav aria-label="Operations and Monitoring" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-policy-compliance-monitoring">
+<span class="md-ellipsis">
+      
+        Azure Policy Compliance Monitoring
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-monitor-governance-dashboards">
+<span class="md-ellipsis">
+      
+        Azure Monitor Governance Dashboards
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#log-analytics-for-governance-events">
+<span class="md-ellipsis">
+      
+        Log Analytics for Governance Events
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#automation-for-drift-detection">
+<span class="md-ellipsis">
+      
+        Automation for Drift Detection
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alert-configuration">
+<span class="md-ellipsis">
+      
+        Alert Configuration
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#validation-checklist">
+<span class="md-ellipsis">
+      
+        Validation Checklist
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-1-permanent-contributor-assignments-on-sap-production-subscriptions">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 1: Permanent Contributor Assignments on SAP Production Subscriptions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-2-using-audit-mode-policy-effect-for-security-controls-that-should-be-deny">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 2: Using Audit-Mode Policy Effect for Security Controls That Should Be Deny
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-3-treating-sap-transport-governance-and-azure-change-control-as-independent-processes">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 3: Treating SAP Transport Governance and Azure Change Control as Independent Processes
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-4-storing-sap-governance-evidence-only-in-azure-policy-dashboard-no-export">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 4: Storing SAP Governance Evidence Only in Azure Policy Dashboard (No Export)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-5-assigning-the-sap-policy-initiative-at-the-subscription-level-instead-of-the-management-group-level">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 5: Assigning the SAP Policy Initiative at the Subscription Level Instead of the Management Group Level
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-1-azure-policy-deny-effect-blocking-an-emergency-sap-deployment">
+<span class="md-ellipsis">
+      
+        Issue 1: Azure Policy Deny Effect Blocking an Emergency SAP Deployment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-2-sap-security-audit-log-events-not-appearing-in-microsoft-sentinel">
+<span class="md-ellipsis">
+      
+        Issue 2: SAP Security Audit Log Events Not Appearing in Microsoft Sentinel
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-3-pim-activation-failing-for-sap-basis-administrator-role-during-maintenance-window">
+<span class="md-ellipsis">
+      
+        Issue 3: PIM Activation Failing for SAP Basis Administrator Role During Maintenance Window
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-4-azure-resource-graph-showing-incorrect-compliance-state-after-policy-remediation">
+<span class="md-ellipsis">
+      
+        Issue 4: Azure Resource Graph Showing Incorrect Compliance State After Policy Remediation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-5-unauthorized-resource-tag-removal-causing-cost-allocation-failure">
+<span class="md-ellipsis">
+      
+        Issue 5: Unauthorized Resource Tag Removal Causing Cost Allocation Failure
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../security/">
+<span class="md-ellipsis">
+    Phase C — Security and Governance
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="sap-on-azure-governance-architecture">SAP on Azure Governance Architecture<a class="headerlink" href="#sap-on-azure-governance-architecture" title="Permanent link">¶</a></h1>
+<hr/>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>Governance for SAP on Azure encompasses the policies, controls, and enforcement mechanisms that ensure SAP workloads remain compliant, secure, and cost-aligned from initial deployment through ongoing operations. The scope of this chapter covers the Azure control plane (Management Group hierarchy, Azure Policy, Azure Role-Based Access Control, Microsoft Entra ID governance) and the SAP application plane (transport governance, authorization concepts, SAP GRC alignment, SAP audit logging). These two planes are governed independently but must be aligned: a change that is approved at the SAP transport level must also pass Azure resource policy constraints, and a privileged Azure role assignment requires the same just-in-time approval workflow as a temporary SAP_BASIS profile assignment. Governance failures in either plane independently constitute a compliance violation under SOC 2 Type II, ISO 27001, and GDPR.</p>
+<p>Azure Policy is the primary enforcement mechanism for the Azure control plane. All SAP subscriptions are placed under a dedicated SAP Management Group where custom policy initiatives enforce SAP-specific constraints: allowed VM SKUs from the SAP-certified list, mandatory disk encryption, required resource tags for cost allocation, network topology protection (no internet-routable public IPs on SAP database subnets), and backup policy enforcement. Policy effects range from Audit (for controls where enforcement would break existing deployments during transition) to Deny (for controls that must never be violated, such as unencrypted disks on HANA VMs) to DeployIfNotExists (for controls that require a companion resource, such as enabling Microsoft Defender for Cloud on all SAP VMs at subscription enrollment). Compliance state is tracked in the Azure Policy compliance dashboard and published as a metric to Azure Monitor for alerting when compliance drops below threshold.</p>
+<p>The enterprise control plane for SAP on Azure integrates Azure governance tools with SAP's own governance frameworks: SAP Solution Manager for transport route management and system landscape governance, SAP GRC Access Control for segregation-of-duties enforcement and periodic access recertification, and SAP Audit Information System (AIS) for audit trail collection. Microsoft Entra ID Privileged Identity Management (PIM) bridges the Azure and SAP identity planes by requiring just-in-time elevation for both Azure infrastructure roles and the SAP_BASIS emergency access profiles. All governance events from both planes are forwarded to a central Log Analytics workspace that feeds Microsoft Sentinel with the SAP Continuous Threat Monitoring connector, providing a unified governance audit trail across the full stack.</p>
+<hr/>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>The SAP on Azure governance architecture is organized into four layers that collectively enforce the principle that no SAP workload change — whether infrastructure or application — can be made without passing through an auditable approval gate. The first layer is the Azure Management Group and subscription hierarchy, which provides the structural container for all Azure Policy and RBAC assignments. The second layer is the Azure Policy initiative stack, which enforces resource configuration constraints through policy effects applied at management group scope so that all current and future subscriptions inherit them automatically. The third layer is the identity governance layer, which uses Microsoft Entra ID PIM, access reviews, and Conditional Access to enforce least-privilege access with time-bounded elevation. The fourth layer is the SAP application governance layer, which uses SAP GRC, SAP Solution Manager ChaRM, and SAP Security Audit Log to enforce change control and authorization management within the SAP application itself.</p>
+<p>The governance architecture separates concerns across three subscription types: the Management subscription hosts the governance control plane components (Log Analytics workspaces, Azure Automation, Microsoft Defender for Cloud), the Connectivity subscription hosts shared network infrastructure subject to its own network governance policies, and the SAP subscriptions (one per environment tier: Production, Quality, Development, Sandbox) host the actual SAP workloads subject to the full SAP policy initiative. This subscription-per-environment model ensures that policy assignments targeting a specific environment tier (for example, stricter backup enforcement on Production) can be scoped without affecting lower environments, while baseline security policies inherited from the root Management Group apply universally.</p>
+<p>Azure Resource Graph provides the governance inventory plane. It indexes all SAP-tagged resources across subscriptions and is queried by Kusto queries in Azure Monitor workbooks to produce the SAP estate inventory: which VMs are running SAP workloads, which are covered by backup policies, which have non-compliant disk configurations, and which resource groups are missing mandatory cost-allocation tags. Resource Graph queries are executed on a scheduled basis by Azure Logic Apps that publish findings to the governance dashboard and trigger remediation workflows for DeployIfNotExists policies where auto-remediation is enabled.</p>
+<p>The governance framework treats infrastructure-as-code as the authoritative source of truth. All Azure resources are deployed through Azure DevOps or GitHub Actions pipelines that enforce policy compliance checks (using <code>az policy</code> or the Azure Policy GitHub Action) before any deployment reaches production. The concept of policy-as-code means that the same Bicep definitions that describe the resource configuration also describe the policy assignments that govern it, stored in the same repository and subject to the same pull-request approval workflow. Drift from declared state is detected by Azure Policy's <code>DeployIfNotExists</code> and <code>Modify</code> effects, and by Azure Automation Change Tracking, which alerts on configuration changes to SAP VMs that were not made through the approved pipeline.</p>
+<h3 id="architecture-diagram-sap-on-azure-governance-hierarchy">Architecture Diagram: SAP on Azure Governance Hierarchy<a class="headerlink" href="#architecture-diagram-sap-on-azure-governance-hierarchy" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph TD
+    subgraph RootMG["Tenant Root Management Group"]
+        direction TB
+        RootPolicy["Root Policies: Allowed Locations, Security Defaults, Diagnostic Settings"]
+
+        subgraph PlatformMG["Platform Management Group"]
+            ConnMG["Connectivity MG\nNetwork governance policies"]
+            IdentityMG["Identity MG\nEntra ID governance policies"]
+            MgmtMG["Management MG\nMonitoring + automation policies"]
+        end
+
+        subgraph LZsMG["Landing Zones Management Group"]
+            direction TB
+            SAPMG["SAP Management Group\nSAP Policy Initiative assigned here"]
+
+            subgraph SAPEnvMGs["SAP Environment Management Groups"]
+                SAPProdMG["SAP Production MG\nStrict deny policies\nBackup enforcement\nNo public IP"]
+                SAPQualMG["SAP Quality MG\nAudit-mode policies\nBackup enforcement"]
+                SAPDevMG["SAP Dev/Test MG\nRelaxed SKU policy\nAuto-shutdown policy"]
+                SAPSandMG["SAP Sandbox MG\nCost cap enforcement\nAuto-delete after 30d"]
+            end
+        end
+
+        subgraph DecomMG["Decommissioned Management Group"]
+            DecomPolicy["Deny-all new deployments\nRead-only RBAC only"]
+        end
+    end
+
+    subgraph SAPProdSub["SAP Production Subscription"]
+        SAPProdRG1["rg-sap-prod-hana\nHANA primary + secondary VMs"]
+        SAPProdRG2["rg-sap-prod-app\nASCS, PAS, AAS VMs"]
+        SAPProdRG3["rg-sap-prod-net\nSpoke VNet, NSGs, route tables"]
+        SAPProdRG4["rg-sap-prod-shared\nKey Vault, Storage, Recovery Services Vault"]
+    end
+
+    subgraph MgmtSub["Management Subscription"]
+        LAW["Log Analytics Workspace\nGovernance + SAP audit logs"]
+        DefenderMDC["Microsoft Defender for Cloud\nGovernance posture dashboard"]
+        AutoAcc["Azure Automation\nPolicy remediation tasks"]
+        PolicyInsights["Azure Policy Insights\nCompliance history export"]
+    end
+
+    subgraph ConnSub["Connectivity Subscription"]
+        AzFW["Azure Firewall Premium\nForced-tunnel default route"]
+        ERGW["ExpressRoute Gateway\nSAP on-prem connectivity"]
+        PrivDNS["Private DNS Zones\nSAP FQDN resolution"]
+    end
+
+    SAPMG --&gt;|"Inherits"| SAPProdMG
+    SAPMG --&gt;|"Inherits"| SAPQualMG
+    SAPMG --&gt;|"Inherits"| SAPDevMG
+    SAPMG --&gt;|"Inherits"| SAPSandMG
+    SAPProdMG --&gt;|"Scoped to"| SAPProdSub
+    SAPProdSub --&gt; SAPProdRG1
+    SAPProdSub --&gt; SAPProdRG2
+    SAPProdSub --&gt; SAPProdRG3
+    SAPProdSub --&gt; SAPProdRG4
+    MgmtMG --&gt;|"Scoped to"| MgmtSub
+    ConnMG --&gt;|"Scoped to"| ConnSub
+    LAW --&gt;|"Receives governance events"| DefenderMDC
+    AutoAcc --&gt;|"Executes remediation"| SAPProdSub
+    PolicyInsights --&gt;|"Queries"| SAPMG</code></pre>
+<hr/>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<h3 id="sap-basis-governance">SAP Basis Governance<a class="headerlink" href="#sap-basis-governance" title="Permanent link">¶</a></h3>
+<p>SAP Basis governance defines the rules under which SAP infrastructure administrators operate within the Azure-hosted SAP landscape. Each SAP system has a designated System Administrator (SA) who holds permanent SAP_BASIS profile assignment in the non-production systems for day-to-day operations but must use emergency access procedures (a firefighter ID governed by SAP GRC Access Control's Superuser Privilege Management) for production system Basis operations. The firefighter ID is time-limited, session-logged, and triggers an automatic notification to the SAP system owner and the security team.</p>
+<p>SAP Basis activities that modify system parameters (transaction RZ10, RZ11), transport routes (transaction STMS), kernel patches (transaction SPAM), or RFC connections (transaction SM59) are classified as Change Category 2 changes under the enterprise change management policy. They require a Service Now change ticket with SAP Basis approval and must be executed within an approved maintenance window. Azure-level changes to the underlying VMs (VM size changes, disk modifications, OS patching) follow the same change category and must be correlated with a transport-layer freeze or maintenance window in SAP Solution Manager ChaRM to prevent overlapping changes.</p>
+<p>Kernel and support package patch governance follows SAP's quarterly patch cycle. SAP HANA database revisions and SAP kernel patches are applied to non-production systems first, with a two-week stabilization period before production patching. Azure Update Manager is integrated with the patching workflow: VM OS patches are coordinated with SAP kernel maintenance to avoid conflicting maintenance windows that could require a double reboot cycle. Patch compliance is tracked in Microsoft Defender for Cloud's regulatory compliance dashboard under the "SAP Baseline" custom standard.</p>
+<h3 id="sap-transport-governance">SAP Transport Governance<a class="headerlink" href="#sap-transport-governance" title="Permanent link">¶</a></h3>
+<p>The SAP transport governance model controls the promotion of ABAP code, configuration, and customizing through the system landscape: Development (DEV) → Quality Assurance (QA) → Production (PRD). Transport governance is enforced through SAP Solution Manager Change Request Management (ChaRM) in conjunction with the enterprise change management process. No direct transport imports to production are permitted outside of ChaRM; the STMS transport routes are configured so that DEV exports to the shared transport directory but PRD import queues are locked to manual import triggered only from ChaRM.</p>
+<p>Azure governance enforces transport governance indirectly through two mechanisms. First, the SAP transport directory (typically <code>/usr/sap/trans</code>) is hosted on Azure NetApp Files or an Azure Premium Files share, and access to that share from outside the approved SAP application VMs is restricted by Private Endpoint and NSG rules — preventing unauthorized file-level manipulation of transport files. Second, SAP Security Audit Log events for transport-related transactions (SE09, SE10, STMS, SCTS) are forwarded to Microsoft Sentinel via the SAP Continuous Threat Monitoring connector, where analytics rules alert on transports imported to production outside of approved ChaRM tickets.</p>
+<p>Emergency transport procedures — required when a production outage demands an unplanned transport — follow a documented break-glass process: the requestor creates an emergency change in Service Now, the SAP Basis administrator uses the firefighter ID in SAP GRC Access Control to temporarily unlock the PRD import queue, the transport is imported and documented, and the firefighter session log is reviewed within 24 hours by the SAP security team. Azure Policy compliance is checked after every emergency change to confirm that no persistent policy violations were introduced.</p>
+<h3 id="sap-authorization-concept">SAP Authorization Concept<a class="headerlink" href="#sap-authorization-concept" title="Permanent link">¶</a></h3>
+<p>The SAP authorization concept defines the role structure, segregation-of-duties (SoD) rules, and access recertification process for the Azure-hosted SAP landscape. The role model uses SAP single roles (generated with Profile Generator, transaction PFCG) assembled into composite roles that reflect job functions. Role design follows the principle of least privilege: each role grants access to exactly the transactions, authorization objects, and field-value ranges required for the job function, with no excess authorizations.</p>
+<p>Segregation of duties is enforced by SAP GRC Access Control's Access Risk Analysis (ARA) component. The SoD ruleset is maintained by the SAP Security team and reviewed quarterly. Any user provisioning that introduces an SoD conflict requires a formal risk acknowledgment and compensating control documentation before the access is granted. Access requests flow through the SAP GRC Business Role Management (BRM) module integrated with Service Now: the requestor selects a business role from the catalog, the system performs a simulation risk analysis, and the approver sees both the business justification and the SoD risk before granting access.</p>
+<p>Periodic access recertification is conducted quarterly for production system Basis and developer roles, and annually for end-user roles. Microsoft Entra ID Access Reviews govern Azure RBAC role assignments on SAP subscriptions, running on the same quarterly schedule as the SAP GRC access review campaigns. Review findings from both planes are consolidated into a governance report reviewed by the SAP System Owner and Information Security Officer.</p>
+<h3 id="sap-audit-architecture">SAP Audit Architecture<a class="headerlink" href="#sap-audit-architecture" title="Permanent link">¶</a></h3>
+<p>SAP audit logging is configured through SAP Security Audit Log (SM19) to capture security-relevant events: logon/logoff, failed logon attempts, transaction start, RFC calls, user and role administration changes, and system parameter changes. The profile parameter <code>rsau/enable</code> is set to 1 on all production systems. Audit logs are written to the local audit file and forwarded in real time to Microsoft Sentinel via the SAP Continuous Threat Monitoring connector (the Microsoft Sentinel SAP data connector), which uses the SAP RFC interface to pull events from the RSAU* tables.</p>
+<p>In addition to the Security Audit Log, SAP Change Document Log (transaction SCU3, SCUL) captures changes to business configuration objects, and ABAP Workbench audit trails (SE01, SE09) capture developer activity. These logs are forwarded to the central Log Analytics workspace where retention is set to 365 days (online) with 7-year archival to Azure Storage (cold tier) to meet regulatory retention requirements under GDPR Article 30 and SOC 2 Type II audit evidence requirements.</p>
+<p>The SAP Audit Information System (AIS, transaction SECR) is configured to generate standard SAP audit reports for user master data, authorization changes, and system configuration changes. These reports are scheduled monthly and exported to a SharePoint site accessible to internal audit. The AIS configuration is itself governed — changes to AIS report schedules require a change ticket to prevent audit evidence gaps.</p>
+<h3 id="sap-grc-alignment">SAP GRC Alignment<a class="headerlink" href="#sap-grc-alignment" title="Permanent link">¶</a></h3>
+<p>SAP GRC Access Control is deployed in the landscape as a centralized component serving all SAP production systems. The GRC system runs on a dedicated SAP NetWeaver ABAP stack in the Management subscription, separated from productive SAP systems to ensure that GRC availability does not depend on the systems it governs. SAP GRC is integrated with Microsoft Entra ID via SAML 2.0 SSO for the GRC self-service portal (Access Request Management), ensuring that GRC portal access requires the same Conditional Access policy enforcement (MFA, compliant device) as all other SAP Fiori access.</p>
+<p>GRC Process Control is used to document and test IT general controls (ITGCs) for the SAP landscape. Control testing evidence — system-generated reports from SAP and Azure — is uploaded to GRC Process Control via the automated control testing framework, reducing manual evidence collection. GRC Risk Management maintains the SAP IT risk register, with risks linked to Azure security findings from Microsoft Defender for Cloud, ensuring that Azure-level risks are tracked within the same GRC framework as SAP-level risks.</p>
+<h3 id="sap-notes-reference-for-governance-architecture">SAP Notes Reference for Governance Architecture<a class="headerlink" href="#sap-notes-reference-for-governance-architecture" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2131662</td>
+<td>Superuser Privilege Management in SAP GRC Access Control</td>
+<td>Defines firefighter ID configuration for emergency SAP Basis access</td>
+<td>SAP GRC Access Control, all production systems</td>
+</tr>
+<tr>
+<td>2754200</td>
+<td>SAP Security Audit Log: New Features in S/4HANA</td>
+<td>Enables enhanced audit log event classes for S/4HANA governance</td>
+<td>SM19 configuration, SAP S/4HANA production</td>
+</tr>
+<tr>
+<td>1580943</td>
+<td>SAP Security Audit Log: Central configuration</td>
+<td>Describes rsau/* profile parameter requirements for audit completeness</td>
+<td>All SAP ABAP systems, profile parameter management</td>
+</tr>
+<tr>
+<td>2873965</td>
+<td>SAP GRC Access Control 12.0 integration with SAP Identity Authentication Service</td>
+<td>Required for Entra ID-backed SSO to GRC self-service portal</td>
+<td>SAP GRC 12.0, Microsoft Entra ID SAML integration</td>
+</tr>
+<tr>
+<td>2973497</td>
+<td>Central Note for SAP Identity Governance</td>
+<td>Defines role lifecycle management integration between SAP IDG and GRC</td>
+<td>SAP Identity Governance deployment, HR system integration</td>
+</tr>
+<tr>
+<td>1899182</td>
+<td>Security Recommendations for SAP HANA</td>
+<td>HANA-level authorization and audit configuration for governance</td>
+<td>SAP HANA system administration, tenant database governance</td>
+</tr>
+<tr>
+<td>2477204</td>
+<td>SAP HANA Tenant Databases — Combined Auditing</td>
+<td>Configures combined audit trail for HANA multi-tenant architectures</td>
+<td>SAP HANA MDC deployments, database audit policies</td>
+</tr>
+<tr>
+<td>3089413</td>
+<td>SAP S/4HANA Business Roles and Authorization Concept</td>
+<td>Defines SAP Fiori role templates for S/4HANA least-privilege role design</td>
+<td>PFCG role design, SAP Fiori launchpad authorization</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<h3 id="management-group-hierarchy-for-sap">Management Group Hierarchy for SAP<a class="headerlink" href="#management-group-hierarchy-for-sap" title="Permanent link">¶</a></h3>
+<p>The Management Group hierarchy for SAP is a four-level structure: Tenant Root → Platform/Landing Zones (level 2) → SAP Management Group (level 3) → SAP Environment Management Groups (level 4). This structure is aligned with the Cloud Adoption Framework enterprise-scale landing zone architecture, with SAP-specific customization at level 3 and below.</p>
+<p>The SAP Management Group at level 3 is the primary assignment scope for the SAP Policy Initiative. All subscriptions that host SAP workloads — regardless of environment — are direct children of the SAP-environment-level management groups at level 4, inheriting policies both from the SAP MG and from the parent Landing Zones MG above it. This inheritance model means that platform-wide security policies (allowed locations, diagnostic settings, Microsoft Defender for Cloud auto-provisioning) are enforced by the platform team and cannot be overridden at the SAP level, while SAP-specific policies are maintained by the SAP architecture team independently.</p>
+<p>The Decommissioned Management Group is a sibling of the Landing Zones MG and serves as the destination for SAP subscriptions that are being wound down. Moving a subscription to the Decommissioned MG automatically applies a Deny-all policy for new resource deployments, ensuring no new workloads are provisioned on a subscription that is being decommissioned, while read access for audit and evidence collection is preserved.</p>
+<h3 id="subscription-design">Subscription Design<a class="headerlink" href="#subscription-design" title="Permanent link">¶</a></h3>
+<p>Each SAP environment tier has a dedicated Azure subscription: SAP Production, SAP Quality (QA), SAP Development, and SAP Sandbox. The production/non-production split at the subscription level serves three governance purposes: Azure Policy assignments with stricter effects (Deny vs. Audit) can be scoped to production only; Azure RBAC assignments can be scoped to prevent developers from having any access to the production subscription; and Azure Cost Management budget alerts can be configured independently per environment without cross-contamination of cost data.</p>
+<p>Within each subscription, resources are organized into resource groups aligned with SAP system components: one resource group per SAP SID (System ID) for application-layer resources, one for database-layer resources, one for networking resources, and one for shared resources (Key Vault, Storage, Recovery Services Vault). This resource group model enables granular RBAC assignments — the HANA DBA team can be assigned the HANA DBA custom role scoped to the database resource group without gaining access to application-layer resources.</p>
+<p>A dedicated Connectivity subscription hosts shared network infrastructure (hub VNet, Azure Firewall, ExpressRoute Gateway, Private DNS zones) and is governed by network-specific policies assigned at the Connectivity MG level. SAP subscriptions peer to the hub VNet through VNet peering, with the peering managed centrally by the platform network team using Azure Policy <code>DeployIfNotExists</code> to enforce correct peering configuration. SAP subscriptions are not permitted to create their own VPN Gateways or independent internet egress — enforced by Deny policies at the SAP MG level.</p>
+<h3 id="azure-policy-assignments-for-sap-workloads">Azure Policy Assignments for SAP Workloads<a class="headerlink" href="#azure-policy-assignments-for-sap-workloads" title="Permanent link">¶</a></h3>
+<p>Azure Policy assignments are organized into three tiers of scope within the SAP governance model. Tier 1 assignments are made at the Tenant Root Management Group level by the platform team and cover universal security controls. Tier 2 assignments are made at the SAP Management Group level and cover SAP-specific controls applicable to all SAP environments. Tier 3 assignments are made at the environment-specific management group level (SAP Production MG, SAP Dev/Test MG) and implement environment-specific stringency differences.</p>
+<p>Tier 2 SAP-specific policy assignments include: allowed VM SKU list (SAP-certified M-series, Edsv5, Mv2 families), mandatory tag enforcement (SAPSystemID, SAPEnvironment, CostCenter, DataClassification, Owner), disk encryption enforcement (SSE with CMK required on all managed disks attached to SAP-tagged VMs), private endpoint enforcement for Key Vault and Storage accessed by SAP workloads, backup policy enforcement (Azure Backup policy must be applied to all production SAP VMs within 24 hours of deployment), and network policy enforcement (no public IP addresses on HANA subnet resources).</p>
+<p>Policy compliance state is exported from Azure Policy Insights to a Log Analytics workspace where it feeds a governance dashboard. Compliance trend data is retained for 90 days in Log Analytics and exported monthly to Azure Storage for annual audit evidence. When compliance drops below 95% for any Deny-effect policy, an alert fires to the SAP governance team's Service Now queue with the list of non-compliant resources.</p>
+<h3 id="azure-blueprints-and-deployment-environments">Azure Blueprints and Deployment Environments<a class="headerlink" href="#azure-blueprints-and-deployment-environments" title="Permanent link">¶</a></h3>
+<p>Azure Deployment Environments is used to provide self-service, policy-compliant environment provisioning for SAP development and sandbox tiers. Development teams request a new SAP development environment through a catalog in Azure Deployment Environments; the catalog entry invokes a Bicep template that deploys the full SAP development landing zone (VNet peering, resource groups, RBAC assignments, Key Vault, storage) in a configuration pre-validated against the SAP policy initiative. This removes the need for developers to understand Azure Policy constraints while ensuring that self-service environments are compliant by construction.</p>
+<p>For production and quality environments, Azure Blueprints (or their successor, policy-backed Bicep deployment stacks) define the authoritative infrastructure configuration. The blueprint definition is stored in the governance repository and versioned; subscription enrollment to a new SAP environment requires a blueprint assignment approval from the SAP Platform Architect. Blueprint assignments are audited: any drift between the assigned blueprint and the current subscription state is detected by Azure Policy and reported in the compliance dashboard.</p>
+<h3 id="resource-graph-for-sap-inventory">Resource Graph for SAP Inventory<a class="headerlink" href="#resource-graph-for-sap-inventory" title="Permanent link">¶</a></h3>
+<p>Azure Resource Graph is the inventory backbone for SAP governance. The following Kusto queries are executed on a scheduled basis to maintain the SAP estate inventory:</p>
+<p><strong>SAP VM inventory by environment:</strong>
+<div class="language-kusto highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">Resources</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"microsoft.compute/virtualmachines"</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">tags</span><span class="p">[</span><span class="s">'SAPSystemID'</span><span class="p">]</span><span class="w"> </span><span class="p">!=</span><span class="w"> </span><span class="s">""</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="p">|</span><span class="w"> </span><span class="k">project</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">resourceGroup</span><span class="p">,</span><span class="w"> </span><span class="n">subscriptionId</span><span class="p">,</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="n">sapSID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tags</span><span class="p">[</span><span class="s">'SAPSystemID'</span><span class="p">],</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="n">sapEnv</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tags</span><span class="p">[</span><span class="s">'SAPEnvironment'</span><span class="p">],</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="n">vmSize</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">properties</span><span class="err">.</span><span class="n">hardwareProfile</span><span class="err">.</span><span class="n">vmSize</span><span class="p">,</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="n">location</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="p">|</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">sapEnv</span><span class="p">,</span><span class="w"> </span><span class="n">sapSID</span>
+</span></code></pre></div></p>
+<p><strong>Non-compliant disk encryption:</strong>
+<div class="language-kusto highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="n">Resources</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"microsoft.compute/disks"</span>
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">tags</span><span class="p">[</span><span class="s">'SAPSystemID'</span><span class="p">]</span><span class="w"> </span><span class="p">!=</span><span class="w"> </span><span class="s">""</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">properties</span><span class="err">.</span><span class="n">encryption</span><span class="err">.</span><span class="n">type</span><span class="w"> </span><span class="p">!=</span><span class="w"> </span><span class="s">"EncryptionAtRestWithCustomerKey"</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="p">|</span><span class="w"> </span><span class="k">project</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">resourceGroup</span><span class="p">,</span><span class="w"> </span><span class="n">subscriptionId</span><span class="p">,</span>
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="n">sapSID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tags</span><span class="p">[</span><span class="s">'SAPSystemID'</span><span class="p">],</span>
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="n">encryptionType</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">properties</span><span class="err">.</span><span class="n">encryption</span><span class="err">.</span><span class="n">type</span>
+</span></code></pre></div></p>
+<p><strong>SAP VMs without backup:</strong>
+<div class="language-kusto highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">RecoveryServicesResources</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"microsoft.recoveryservices/vaults/backupfabrics/protectioncontainers/protecteditems"</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">properties</span><span class="err">.</span><span class="n">workloadType</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"VM"</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="p">|</span><span class="w"> </span><span class="k">project</span><span class="w"> </span><span class="n">vmId</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tolower</span><span class="p">(</span><span class="n">properties</span><span class="err">.</span><span class="n">sourceResourceId</span><span class="p">),</span><span class="w"> </span><span class="n">backupStatus</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">properties</span><span class="err">.</span><span class="n">lastBackupStatus</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="p">|</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">kind</span><span class="p">=</span><span class="n">rightouter</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="w">    </span><span class="n">Resources</span>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="w">    </span><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"microsoft.compute/virtualmachines"</span>
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="w">    </span><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">tags</span><span class="p">[</span><span class="s">'SAPSystemID'</span><span class="p">]</span><span class="w"> </span><span class="p">!=</span><span class="w"> </span><span class="s">""</span>
+</span><span id="__span-2-9"><a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="w">    </span><span class="p">|</span><span class="w"> </span><span class="k">project</span><span class="w"> </span><span class="n">vmId</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tolower</span><span class="p">(</span><span class="n">id</span><span class="p">),</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">sapSID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tags</span><span class="p">[</span><span class="s">'SAPSystemID'</span><span class="p">]</span>
+</span><span id="__span-2-10"><a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="p">)</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">vmId</span>
+</span><span id="__span-2-11"><a href="#__codelineno-2-11" id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">isempty</span><span class="p">(</span><span class="n">backupStatus</span><span class="p">)</span>
+</span><span id="__span-2-12"><a href="#__codelineno-2-12" id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="p">|</span><span class="w"> </span><span class="k">project</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">sapSID</span>
+</span></code></pre></div></p>
+<p>These queries are embedded in Azure Monitor workbooks in the SAP Governance dashboard and are also used by the monthly governance report automation.</p>
+<h3 id="rbac-model">RBAC Model<a class="headerlink" href="#rbac-model" title="Permanent link">¶</a></h3>
+<p>The SAP RBAC model uses custom Azure role definitions scoped to specific resource groups and is structured around SAP job functions rather than Azure technical roles. No standing Contributor or Owner assignments exist on production SAP subscriptions; all elevated access requires PIM activation with business justification and MFA.</p>
+<p><strong>Custom Azure roles for SAP:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Role Name</th>
+<th>Permissions</th>
+<th>Scope</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP HANA DBA</td>
+<td>Read/write on HANA VM, ANF volumes, backup items in DB resource group</td>
+<td>SAP production DB resource group</td>
+<td>HANA DBAs manage database VMs and storage; no access to application layer</td>
+</tr>
+<tr>
+<td>SAP Basis Administrator</td>
+<td>Read on all SAP resources; Start/Stop/Restart VM actions on SAP VMs</td>
+<td>SAP production subscription (activated via PIM only)</td>
+<td>Basis admins need cross-resource visibility but elevation is time-bounded</td>
+</tr>
+<tr>
+<td>SAP Network Operator</td>
+<td>Read/write on SAP spoke VNet NSGs and route tables</td>
+<td>SAP networking resource group</td>
+<td>Allows NSG rule management without subscription-wide access</td>
+</tr>
+<tr>
+<td>SAP Backup Operator</td>
+<td>Backup contributor on Recovery Services Vault</td>
+<td>SAP shared resource group</td>
+<td>Allows backup job management without VM write access</td>
+</tr>
+<tr>
+<td>SAP Cost Manager</td>
+<td>Read on all SAP resources; Cost Management reader</td>
+<td>SAP subscription</td>
+<td>Allows cost analysis without infrastructure change capability</td>
+</tr>
+<tr>
+<td>SAP Auditor</td>
+<td>Reader on all SAP resources; Log Analytics reader</td>
+<td>SAP subscription, Log Analytics workspace</td>
+<td>Read-only audit access across the full SAP estate</td>
+</tr>
+</tbody>
+</table>
+<p>Permanent Reader assignments are permitted at subscription scope for the SAP Auditor and SAP Cost Manager roles. All write-capable roles are PIM-eligible only, with maximum activation duration of 8 hours, requiring manager approval for Basis Administrator and HANA DBA roles.</p>
+<h3 id="managed-identities">Managed Identities<a class="headerlink" href="#managed-identities" title="Permanent link">¶</a></h3>
+<p>All SAP supporting infrastructure components that need to authenticate to Azure services use system-assigned or user-assigned managed identities, eliminating service principal secrets from the SAP environment. The following managed identity assignments are standard:</p>
+<p>SAP backup proxy VMs use a user-assigned managed identity with Backup Contributor on the Recovery Services Vault and Storage Blob Data Contributor on the backup storage account. HANA VMs use a system-assigned managed identity with Key Vault Secrets User on the Key Vault, allowing the HANA hdbuserstore to retrieve credentials without storing them on disk. Azure Monitor Agent (AMA) on all SAP VMs uses a system-assigned managed identity with Monitoring Metrics Publisher on the Log Analytics workspace. Azure Automation accounts that execute governance remediation tasks use a system-assigned managed identity with scoped Contributor access on the resource groups they manage.</p>
+<p>User-assigned managed identities are preferred over system-assigned for workloads where the same identity needs to be shared across multiple resources or where the identity lifecycle must be decoupled from the resource lifecycle (for example, a managed identity shared by a cluster of SAP application servers).</p>
+<h3 id="azure-arc-for-hybrid-sap">Azure Arc for Hybrid SAP<a class="headerlink" href="#azure-arc-for-hybrid-sap" title="Permanent link">¶</a></h3>
+<p>For SAP systems that remain on-premises during a phased migration or as a permanent hybrid configuration, Azure Arc for Servers extends Azure governance controls to on-premises VMs. Arc-connected SAP servers appear in Azure Resource Graph and are subject to Azure Policy guest configuration policies (enforcing OS hardening baselines), Microsoft Defender for Cloud (extending vulnerability assessment and EDR to on-premises), and Azure Monitor Agent deployment for log forwarding to the central Log Analytics workspace.</p>
+<p>Arc governance for hybrid SAP systems does not replace SAP-level governance (GRC, transport management, authorization) but adds the Azure control plane visibility that enables a unified governance dashboard spanning both cloud-native and on-premises SAP systems. The SAP Management Group policies include a specific assignment for Arc-connected servers: <code>AuditIfNotExists</code> checks that Arc-connected servers tagged as SAP workloads have the Azure Monitor Agent extension and Microsoft Defender for Endpoint extension deployed.</p>
+<h3 id="architecture-diagram-azure-policy-and-rbac-structure-for-sap">Architecture Diagram: Azure Policy and RBAC Structure for SAP<a class="headerlink" href="#architecture-diagram-azure-policy-and-rbac-structure-for-sap" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph TB
+    subgraph EntraID["Microsoft Entra ID — Identity Governance"]
+        PIM["Privileged Identity Management\nEligible-only write roles"]
+        AccessReview["Access Reviews\nQuarterly privileged / Annual end-user"]
+        CA["Conditional Access\nCA-SAP-001 to CA-SAP-004"]
+        Groups["Security Groups\nSAP-Basis-Admins\nSAP-HANA-DBAs\nSAP-Auditors"]
+    end
+
+    subgraph PolicyPlane["Azure Policy Plane — SAP Management Group Scope"]
+        Initiative["initiative-sap-baseline\nCustom Policy Initiative"]
+
+        subgraph DenyPolicies["Deny Effect Policies"]
+            TagDeny["Mandatory Tags Enforcement\nSAPSystemID, SAPEnvironment\nCostCenter, DataClassification, Owner"]
+            SKUDeny["Allowed VM SKUs\nSAP-certified M-series, Edsv5, Mv2"]
+            EncDeny["Disk Encryption CMK\nSSE-CMK required all SAP disks"]
+            PIPDeny["No Public IPs on DB Subnets\n*-hana-*, *-db-*, *-database-*"]
+        end
+
+        subgraph AuditPolicies["AuditIfNotExists Policies"]
+            TunnelAudit["Forced Tunneling\nDefault route → Azure Firewall"]
+            ArcAudit["Arc-Connected SAP Servers\nAMA + MDE extension required"]
+        end
+
+        subgraph DIEPolicies["DeployIfNotExists Policies"]
+            BackupDIE["Backup Enforcement\nProd VMs → RSV default policy"]
+            DiagDIE["Diagnostic Settings\nVM + KV + NSG → Log Analytics"]
+            DefenderDIE["Defender for Cloud\nServers Plan 2 auto-enable"]
+        end
+
+        Initiative --&gt; DenyPolicies
+        Initiative --&gt; AuditPolicies
+        Initiative --&gt; DIEPolicies
+    end
+
+    subgraph RBACModel["Azure RBAC Model — SAP Subscriptions"]
+        subgraph PIMRoles["PIM-Eligible Only (No Standing Access)"]
+            BasisRole["SAP Basis Administrator\nMax 8h, MFA + Approval required"]
+            HANARole["SAP HANA DBA\nMax 8h, MFA + Approval required"]
+            NetRole["SAP Network Operator\nMax 4h, MFA + Self-approve"]
+            BackupRole["SAP Backup Operator\nMax 4h, MFA + Self-approve"]
+        end
+        subgraph PermanentRoles["Permanent Read-Only Assignments"]
+            AuditorRole["SAP Auditor\nReader + Log Analytics Reader"]
+            CostRole["SAP Cost Manager\nReader + Cost Management Reader"]
+        end
+    end
+
+    subgraph AutoRemediation["Governance Automation"]
+        AutoAcc["Azure Automation Account\nSystem-Assigned Managed Identity"]
+        Runbooks["Scheduled Runbooks\nTag compliance check (4h)\nBackup coverage (24h)\nPIM role audit (1h)\nMonthly report (monthly)"]
+        Logic["Azure Logic Apps\nAccess review reminders\nNon-compliance routing\nGovernance report distribution"]
+    end
+
+    subgraph Monitoring["Governance Monitoring"]
+        LAW["Log Analytics Workspace\nActivity Log + Entra ID Logs\nPolicy Insights + SAP Audit Log"]
+        Sentinel["Microsoft Sentinel\nSAP CTM Connector\nGovernance analytics rules"]
+        MDC["Microsoft Defender for Cloud\nGovernance rules + owner assignment\nRegulatory compliance dashboard"]
+        WorkBook["SAP Governance Workbook\nCompliance Summary\nAsset Inventory + Backup Coverage"]
+    end
+
+    PIM --&gt;|"Activates"| BasisRole
+    PIM --&gt;|"Activates"| HANARole
+    AccessReview --&gt;|"Recertifies"| PIMRoles
+    AccessReview --&gt;|"Recertifies"| PermanentRoles
+    CA --&gt;|"Enforces on activation"| PIM
+    Groups --&gt;|"Members mapped to"| PIMRoles
+    Groups --&gt;|"Members mapped to"| PermanentRoles
+
+    Initiative --&gt;|"Blocks non-compliant deployments"| PolicyPlane
+    DIEPolicies --&gt;|"Triggers"| AutoAcc
+    AutoAcc --&gt; Runbooks
+    AutoAcc --&gt; Logic
+
+    LAW --&gt;|"Feeds"| Sentinel
+    LAW --&gt;|"Feeds"| MDC
+    LAW --&gt;|"Powers"| WorkBook
+    Sentinel --&gt;|"Alerts on governance events"| Monitoring</code></pre>
+<hr/>
+<h2 id="governance-framework">Governance Framework<a class="headerlink" href="#governance-framework" title="Permanent link">¶</a></h2>
+<h3 id="azure-policy-initiative-for-sap">Azure Policy Initiative for SAP<a class="headerlink" href="#azure-policy-initiative-for-sap" title="Permanent link">¶</a></h3>
+<p>The SAP Policy Initiative (<code>initiative-sap-baseline</code>) is a custom Azure Policy initiative containing the following policy definitions, assigned at the SAP Management Group scope:</p>
+<p><strong>Required Tags Policy (Deny effect)</strong>
+- Policy: All resources in SAP subscriptions must have tags: <code>SAPSystemID</code>, <code>SAPEnvironment</code>, <code>CostCenter</code>, <code>DataClassification</code>, <code>Owner</code>.
+- Effect: Deny — resource creation is blocked if any mandatory tag is missing or has an empty value.
+- Exemption process: Resource groups used for transient deployment artifacts (e.g., ARM deployment resource groups) can be exempted by the SAP Platform Architect for a maximum of 72 hours.</p>
+<p><strong>Allowed VM SKUs (Deny effect)</strong>
+- Policy: Virtual machines in SAP subscriptions may only use SKUs from the SAP-certified list: Standard_M8ms, Standard_M16ms, Standard_M32ms, Standard_M64ms, Standard_M128ms, Standard_M208ms_v2, Standard_M416ms_v2, Standard_E16ds_v5, Standard_E32ds_v5, Standard_E48ds_v5, Standard_E64ds_v5, Standard_E96ds_v5, Standard_E104ids_v5.
+- Effect: Deny — VM deployments using uncertified SKUs fail at the ARM layer.
+- Rationale: Only SAP-certified VM SKUs are permitted in production to comply with SAP Note 1928533 certification requirements.</p>
+<p><strong>Disk Encryption Enforcement (Deny effect)</strong>
+- Policy: Managed disks attached to VMs tagged as SAP workloads must use Server-Side Encryption with Customer-Managed Key (SSE-CMK). Disk Encryption Sets must reference a Key Vault in the same subscription's approved Key Vault resource.
+- Effect: Deny on disk creation; DeployIfNotExists to associate existing disks with a Disk Encryption Set where not already configured.</p>
+<p><strong>Network Policy: No Public IPs on Database Subnets (Deny effect)</strong>
+- Policy: Public IP addresses may not be associated with network interfaces attached to VMs in subnets named <code>*-hana-*</code>, <code>*-db-*</code>, or <code>*-database-*</code> in SAP subscriptions.
+- Effect: Deny — prevents accidental direct internet exposure of SAP database VMs.</p>
+<p><strong>Network Policy: Forced Tunneling Required (AuditIfNotExists effect)</strong>
+- Policy: Route tables associated with SAP subnets must contain a default route (0.0.0.0/0) pointing to the Azure Firewall private IP in the hub VNet.
+- Effect: AuditIfNotExists — flags route tables missing the forced-tunnel route for remediation. Deny effect not used here to avoid breaking emergency network changes during incidents.</p>
+<p><strong>Backup Enforcement (DeployIfNotExists effect)</strong>
+- Policy: Virtual machines in SAP Production subscriptions tagged with <code>SAPEnvironment: Production</code> must be associated with an Azure Backup policy within the approved Recovery Services Vault. If no backup item exists for a VM, a backup item is created using the default SAP backup policy (daily backup, 35-day retention, weekly backup with 12-week retention, monthly backup with 12-month retention).
+- Effect: DeployIfNotExists — auto-remediation creates the backup association.</p>
+<p><strong>Diagnostic Settings Enforcement (DeployIfNotExists effect)</strong>
+- Policy: All VMs, Key Vaults, Storage Accounts, and Network Security Groups in SAP subscriptions must have diagnostic settings configured to send logs to the central Log Analytics workspace.
+- Effect: DeployIfNotExists — creates diagnostic settings if missing.</p>
+<p><strong>Microsoft Defender for Cloud Auto-Provisioning (DeployIfNotExists effect)</strong>
+- Policy: Microsoft Defender for Cloud Servers Plan 2 must be enabled on all SAP subscriptions. The Azure Monitor Agent and the Defender for Endpoint extension must be deployed on all SAP VMs.
+- Effect: DeployIfNotExists — auto-enables the Defender plan and deploys extensions.</p>
+<h3 id="compliance-reporting-via-azure-policy-compliance-dashboard">Compliance Reporting via Azure Policy Compliance Dashboard<a class="headerlink" href="#compliance-reporting-via-azure-policy-compliance-dashboard" title="Permanent link">¶</a></h3>
+<p>The Azure Policy compliance dashboard for the SAP Policy Initiative is configured as the primary compliance reporting tool for the SAP governance team. The dashboard shows overall compliance percentage per policy definition, per subscription, and per resource type. A compliance percentage below 95% for any Deny-effect policy triggers an automated alert to the SAP governance team.</p>
+<p>Compliance data is exported monthly using the Azure Policy Insights REST API (<code>/providers/Microsoft.PolicyInsights/policyStates</code>) to a storage account, where it is ingested into a Power BI report for executive governance reporting. The report shows compliance trend over time, identifies the top 10 non-compliant resource types, and correlates non-compliance with change management tickets to identify whether non-compliance was authorized (exempt) or unauthorized (requiring remediation).</p>
+<p>Azure Policy compliance history is retained for 90 days by the Azure platform. For longer-term compliance evidence required by SOC 2 Type II audits (12-month audit period), the monthly export to Azure Storage provides the historical record. The storage account containing compliance exports is WORM-protected (Write Once Read Many) using Azure Blob Storage Immutability with a 13-month retention lock, ensuring that compliance evidence cannot be modified after export.</p>
+<h3 id="regulatory-compliance-for-sap-soc-2-iso-27001-and-gdpr">Regulatory Compliance for SAP: SOC 2, ISO 27001, and GDPR<a class="headerlink" href="#regulatory-compliance-for-sap-soc-2-iso-27001-and-gdpr" title="Permanent link">¶</a></h3>
+<p><strong>SOC 2 Type II Applicability:</strong>
+SOC 2 Type II requires continuous evidence of controls over a 12-month period. The SAP governance architecture addresses SOC 2 Trust Services Criteria as follows: CC6.1 (logical access controls) is evidenced by Entra ID PIM activation logs and SAP GRC access request logs; CC6.3 (access revocation) is evidenced by quarterly access reviews in Entra ID and SAP GRC; CC7.1 (change monitoring) is evidenced by Azure Policy compliance exports and SAP ChaRM transport logs; CC8.1 (change management) is evidenced by Service Now change records correlated with Azure Activity Log deployment events.</p>
+<p><strong>ISO 27001:2022 Applicability:</strong>
+ISO 27001 Annex A controls relevant to SAP governance include A.5.15 (access control), A.5.18 (access rights management), A.5.23 (information security for use of cloud services), A.8.24 (use of cryptography), and A.8.32 (change management). The Azure Policy initiative enforces A.8.24 through CMK disk encryption requirements and A.8.32 through the deployment pipeline approval gates. ISO 27001 Statement of Applicability (SoA) entries referencing these controls cite this governance architecture document and the Azure Policy initiative definition as implementation evidence.</p>
+<p><strong>GDPR Applicability:</strong>
+SAP systems hosting personal data (HR data in SAP HCM, customer data in SAP SD/CRM) are subject to GDPR Article 25 (data protection by design) and Article 32 (security of processing). The governance architecture addresses Article 25 by enforcing encryption by default (CMK policy), network isolation (no public IP policy), and least-privilege access (PIM-only elevated roles). Article 30 (records of processing activities) requires audit log retention — addressed by the 7-year archival policy for SAP Security Audit Log events in Azure Storage. Article 33 (breach notification within 72 hours) is supported by Microsoft Sentinel analytics rules that alert on SAP data exfiltration indicators within minutes of detection.</p>
+<hr/>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>SAP/Azure Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Management Group depth for SAP</td>
+<td>Flat (all SAP subs directly under Landing Zones MG) vs. four-level hierarchy with SAP MG and environment MGs</td>
+<td>Four-level hierarchy: Root → Landing Zones → SAP MG → Environment MGs</td>
+<td>Environment-level MGs allow Deny policies on Production without affecting Development; SAP MG provides single assignment scope for all SAP-wide policies</td>
+<td>Azure CAF enterprise-scale landing zone; Azure Policy inheritance model</td>
+</tr>
+<tr>
+<td>Policy effect for VM SKU enforcement</td>
+<td>Audit vs. Deny</td>
+<td>Deny</td>
+<td>Audit mode allows non-compliant VMs to be created and potentially reach production state; SAP Note 1928533 certification is a hard requirement, not a recommendation</td>
+<td>SAP Note 1928533; Azure Policy effect documentation</td>
+</tr>
+<tr>
+<td>RBAC model for SAP Basis access</td>
+<td>Permanent Contributor on SAP subscriptions vs. PIM-eligible Basis Administrator custom role</td>
+<td>PIM-eligible custom role, no standing write access</td>
+<td>Standing Contributor violates least-privilege and creates SOC 2 CC6.1 finding; PIM activation provides auditable just-in-time access with MFA verification</td>
+<td>Azure AD PIM documentation; SOC 2 CC6.1</td>
+</tr>
+<tr>
+<td>Subscription topology</td>
+<td>Single subscription for all SAP environments vs. per-environment subscriptions</td>
+<td>Per-environment subscriptions (Prod, QA, Dev, Sandbox)</td>
+<td>Subscription-level RBAC isolation prevents developers from accessing production; independent budget alerts and policy strictness per environment; Azure subscription quotas do not become a shared constraint</td>
+<td>Azure subscription design guidance; Azure Policy scope</td>
+</tr>
+<tr>
+<td>SAP transport directory hosting</td>
+<td>On-premises NFS server vs. Azure NetApp Files vs. Azure Premium Files</td>
+<td>Azure NetApp Files with Private Endpoint</td>
+<td>ANF provides NFS v4.1 required by SAP transport system, sub-millisecond latency, and Private Endpoint for access control; no public network exposure of transport files</td>
+<td>SAP Note 2015553; Azure ANF NFS documentation</td>
+</tr>
+<tr>
+<td>GRC system placement</td>
+<td>On-premises GRC vs. GRC in SAP landscape vs. dedicated GRC subscription</td>
+<td>Dedicated GRC subscription within SAP Management Group</td>
+<td>GRC availability must not depend on productive SAP systems; dedicated subscription with its own resource quotas and policies; GRC data (access logs, risk register) is governance-sensitive and should be isolated</td>
+<td>SAP GRC system sizing guide; Azure subscription isolation</td>
+</tr>
+<tr>
+<td>Policy compliance reporting</td>
+<td>Native Azure Policy dashboard only vs. export to Log Analytics vs. export to external SIEM</td>
+<td>Export to Log Analytics + Power BI report</td>
+<td>Azure Policy dashboard lacks trend history beyond 90 days; Log Analytics enables custom KQL queries and integration with governance workbooks; Power BI enables executive reporting with RBAC-controlled access</td>
+<td>Azure Policy Insights API; Log Analytics retention</td>
+</tr>
+<tr>
+<td>Managed identity vs. service principals</td>
+<td>Service principals with client secrets vs. managed identities for Azure resource access</td>
+<td>Managed identities exclusively for SAP supporting infrastructure</td>
+<td>Service principal secrets require rotation, are susceptible to secret leakage, and create compliance findings; managed identities eliminate secret management entirely for Azure-to-Azure authentication</td>
+<td>Azure managed identity documentation; Microsoft Defender for Cloud secret rotation recommendation</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="sap-notes-reference">SAP Notes Reference<a class="headerlink" href="#sap-notes-reference" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Governance Relevance</th>
+<th>Applicable Systems</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Azure: Supported Products and Azure VM Types</td>
+<td>Authoritative list of SAP-certified Azure VM SKUs; basis for Allowed VM SKU policy</td>
+<td>All SAP production systems</td>
+</tr>
+<tr>
+<td>2131662</td>
+<td>Superuser Privilege Management in SAP GRC Access Control</td>
+<td>Firefighter ID configuration for emergency Basis access; governs break-glass procedures</td>
+<td>SAP GRC Access Control, all production ABAP systems</td>
+</tr>
+<tr>
+<td>2754200</td>
+<td>Security Audit Log in SAP S/4HANA</td>
+<td>Configuration of enhanced audit log event classes for S/4HANA; required for complete governance audit trail</td>
+<td>SAP S/4HANA systems</td>
+</tr>
+<tr>
+<td>1580943</td>
+<td>SAP Security Audit Log: Central Configuration</td>
+<td>Profile parameter <code>rsau/enable</code>, <code>rsau/max_diskspace/local</code>, and filter configuration for complete audit log coverage</td>
+<td>All SAP ABAP systems</td>
+</tr>
+<tr>
+<td>1899182</td>
+<td>Security Recommendations for SAP HANA</td>
+<td>HANA-level audit policy configuration, user administration restrictions, and password policy governance</td>
+<td>SAP HANA databases</td>
+</tr>
+<tr>
+<td>2477204</td>
+<td>SAP HANA Tenant Databases — Combined Auditing</td>
+<td>Audit policy configuration for HANA multi-tenant (MDC) deployments to ensure tenant-level audit completeness</td>
+<td>SAP HANA MDC systems</td>
+</tr>
+<tr>
+<td>3089413</td>
+<td>SAP S/4HANA Business Roles and Authorization Concept</td>
+<td>SAP Fiori business role templates for least-privilege role design in S/4HANA; used as basis for PFCG role catalog</td>
+<td>SAP S/4HANA, SAP Fiori Launchpad</td>
+</tr>
+<tr>
+<td>2973497</td>
+<td>Central Note for SAP Identity Governance</td>
+<td>Integration requirements for SAP Identity Governance with SAP GRC Access Control and SAP HR system</td>
+<td>SAP Identity Governance, SAP GRC</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>Optimizing the Network Configuration on HANA and OS Level</td>
+<td>Network configuration constraints relevant to governance of HANA VM network interfaces; prevents unauthorized interface additions</td>
+<td>SAP HANA VMs</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<h3 id="reliability">Reliability<a class="headerlink" href="#reliability" title="Permanent link">¶</a></h3>
+<p>The governance architecture itself must be reliable: if governance tooling fails, the SAP estate must not become ungoverned. Azure Policy enforcement is built into the Azure Resource Manager control plane and does not depend on external services — Deny-effect policies continue to block non-compliant deployments even if the policy portal is unavailable. Microsoft Entra ID PIM is a global service with 99.99% SLA; PIM activation failures fall back to the pre-approved break-glass accounts documented in the emergency access procedure. The Log Analytics workspace uses a dedicated cluster or standard workspace with geo-redundant backup to ensure governance event retention survives a regional outage. Recovery Services Vault for the SAP backup governance data uses geo-redundant storage (GRS) by default.</p>
+<p>The governance control plane (Log Analytics, Sentinel, Defender for Cloud) is hosted in the Management subscription in a primary Azure region, with cross-region replication of critical governance data (audit logs, policy compliance exports) to the paired region. If the Management subscription experiences a regional failure, the compliance export data in Azure Storage (GRS) is accessible from the paired region, and Sentinel has cross-workspace query capability to reconstruct governance visibility.</p>
+<h3 id="security">Security<a class="headerlink" href="#security" title="Permanent link">¶</a></h3>
+<p>The governance architecture is itself a security-sensitive component: the policies, role assignments, and audit log configurations that govern the SAP estate must be protected against unauthorized modification. Azure Policy definitions and assignments are protected by Azure RBAC: only members of the SAP Platform Architecture security group (Policy Contributor role at the SAP Management Group) can create or modify policy assignments. Changes to policy assignments are logged in the Azure Activity Log and generate Sentinel analytics rule alerts for any policy assignment deletion or modification.</p>
+<p>The Log Analytics workspace that receives SAP governance events is protected by its own RBAC model: the workspace uses workspace-level RBAC where SAP operators have table-level read access only to the tables relevant to their function, and write access is restricted to the Azure Monitor Agent managed identity. Log purge operations on the workspace require Owner-level PIM activation and trigger a critical Sentinel alert. Key Vault access policies for governance-related secrets (Disk Encryption Set keys, automation account certificates) follow the same managed identity model described in the Azure Architecture section.</p>
+<h3 id="cost-optimization">Cost Optimization<a class="headerlink" href="#cost-optimization" title="Permanent link">¶</a></h3>
+<p>Governance tooling generates cost at several points: Log Analytics data ingestion and retention, Microsoft Defender for Cloud Servers Plan 2 per-VM licensing, and Azure Policy compliance data export to Storage. These costs are tracked under the <code>CostCenter: Governance</code> tag and separated from SAP workload costs. Log Analytics ingestion costs are controlled by configuring data collection rules (DCRs) on Azure Monitor Agent to collect only governance-relevant log tables from SAP VMs (Security, Syslog, WindowsEvent for security event IDs) rather than all available logs. Retention beyond 90 days is handled by archiving to Azure Storage (cold tier) at significantly lower cost than Log Analytics retention pricing.</p>
+<p>Microsoft Defender for Cloud costs are allocated to the SAP subscription budget rather than the Management subscription to create accountability: if a SAP system team deploys additional VMs, they bear the incremental Defender cost, providing incentive to right-size the VM estate. The cost allocation is enforced through the <code>CostCenter</code> tag and Azure Cost Management budget alerts per subscription.</p>
+<h3 id="operational-excellence">Operational Excellence<a class="headerlink" href="#operational-excellence" title="Permanent link">¶</a></h3>
+<p>Governance automation reduces toil and ensures consistency. The following governance operations are automated: policy remediation tasks run daily for DeployIfNotExists policies, triggered by Azure Automation runbooks; access review reminder notifications are sent to reviewers 7 days before the review deadline via Logic Apps integrated with Service Now; non-compliant resource alerts are routed to the owning SAP team's Service Now queue based on the <code>Owner</code> resource tag; and monthly governance reports are generated automatically and distributed to SAP System Owners via the Logic App report generation pipeline.</p>
+<p>The governance-as-code principle ensures that all policy definitions, initiative assignments, and RBAC role definitions are stored in the governance repository and deployed through the CI/CD pipeline. No manual changes to policy assignments or RBAC configurations are made outside of the pipeline — enforced by the same pipeline-only deployment model that governs SAP infrastructure changes. This eliminates configuration drift in the governance layer and ensures that all governance changes are peer-reviewed, tested in non-production management groups first, and documented with a Service Now change ticket.</p>
+<h3 id="performance-efficiency">Performance Efficiency<a class="headerlink" href="#performance-efficiency" title="Permanent link">¶</a></h3>
+<p>Governance overhead on SAP workloads must not degrade SAP performance. The governance tools that run on SAP VMs (Azure Monitor Agent, Microsoft Defender for Endpoint) are validated for SAP performance impact: AMA collects logs asynchronously and has negligible CPU and memory overhead. Microsoft Defender for Endpoint is configured with SAP-specific exclusions (SAP data directories, work directories, transport directories) as documented in the Microsoft Defender for Endpoint SAP configuration guidance, preventing false-positive I/O scanning of high-throughput SAP database files.</p>
+<p>Azure Policy evaluation occurs server-side in the Azure control plane and has no performance impact on SAP VMs. Guest Configuration policies (which run inside the VM) are scheduled at low frequency (15-minute compliance scan intervals with a configurable jitter) and use minimal CPU resources. The guest configuration agent is configured to run at below-normal OS process priority on HANA VMs to prevent any interference with HANA's memory and CPU allocation.</p>
+<hr/>
+<h2 id="security-architecture">Security Architecture<a class="headerlink" href="#security-architecture" title="Permanent link">¶</a></h2>
+<h3 id="microsoft-entra-id-governance">Microsoft Entra ID Governance<a class="headerlink" href="#microsoft-entra-id-governance" title="Permanent link">¶</a></h3>
+<p>Microsoft Entra ID serves as the authoritative identity provider for all Azure resource access and for SAP Fiori SSO. The Entra ID tenant is configured with the following governance settings: Password Protection enabled with the SAP-specific banned password list (preventing SAP<sid>-pattern passwords); Self-Service Password Reset disabled for SAP admin accounts (requiring helpdesk-mediated resets with identity verification); and Conditional Access requiring MFA and compliant device for all access to the SAP Azure subscriptions and SAP Fiori endpoints.</sid></p>
+<p>Entra ID Identity Protection is configured to detect and respond to risky sign-ins for SAP system accounts. High-risk sign-in detections for accounts with SAP RBAC role assignments trigger an automatic PIM role deactivation and an alert to the SAP security team. Medium-risk sign-ins require step-up MFA for continued session access. Identity Protection risk policies are scoped to the security group containing all accounts with PIM-eligible SAP roles.</p>
+<p>Entra ID Access Reviews are configured for all Azure RBAC role assignments on SAP subscriptions and for all PIM-eligible role assignments. Reviews run quarterly for privileged roles (SAP Basis Administrator, HANA DBA) and annually for read-only roles (SAP Auditor, SAP Cost Manager). Review results are exported to Log Analytics for compliance reporting. Accounts that are not reviewed within the review window are automatically removed from the eligible role assignments (auto-deny on no response).</p>
+<h3 id="pim-for-sap-admin-roles">PIM for SAP Admin Roles<a class="headerlink" href="#pim-for-sap-admin-roles" title="Permanent link">¶</a></h3>
+<p>Privileged Identity Management is configured for all Azure RBAC roles that have write access on SAP subscriptions. PIM activation settings for SAP-specific roles:</p>
+<ul>
+<li><strong>SAP Basis Administrator</strong>: Maximum activation duration 8 hours; requires MFA verification; requires business justification (Service Now change ticket number); requires approval from SAP Platform Architect or designated alternate.</li>
+<li><strong>SAP HANA DBA</strong>: Maximum activation duration 8 hours; requires MFA verification; requires business justification; manager approval required.</li>
+<li><strong>SAP Network Operator</strong>: Maximum activation duration 4 hours; requires MFA verification; requires business justification; no additional approval (self-approve with justification).</li>
+<li><strong>SAP Backup Operator</strong>: Maximum activation duration 4 hours; requires MFA verification; requires business justification; no additional approval.</li>
+</ul>
+<p>PIM activation events are forwarded to Log Analytics and trigger Sentinel analytics rules that correlate the PIM activation with subsequent Azure Activity Log events to verify that the activated role was used only for the stated purpose. Activations outside business hours (defined as 06:00–20:00 in the enterprise's primary time zone) trigger an additional notification to the SAP security team.</p>
+<h3 id="access-reviews">Access Reviews<a class="headerlink" href="#access-reviews" title="Permanent link">¶</a></h3>
+<p>Entra ID Access Reviews are the primary mechanism for periodic revalidation of both Azure RBAC and PIM eligible assignments. Review configuration: Reviewers are the direct managers of the role holders for end-user roles, and the SAP Platform Architect for privileged roles. Duration is 14 days. Frequency is quarterly for privileged roles and annual for read-only roles. On completion, accounts with a "Deny" decision or no response are automatically removed.</p>
+<p>SAP GRC access review campaigns are synchronized with the Entra ID access review schedule so that both platforms review access simultaneously, reducing reviewer fatigue and enabling the governance team to present a unified access recertification report. The synchronization is implemented through a Logic App that reads the SAP GRC review campaign schedule and creates a corresponding Entra ID access review at the same time.</p>
+<h3 id="conditional-access-policies-for-sap">Conditional Access Policies for SAP<a class="headerlink" href="#conditional-access-policies-for-sap" title="Permanent link">¶</a></h3>
+<p>Conditional Access policies specific to SAP access:</p>
+<p><strong>CA-SAP-001: Require MFA for SAP Fiori Access</strong>
+- Target users: All users assigned to SAP Fiori enterprise applications in Entra ID.
+- Conditions: All locations (no trusted network exemption for SAP Fiori).
+- Grant control: Require MFA + compliant device.</p>
+<p><strong>CA-SAP-002: Block Legacy Authentication for SAP</strong>
+- Target users: All users.
+- Conditions: Authentication flows using legacy protocols (basic auth, NTLM).
+- Target applications: SAP NetWeaver ABAP enterprise app, SAP Fiori enterprise app.
+- Grant control: Block.</p>
+<p><strong>CA-SAP-003: Require Privileged Workstation for SAP Basis PIM Activation</strong>
+- Target users: Members of the SAP-Basis-Admins security group.
+- Conditions: All locations.
+- Grant control: Require MFA + Hybrid Entra ID Joined device + require compliant device (Intune MDM compliance policy with SAP workstation baseline applied).</p>
+<p><strong>CA-SAP-004: Block SAP Access from High-Risk Locations</strong>
+- Target users: All users.
+- Target applications: All SAP enterprise apps.
+- Conditions: Named locations not in the approved country list.
+- Grant control: Block.</p>
+<h3 id="just-in-time-vm-access">Just-in-Time VM Access<a class="headerlink" href="#just-in-time-vm-access" title="Permanent link">¶</a></h3>
+<p>Microsoft Defender for Cloud Just-in-Time VM Access is configured for all SAP VMs to eliminate standing SSH/RDP access. JIT access requests for SAP VMs require:
+- Service Now change ticket reference.
+- MFA verification.
+- Approval from the SAP Basis Administrator or SAP Platform Architect for production VMs.
+- Maximum access duration of 4 hours per request.
+- Source IP restriction to the requester's current public IP or the enterprise's Bastion subnet CIDR.</p>
+<p>JIT access approval workflows are configured in Defender for Cloud with notifications sent to the SAP Basis team's Service Now queue. JIT access sessions are logged in the Defender for Cloud activity log and forwarded to Log Analytics. Bastion is the preferred access method for all SAP VM administrative access; JIT is used as a fallback when Bastion is unavailable.</p>
+<h3 id="microsoft-defender-for-cloud-governance-posture">Microsoft Defender for Cloud Governance Posture<a class="headerlink" href="#microsoft-defender-for-cloud-governance-posture" title="Permanent link">¶</a></h3>
+<p>Microsoft Defender for Cloud is configured with a custom governance rule for the SAP subscription that assigns non-compliant security recommendations to the responsible SAP team based on resource tags. The governance rule maps <code>Owner</code> tag values to Defender for Cloud email notification recipients, ensuring that every unresolved security recommendation has an assigned owner with a remediation due date. Recommendations with a "High" severity have a 7-day remediation SLA; "Medium" severity have a 30-day SLA; "Low" severity have a 90-day SLA.</p>
+<p>The Defender for Cloud regulatory compliance dashboard is configured with ISO 27001, SOC 2, and a custom "SAP Baseline" standard. The SAP Baseline standard includes checks specific to SAP workload configuration (HANA VM SKU compliance, disk encryption, backup coverage) that are not covered by the built-in regulatory standards. Compliance scores are exported to the governance Power BI report on a monthly basis.</p>
+<p>Microsoft Defender for Cloud's attack path analysis is reviewed monthly by the SAP security team to identify cross-resource attack paths that traverse the SAP governance boundary — for example, a path that begins with a public internet exposure and leads to a HANA database VM. Identified attack paths are remediated as P1 security findings with a 48-hour SLA.</p>
+<hr/>
+<h2 id="reliability-and-high-availability">Reliability and High Availability<a class="headerlink" href="#reliability-and-high-availability" title="Permanent link">¶</a></h2>
+<h3 id="rpo-and-rto-targets">RPO and RTO Targets<a class="headerlink" href="#rpo-and-rto-targets" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Tier</th>
+<th>RPO Target</th>
+<th>RTO Target</th>
+<th>HA Method</th>
+<th>DR Method</th>
+<th>Azure SLA Component</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tier 1: SAP S/4HANA Production (HANA DB)</td>
+<td>&lt; 15 minutes</td>
+<td>&lt; 4 hours</td>
+<td>HSR SYNC + Pacemaker, AZ1-AZ2</td>
+<td>HSR ASYNC to paired region</td>
+<td>Azure VM 99.99% (AZ), Azure ANF 99.99%</td>
+</tr>
+<tr>
+<td>Tier 1: SAP S/4HANA Production (App Servers)</td>
+<td>&lt; 15 minutes</td>
+<td>&lt; 2 hours</td>
+<td>Multiple PAS/AAS across AZs; ASCS/ERS Pacemaker cluster</td>
+<td>Azure Site Recovery (RPO 15 min replication)</td>
+<td>Azure VM 99.99% (AZ)</td>
+</tr>
+<tr>
+<td>Tier 2: SAP BW/4HANA Production</td>
+<td>&lt; 30 minutes</td>
+<td>&lt; 6 hours</td>
+<td>HSR SYNC + Pacemaker, AZ1-AZ2</td>
+<td>Azure Backup + HSR ASYNC</td>
+<td>Azure VM 99.99% (AZ)</td>
+</tr>
+<tr>
+<td>Tier 3: SAP Quality/Pre-Production</td>
+<td>&lt; 4 hours</td>
+<td>&lt; 8 hours</td>
+<td>Single-zone deployment; VM restart via Azure platform</td>
+<td>Azure Backup restore from daily snapshot</td>
+<td>Azure VM 99.9% (single zone)</td>
+</tr>
+<tr>
+<td>Tier 4: SAP Development</td>
+<td>&lt; 24 hours</td>
+<td>&lt; 24 hours</td>
+<td>No HA; best-effort VM restart</td>
+<td>Azure Backup restore</td>
+<td>Azure VM 99.9%</td>
+</tr>
+<tr>
+<td>Tier 5: SAP Sandbox</td>
+<td>Best effort</td>
+<td>Best effort</td>
+<td>No HA; no DR</td>
+<td>No dedicated DR (rebuilt from catalog)</td>
+<td>Azure VM 99.5%</td>
+</tr>
+<tr>
+<td>Governance Control Plane (Log Analytics, Sentinel)</td>
+<td>&lt; 5 minutes (event ingestion)</td>
+<td>&lt; 1 hour (workspace failover)</td>
+<td>Zone-redundant workspace or dedicated cluster</td>
+<td>Cross-workspace query to secondary region workspace</td>
+<td>Log Analytics 99.9%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="governance-control-plane-ha-considerations">Governance Control Plane HA Considerations<a class="headerlink" href="#governance-control-plane-ha-considerations" title="Permanent link">¶</a></h3>
+<p>The governance control plane is not itself a SAP-tier workload but its availability directly affects the ability to detect and respond to SAP governance events. Log Analytics workspace failures are mitigated by the 90-day local retention buffer in the Azure Monitor Agent on each SAP VM: if the workspace is unavailable, AMA buffers up to 5 GB of log data locally before beginning to drop events. Sentinel analytics rules are evaluated against the Log Analytics workspace and do not generate alerts during workspace outages; the Sentinel workspace health workbook alerts when rule evaluation latency exceeds 15 minutes.</p>
+<p>Azure Automation accounts used for policy remediation are deployed with a system-assigned managed identity and have no dependency on SAP VMs or the SAP spoke VNet — they communicate with Azure Resource Manager through the Azure backbone. Automation runbook failures are alerted through Azure Monitor action groups and are retried automatically up to three times before generating a Service Now incident for the governance team.</p>
+<hr/>
+<h2 id="cost-optimization_1">Cost Optimization<a class="headerlink" href="#cost-optimization_1" title="Permanent link">¶</a></h2>
+<h3 id="governance-cost-optimization-strategies">Governance Cost Optimization Strategies<a class="headerlink" href="#governance-cost-optimization-strategies" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Estimated Saving</th>
+<th>Implementation Complexity</th>
+<th>Prerequisites</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Configure Data Collection Rules to ingest only security and governance tables (Security, Syslog security facility, WindowsEvent 4624/4625/4648/4688) from SAP VMs instead of all tables</td>
+<td>40–60% reduction in Log Analytics ingestion cost for SAP VMs</td>
+<td>Medium (DCR authoring per VM OS type, testing for missed events)</td>
+<td>Azure Monitor Agent deployed on all SAP VMs; DCR per SAP VM role type</td>
+</tr>
+<tr>
+<td>Archive Log Analytics data beyond 90 days to Azure Storage (cold tier) instead of retaining in Log Analytics interactive tier</td>
+<td>85–90% reduction in log retention cost for data aged 90–2555 days</td>
+<td>Low (configure workspace archive settings)</td>
+<td>Log Analytics workspace; Azure Storage account with immutability lock</td>
+</tr>
+<tr>
+<td>Use Azure Policy Audit effect instead of DeployIfNotExists for non-production environments where auto-remediation is not required</td>
+<td>Eliminates Azure Automation run cost for non-production remediation tasks</td>
+<td>Low (duplicate policy initiative with modified effects for non-production MG)</td>
+<td>Separate policy initiative for non-production environments</td>
+</tr>
+<tr>
+<td>Consolidate Log Analytics workspaces to a dedicated cluster for large estates (&gt;500 GB/day ingestion)</td>
+<td>25% ingestion cost reduction via cluster commitment tier</td>
+<td>High (workspace migration, sentinel reconfiguration)</td>
+<td>Log Analytics dedicated cluster (100 GB/day minimum); workspace migration planning</td>
+</tr>
+<tr>
+<td>Right-size Microsoft Defender for Cloud Servers Plan 2 to Servers Plan 1 on non-production SAP VMs</td>
+<td>~50% Defender cost reduction on non-production VMs</td>
+<td>Low (Defender plan per subscription via policy)</td>
+<td>Confirm Servers Plan 1 meets compliance requirements for non-production</td>
+</tr>
+<tr>
+<td>Use Azure Reservations for governance compute (Automation workers, Sentinel workspace VMs if using dedicated cluster)</td>
+<td>30–40% compute cost reduction on committed governance infrastructure</td>
+<td>Low (1-year or 3-year reservation purchase)</td>
+<td>Stable governance infrastructure sizing; financial approval for commitment</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cost-governance-enforcement">Cost Governance Enforcement<a class="headerlink" href="#cost-governance-enforcement" title="Permanent link">¶</a></h3>
+<p>Azure Cost Management budgets are configured at subscription level for each SAP subscription, with thresholds at 80% (forecast alert) and 100% (actual spend alert). Budget alerts route to the SAP System Owner and the Cost Manager role holder for the subscription. Azure Cost Management anomaly detection is enabled on all SAP subscriptions to catch unexpected cost spikes that may indicate unauthorized resource deployments or runaway automation.</p>
+<p>The <code>CostCenter</code> mandatory tag is enforced by the SAP Policy Initiative and enables cost allocation reports in Azure Cost Management to be split by cost center, enabling accurate chargeback to the business units that own each SAP system. The <code>SAPSystemID</code> tag enables cost reports to be broken down by SAP SID, allowing the infrastructure cost of each SAP system to be tracked independently.</p>
+<hr/>
+<h2 id="operations-and-monitoring">Operations and Monitoring<a class="headerlink" href="#operations-and-monitoring" title="Permanent link">¶</a></h2>
+<h3 id="azure-policy-compliance-monitoring">Azure Policy Compliance Monitoring<a class="headerlink" href="#azure-policy-compliance-monitoring" title="Permanent link">¶</a></h3>
+<p>Azure Policy compliance is monitored through a combination of the Azure Policy compliance dashboard, Log Analytics queries on the PolicyInsights data source, and automated alerts. The following monitoring configuration is standard:</p>
+<p>Policy compliance data is ingested into Log Analytics using the Azure Policy Insights diagnostic setting. The <code>AzurePolicyInsights</code> Log Analytics solution (or its replacement, the Policy Insights data connector) is enabled on the governance workspace. A saved query detects compliance state changes for Deny-effect policies:</p>
+<div class="language-kusto highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">PolicyInsights</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">TimeGenerated</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="n">ago</span><span class="p">(</span><span class="mi">24</span><span class="n">h</span><span class="p">)</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">PolicyEffect</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"deny"</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">ComplianceState</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"NonCompliant"</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="p">|</span><span class="w"> </span><span class="k">summarize</span><span class="w"> </span><span class="k">count</span><span class="p">()</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">PolicyDefinitionName</span><span class="p">,</span><span class="w"> </span><span class="n">ResourceType</span><span class="p">,</span><span class="w"> </span><span class="n">SubscriptionId</span>
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">count_</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">0</span>
+</span></code></pre></div>
+<p>This query runs on a 4-hour schedule and routes alerts to the SAP governance team's Service Now queue via an Azure Monitor action group.</p>
+<h3 id="azure-monitor-governance-dashboards">Azure Monitor Governance Dashboards<a class="headerlink" href="#azure-monitor-governance-dashboards" title="Permanent link">¶</a></h3>
+<p>The SAP Governance Azure Monitor workbook contains the following tabs:
+- <strong>Compliance Summary</strong>: Policy compliance percentage by initiative, by subscription, and trend over 30 days.
+- <strong>SAP Asset Inventory</strong>: Table of all SAP-tagged resources from Resource Graph, with compliance indicators.
+- <strong>Backup Coverage</strong>: SAP VMs with and without backup policy associations, last backup status, and any backup failures.
+- <strong>Access Activity</strong>: PIM activation events, Conditional Access policy match/block events, and SAP Security Audit Log sign-on failures from Sentinel.
+- <strong>Cost Allocation</strong>: Azure Cost Management data by SAPSystemID and CostCenter tags, with budget consumption gauges.</p>
+<p>The workbook is pinned to the shared dashboard in the Azure portal for the SAP Platform Architecture and SAP Basis teams.</p>
+<h3 id="log-analytics-for-governance-events">Log Analytics for Governance Events<a class="headerlink" href="#log-analytics-for-governance-events" title="Permanent link">¶</a></h3>
+<p>The following governance-relevant data sources are configured in the Log Analytics workspace:</p>
+<table>
+<thead>
+<tr>
+<th>Data Source</th>
+<th>Collection Method</th>
+<th>Retention</th>
+<th>Primary Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure Activity Log (SAP subscriptions)</td>
+<td>Diagnostic setting → workspace</td>
+<td>90 days interactive, 2 years archive</td>
+<td>Azure resource change auditing, unauthorized deployment detection</td>
+</tr>
+<tr>
+<td>Microsoft Entra ID Audit Logs</td>
+<td>Entra ID diagnostic setting → workspace</td>
+<td>90 days interactive, 7 years archive</td>
+<td>Access review evidence, PIM activation log, role assignment changes</td>
+</tr>
+<tr>
+<td>Microsoft Entra ID Sign-In Logs</td>
+<td>Entra ID diagnostic setting → workspace</td>
+<td>90 days interactive, 1 year archive</td>
+<td>Conditional Access enforcement evidence, sign-in anomaly detection</td>
+</tr>
+<tr>
+<td>SAP Security Audit Log</td>
+<td>SAP Continuous Threat Monitoring connector</td>
+<td>90 days interactive, 7 years archive</td>
+<td>SAP application-level governance evidence, SOC 2 CC6.1</td>
+</tr>
+<tr>
+<td>Azure Policy Insights</td>
+<td>PolicyInsights diagnostic</td>
+<td>90 days interactive, 13 months archive</td>
+<td>Policy compliance evidence, SOC 2 CC7.1</td>
+</tr>
+<tr>
+<td>Defender for Cloud Security Alerts</td>
+<td>Defender for Cloud connector</td>
+<td>90 days interactive, 1 year archive</td>
+<td>Security posture evidence, ISO 27001 A.8.16</td>
+</tr>
+<tr>
+<td>Automation Job Logs</td>
+<td>Automation diagnostic setting → workspace</td>
+<td>30 days interactive</td>
+<td>Remediation task auditing, failed remediation alerting</td>
+</tr>
+</tbody>
+</table>
+<h3 id="automation-for-drift-detection">Automation for Drift Detection<a class="headerlink" href="#automation-for-drift-detection" title="Permanent link">¶</a></h3>
+<p>Azure Automation is used to detect and remediate governance drift on a scheduled basis. The following runbooks are deployed in the governance Automation account:</p>
+<p><strong>Check-SAPTagCompliance.ps1</strong>: Runs every 4 hours. Queries all SAP-tagged resources using Resource Graph and identifies resources missing mandatory tags. Creates Service Now incidents for resources missing tags for more than 2 hours (allowing for deployment pipeline tag propagation delay).</p>
+<p><strong>Check-SAPBackupCoverage.ps1</strong>: Runs every 24 hours. Identifies SAP Production VMs not associated with a backup policy. Attempts auto-remediation by creating a backup item using the default SAP backup policy. If remediation fails, creates a P2 Service Now incident.</p>
+<p><strong>Check-SAPPIMRoleCleanup.ps1</strong>: Runs every hour. Identifies any permanent (non-PIM-eligible) write-capable role assignments on SAP subscriptions that were not made through the approved pipeline. Creates a P1 Service Now incident and triggers a Sentinel alert for investigation.</p>
+<p><strong>Export-SAPGovernanceReport.ps1</strong>: Runs monthly on the 1st at 02:00 UTC. Generates the governance report (policy compliance snapshot, access review status, backup coverage) and uploads to the SharePoint governance site.</p>
+<h3 id="alert-configuration">Alert Configuration<a class="headerlink" href="#alert-configuration" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Metric/Signal</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Runbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP Policy Compliance Drop</td>
+<td>Azure Policy compliance percentage (custom metric from KQL)</td>
+<td>&lt; 95% for any Deny-effect policy</td>
+<td>Sev 1</td>
+<td>Runbook: Investigate-PolicyNonCompliance.ps1; Service Now P2</td>
+</tr>
+<tr>
+<td>SAP VM Backup Failure</td>
+<td>AzureBackupReport (BackupItemType == VM, BackupManagementType == AzureVM, Status == Failed)</td>
+<td>Any failure on SAP-tagged VM</td>
+<td>Sev 2</td>
+<td>Runbook: Retry-SAPBackup.ps1; Service Now P3</td>
+</tr>
+<tr>
+<td>SAP PIM Activation Outside Hours</td>
+<td>Entra ID Audit Log (activateRole outside 06:00–20:00 local time)</td>
+<td>Any activation</td>
+<td>Sev 2</td>
+<td>Notify SAP security team; investigate within 1 hour</td>
+</tr>
+<tr>
+<td>Unauthorized Policy Assignment Change</td>
+<td>Azure Activity Log (Microsoft.Authorization/policyAssignments/write or delete, caller not in approved pipeline service principal)</td>
+<td>Any event</td>
+<td>Sev 1</td>
+<td>Sentinel incident created; Service Now P1</td>
+</tr>
+<tr>
+<td>SAP Security Audit Log Gap</td>
+<td>SAP Continuous Threat Monitoring connector heartbeat</td>
+<td>No events received for &gt; 15 minutes from any production SAP SID</td>
+<td>Sev 1</td>
+<td>Runbook: Check-SAPConnectorHealth.ps1; Service Now P2</td>
+</tr>
+<tr>
+<td>HANA VM Disk Encryption Non-Compliant</td>
+<td>Azure Policy compliance (SSE-CMK policy, SAP HANA resource group)</td>
+<td>Any non-compliant disk</td>
+<td>Sev 1</td>
+<td>Runbook: Remediate-DiskEncryption.ps1; Service Now P1</td>
+</tr>
+<tr>
+<td>SAP Subscription Cost Budget Exceeded</td>
+<td>Azure Cost Management (actual spend &gt; 100% of monthly budget)</td>
+<td>Budget threshold breach</td>
+<td>Sev 3</td>
+<td>Notify SAP System Owner and Cost Manager; Service Now P4</td>
+</tr>
+<tr>
+<td>Entra ID Risky Sign-In for SAP Role Holder</td>
+<td>Identity Protection (RiskLevel == High, user in SAP-Admin-Groups)</td>
+<td>Any high-risk sign-in</td>
+<td>Sev 1</td>
+<td>Auto-revoke PIM activations; notify security team; Service Now P1</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<p>The governance architecture maps directly to the Azure Landing Zone for SAP defined in the <code>landing-zone.md</code> chapter. The following components of the landing zone are governed by this architecture:</p>
+<p><strong>Management Group structure</strong> (landing-zone.md section: Management Group Hierarchy): The hierarchy defined in this chapter is identical to the one implemented in the landing zone Bicep templates in <code>bicep/management-groups/</code>. The SAP Management Group and environment sub-groups are deployed as part of landing zone provisioning.</p>
+<p><strong>Subscription vending</strong> (landing-zone.md section: Subscription Design): New SAP subscriptions are vended by the subscription vending process, which applies the SAP Policy Initiative assignment and baseline RBAC role assignments defined in this chapter as part of the vending pipeline.</p>
+<p><strong>Azure Policy assignments</strong> (landing-zone.md section: Azure Policy): The SAP Policy Initiative (<code>initiative-sap-baseline</code>) defined in this chapter is assigned in the landing zone Bicep at <code>bicep/policy/assignments/sap-baseline-assignment.bicep</code>. Changes to the initiative require a pull request to the governance repository with SAP Platform Architect approval.</p>
+<p><strong>Networking governance</strong> (networking.md, landing-zone.md section: Hub-Spoke Topology): The forced-tunnel policy and no-public-IP policy defined in this chapter enforce the hub-spoke topology described in the networking and landing zone chapters. The policy definitions reference the hub VNet resource ID as a parameter, which is output by the connectivity subscription Bicep deployment.</p>
+<p><strong>Identity and access</strong> (security.md section: Microsoft Entra ID): The PIM role assignments, Conditional Access policies, and access review configuration defined in this chapter extend the Entra ID configuration described in the security chapter. The security chapter addresses the SSO and authentication architecture; this chapter addresses the governance and lifecycle management of those access mechanisms.</p>
+<p><strong>Monitoring</strong> (operations.md section: Azure Monitor): The governance dashboards and alert rules defined in this chapter are deployed as extensions of the SAP monitoring architecture described in the operations chapter. The governance Log Analytics workspace is the same workspace used for SAP operational monitoring — governance and operational data coexist in the same workspace with table-level RBAC controlling access.</p>
+<hr/>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<p>The following Microsoft documentation URLs are authoritative references for the governance architecture described in this chapter:</p>
+<ol>
+<li><strong>Azure Policy overview and effects</strong>: https://learn.microsoft.com/en-us/azure/governance/policy/overview</li>
+<li><strong>SAP on Azure landing zone accelerator</strong>: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/sap/enterprise-scale-landing-zone</li>
+<li><strong>Azure Management Group hierarchy</strong>: https://learn.microsoft.com/en-us/azure/governance/management-groups/overview</li>
+<li><strong>Microsoft Entra ID Privileged Identity Management</strong>: https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-configure</li>
+<li><strong>Azure Policy for SAP on Azure</strong>: https://learn.microsoft.com/en-us/azure/governance/policy/samples/built-in-policies</li>
+<li><strong>Microsoft Sentinel SAP data connector</strong>: https://learn.microsoft.com/en-us/azure/sentinel/sap/deployment-overview</li>
+<li><strong>Azure Resource Graph overview</strong>: https://learn.microsoft.com/en-us/azure/governance/resource-graph/overview</li>
+<li><strong>Microsoft Defender for Cloud governance rules</strong>: https://learn.microsoft.com/en-us/azure/defender-for-cloud/governance-rules</li>
+<li><strong>Azure Well-Architected Framework — Operational Excellence</strong>: https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/</li>
+<li><strong>Azure Cost Management and Billing</strong>: https://learn.microsoft.com/en-us/azure/cost-management-billing/cost-management-billing-overview</li>
+<li><strong>Just-in-time VM access in Defender for Cloud</strong>: https://learn.microsoft.com/en-us/azure/defender-for-cloud/just-in-time-access-usage</li>
+</ol>
+<hr/>
+<h2 id="validation-checklist">Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">¶</a></h2>
+<p>The following checklist must be verified before any SAP workload is promoted to production status in the Azure environment:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>1. SAP Management Group hierarchy deployed</strong>: Verify that the four-level Management Group hierarchy (Root → Landing Zones → SAP MG → Environment MGs) is deployed and all SAP subscriptions are placed in the correct environment-level MG.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>2. SAP Policy Initiative assigned</strong>: Confirm that <code>initiative-sap-baseline</code> is assigned at the SAP Management Group scope with no policy exclusions on production subscriptions. Verify compliance percentage is 100% for Deny-effect policies.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>3. Mandatory tags present</strong>: Verify all resources in the SAP production subscription have all five mandatory tags (<code>SAPSystemID</code>, <code>SAPEnvironment</code>, <code>CostCenter</code>, <code>DataClassification</code>, <code>Owner</code>) with non-empty values.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>4. Disk encryption with CMK</strong>: Confirm all managed disks attached to SAP production VMs use SSE-CMK. Verify the Disk Encryption Set references the approved Key Vault and that the Key Vault has soft-delete and purge protection enabled.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>5. No standing write-capable RBAC assignments</strong>: Verify using Azure Resource Graph that no permanent Contributor or Owner assignments exist on the SAP production subscription. All write-capable assignments must be PIM-eligible only.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>6. PIM configuration for SAP roles</strong>: Verify PIM activation settings for SAP Basis Administrator and HANA DBA roles: maximum activation 8 hours, MFA required, approval required, justification required.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>7. Conditional Access policies active</strong>: Confirm CA-SAP-001 through CA-SAP-004 are in Enabled state in Entra ID Conditional Access. Verify CA-SAP-001 is not in Report-only mode.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>8. SAP Security Audit Log configured</strong>: Verify <code>rsau/enable = 1</code> on all production SAP ABAP systems. Confirm Security Audit Log is forwarding to Microsoft Sentinel via the SAP Continuous Threat Monitoring connector. Verify a test event appears in the Sentinel workspace within 5 minutes of trigger.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>9. Backup policy applied to all SAP Production VMs</strong>: Run the Resource Graph query for SAP VMs without backup and confirm zero results for the production subscription. Verify the last backup of each VM completed successfully within the last 24 hours.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>10. Forced tunneling in place</strong>: Verify route tables on all SAP subnets contain a 0.0.0.0/0 route to the Azure Firewall private IP. Confirm no SAP VM has a direct internet path by testing from a SAP VM that external IP resolution returns the Azure Firewall public IP.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>11. Log Analytics governance events flowing</strong>: Verify Azure Activity Log, Entra ID Audit Logs, and Entra ID Sign-In Logs are streaming to the governance Log Analytics workspace. Confirm Policy Insights data is present. Verify data is arriving within the expected latency (&lt; 5 minutes for Activity Log, &lt; 15 minutes for Entra ID logs).</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>12. Governance alert rules active</strong>: Verify all eight alert rules in the Operations section are in Enabled state in Azure Monitor. Confirm action group routing is correctly configured to Service Now and the SAP security team's notification channel.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>13. Access review campaigns scheduled</strong>: Confirm quarterly access review campaigns are scheduled in Entra ID Access Reviews for all PIM-eligible SAP roles and that reviewer assignments are current.</li>
+<li class="task-list-item"><label class="task-list-control"><input disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> <strong>14. Governance workbook accessible</strong>: Verify the SAP Governance Azure Monitor workbook loads without errors and all tabs display data. Confirm the workbook is shared with the SAP Platform Architecture and SAP Basis team security groups.</li>
+</ul>
+<hr/>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-1-permanent-contributor-assignments-on-sap-production-subscriptions">Anti-Pattern 1: Permanent Contributor Assignments on SAP Production Subscriptions<a class="headerlink" href="#anti-pattern-1-permanent-contributor-assignments-on-sap-production-subscriptions" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Granting a permanent (non-PIM) Contributor role assignment to SAP Basis or DBA teams on the production SAP subscription for operational convenience, to avoid the friction of PIM activation.</p>
+<p><strong>Impact</strong>: Permanent Contributor access violates the principle of least privilege and SOC 2 CC6.1 (logical access controls). Any compromise of the team member's Entra ID account immediately yields full write access to all SAP production resources without requiring MFA re-verification. It also eliminates the audit trail value of PIM activation — without activation records, it is impossible to correlate specific changes to specific authorized sessions.</p>
+<p><strong>Correct approach</strong>: Use PIM-eligible assignments exclusively for all write-capable roles. Reduce PIM activation friction by pre-staging common approvers, using approved break-glass accounts with permanently activated access for true emergencies (documented and monitored separately), and setting a maximum activation duration of 8 hours so frequent re-activation is not required during maintenance windows.</p>
+<hr/>
+<h3 id="anti-pattern-2-using-audit-mode-policy-effect-for-security-controls-that-should-be-deny">Anti-Pattern 2: Using Audit-Mode Policy Effect for Security Controls That Should Be Deny<a class="headerlink" href="#anti-pattern-2-using-audit-mode-policy-effect-for-security-controls-that-should-be-deny" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Assigning Azure Policy definitions for critical security controls (disk encryption, VM SKU compliance, no public IPs on database subnets) with Audit effect instead of Deny, on the rationale that Deny might block a deployment during an incident.</p>
+<p><strong>Impact</strong>: Audit-mode policies do not prevent non-compliant resources from being created. During incident response, non-compliant resources (unencrypted disks, uncertified VM SKUs, database VMs with public IPs) will be created and remain in the environment long after the incident is resolved. Audit-mode compliance findings require manual remediation effort and create a backlog of security debt that grows over time. They also fail SOC 2 CC7.1 (change monitoring) because the non-compliant state was not prevented, only detected after the fact.</p>
+<p><strong>Correct approach</strong>: Use Deny effect for controls that must never be violated. Maintain a documented exemption process for the rare cases where a Deny policy legitimately needs to be bypassed (for example, a transient non-compliant configuration during a complex migration). Exemptions must be time-bounded, approved by the SAP Platform Architect, and automatically expire. Use Audit effect only for controls that are informational or where the compliance baseline is being established for the first time in a transition period with a defined end date.</p>
+<hr/>
+<h3 id="anti-pattern-3-treating-sap-transport-governance-and-azure-change-control-as-independent-processes">Anti-Pattern 3: Treating SAP Transport Governance and Azure Change Control as Independent Processes<a class="headerlink" href="#anti-pattern-3-treating-sap-transport-governance-and-azure-change-control-as-independent-processes" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Managing SAP transport approvals in SAP ChaRM and Azure resource changes in Service Now as entirely separate processes with no cross-reference requirement, allowing Azure infrastructure changes to be made during SAP transport freezes or vice versa.</p>
+<p><strong>Impact</strong>: Overlapping changes to both the Azure infrastructure and the SAP application layer simultaneously make root-cause analysis during incidents extremely difficult. If a SAP application issue occurs immediately after both an SAP kernel upgrade and an Azure VM resize, it is impossible to isolate the causal change without rolling back both, which may require extended downtime. This pattern also creates audit gaps: a production outage that was preceded by undocumented infrastructure changes creates SOC 2 CC8.1 findings.</p>
+<p><strong>Correct approach</strong>: Mandate that all Azure infrastructure change tickets reference the associated SAP ChaRM transport request (or vice versa for infrastructure-only changes). During SAP transport freeze periods (typically before quarter-end close), also freeze Azure infrastructure changes on production SAP subscriptions using a temporary Deny-all deployment policy assigned at the production subscription scope. Define and document the cross-platform change correlation process in the change management runbook.</p>
+<hr/>
+<h3 id="anti-pattern-4-storing-sap-governance-evidence-only-in-azure-policy-dashboard-no-export">Anti-Pattern 4: Storing SAP Governance Evidence Only in Azure Policy Dashboard (No Export)<a class="headerlink" href="#anti-pattern-4-storing-sap-governance-evidence-only-in-azure-policy-dashboard-no-export" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Relying solely on the Azure Policy compliance dashboard for governance evidence, without exporting compliance data to a durable, tamper-evident store. Assuming the 90-day Azure Policy compliance history is sufficient for annual SOC 2 or ISO 27001 audits.</p>
+<p><strong>Impact</strong>: Azure Policy compliance data is only retained in the platform for 90 days. SOC 2 Type II audit periods are 12 months; ISO 27001 surveillance audits require evidence across the 12-month certification period. If compliance data has not been exported, there is no evidence that controls were operating effectively during the months that fall outside the 90-day retention window. This will result in a SOC 2 audit qualification or ISO 27001 non-conformity finding.</p>
+<p><strong>Correct approach</strong>: Configure monthly automated export of Azure Policy compliance state to an Azure Storage account with immutability (WORM) lock configured for 13 months. Verify the export automation runs successfully each month and alert on export failures. Include the storage account URI in the SOC 2 audit evidence package. Treat the export automation as a governance control itself: its operational status is included in the monthly governance report.</p>
+<hr/>
+<h3 id="anti-pattern-5-assigning-the-sap-policy-initiative-at-the-subscription-level-instead-of-the-management-group-level">Anti-Pattern 5: Assigning the SAP Policy Initiative at the Subscription Level Instead of the Management Group Level<a class="headerlink" href="#anti-pattern-5-assigning-the-sap-policy-initiative-at-the-subscription-level-instead-of-the-management-group-level" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Assigning the SAP Policy Initiative directly to each SAP subscription rather than at the SAP Management Group scope, either because the management group hierarchy was not set up when the subscriptions were created or to provide "flexibility" to override policies per subscription.</p>
+<p><strong>Impact</strong>: Subscription-level policy assignments must be managed individually for each subscription. When a new SAP subscription is created, the policy assignment must be manually applied — creating a window of non-compliance between subscription creation and policy assignment. If a subscription is inadvertently created without the policy assignment, it is governed only by platform-level policies, potentially missing all SAP-specific controls. This also creates maintenance overhead: every policy initiative update requires changes to N subscription assignments instead of one management group assignment.</p>
+<p><strong>Correct approach</strong>: Assign all SAP Policy Initiatives at the SAP Management Group scope. Use the management group's automatic inheritance to ensure every new subscription placed in the management group is immediately governed. If subscription-specific overrides are required, use policy exemptions with time bounds rather than separate subscription-level assignments. The subscription vending process should be responsible for placing new subscriptions in the correct management group as part of the vending pipeline, not as a separate post-provisioning step.</p>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="issue-1-azure-policy-deny-effect-blocking-an-emergency-sap-deployment">Issue 1: Azure Policy Deny Effect Blocking an Emergency SAP Deployment<a class="headerlink" href="#issue-1-azure-policy-deny-effect-blocking-an-emergency-sap-deployment" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: During an incident response, an ARM deployment for an emergency SAP VM (for example, an additional application server to handle failover load) fails with error: <code>RequestDisallowedByPolicy: Resource 'vm-sap-emer-01' was disallowed by policy. Policy: 'Allowed VM SKUs for SAP workloads'</code>. The required VM SKU is not in the approved list.</p>
+<p><strong>Root Cause</strong>: The emergency VM SKU is not in the SAP-certified VM SKU allow-list defined in the Allowed VM SKU policy. The policy has Deny effect at the SAP Production MG scope, blocking the deployment regardless of who initiates it or what the business justification is.</p>
+<p><strong>Resolution</strong>:
+1. In the Azure portal, navigate to Policy &gt; Assignments and locate the Allowed VM SKU assignment on the SAP Production MG.
+2. Create a policy exemption (Exemption Category: Waiver) scoped to the specific resource group or subscription for the emergency VM. Set the exemption expiration to 72 hours.
+3. Exemption creation requires the <code>Policy Contributor</code> role at the SAP MG scope — this requires a PIM activation for the SAP Platform Architect role. The PIM activation and exemption creation must be documented in the incident ticket.
+4. Deploy the emergency VM within the exemption window.
+5. After the incident, evaluate whether the emergency VM SKU should be added to the permanent allow-list (requires SAP certification verification per SAP Note 1928533) or whether the VM should be replaced with a certified SKU.
+6. Remove the policy exemption after the emergency VM is decommissioned or replaced.</p>
+<hr/>
+<h3 id="issue-2-sap-security-audit-log-events-not-appearing-in-microsoft-sentinel">Issue 2: SAP Security Audit Log Events Not Appearing in Microsoft Sentinel<a class="headerlink" href="#issue-2-sap-security-audit-log-events-not-appearing-in-microsoft-sentinel" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: The SAP Continuous Threat Monitoring connector health dashboard shows the SAP data connector for a production SAP SID as "Connected" but no SAP Security Audit Log events have appeared in the Sentinel workspace for more than 30 minutes. The <code>SAPAuditLog</code> table shows no new rows.</p>
+<p><strong>Root Cause</strong>: Multiple possible causes: (a) The SAP RFC user account used by the Sentinel connector has expired or its password has been reset; (b) the SAP System container running the connector (Azure Container Instances or AKS) has crashed or been restarted and lost its configuration; (c) SAP Security Audit Log on the SAP system has been disabled (SM19 filter disabled or <code>rsau/enable</code> profile parameter set to 0); (d) network connectivity between the connector container and the SAP system has been blocked (NSG rule change or RFC destination TCP 3300+ blocked).</p>
+<p><strong>Resolution</strong>:
+1. Check the connector container logs: <code>az container logs --name sap-sentinel-connector-&lt;SID&gt; --resource-group rg-sap-prod-shared</code>. Look for authentication errors or RFC connection errors.
+2. Verify the SAP RFC user in transaction SU01: check account validity, password status, and that the user is not locked.
+3. In SAP SM19, verify that the Security Audit Log filter is active (status should be "Active" for all configured filters).
+4. From the connector container's host, verify TCP connectivity to the SAP system on port 3300 (or the configured RFC port): <code>nc -zv &lt;SAP_HOST&gt; 3300</code>.
+5. If the container has crashed, restart it: <code>az container restart --name sap-sentinel-connector-&lt;SID&gt; --resource-group rg-sap-prod-shared</code>.
+6. If the RFC user password has been reset, update the secret in Azure Key Vault (the connector retrieves credentials from Key Vault at startup) and restart the container.
+7. If the issue recurs, review the connector container's resource limits (CPU and memory) and increase if the container is being OOM-killed.</p>
+<hr/>
+<h3 id="issue-3-pim-activation-failing-for-sap-basis-administrator-role-during-maintenance-window">Issue 3: PIM Activation Failing for SAP Basis Administrator Role During Maintenance Window<a class="headerlink" href="#issue-3-pim-activation-failing-for-sap-basis-administrator-role-during-maintenance-window" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: During a scheduled maintenance window, a SAP Basis administrator attempts to activate the <code>SAP Basis Administrator</code> PIM role and receives: <code>Your activation request was denied. Reason: Approval expired</code>. The maintainer has been unable to proceed with the maintenance for 45 minutes.</p>
+<p><strong>Root Cause</strong>: PIM approval requests expire after the configured approval timeout (default 24 hours, but may have been configured to a shorter duration). The approver was not available or did not respond to the approval request within the timeout window. Alternatively, the approver rejected the request without contacting the requestor.</p>
+<p><strong>Resolution</strong>:
+1. Check the PIM audit log in Entra ID to determine whether the request was denied or simply timed out without approval.
+2. If timed out, create a new PIM activation request ensuring that the designated approver is available and aware of the incoming request (contact them directly via Teams or phone during maintenance windows rather than waiting for email notification).
+3. If the approval chain is unavailable (primary and alternate approvers both absent), invoke the emergency access procedure: use the SAP break-glass Azure account (a cloud-only Global Administrator account with permanent Contributor access to the SAP subscription, used only for break-glass scenarios). The break-glass account usage must be documented in the incident ticket immediately.
+4. After the maintenance window, review the PIM configuration: add additional alternate approvers to the SAP Basis Administrator role approval policy to prevent single-approver bottlenecks. Consider enabling a "no approval required during maintenance window" policy using PIM's scheduled access feature for pre-approved maintenance windows.
+5. Update the maintenance window runbook to include a pre-check step: verify PIM activation succeeds and the role is active before beginning any maintenance steps.</p>
+<hr/>
+<h3 id="issue-4-azure-resource-graph-showing-incorrect-compliance-state-after-policy-remediation">Issue 4: Azure Resource Graph Showing Incorrect Compliance State After Policy Remediation<a class="headerlink" href="#issue-4-azure-resource-graph-showing-incorrect-compliance-state-after-policy-remediation" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: An Azure Policy remediation task for the backup enforcement policy completed successfully (status: Succeeded in the Remediation blade), but the Azure Policy compliance dashboard still shows several SAP VMs as non-compliant. Resource Graph queries continue to return these VMs as lacking backup protection.</p>
+<p><strong>Root Cause</strong>: Azure Policy compliance evaluation is not immediate. After a remediation task completes, the policy engine must re-evaluate the affected resources against the policy rule. This re-evaluation can take 15–30 minutes for standard subscriptions or up to several hours during periods of high platform load. Additionally, if the remediation task created the backup item but the first backup has not yet completed, the policy's existence condition (<code>ifNotExists</code> check for a protected item) may still evaluate as non-compliant until the first backup job runs.</p>
+<p><strong>Resolution</strong>:
+1. Wait 30 minutes after remediation task completion and refresh the compliance dashboard.
+2. If still non-compliant after 30 minutes, manually trigger a policy compliance scan: <code>az policy state trigger-scan --subscription &lt;SUB_ID&gt;</code>. This forces an immediate re-evaluation.
+3. Verify in the Azure Backup blade that backup items exist for the flagged VMs and that an initial backup has been triggered and completed.
+4. If the backup item exists but the policy still reports non-compliant, check that the backup item is associated with the policy definition's configured Recovery Services Vault (the policy uses a parameter for the vault resource ID — verify the parameter value in the policy assignment matches the actual vault used in remediation).
+5. If the issue persists after 2 hours with a successful backup in place, open a Microsoft support case referencing the policy assignment ID and the resource IDs showing incorrect compliance state.</p>
+<hr/>
+<h3 id="issue-5-unauthorized-resource-tag-removal-causing-cost-allocation-failure">Issue 5: Unauthorized Resource Tag Removal Causing Cost Allocation Failure<a class="headerlink" href="#issue-5-unauthorized-resource-tag-removal-causing-cost-allocation-failure" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: The monthly cost allocation report shows a significant portion of SAP subscription costs (approximately 15%) attributed to "Untagged resources" in the Azure Cost Management report. Investigation reveals that several SAP VMs lost their <code>CostCenter</code> and <code>SAPSystemID</code> tags. The Azure Policy tag enforcement policy has Deny effect for new resources but the tags were removed from existing resources.</p>
+<p><strong>Root Cause</strong>: The Azure Policy Deny effect for tag enforcement prevents resources from being created without mandatory tags, but it does not prevent tags from being removed from existing resources after creation. Tag removal on existing resources requires a separate <code>Modify</code> effect policy that adds or modifies tag values on existing resources, or the use of resource locks to prevent tag modification. In this case, an automated deployment script (a third-party backup agent installer) removed all resource tags from the target VMs as a side effect of a VM extension deployment.</p>
+<p><strong>Resolution</strong>:
+1. Immediately re-apply the missing tags to the affected VMs using the <code>az tag update --operation Merge</code> command or a Bicep re-deployment.
+2. Identify the cause of tag removal: check the Azure Activity Log for the affected resources around the time the tags disappeared, filtering for <code>Microsoft.Compute/virtualMachines/write</code> operations. Identify the calling identity (likely the service principal used by the deployment script).
+3. Create a supplemental Azure Policy definition with <code>Modify</code> effect that ensures mandatory tag values are present on all existing SAP VMs, scheduled for daily remediation. This will re-apply missing tags automatically if they are removed again.
+4. Apply a CanNotDelete resource lock on the SAP VM resource groups to prevent accidental deletion by automated tools while still allowing tag updates. Note that a ReadOnly lock prevents all writes including tag updates, so use CanNotDelete unless write prevention is explicitly required; the Modify policy remediation identity must hold Resource Policy Contributor or Owner to override lock restrictions when reapplying tags.
+5. Review the deployment script that caused the tag removal and fix it to use <code>--mode Incremental</code> (ARM) or tag merging (Bicep <code>union()</code> function) rather than full resource overwrites, to preserve existing tags during re-deployments.</p>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

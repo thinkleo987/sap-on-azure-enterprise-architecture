@@ -1,0 +1,1514 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/" rel="canonical"/>
+<link href="chapters/architecture-principles/" rel="next"/>
+<link href="assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="css/timeago.css" rel="stylesheet"/>
+<link href="stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-on-microsoft-azure-enterprise-architecture-handbook">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href=".">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="chapters/architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="chapters/compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="chapters/security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="chapters/hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="chapters/operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="chapters/performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="chapters/sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href=".">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#executive-summary">
+<span class="md-ellipsis">
+      
+        Executive Summary
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#scope">
+<span class="md-ellipsis">
+      
+        Scope
+      
+    </span>
+</a>
+<nav aria-label="Scope" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-systems-covered">
+<span class="md-ellipsis">
+      
+        SAP Systems Covered
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#out-of-scope">
+<span class="md-ellipsis">
+      
+        Out of Scope
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-to-use-this-handbook">
+<span class="md-ellipsis">
+      
+        How to Use This Handbook
+      
+    </span>
+</a>
+<nav aria-label="How to Use This Handbook" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#navigating-sap-notes">
+<span class="md-ellipsis">
+      
+        Navigating SAP Notes
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#navigating-architecture-decision-records">
+<span class="md-ellipsis">
+      
+        Navigating Architecture Decision Records
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#handbook-structure">
+<span class="md-ellipsis">
+      
+        Handbook Structure
+      
+    </span>
+</a>
+<nav aria-label="Handbook Structure" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-a-foundation">
+<span class="md-ellipsis">
+      
+        Phase A — Foundation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-b-compute-and-storage">
+<span class="md-ellipsis">
+      
+        Phase B — Compute and Storage
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-c-database-platforms">
+<span class="md-ellipsis">
+      
+        Phase C — Database Platforms
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-d-cross-cutting-concerns">
+<span class="md-ellipsis">
+      
+        Phase D — Cross-Cutting Concerns
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-e-quality-attributes">
+<span class="md-ellipsis">
+      
+        Phase E — Quality Attributes
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#phase-f-reference-material">
+<span class="md-ellipsis">
+      
+        Phase F — Reference Material
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-principles-summary">
+<span class="md-ellipsis">
+      
+        Architecture Principles Summary
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#quick-navigation">
+<span class="md-ellipsis">
+      
+        Quick Navigation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#prerequisites">
+<span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+</a>
+<nav aria-label="Prerequisites" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#technical-prerequisites">
+<span class="md-ellipsis">
+      
+        Technical Prerequisites
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#knowledge-prerequisites">
+<span class="md-ellipsis">
+      
+        Knowledge Prerequisites
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#target-audience">
+<span class="md-ellipsis">
+      
+        Target Audience
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-and-microsoft-alignment-statement">
+<span class="md-ellipsis">
+      
+        SAP and Microsoft Alignment Statement
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#handbook-structure-diagram">
+<span class="md-ellipsis">
+      
+        Handbook Structure Diagram
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#document-metadata">
+<span class="md-ellipsis">
+      
+        Document Metadata
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="chapters/references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="sap-on-microsoft-azure-enterprise-architecture-handbook">SAP on Microsoft Azure Enterprise Architecture Handbook<a class="headerlink" href="#sap-on-microsoft-azure-enterprise-architecture-handbook" title="Permanent link">¶</a></h1>
+<h2 id="executive-summary">Executive Summary<a class="headerlink" href="#executive-summary" title="Permanent link">¶</a></h2>
+<p>This handbook defines the enterprise architecture standards, design decisions, and operational patterns for deploying SAP workloads on Microsoft Azure. It is authored for enterprise architects, platform engineers, and SAP Basis teams responsible for designing, implementing, and operating SAP landscapes that meet the reliability, security, and performance requirements of production-grade enterprise environments. The guidance consolidates SAP-validated configurations, Microsoft Azure Well-Architected Framework principles, and Azure Landing Zone accelerators into a single authoritative reference.</p>
+<p>The handbook addresses the full spectrum of SAP deployment scenarios on Azure, including SAP S/4HANA, SAP BTP, and legacy AnyDB platforms (SAP ASE, IBM Db2, Microsoft SQL Server, Oracle Database) on both Lift-and-Shift and Cloud-Native target architectures. Each chapter maps SAP architectural requirements to Azure service constructs, providing traceable design decisions, relevant SAP Notes, and Azure Architecture Center references. Architecture Decision Records (ADRs) and SAP Notes indexes are maintained as first-class artifacts.</p>
+<p>This handbook is aligned to SAP's Enterprise Architecture methodology, Microsoft's Cloud Adoption Framework (CAF) and Well-Architected Framework (WAF), and the SAP on Azure Architecture Guide published on Microsoft Learn. All guidance is vendor-neutral within the Azure ecosystem and avoids prescriptive product lock-in beyond what SAP certification and Azure support boundaries require. Teams consuming this handbook are expected to adapt the patterns to their organizational context using the provided decision frameworks.</p>
+<hr/>
+<h2 id="scope">Scope<a class="headerlink" href="#scope" title="Permanent link">¶</a></h2>
+<h3 id="sap-systems-covered">SAP Systems Covered<a class="headerlink" href="#sap-systems-covered" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP System</th>
+<th>Deployment Model</th>
+<th>Database</th>
+<th>Azure Target</th>
+<th>HA/DR Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP S/4HANA (Private Cloud)</td>
+<td>IaaS VMs</td>
+<td>SAP HANA</td>
+<td>Azure VMs (M-series, Mv2)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SAP S/4HANA (Distributed)</td>
+<td>IaaS VMs</td>
+<td>SAP HANA</td>
+<td>Azure VMs (M-series, Mv2)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SAP BW/4HANA</td>
+<td>IaaS VMs</td>
+<td>SAP HANA</td>
+<td>Azure VMs (M-series)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SAP ECC 6.x (AnyDB)</td>
+<td>IaaS VMs</td>
+<td>SQL Server, Oracle, Db2</td>
+<td>Azure VMs (E-series, D-series)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SAP NetWeaver Application Server (ABAP/Java)</td>
+<td>IaaS VMs</td>
+<td>Any</td>
+<td>Azure VMs</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SAP HANA (standalone)</td>
+<td>IaaS VMs</td>
+<td>SAP HANA</td>
+<td>Azure VMs (M-series, Mv2)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SAP BusinessObjects BI Platform</td>
+<td>IaaS VMs</td>
+<td>SQL Server, SAP HANA</td>
+<td>Azure VMs</td>
+<td>Partial</td>
+</tr>
+<tr>
+<td>SAP Solution Manager / CALM</td>
+<td>IaaS VMs</td>
+<td>SAP HANA, AnyDB</td>
+<td>Azure VMs</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SAP BTP (Business Technology Platform)</td>
+<td>PaaS</td>
+<td>Managed</td>
+<td>Azure-hosted BTP subaccounts</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>SAP Fiori (standalone gateway)</td>
+<td>IaaS VMs</td>
+<td>SAP HANA</td>
+<td>Azure VMs</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SAP PI/PO / Integration Suite</td>
+<td>IaaS VMs / PaaS</td>
+<td>Any</td>
+<td>Azure VMs / BTP</td>
+<td>Partial</td>
+</tr>
+<tr>
+<td>SAP Data Intelligence</td>
+<td>PaaS / Kubernetes</td>
+<td>SAP HANA</td>
+<td>AKS</td>
+<td>Partial</td>
+</tr>
+</tbody>
+</table>
+<h3 id="out-of-scope">Out of Scope<a class="headerlink" href="#out-of-scope" title="Permanent link">¶</a></h3>
+<ul>
+<li>SAP RISE with Microsoft Azure (governed separately by SAP's managed service agreements)</li>
+<li>SAP on non-Azure cloud providers</li>
+<li>On-premises SAP deployments without Azure connectivity</li>
+<li>SAP workloads hosted on Azure by third-party managed service providers under their own architectures</li>
+</ul>
+<hr/>
+<h2 id="how-to-use-this-handbook">How to Use This Handbook<a class="headerlink" href="#how-to-use-this-handbook" title="Permanent link">¶</a></h2>
+<p>This handbook is structured for multiple consumption patterns depending on the reader's role and task:</p>
+<p><strong>For enterprise architects planning a new SAP on Azure deployment:</strong>
+Begin with <a href="chapters/architecture-principles/">Architecture Principles</a>, then <a href="chapters/landing-zone/">Landing Zone</a>, then <a href="chapters/networking/">Networking</a>. These chapters establish the non-negotiable constraints that all subsequent design decisions inherit.</p>
+<p><strong>For platform engineers implementing a specific SAP tier:</strong>
+Navigate directly to the relevant compute, storage, or database chapter. Each chapter is self-contained with its own design decision tables, SAP Notes references, and validation checklists.</p>
+<p><strong>For security and compliance teams:</strong>
+The <a href="chapters/security/">Security</a> chapter covers the full control plane. Cross-chapter security considerations are also embedded in each chapter's dedicated security section.</p>
+<p><strong>For operations teams:</strong>
+The <a href="chapters/operations/">Operations</a> chapter covers monitoring, patching, backup, and alerting. Database-specific operations guidance is in each database chapter.</p>
+<p><strong>For architects reviewing an existing deployment:</strong>
+Use the validation checklists in each chapter and the <a href="chapters/governance/">Governance</a> chapter to assess conformance. The <a href="chapters/adr-index/">ADR Index</a> provides traceability for past decisions.</p>
+<p><strong>For architects evaluating HA and DR:</strong>
+Read <a href="chapters/high-availability/">High Availability</a> and <a href="chapters/disaster-recovery/">Disaster Recovery</a> together, as they share availability zone and region pair dependencies.</p>
+<h3 id="navigating-sap-notes">Navigating SAP Notes<a class="headerlink" href="#navigating-sap-notes" title="Permanent link">¶</a></h3>
+<p>All SAP Notes referenced in this handbook are indexed in the <a href="chapters/sap-notes-index/">SAP Notes Index</a> with cross-references to the chapters where they apply. SAP Notes require an SAP S-user ID for access via the SAP Support Portal or SAP ONE Support Launchpad.</p>
+<h3 id="navigating-architecture-decision-records">Navigating Architecture Decision Records<a class="headerlink" href="#navigating-architecture-decision-records" title="Permanent link">¶</a></h3>
+<p>All ADRs are indexed in the <a href="chapters/adr-index/">ADR Index</a>. ADRs follow the Markdown Architectural Decision Records (MADR) format and are embedded in the relevant chapter where the decision applies.</p>
+<hr/>
+<h2 id="handbook-structure">Handbook Structure<a class="headerlink" href="#handbook-structure" title="Permanent link">¶</a></h2>
+<p>The handbook is organized into six phases aligned to the SAP on Azure adoption lifecycle:</p>
+<h3 id="phase-a-foundation">Phase A — Foundation<a class="headerlink" href="#phase-a-foundation" title="Permanent link">¶</a></h3>
+<p>Establishes the non-negotiable architectural constraints and Azure platform foundations that all SAP workloads inherit.</p>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="chapters/architecture-principles/">Architecture Principles</a></td>
+<td>Governing design principles, constraints, and trade-off hierarchy</td>
+</tr>
+<tr>
+<td><a href="chapters/landing-zone/">Landing Zone</a></td>
+<td>Azure Landing Zone design for SAP, subscription topology, management group hierarchy</td>
+</tr>
+<tr>
+<td><a href="chapters/networking/">Networking</a></td>
+<td>Hub-spoke topology, ExpressRoute, private endpoints, DNS, NSG design</td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-b-compute-and-storage">Phase B — Compute and Storage<a class="headerlink" href="#phase-b-compute-and-storage" title="Permanent link">¶</a></h3>
+<p>Defines the infrastructure layer for SAP application servers, databases, and ancillary systems.</p>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="chapters/compute/">Compute</a></td>
+<td>VM SKU selection, proximity placement groups, accelerated networking, OS configuration</td>
+</tr>
+<tr>
+<td><a href="chapters/storage/">Storage</a></td>
+<td>Azure Managed Disks, ANF, Blob storage, storage layout for SAP HANA and AnyDB</td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-c-database-platforms">Phase C — Database Platforms<a class="headerlink" href="#phase-c-database-platforms" title="Permanent link">¶</a></h3>
+<p>Covers each supported SAP database platform with its specific Azure architecture requirements.</p>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="chapters/hana/">SAP HANA</a></td>
+<td>SAP HANA on Azure: M-series sizing, HSR, HANA-specific storage, backup</td>
+</tr>
+<tr>
+<td><a href="chapters/sql-server/">SQL Server</a></td>
+<td>SQL Server for SAP on Azure: AG, FCI, storage layout, licensing</td>
+</tr>
+<tr>
+<td><a href="chapters/oracle/">Oracle Database</a></td>
+<td>Oracle for SAP on Azure: ASM, Data Guard, Oracle licensing on Azure</td>
+</tr>
+<tr>
+<td><a href="chapters/db2/">IBM Db2</a></td>
+<td>IBM Db2 HADR for SAP on Azure, HADR topology, storage layout</td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-d-cross-cutting-concerns">Phase D — Cross-Cutting Concerns<a class="headerlink" href="#phase-d-cross-cutting-concerns" title="Permanent link">¶</a></h3>
+<p>Addresses security, operations, governance, and cost management as platform-wide concerns.</p>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="chapters/security/">Security</a></td>
+<td>Entra ID, RBAC, key management, network security, SAP security integration</td>
+</tr>
+<tr>
+<td><a href="chapters/operations/">Operations</a></td>
+<td>Azure Monitor, SAP workload monitoring, patching, backup, alerting</td>
+</tr>
+<tr>
+<td><a href="chapters/governance/">Governance</a></td>
+<td>Azure Policy, tagging, cost management, naming conventions, RBAC governance</td>
+</tr>
+<tr>
+<td><a href="chapters/cost-optimization/">Cost Optimization</a></td>
+<td>Reserved Instances, Azure Hybrid Benefit, right-sizing, cost allocation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-e-quality-attributes">Phase E — Quality Attributes<a class="headerlink" href="#phase-e-quality-attributes" title="Permanent link">¶</a></h3>
+<p>Covers performance, reliability, and availability patterns specific to SAP workloads on Azure.</p>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="chapters/performance/">Performance</a></td>
+<td>IOPS, throughput, latency benchmarking, performance patterns for SAP</td>
+</tr>
+<tr>
+<td><a href="chapters/high-availability/">High Availability</a></td>
+<td>Availability zones, Pacemaker, Azure Load Balancer, HA patterns per tier</td>
+</tr>
+<tr>
+<td><a href="chapters/disaster-recovery/">Disaster Recovery</a></td>
+<td>Azure Site Recovery, cross-region DR, RTO/RPO targets, DR testing</td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-f-reference-material">Phase F — Reference Material<a class="headerlink" href="#phase-f-reference-material" title="Permanent link">¶</a></h3>
+<p>Provides traceability artifacts and external references.</p>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="chapters/sap-notes-index/">SAP Notes Index</a></td>
+<td>Cross-reference index of all SAP Notes cited in this handbook</td>
+</tr>
+<tr>
+<td><a href="chapters/adr-index/">ADR Index</a></td>
+<td>Index of all Architecture Decision Records with status and supersession links</td>
+</tr>
+<tr>
+<td><a href="chapters/references/">References</a></td>
+<td>Microsoft Learn, SAP Help Portal, Azure Architecture Center, and standards references</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="architecture-principles-summary">Architecture Principles Summary<a class="headerlink" href="#architecture-principles-summary" title="Permanent link">¶</a></h2>
+<p>The following principles govern all design decisions in this handbook. Each principle is elaborated in the <a href="chapters/architecture-principles/">Architecture Principles</a> chapter with rationale, trade-offs, and Azure/SAP references.</p>
+<ul>
+<li><strong>SAP certification is a hard constraint.</strong> No Azure configuration that invalidates SAP's certification for a given component is permitted, regardless of cost or operational benefit.</li>
+<li><strong>Azure Landing Zone is the deployment boundary.</strong> All SAP workloads deploy into an Azure Landing Zone-aligned subscription topology. Deviations require an ADR.</li>
+<li><strong>Private networking by default.</strong> All SAP workload traffic traverses private networks. Public endpoints are prohibited unless explicitly justified and compensated with WAF and DDoS protection.</li>
+<li><strong>Hub-spoke with ExpressRoute.</strong> SAP landscapes connect to on-premises via ExpressRoute in a hub-spoke topology. VPN is a fallback for non-production environments only.</li>
+<li><strong>Availability Zones for HA.</strong> Production SAP systems use Availability Zone-aware deployments with cross-zone replication or synchronous database replication.</li>
+<li><strong>Managed identities over service principals.</strong> All Azure resource authentication uses managed identities where supported.</li>
+<li><strong>Infrastructure as Code is mandatory.</strong> All production infrastructure is deployed and managed via Bicep or Terraform. Manual portal deployments are prohibited in production.</li>
+<li><strong>Defense in depth.</strong> Security controls are applied at every layer: network, identity, compute, data, and application. No single control is treated as sufficient.</li>
+<li><strong>Cost allocation is an architectural concern.</strong> Resource tagging for cost allocation is defined at architecture time, not retrospectively.</li>
+<li><strong>Observability is built in, not bolted on.</strong> Azure Monitor, Log Analytics, and SAP-specific monitoring agents are provisioned as part of the deployment, not post-deployment.</li>
+<li><strong>DR is tested, not assumed.</strong> Disaster recovery capability is validated through scheduled failover tests. RPO/RTO targets are contractually defined and architecture-traceable.</li>
+<li><strong>Azure Well-Architected Framework governs quality trade-offs.</strong> Design decisions explicitly map to one or more WAF pillars (Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency).</li>
+</ul>
+<hr/>
+<h2 id="quick-navigation">Quick Navigation<a class="headerlink" href="#quick-navigation" title="Permanent link">¶</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Starting a new SAP on Azure project?</p>
+<p>Begin with <a href="chapters/architecture-principles/">Architecture Principles</a> and <a href="chapters/landing-zone/">Landing Zone</a>. These chapters define the non-negotiable constraints before any compute or database design begins.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Deploying SAP HANA?</p>
+<p>The <a href="chapters/hana/">SAP HANA</a> chapter covers M-series VM selection, HANA System Replication topology, ANF storage layout, and HANA-specific backup strategies including Backint integration with Azure Backup.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Deploying SAP on SQL Server, Oracle, or Db2?</p>
+<p>See the dedicated database chapters: <a href="chapters/sql-server/">SQL Server</a>, <a href="chapters/oracle/">Oracle</a>, <a href="chapters/db2/">Db2</a>. Each chapter covers Azure-specific HA topology, storage layout, licensing considerations, and relevant SAP Notes.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Security and compliance requirements?</p>
+<p>The <a href="chapters/security/">Security</a> chapter is the authoritative source for control plane design. Every other chapter also contains a dedicated security considerations section. Review both.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Designing for High Availability or Disaster Recovery?</p>
+<p>Read <a href="chapters/high-availability/">High Availability</a> and <a href="chapters/disaster-recovery/">Disaster Recovery</a> together. HA uses Availability Zones within a region; DR uses paired regions with Azure Site Recovery or database-native replication.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Looking for a specific SAP Note or ADR?</p>
+<p>Use the <a href="chapters/sap-notes-index/">SAP Notes Index</a> and <a href="chapters/adr-index/">ADR Index</a> as cross-reference catalogs. Both are maintained as living documents updated with each handbook revision.</p>
+</div>
+<div class="admonition abstract">
+<p class="admonition-title">Cost and governance review?</p>
+<p>See <a href="chapters/cost-optimization/">Cost Optimization</a> and <a href="chapters/governance/">Governance</a> for Reserved Instance strategy, Azure Hybrid Benefit guidance, tagging taxonomy, and Azure Policy assignments.</p>
+</div>
+<hr/>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
+<h3 id="technical-prerequisites">Technical Prerequisites<a class="headerlink" href="#technical-prerequisites" title="Permanent link">¶</a></h3>
+<p>Before using this handbook to design an SAP on Azure architecture, the following platform foundations are assumed to be in place or planned:</p>
+<table>
+<thead>
+<tr>
+<th>Prerequisite</th>
+<th>Description</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure Landing Zone</td>
+<td>Enterprise-scale or SAP-specific Landing Zone subscription topology</td>
+<td><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/">CAF Landing Zone</a></td>
+</tr>
+<tr>
+<td>Microsoft Entra ID tenant</td>
+<td>Configured with hybrid identity (Entra Connect Sync or Cloud Sync)</td>
+<td><a href="https://learn.microsoft.com/entra/identity/">Entra ID documentation</a></td>
+</tr>
+<tr>
+<td>ExpressRoute circuit</td>
+<td>Dedicated circuit to on-premises SAP landscape with adequate bandwidth</td>
+<td><a href="https://learn.microsoft.com/azure/expressroute/expressroute-introduction">ExpressRoute for SAP</a></td>
+</tr>
+<tr>
+<td>Azure Network topology</td>
+<td>Hub-spoke VNet topology with Azure Firewall or NVA</td>
+<td><a href="https://learn.microsoft.com/azure/architecture/reference-architectures/hybrid-networking/hub-spoke">Hub-spoke topology</a></td>
+</tr>
+<tr>
+<td>Azure Monitor workspace</td>
+<td>Log Analytics workspace provisioned in management subscription</td>
+<td><a href="https://learn.microsoft.com/azure/azure-monitor/overview">Azure Monitor</a></td>
+</tr>
+<tr>
+<td>Azure Key Vault</td>
+<td>Deployed in management or security subscription for secret management</td>
+<td><a href="https://learn.microsoft.com/azure/key-vault/general/overview">Key Vault</a></td>
+</tr>
+<tr>
+<td>SAP S-user ID</td>
+<td>Required for SAP Notes access, SAP Support Portal, and SAP Certified Cloud and Service Provider validation</td>
+<td><a href="https://support.sap.com">SAP Support Portal</a></td>
+</tr>
+<tr>
+<td>Azure subscription quotas</td>
+<td>M-series and Mv2 VM quota approved in target regions</td>
+<td><a href="https://learn.microsoft.com/azure/quotas/view-quotas">Azure quotas</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="knowledge-prerequisites">Knowledge Prerequisites<a class="headerlink" href="#knowledge-prerequisites" title="Permanent link">¶</a></h3>
+<p>Readers of this handbook are expected to have working knowledge of:</p>
+<ul>
+<li>SAP NetWeaver or SAP HANA architecture fundamentals</li>
+<li>Azure core services: VMs, VNets, Storage, IAM, Azure Monitor</li>
+<li>Linux or Windows Server administration relevant to their SAP platform</li>
+<li>Infrastructure as Code (Bicep or Terraform) at an intermediate level</li>
+<li>Azure networking concepts: NSGs, route tables, private DNS, private endpoints</li>
+</ul>
+<hr/>
+<h2 id="target-audience">Target Audience<a class="headerlink" href="#target-audience" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Audience</th>
+<th>Relevant Chapters</th>
+<th>Primary Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enterprise Architect</td>
+<td>All</td>
+<td>End-to-end architecture design and review</td>
+</tr>
+<tr>
+<td>Cloud Platform Engineer</td>
+<td>Landing Zone, Networking, Compute, Storage, Security</td>
+<td>Infrastructure build and configuration</td>
+</tr>
+<tr>
+<td>SAP Basis Administrator</td>
+<td>HANA, SQL Server, Oracle, Db2, Operations</td>
+<td>SAP platform deployment and operations</td>
+</tr>
+<tr>
+<td>Security Architect</td>
+<td>Security, Networking, Governance</td>
+<td>Security control design and review</td>
+</tr>
+<tr>
+<td>Database Administrator</td>
+<td>HANA, SQL Server, Oracle, Db2, Storage</td>
+<td>Database platform design and operations</td>
+</tr>
+<tr>
+<td>FinOps / Cloud Economics</td>
+<td>Cost Optimization, Governance</td>
+<td>Cost modeling and optimization</td>
+</tr>
+<tr>
+<td>Operations / SRE</td>
+<td>Operations, High Availability, Disaster Recovery, Performance</td>
+<td>Day-2 operations and incident response</td>
+</tr>
+<tr>
+<td>Compliance / Audit</td>
+<td>Security, Governance, ADR Index</td>
+<td>Compliance evidence and traceability</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="sap-and-microsoft-alignment-statement">SAP and Microsoft Alignment Statement<a class="headerlink" href="#sap-and-microsoft-alignment-statement" title="Permanent link">¶</a></h2>
+<p>This handbook is authored in alignment with the following SAP and Microsoft reference programs and frameworks:</p>
+<ul>
+<li><strong>SAP Certified Infrastructure:</strong> All Azure VM SKUs and storage configurations referenced in this handbook are either SAP-certified or within the parameters of SAP's Azure certification scope as documented in <a href="https://launchpad.support.sap.com/#/notes/1928533">SAP Note 1928533</a> (SAP Applications on Azure: Supported Products and Azure VM Types) and <a href="https://launchpad.support.sap.com/#/notes/2015553">SAP Note 2015553</a> (SAP on Microsoft Azure: Support Prerequisites).</li>
+<li><strong>Microsoft Azure Well-Architected Framework (WAF):</strong> Each chapter maps design decisions to the five WAF pillars: Reliability, Security, Cost Optimization, Operational Excellence, and Performance Efficiency.</li>
+<li><strong>Microsoft Cloud Adoption Framework (CAF):</strong> Landing Zone, governance, and subscription topology guidance follows CAF enterprise-scale patterns with SAP-specific adaptations from the <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/sap/">SAP on Azure Landing Zone Accelerator</a>.</li>
+<li><strong>Azure Architecture Center:</strong> Patterns and reference architectures align to <a href="https://learn.microsoft.com/azure/architecture/reference-architectures/sap/">SAP workloads on Azure</a> as published on the Azure Architecture Center.</li>
+<li><strong>SAP Enterprise Architecture Framework:</strong> Design principles and governance patterns align to SAP's Enterprise Architecture methodology and the SAP TOGAF-aligned architecture approach.</li>
+</ul>
+<p>Where this handbook deviates from or extends published Microsoft or SAP guidance, the deviation is documented in an Architecture Decision Record with explicit rationale.</p>
+<hr/>
+<h2 id="handbook-structure-diagram">Handbook Structure Diagram<a class="headerlink" href="#handbook-structure-diagram" title="Permanent link">¶</a></h2>
+<pre class="mermaid"><code>graph TD
+    A["SAP on Azure Enterprise Architecture Handbook"] --&gt; B["Phase A: Foundation"]
+    A --&gt; C["Phase B: Compute and Storage"]
+    A --&gt; D["Phase C: Database Platforms"]
+    A --&gt; E["Phase D: Cross-Cutting Concerns"]
+    A --&gt; F["Phase E: Quality Attributes"]
+    A --&gt; G["Phase F: Reference Material"]
+
+    B --&gt; B1["Architecture Principles"]
+    B --&gt; B2["Landing Zone"]
+    B --&gt; B3["Networking"]
+
+    C --&gt; C1["Compute"]
+    C --&gt; C2["Storage"]
+
+    D --&gt; D1["SAP HANA"]
+    D --&gt; D2["SQL Server"]
+    D --&gt; D3["Oracle"]
+    D --&gt; D4["IBM Db2"]
+
+    E --&gt; E1["Security"]
+    E --&gt; E2["Operations"]
+    E --&gt; E3["Governance"]
+    E --&gt; E4["Cost Optimization"]
+
+    F --&gt; F1["Performance"]
+    F --&gt; F2["High Availability"]
+    F --&gt; F3["Disaster Recovery"]
+
+    G --&gt; G1["SAP Notes Index"]
+    G --&gt; G2["ADR Index"]
+    G --&gt; G3["References"]
+
+    style A fill:#0078d4,color:#fff,stroke:#005a9e
+    style B fill:#106ebe,color:#fff,stroke:#005a9e
+    style C fill:#106ebe,color:#fff,stroke:#005a9e
+    style D fill:#106ebe,color:#fff,stroke:#005a9e
+    style E fill:#106ebe,color:#fff,stroke:#005a9e
+    style F fill:#106ebe,color:#fff,stroke:#005a9e
+    style G fill:#106ebe,color:#fff,stroke:#005a9e</code></pre>
+<hr/>
+<h2 id="document-metadata">Document Metadata<a class="headerlink" href="#document-metadata" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Handbook version</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td>Last reviewed</td>
+<td>2026-06-29</td>
+</tr>
+<tr>
+<td>Azure region scope</td>
+<td>All Azure regions with M-series VM availability</td>
+</tr>
+<tr>
+<td>SAP release scope</td>
+<td>SAP HANA 2.0 SPS06+, SAP S/4HANA 2021+, SAP NetWeaver 7.4+</td>
+</tr>
+<tr>
+<td>Azure SDK / API baseline</td>
+<td>Azure Resource Manager, 2024-01-01 API profile</td>
+</tr>
+<tr>
+<td>MkDocs version</td>
+<td>1.5.x with Material theme 9.x</td>
+</tr>
+<tr>
+<td>Diagram tooling</td>
+<td>Mermaid 10.x</td>
+</tr>
+<tr>
+<td>IaC tooling</td>
+<td>Bicep (primary), Terraform (secondary)</td>
+</tr>
+<tr>
+<td>Primary references</td>
+<td>SAP Note 1928533, SAP Note 2015553, Azure Architecture Center, CAF, WAF</td>
+</tr>
+</tbody>
+</table>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="js/timeago.min.js"></script>
+<script src="js/timeago_mkdocs_material.js"></script>
+<script src="javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

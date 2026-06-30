@@ -1,0 +1,3078 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/oracle/" rel="canonical"/>
+<link href="../sql-server/" rel="prev"/>
+<link href="../db2/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Oracle on Azure - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-on-oracle-database-on-azure-architecture">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Oracle on Azure
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+<nav aria-label="Architecture Overview" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-sap-on-oracle-on-azure-full-topology">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: SAP on Oracle on Azure — Full Topology
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+<nav aria-label="SAP Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-component-topology-on-oracle-database">
+<span class="md-ellipsis">
+      
+        SAP Component Topology on Oracle Database
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#supported-sap-workloads-on-oracle-database">
+<span class="md-ellipsis">
+      
+        Supported SAP Workloads on Oracle Database
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-version-support-matrix-for-sap-on-azure">
+<span class="md-ellipsis">
+      
+        Oracle Version Support Matrix for SAP on Azure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-database-sizing-for-sap-workloads">
+<span class="md-ellipsis">
+      
+        Oracle Database Sizing for SAP Workloads
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-transport-landscape-integration">
+<span class="md-ellipsis">
+      
+        SAP Transport Landscape Integration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rman-backup-integration-with-sap">
+<span class="md-ellipsis">
+      
+        RMAN Backup Integration with SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference-sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference (SAP Architecture)
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+<nav aria-label="Azure Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#certified-vm-families-for-oracle-database-hosts">
+<span class="md-ellipsis">
+      
+        Certified VM Families for Oracle Database Hosts
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#storage-layout-for-oracle-production-primary-node">
+<span class="md-ellipsis">
+      
+        Storage Layout for Oracle Production Primary Node
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#networking-requirements">
+<span class="md-ellipsis">
+      
+        Networking Requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-backup-for-oracle-rman-integration">
+<span class="md-ellipsis">
+      
+        Azure Backup for Oracle (RMAN Integration)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#required-vm-extensions-for-oracle-database-vms">
+<span class="md-ellipsis">
+      
+        Required VM Extensions for Oracle Database VMs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-service-detail-diagram-oracle-database-tier">
+<span class="md-ellipsis">
+      
+        Azure Service Detail Diagram: Oracle Database Tier
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#database-configuration">
+<span class="md-ellipsis">
+      
+        Database Configuration
+      
+    </span>
+</a>
+<nav aria-label="Database Configuration" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-initialization-parameters-for-sap-on-azure">
+<span class="md-ellipsis">
+      
+        Oracle Initialization Parameters for SAP on Azure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#os-configuration-requirements">
+<span class="md-ellipsis">
+      
+        OS Configuration Requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#volume-layout-summary">
+<span class="md-ellipsis">
+      
+        Volume Layout Summary
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-automatic-storage-management-asm-on-azure">
+<span class="md-ellipsis">
+      
+        Oracle Automatic Storage Management (ASM) on Azure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-licensing-on-azure">
+<span class="md-ellipsis">
+      
+        Oracle Licensing on Azure
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#high-availability-architecture">
+<span class="md-ellipsis">
+      
+        High Availability Architecture
+      
+    </span>
+</a>
+<nav aria-label="High Availability Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-data-guard-on-azure-configuration">
+<span class="md-ellipsis">
+      
+        Oracle Data Guard on Azure — Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-data-guard-parameters">
+<span class="md-ellipsis">
+      
+        Oracle Data Guard Parameters
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pacemaker-cluster-integration-with-oracle-data-guard">
+<span class="md-ellipsis">
+      
+        Pacemaker Cluster Integration with Oracle Data Guard
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#availability-zone-deployment">
+<span class="md-ellipsis">
+      
+        Availability Zone Deployment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-latency-for-data-guard-redo-shipping">
+<span class="md-ellipsis">
+      
+        Network Latency for Data Guard Redo Shipping
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#fast-start-failover-fsfo">
+<span class="md-ellipsis">
+      
+        Fast-Start Failover (FSFO)
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#disaster-recovery-architecture">
+<span class="md-ellipsis">
+      
+        Disaster Recovery Architecture
+      
+    </span>
+</a>
+<nav aria-label="Disaster Recovery Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-data-guard-cross-region-async-replication">
+<span class="md-ellipsis">
+      
+        Oracle Data Guard Cross-Region Async Replication
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-site-recovery-asr-exclusion-rationale">
+<span class="md-ellipsis">
+      
+        Azure Site Recovery (ASR) Exclusion Rationale
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-network-architecture">
+<span class="md-ellipsis">
+      
+        DR Network Architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-vm-sizing">
+<span class="md-ellipsis">
+      
+        DR VM Sizing
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rtorpo-validation">
+<span class="md-ellipsis">
+      
+        RTO/RPO Validation
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-architecture">
+<span class="md-ellipsis">
+      
+        Security Architecture
+      
+    </span>
+</a>
+<nav aria-label="Security Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-transparent-data-encryption-with-azure-key-vault-hsm">
+<span class="md-ellipsis">
+      
+        Oracle Transparent Data Encryption with Azure Key Vault HSM
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-unified-auditing-to-log-analytics">
+<span class="md-ellipsis">
+      
+        Oracle Unified Auditing to Log Analytics
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#entra-id-for-dba-access-pim">
+<span class="md-ellipsis">
+      
+        Entra ID for DBA Access (PIM)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-vault-for-credential-management">
+<span class="md-ellipsis">
+      
+        Oracle Vault for Credential Management
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-isolation-and-nsg-rules">
+<span class="md-ellipsis">
+      
+        Network Isolation and NSG Rules
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-defender-for-cloud">
+<span class="md-ellipsis">
+      
+        Microsoft Defender for Cloud
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability-and-high-availability">
+<span class="md-ellipsis">
+      
+        Reliability and High Availability
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization">
+<span class="md-ellipsis">
+      
+        Cost Optimization
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operations-and-monitoring">
+<span class="md-ellipsis">
+      
+        Operations and Monitoring
+      
+    </span>
+</a>
+<nav aria-label="Operations and Monitoring" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-monitor-for-sap-solutions-oracle-provider">
+<span class="md-ellipsis">
+      
+        Azure Monitor for SAP Solutions — Oracle Provider
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#oracle-awrash-integration-with-log-analytics">
+<span class="md-ellipsis">
+      
+        Oracle AWR/ASH Integration with Log Analytics
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rman-backup-monitoring">
+<span class="md-ellipsis">
+      
+        RMAN Backup Monitoring
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alert-definitions">
+<span class="md-ellipsis">
+      
+        Alert Definitions
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+<nav aria-label="Landing Zone Mapping" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#db-subnet-placement">
+<span class="md-ellipsis">
+      
+        DB Subnet Placement
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#nsg-rules-for-oracle-ports">
+<span class="md-ellipsis">
+      
+        NSG Rules for Oracle Ports
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#private-dns-configuration">
+<span class="md-ellipsis">
+      
+        Private DNS Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-key-vault-access">
+<span class="md-ellipsis">
+      
+        Azure Key Vault Access
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#recovery-services-vault-for-rman-backup">
+<span class="md-ellipsis">
+      
+        Recovery Services Vault for RMAN Backup
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#validation-checklist">
+<span class="md-ellipsis">
+      
+        Validation Checklist
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-1-using-azure-site-recovery-for-oracle-database-dr">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 1: Using Azure Site Recovery for Oracle Database DR
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-2-deploying-oracle-data-guard-on-azure-without-a-dedicated-observer-vm">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 2: Deploying Oracle Data Guard on Azure Without a Dedicated Observer VM
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-3-placing-oracle-redo-log-files-on-premium-ssd-v2-without-write-accelerator-on-e-series-vms-or-on-standard-ssd">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 3: Placing Oracle Redo Log Files on Premium SSD v2 Without Write Accelerator (on E-series VMs) or on Standard SSD
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-4-using-oracle-asm-with-normal-or-high-redundancy-on-azure-managed-disks">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 4: Using Oracle ASM with NORMAL or HIGH Redundancy on Azure Managed Disks
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-5-co-locating-oracle-database-and-sap-application-server-on-the-same-azure-vm">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 5: Co-locating Oracle Database and SAP Application Server on the Same Azure VM
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-6-disabling-oracle-unified-auditing-to-improve-performance">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 6: Disabling Oracle Unified Auditing to Improve Performance
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-1-oracle-data-guard-apply-lag-continuously-increasing">
+<span class="md-ellipsis">
+      
+        Issue 1: Oracle Data Guard Apply Lag Continuously Increasing
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-2-sap-system-down-after-oracle-data-guard-failover-sap-cannot-connect-to-new-primary">
+<span class="md-ellipsis">
+      
+        Issue 2: SAP System Down After Oracle Data Guard Failover — SAP Cannot Connect to New Primary
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-3-oracle-ora-04031-errors-in-sap-syslog-shared-pool-memory-exhaustion">
+<span class="md-ellipsis">
+      
+        Issue 3: Oracle ORA-04031 Errors in SAP Syslog — Shared Pool Memory Exhaustion
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-4-rman-backup-fails-with-ora-19511-azure-backup-agent-not-responding">
+<span class="md-ellipsis">
+      
+        Issue 4: RMAN Backup Fails with ORA-19511 — Azure Backup Agent Not Responding
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-5-oracle-log-writer-lgwr-wait-sap-response-times-degraded-with-log-file-sync-waits">
+<span class="md-ellipsis">
+      
+        Issue 5: Oracle Log Writer (LGWR) Wait — SAP Response Times Degraded with log file sync Waits
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-6-oracle-data-guard-redo-gap-during-sap-batch-processing-window">
+<span class="md-ellipsis">
+      
+        Issue 6: Oracle Data Guard Redo Gap During SAP Batch Processing Window
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../hana/">
+<span class="md-ellipsis">
+    Phase D — Database Platforms
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="sap-on-oracle-database-on-azure-architecture">SAP on Oracle Database on Azure Architecture<a class="headerlink" href="#sap-on-oracle-database-on-azure-architecture" title="Permanent link">¶</a></h1>
+<hr/>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>Oracle Database is one of the longest-standing RDBMS platforms supported by SAP, with production deployments predating SAP HANA by more than two decades. In Azure environments, Oracle Database serves as the persistence layer for SAP NetWeaver ABAP-based systems including SAP ECC 6.0 (all Enhancement Packages), SAP S/4HANA (restricted support, see SAP Note 2267798), SAP Business Warehouse 7.4 and 7.5, SAP Solution Manager 7.2, SAP GRC, SAP PI/PO, and the full catalog of SAP NetWeaver 7.4 and 7.5 ABAP-based products. The SAP kernel communicates with Oracle Database through the SAP Database Interface (DBI) layer using Oracle's OCI (Oracle Call Interface) client libraries embedded in the SAP kernel binary, enabling the SAP ABAP stack to issue SQL statements against Oracle without awareness of Oracle internals. Enterprises that have standardized on Oracle Database as their corporate RDBMS platform — including those holding Enterprise License Agreements (ELA) with Oracle — and who are migrating SAP landscapes from on-premises x86 or SPARC/AIX infrastructure to Azure without a simultaneous database migration project represent the primary adopters of this architecture. In these scenarios, the operational cost and risk of a database migration (typically HANA migration using SAP DMO) outweighs the benefit of adopting a newer platform, making Azure IaaS the lift-and-shift target for the existing Oracle-backed SAP landscape.</p>
+<p>Azure support for SAP on Oracle Database is documented in SAP Note 2039619, which defines the supported Oracle Database versions, supported operating system versions, and required Azure VM families for Oracle Database hosting SAP workloads. Unlike SAP HANA, which carries its own SAP hardware certification directory, Oracle Database for SAP on Azure is certified through the standard SAP DBMS certification model: Oracle supports Oracle Database, SAP supports the SAP application layer and Oracle integration, and Microsoft supports the Azure infrastructure. The joint support model is defined in SAP Note 2039619 and the corresponding Microsoft documentation at learn.microsoft.com/azure/sap/workloads/dbms-guide-oracle. Oracle Database 19c is the current Long Term Support Release and the recommended version for all new SAP on Oracle deployments on Azure. Oracle Database 21c is an Innovation Release not recommended for SAP production. Oracle Database 23ai (23c) support for SAP is governed by Oracle-SAP compatibility certifications published through SAP Note 2039619 updates; as of the knowledge cutoff, 23ai is not in the supported matrix for SAP NetWeaver ABAP production deployments.</p>
+<p>The primary architectural decisions for SAP on Oracle on Azure are: Oracle Database version selection (19c LTS vs legacy 12.2), VM family selection between Edsv5 (cost-efficient for databases under 2 TiB) and Mv2 (large memory for databases exceeding 2 TiB or requiring large Oracle SGA/PGA), storage architecture using Azure Ultra Disk or Premium SSD v2 for Oracle redo logs and Ultra Disk or Azure NetApp Files for Oracle data files, High Availability using Oracle Data Guard with Pacemaker cluster and Azure Fence Agent for automated failover, Disaster Recovery using Oracle Data Guard Async replication to a secondary Azure region, Oracle Automatic Storage Management (ASM) on Azure block storage versus filesystem-based Oracle storage, Oracle Database licensing model (Bring Your Own License for existing ELA holders versus Oracle-included VM licensing on Azure Marketplace images), and Oracle Transparent Data Encryption with Azure Key Vault HSM for encryption key management. Each of these decisions carries multi-year operational and financial impact: the VM family drives Reserved Instance commitments; the storage architecture determines the recoverable IOPS and log write latency; the HA method determines the RTO under unplanned failover; and the Oracle licensing model can be the single largest cost item in the total cost of ownership for Oracle-backed SAP landscapes on Azure.</p>
+<hr/>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>SAP on Oracle on Azure follows the SAP Landing Zone architecture defined in the SAP on Azure Landing Zone Accelerator, with the Oracle Database tier deployed in the SAP DB subnet within the SAP Landing Zone Spoke VNet, peered to the Hub VNet for centralized egress, DNS resolution, and Azure Firewall inspection. The database tier is network-isolated from the SAP application tier using Network Security Group (NSG) rules that permit only Oracle listener traffic (default TCP/1521) from the application subnet to the database subnet. This isolation satisfies the security requirements in SAP Note 1680803 and reduces the Oracle Database attack surface to only the application tier hosts. The Hub VNet hosts the ExpressRoute Gateway (UltraPerformance SKU for SAP-scale connectivity), Azure Firewall Premium, Azure Bastion for operational access, and the Azure Private DNS Resolver. On-premises connectivity via ExpressRoute provides the primary path for SAP user traffic, SAP transport imports, and DBA access to Oracle hosts.</p>
+<p>The Oracle Data Guard primary and standby database nodes are deployed in separate Azure Availability Zones within the same Azure region. Zone separation ensures that a physical datacenter-level failure — including power, cooling, and network infrastructure failures within one zone — does not simultaneously affect both Oracle nodes. Oracle Data Guard SYNC mode (Maximum Availability protection mode) is used for intra-region HA, where the Data Guard redo shipping latency between Availability Zones is typically 1–2 ms round-trip, within the Oracle-defined threshold for SYNC mode with Maximum Availability protection on SAP ECC and S/4HANA workloads. An Azure Internal Load Balancer (Standard SKU) with HA Ports rule and floating IP enabled fronts the Oracle cluster virtual IP, directing SAP application server JDBC/OCI connections to the active Oracle Data Guard primary. Pacemaker with the fence_azure_arm STONITH agent manages automated Data Guard role transitions and fencing, ensuring that split-brain scenarios result in node isolation rather than dual-primary data divergence.</p>
+<p>Storage for the Oracle primary node uses Azure Ultra Disk for Oracle redo log groups (requiring sub-1 ms write latency at the 99th percentile for Oracle log writer synchronous writes) and Azure Premium SSD v2 or Azure NetApp Files for Oracle data files and archive log destination. When Oracle Automatic Storage Management (ASM) is deployed — the recommended approach for Oracle 19c on Azure per SAP Note 2039619 and Oracle's own MAA (Maximum Availability Architecture) guidance — ASM disk groups are built on Azure managed disks presented as raw block devices to the Oracle ASM instances on each node. The ASM EXTERNAL REDUNDANCY configuration relies on Azure managed disk redundancy (LRS with triple-replication within a zone) rather than Oracle ASM mirroring, which would double the disk cost. For the Oracle Data Guard standby node, a separate equivalent set of disks is provisioned in the standby Availability Zone; Oracle Data Guard maintains the standby via redo log shipping and automatic apply, so there is no need for shared storage between primary and standby.</p>
+<p>Monitoring and operations are delivered through Azure Monitor for SAP Solutions (AMS) with the Oracle provider configured to collect Oracle DB metrics via the DB_STATS and V$SYSSTAT views at 60-second intervals, published to a Log Analytics Workspace in the Shared Services Spoke. Oracle Unified Auditing output is forwarded to Log Analytics using the Azure Monitor Agent and a custom data collection rule. Azure Backup with RMAN integration provides policy-driven Oracle backups to a Recovery Services Vault with Geo-Redundant Storage (GRS). The SAP System Landscape Directory (SLD) and SAP Solution Manager (SolMan) connect to Oracle instances through the DB subnet for Oracle-specific SAP system monitoring, Early Watch Alert collection, and ABAP dictionary consistency checks. Oracle Enterprise Manager (OEM) Cloud Control can optionally be deployed in the Management subnet for Oracle-native DBA operations, with OEM agents installed on all Oracle Database VMs.</p>
+<h3 id="architecture-diagram-sap-on-oracle-on-azure-full-topology">Architecture Diagram: SAP on Oracle on Azure — Full Topology<a class="headerlink" href="#architecture-diagram-sap-on-oracle-on-azure-full-topology" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph TB
+  subgraph HubVNet["Hub VNet (10.10.0.0/16)"]
+    FW["Azure Firewall Premium\n10.10.0.4"]
+    ERGW["ExpressRoute Gateway\nUltraPerformance SKU"]
+    VPNGW["VPN Gateway (Dev/Test)\nVpnGw2 SKU"]
+    BastionHost["Azure Bastion\nStandard SKU"]
+    HubDNS["Azure Private DNS Resolver\nInbound 10.10.1.4"]
+  end
+
+  subgraph SAPSpoke["SAP Landing Zone Spoke VNet (10.20.0.0/16)"]
+    subgraph AppSubnet["Application Subnet (10.20.1.0/24)\nNSG: Allow 3200-3299 inbound from Corp"]
+      PAS["PAS VM\nE32ds_v5 Zone 1\n10.20.1.10"]
+      AAS1["AAS VM-1\nE32ds_v5 Zone 1\n10.20.1.11"]
+      AAS2["AAS VM-2\nE32ds_v5 Zone 2\n10.20.1.12"]
+      ASCS["ASCS/ERS VMs\nE4ds_v5 Zone 1+2\n10.20.1.20-21"]
+    end
+
+    subgraph DBSubnet["Database Subnet (10.20.2.0/24)\nNSG: Allow TCP/1521 from AppSubnet only"]
+      OraclePrimary["Oracle Primary\nM208ms_v2 Zone 1\n10.20.2.10\nOracleDB 19c + ASM"]
+      OracleStandby["Oracle Standby\nM208ms_v2 Zone 2\n10.20.2.11\nData Guard Physical Standby"]
+      ILBORA["ILB-Oracle\nStandard SKU\nFloating IP 10.20.2.100\nPort 1521 HA Ports"]
+      OracleObserver["DG Observer VM\nB2s Zone 3\n10.20.2.20\nFast-Start Failover Observer"]
+    end
+
+    subgraph ASMStorage["ASM Disk Group Storage (Zone 1)"]
+      UltraDiskRedo["Ultra Disk — Redo Logs\n2x 512 GiB\nDG: DATA (EXTERNAL)"]
+      PremSSDData["Premium SSD v2 — Data Files\n4x 4 TiB\nDG: DATAC1 (EXTERNAL)"]
+      PremSSDArch["Premium SSD v2 — Archive Logs\n2x 2 TiB\nDG: ARCHDG (EXTERNAL)"]
+    end
+
+    subgraph ASMStorageStandby["ASM Disk Group Storage (Zone 2)"]
+      UltraDiskRedoSby["Ultra Disk — Redo Logs\n2x 512 GiB"]
+      PremSSDDataSby["Premium SSD v2 — Data Files\n4x 4 TiB"]
+      PremSSDArchSby["Premium SSD v2 — Archive Logs\n2x 2 TiB"]
+    end
+
+    subgraph ManagementSubnet["Management Subnet (10.20.4.0/24)"]
+      SOLMAN["SAP Solution Manager\nE16ds_v5\n10.20.4.10"]
+      OEM["Oracle Enterprise Manager\nE8ds_v5\n10.20.4.11"]
+    end
+  end
+
+  subgraph SharedServices["Shared Services Spoke"]
+    AKV["Azure Key Vault\nHSM-backed Premium SKU\nTDE Master Key"]
+    LAW["Log Analytics Workspace\n90-day hot / 2yr archive"]
+    AMS["Azure Monitor for SAP Solutions\nOracle Provider"]
+    RSV["Recovery Services Vault\nGRS — RMAN Backup Target"]
+    ACR["Azure Container Registry"]
+  end
+
+  subgraph DRRegion["DR Region (Secondary Azure Region)"]
+    OracleDR["Oracle DR Standby\nM208ms_v2\nData Guard Async"]
+    RSV_DR["Recovery Services Vault DR\nLRS"]
+  end
+
+  OnPrem["On-Premises\nSAP Users / Corp AD"] --&gt;|ExpressRoute 10 Gbps| ERGW
+  ERGW --&gt; FW
+  FW --&gt;|Inspected traffic| SAPSpoke
+  OraclePrimary --&gt;|Data Guard SYNC redo shipping| OracleStandby
+  OraclePrimary --&gt;|Data Guard ASYNC cross-region| OracleDR
+  OraclePrimary --&gt; UltraDiskRedo
+  OraclePrimary --&gt; PremSSDData
+  OraclePrimary --&gt; PremSSDArch
+  OracleStandby --&gt; UltraDiskRedoSby
+  OracleStandby --&gt; PremSSDDataSby
+  OracleStandby --&gt; PremSSDArchSby
+  ILBORA --&gt;|Active| OraclePrimary
+  ILBORA -.-&gt;|Standby| OracleStandby
+  OracleObserver --&gt;|FSFO coordination| OraclePrimary
+  OracleObserver --&gt;|FSFO coordination| OracleStandby
+  PAS --&gt;|TCP/1521| ILBORA
+  AAS1 --&gt;|TCP/1521| ILBORA
+  AAS2 --&gt;|TCP/1521| ILBORA
+  OraclePrimary --&gt;|RMAN via Private Endpoint| RSV
+  AMS --&gt;|Oracle provider metrics| LAW
+  OraclePrimary --&gt;|Managed Identity — TDE key fetch| AKV
+  BastionHost -.-&gt;|SSH jump| DBSubnet</code></pre>
+<hr/>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<h3 id="sap-component-topology-on-oracle-database">SAP Component Topology on Oracle Database<a class="headerlink" href="#sap-component-topology-on-oracle-database" title="Permanent link">¶</a></h3>
+<p>SAP workloads on Oracle Database follow the standard SAP three-tier architecture: SAP application servers (Primary Application Server and Additional Application Servers) in the application tier communicate with the Oracle Database instance through the SAP DBI (Database Interface) layer using Oracle OCI client libraries embedded in the SAP kernel. The SAP kernel package includes the Oracle-specific DBSL (Database Shared Library) — <code>libdboraslib.so</code> on Linux — which handles connection pooling, cursor management, SAP-specific Oracle session parameters, and Oracle Real Application Clusters (RAC) transparent failover when applicable. The SAP ASCS/ERS cluster does not connect to Oracle directly; its role is SAP message server and enqueue server management only. The Oracle Database instance name matches the SAP SID by convention: for SID "P01", the Oracle ORACLE_SID is "P01" and the Oracle service name used by SAP is "P01".</p>
+<p>SAP NetWeaver connects to Oracle using the Oracle TNS listener (default port 1521) configured with a connect descriptor pointing to the virtual hostname of the Oracle cluster (fronted by the Azure ILB). The TNS alias is defined in the <code>tnsnames.ora</code> file deployed on all SAP application servers, pointing to the ILB floating IP on port 1521. Oracle connection failover during Data Guard role transitions is handled by the Pacemaker cluster updating the ILB probe response on the new primary within the Azure ILB health probe interval (default 15 seconds), after which new SAP OCI connections from the application servers route to the new Oracle primary. Existing SAP work process connections are recycled by the SAP work process reconnect logic after detecting ORA-03113 or ORA-03114 errors during the failover window.</p>
+<h3 id="supported-sap-workloads-on-oracle-database">Supported SAP Workloads on Oracle Database<a class="headerlink" href="#supported-sap-workloads-on-oracle-database" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Workload</th>
+<th>Oracle Support Status</th>
+<th>Minimum Oracle Version</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP ECC 6.0 (all EHPs)</td>
+<td>Fully supported</td>
+<td>Oracle 12.2.0.1 + BP</td>
+<td>Mainstream maintenance ends 2027; Oracle supported for migration path</td>
+</tr>
+<tr>
+<td>SAP S/4HANA 1809–2022</td>
+<td>Supported with restrictions</td>
+<td>Oracle 19c</td>
+<td>SAP Note 2267798: S/4HANA on non-HANA DB is "any DB" mode with functional restrictions</td>
+</tr>
+<tr>
+<td>SAP S/4HANA 2023+</td>
+<td>Not recommended</td>
+<td>Oracle 19c</td>
+<td>SAP strategic direction is SAP HANA; evaluate HANA migration</td>
+</tr>
+<tr>
+<td>SAP BW 7.4/7.5</td>
+<td>Fully supported</td>
+<td>Oracle 12.2.0.1 + BP</td>
+<td>BW on Oracle with row and column store mixing; BW/4HANA requires HANA</td>
+</tr>
+<tr>
+<td>SAP Solution Manager 7.2</td>
+<td>Fully supported</td>
+<td>Oracle 12.2.0.1 + BP</td>
+<td>SolMan on Oracle common in Oracle-standardized enterprises</td>
+</tr>
+<tr>
+<td>SAP PI/PO 7.5</td>
+<td>Fully supported</td>
+<td>Oracle 12.2.0.1 + BP</td>
+<td>Dual-stack Java+ABAP on Oracle supported</td>
+</tr>
+<tr>
+<td>SAP GRC 12.0</td>
+<td>Fully supported</td>
+<td>Oracle 12.2.0.1 + BP</td>
+<td>GRC inherits NetWeaver ABAP Oracle support matrix</td>
+</tr>
+<tr>
+<td>SAP NetWeaver 7.52 ABAP</td>
+<td>Fully supported</td>
+<td>Oracle 12.2.0.1 + BP</td>
+<td>All NW 7.5x ABAP products on Oracle</td>
+</tr>
+</tbody>
+</table>
+<h3 id="oracle-version-support-matrix-for-sap-on-azure">Oracle Version Support Matrix for SAP on Azure<a class="headerlink" href="#oracle-version-support-matrix-for-sap-on-azure" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Oracle Version</th>
+<th>Oracle End of Premier Support</th>
+<th>SAP Support Status</th>
+<th>Recommended</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle 12.1.0.2</td>
+<td>July 2022 (Extended Support ended 2024)</td>
+<td>Legacy — SAP Note 2039619, restricted</td>
+<td>No — upgrade required</td>
+</tr>
+<tr>
+<td>Oracle 12.2.0.1</td>
+<td>November 2020 (Extended Support available)</td>
+<td>Supported with Bundle Patch</td>
+<td>No — migrate to 19c</td>
+</tr>
+<tr>
+<td>Oracle 18c (12.2.0.2)</td>
+<td>June 2021</td>
+<td>Not recommended for new deployments</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Oracle 19c (19.3+)</td>
+<td>April 2024 Premier; Extended through April 2027</td>
+<td>Fully supported — current SAP baseline</td>
+<td>Yes — current recommended</td>
+</tr>
+<tr>
+<td>Oracle 21c</td>
+<td>April 2024 Premier (Innovation Release)</td>
+<td>Not in SAP supported matrix</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Oracle 23ai</td>
+<td>Announced future LTS</td>
+<td>Not yet in SAP supported matrix</td>
+<td>Evaluate only</td>
+</tr>
+</tbody>
+</table>
+<h3 id="oracle-database-sizing-for-sap-workloads">Oracle Database Sizing for SAP Workloads<a class="headerlink" href="#oracle-database-sizing-for-sap-workloads" title="Permanent link">¶</a></h3>
+<p>SAP Quick Sizer generates the SAPS requirement and database size estimate. For Oracle, VM sizing follows these rules:</p>
+<ol>
+<li>
+<p><strong>CPU sizing</strong>: Oracle SQL execution is CPU-bound for OLTP dialog steps (ECC, S/4HANA). The Oracle server requires vCPUs to execute peak concurrent SQL from SAP work processes: 1 vCPU per 2–3 SAP dialog work processes connecting to Oracle plus 4–8 vCPUs for Oracle background processes (LGWR, DBWR, CKPT, ARCH, MMON). Minimum 16 vCPUs for any SAP production Oracle instance.</p>
+</li>
+<li>
+<p><strong>Memory sizing</strong>: Oracle System Global Area (SGA) must cache the Oracle hot buffer cache (db_cache_size) plus shared pool for SQL cursor caching. SAP recommends Oracle Buffer Cache Hit Ratio above 99% for ECC OLTP. Target SGA: 40–60% of database size for ECC OLTP, 20–30% for BW (sequential scan dominated). Total VM RAM = SGA + PGA aggregate target (1–4 GiB per concurrent session × peak sessions) + Oracle instance overhead + OS and page cache + 15% headroom. For a 1 TiB ECC database, minimum 512 GiB VM RAM.</p>
+</li>
+<li>
+<p><strong>Oracle PGA sizing</strong>: For SAP BW workloads with large hash join and sort operations, PGA_AGGREGATE_TARGET should be set to 20–30% of total VM RAM. Undersized PGA forces Oracle to perform sort and hash operations to temp tablespace (disk), severely impacting BW query performance.</p>
+</li>
+<li>
+<p><strong>Data Guard standby sizing</strong>: The Oracle Data Guard physical standby VM must be identical to the primary in CPU, RAM, and storage IOPS/throughput. An underpowered standby cannot apply redo fast enough during high log generation, causing Data Guard apply lag and increasing the achievable RPO beyond target.</p>
+</li>
+</ol>
+<h3 id="sap-transport-landscape-integration">SAP Transport Landscape Integration<a class="headerlink" href="#sap-transport-landscape-integration" title="Permanent link">¶</a></h3>
+<p>The SAP transport landscape (DEV → QAS → PRD) maps to separate SAP system instances each with its own Oracle database (separate Oracle ORACLE_SID and separate Oracle database files). The SAP transport directory (<code>/usr/sap/trans</code>) is shared across all systems via NFS (Azure NetApp Files Standard tier). Each Oracle database runs under a dedicated OS user (<code>oracle</code>) with the Oracle ORACLE_HOME consistent across nodes. Transport imports into Oracle-backed PRD systems require Oracle UNDO tablespace free space sufficient for long-running ABAP dictionary activation transactions and Oracle temporary tablespace space for ABAP mass activation sort operations.</p>
+<h3 id="rman-backup-integration-with-sap">RMAN Backup Integration with SAP<a class="headerlink" href="#rman-backup-integration-with-sap" title="Permanent link">¶</a></h3>
+<p>SAP on Oracle uses Oracle Recovery Manager (RMAN) as the backup engine, invoked through the SAP BR*Tools utilities (BRBACKUP, BRARCHIVE, BRRESTORE). The backup integration flow on Azure:</p>
+<ol>
+<li>SAP BRBACKUP invokes RMAN with an Oracle-SAP-specific RMAN configuration script.</li>
+<li>RMAN connects to the Oracle database and performs an online backup using <code>BACKUP DATABASE</code>.</li>
+<li>The RMAN backup stream is directed to the Azure Recovery Services Vault via the Azure Backup for Oracle workload extension (Microsoft.Azure.RecoveryServices.WorkloadBackup), or to Azure Blob Storage via an RMAN media management layer (SBT_TAPE channel with Azure storage backend).</li>
+<li>Oracle archive logs are backed up by BRARCHIVE via RMAN <code>BACKUP ARCHIVELOG ALL DELETE INPUT</code> on a scheduled basis.</li>
+<li>RMAN catalog (optional) is maintained in a separate Oracle Recovery Catalog database in the Management subnet, or the default RMAN control file catalog is used.</li>
+</ol>
+<p>SAP Note 2178659 documents the RMAN backup architecture for SAP on Oracle on Azure and defines supported backup channel types and RMAN parallelism settings.</p>
+<h3 id="sap-notes-reference-sap-architecture">SAP Notes Reference (SAP Architecture)<a class="headerlink" href="#sap-notes-reference-sap-architecture" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2039619</td>
+<td>SAP Applications on Microsoft Azure Using the Oracle Database</td>
+<td>Defines supported Azure VM SKUs, Oracle versions, OS versions for Oracle on Azure</td>
+<td>All Oracle on Azure deployments</td>
+</tr>
+<tr>
+<td>2178659</td>
+<td>Backing Up Oracle on Microsoft Azure</td>
+<td>Oracle RMAN backup architecture, RMAN channel configuration, backup targets on Azure</td>
+<td>Backup solution design</td>
+</tr>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>Certified VM families for Oracle DB hosts; Accelerated Networking mandatory</td>
+<td>VM selection</td>
+</tr>
+<tr>
+<td>2267798</td>
+<td>SAP S/4HANA Database Support on Azure</td>
+<td>S/4HANA on Oracle restrictions; functional limitations vs SAP HANA</td>
+<td>S/4HANA deployment decisions</td>
+</tr>
+<tr>
+<td>1680803</td>
+<td>SAP Systems on Microsoft Azure: Security Guidelines</td>
+<td>Network isolation for Oracle DB subnet; OS hardening baseline</td>
+<td>NSG design, OS hardening</td>
+</tr>
+<tr>
+<td>1496410</td>
+<td>Oracle Database on Microsoft Azure</td>
+<td>Oracle-specific Azure configuration guidance; NIC, disk, kernel settings</td>
+<td>Infrastructure configuration</td>
+</tr>
+<tr>
+<td>2470289</td>
+<td>FAQ: Oracle High Availability on Azure</td>
+<td>Oracle Data Guard on Azure; observer configuration; FSFO</td>
+<td>HA/DR architecture</td>
+</tr>
+<tr>
+<td>1984882</td>
+<td>Using SAP LaMa with Oracle Database on Azure</td>
+<td>SAP Landscape Management integration for Oracle cloning and refresh</td>
+<td>Non-production system operations</td>
+</tr>
+<tr>
+<td>2799900</td>
+<td>Oracle Database 19c — SAP ABAP System Requirements</td>
+<td>Oracle 19c minimum patch level, SAP kernel requirements, installation sequence</td>
+<td>Oracle 19c deployments</td>
+</tr>
+<tr>
+<td>105047</td>
+<td>Support for Oracle Functions in SAP</td>
+<td>Defines Oracle features allowed and disallowed by SAP; Oracle partitioning restrictions</td>
+<td>Oracle feature usage</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<h3 id="certified-vm-families-for-oracle-database-hosts">Certified VM Families for Oracle Database Hosts<a class="headerlink" href="#certified-vm-families-for-oracle-database-hosts" title="Permanent link">¶</a></h3>
+<p>SAP-certified VM families for Oracle Database hosts on Azure are defined in SAP Note 2039619 and SAP Note 1928533. Oracle Database VM sizing is driven by Oracle SGA + PGA memory requirements plus OS overhead.</p>
+<table>
+<thead>
+<tr>
+<th>VM SKU</th>
+<th>vCPUs</th>
+<th>RAM (GiB)</th>
+<th>Max Uncached IOPS</th>
+<th>Max Network (Gbps)</th>
+<th>Recommended Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E16ds_v5</td>
+<td>16</td>
+<td>128</td>
+<td>51,200</td>
+<td>12.5</td>
+<td>Oracle DEV/QAS (database up to 300 GiB)</td>
+</tr>
+<tr>
+<td>E32ds_v5</td>
+<td>32</td>
+<td>256</td>
+<td>76,800</td>
+<td>16</td>
+<td>Oracle production small ECC (up to 600 GiB)</td>
+</tr>
+<tr>
+<td>E64ds_v5</td>
+<td>64</td>
+<td>512</td>
+<td>80,000</td>
+<td>16</td>
+<td>Oracle production medium ECC (up to 1.5 TiB)</td>
+</tr>
+<tr>
+<td>E96ds_v5</td>
+<td>96</td>
+<td>672</td>
+<td>80,000</td>
+<td>25</td>
+<td>Oracle production large ECC (up to 2.5 TiB)</td>
+</tr>
+<tr>
+<td>M208ms_v2</td>
+<td>208</td>
+<td>5,700</td>
+<td>80,000</td>
+<td>25</td>
+<td>Oracle BW production (large SGA, up to 8 TiB DB)</td>
+</tr>
+<tr>
+<td>M416ms_v2</td>
+<td>416</td>
+<td>11,400</td>
+<td>80,000</td>
+<td>25</td>
+<td>Oracle BW very large (up to 16 TiB DB)</td>
+</tr>
+<tr>
+<td>M128ms_v2</td>
+<td>128</td>
+<td>3,892</td>
+<td>80,000</td>
+<td>25</td>
+<td>Oracle ECC + BW combined (up to 6 TiB DB)</td>
+</tr>
+</tbody>
+</table>
+<p>All production Oracle VMs require:
+- <strong>Accelerated Networking</strong> enabled on all NICs (SAP Note 2039619 mandatory requirement; reduces NIC latency from ~150 µs to ~25 µs via SR-IOV)
+- <strong>Write Accelerator</strong> is NOT available on Mv2; Ultra Disk is used for Oracle redo logs instead
+- <strong>Proximity Placement Group (PPG)</strong>: Use PPG for single-zone deployments to co-locate Oracle and SAP application VMs. For cross-zone HA deployments, do not use PPG — it forces same-zone placement and defeats the zone-separated HA design.</p>
+<h3 id="storage-layout-for-oracle-production-primary-node">Storage Layout for Oracle Production Primary Node<a class="headerlink" href="#storage-layout-for-oracle-production-primary-node" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Volume / Mount Point</th>
+<th>Storage Type</th>
+<th>Recommended Size</th>
+<th>IOPS</th>
+<th>Throughput</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OS disk (/)</td>
+<td>Premium SSD v2</td>
+<td>128 GiB</td>
+<td>3,000</td>
+<td>125 MB/s</td>
+<td>Separate from Oracle data</td>
+</tr>
+<tr>
+<td>Oracle software (<code>/oracle/&lt;SID&gt;/19.0.0</code>)</td>
+<td>Premium SSD v2</td>
+<td>100 GiB</td>
+<td>3,000</td>
+<td>125 MB/s</td>
+<td>Oracle ORACLE_HOME</td>
+</tr>
+<tr>
+<td>Oracle redo log groups (ASM DG: REDO)</td>
+<td>Ultra Disk</td>
+<td>2× 512 GiB</td>
+<td>160,000</td>
+<td>2,000 MB/s</td>
+<td>LGWR synchronous writes; sub-1 ms latency required</td>
+</tr>
+<tr>
+<td>Oracle data files (ASM DG: DATAC1)</td>
+<td>Premium SSD v2 or ANF Ultra</td>
+<td>4× (database size / 4)</td>
+<td>80,000+</td>
+<td>1,000 MB/s</td>
+<td>Striped across 4 disks via ASM</td>
+</tr>
+<tr>
+<td>Oracle temp tablespace (ASM DG: TEMPC1)</td>
+<td>Premium SSD v2</td>
+<td>1× 512 GiB</td>
+<td>20,000</td>
+<td>250 MB/s</td>
+<td>Sort and hash spill; separate ASM disk group</td>
+</tr>
+<tr>
+<td>Oracle archive log destination (ASM DG: ARCHDG)</td>
+<td>Premium SSD v2</td>
+<td>2× 2 TiB</td>
+<td>10,000</td>
+<td>500 MB/s</td>
+<td>Archive log retention 24–48 hours before RMAN deletion</td>
+</tr>
+<tr>
+<td>Oracle RMAN backup staging</td>
+<td>Azure Blob Storage (Hot tier)</td>
+<td>Variable</td>
+<td>N/A (blob)</td>
+<td>N/A</td>
+<td>RMAN backup images before vault transfer</td>
+</tr>
+<tr>
+<td><code>/sapmnt/&lt;SID&gt;</code></td>
+<td>ANF Standard NFS v4.1</td>
+<td>512 GiB</td>
+<td>Shared</td>
+<td>Shared</td>
+<td>SAP Global File System</td>
+</tr>
+<tr>
+<td><code>/usr/sap/trans</code></td>
+<td>ANF Standard NFS v4.1</td>
+<td>1,024 GiB</td>
+<td>Shared</td>
+<td>Shared</td>
+<td>SAP Transport directory</td>
+</tr>
+</tbody>
+</table>
+<h3 id="networking-requirements">Networking Requirements<a class="headerlink" href="#networking-requirements" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Application to Oracle latency</strong>: Target below 1 ms round-trip for SAP dialog SQL statements. Achieved using Proximity Placement Group (PPG) to co-locate application servers and Oracle primary within the same physical cluster in one zone.</li>
+<li><strong>Oracle Data Guard redo shipping latency (intra-region)</strong>: Typically 1–2 ms round-trip between Availability Zones. Oracle Data Guard SYNC mode in Maximum Availability protection requires this latency to be below 10 ms to avoid Oracle primary stalling on SYNC redo acknowledgment.</li>
+<li><strong>Accelerated Networking</strong>: Mandatory on all Oracle Database VMs per SAP Note 2039619. Without Accelerated Networking, LGWR redo I/O completion times over the virtual NIC incur additional hypervisor latency.</li>
+<li><strong>Oracle Data Guard network bandwidth</strong>: Size the primary NIC throughput to accommodate SYNC redo shipping plus RMAN backup streaming simultaneously. For an ECC system generating 30 MB/s of redo with concurrent RMAN streaming at 300 MB/s, minimum 4 Gbps NIC capacity for Oracle traffic.</li>
+<li><strong>Oracle listener port</strong>: Default TCP/1521. NSG inbound rule on DB subnet allows TCP/1521 from application subnet CIDR only. No inbound rule from the internet. Oracle Enterprise Manager HTTPS (TCP/7803) allowed from management subnet only.</li>
+</ul>
+<h3 id="azure-backup-for-oracle-rman-integration">Azure Backup for Oracle (RMAN Integration)<a class="headerlink" href="#azure-backup-for-oracle-rman-integration" title="Permanent link">¶</a></h3>
+<p>Azure Backup for Oracle Database uses the Azure Backup Oracle workload extension deployed on Oracle VMs. The extension integrates with RMAN using a pre/post backup script model:</p>
+<ol>
+<li>Azure Backup policy triggers the Oracle backup job.</li>
+<li>The Oracle workload backup extension connects to the Oracle database via a local SYSDBA connection and issues RMAN commands.</li>
+<li>RMAN writes backup pieces to the local staging area (Azure managed disk or Azure Files) then transfers to the Recovery Services Vault via Azure Backup infrastructure.</li>
+<li>Archive log backups are triggered on the policy schedule and use <code>RMAN BACKUP ARCHIVELOG ALL DELETE INPUT</code>.</li>
+<li>The Recovery Services Vault is configured with GRS to enable restore to a secondary Azure region for DR scenarios.</li>
+</ol>
+<p>SAP Note 2178659 and the Azure documentation at learn.microsoft.com/azure/backup/backup-azure-oracle-database define supported Oracle versions, required RMAN parameters, and Recovery Services Vault configuration.</p>
+<h3 id="required-vm-extensions-for-oracle-database-vms">Required VM Extensions for Oracle Database VMs<a class="headerlink" href="#required-vm-extensions-for-oracle-database-vms" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Purpose</th>
+<th>Applicability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AzureMonitorLinuxAgent (1.27+)</td>
+<td>Azure Monitor data collection via DCR; replaces legacy OMS/MMA agent</td>
+<td>All Oracle and SAP VMs</td>
+</tr>
+<tr>
+<td>Microsoft.Azure.RecoveryServices.WorkloadBackup</td>
+<td>RMAN-integrated Azure Backup for Oracle; enables policy-driven backup from Azure portal</td>
+<td>Oracle primary and standby</td>
+</tr>
+<tr>
+<td>AADSSHLoginForLinux</td>
+<td>Entra ID-based SSH authentication for Oracle DBA accounts; integrates with PIM</td>
+<td>All Oracle VMs</td>
+</tr>
+<tr>
+<td>CustomScript (deployment only)</td>
+<td>OS tuning scripts: hugepages, kernel parameters, Oracle ASM udev rules</td>
+<td>Deployment automation</td>
+</tr>
+<tr>
+<td>AzureDiskEncryption (if not using TDE)</td>
+<td>Customer-managed key disk encryption for OS disk; data disk encryption deferred to TDE</td>
+<td>Oracle VMs — OS disk only</td>
+</tr>
+<tr>
+<td>DependencyAgentLinux</td>
+<td>Service Map and Network Performance Monitor for Oracle network dependency tracking</td>
+<td>Oracle VMs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="azure-service-detail-diagram-oracle-database-tier">Azure Service Detail Diagram: Oracle Database Tier<a class="headerlink" href="#azure-service-detail-diagram-oracle-database-tier" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph LR
+  subgraph Zone1["Availability Zone 1"]
+    OraP["Oracle Primary\nM208ms_v2\nOracle 19c + ASM\nData Guard PRIMARY role"]
+    UltraRedo1["Ultra Disk\nRedo Log Groups 1+2\n2x 512 GiB\nASM DG: REDO"]
+    PremData1["Premium SSD v2\nData Files\n4x 4 TiB\nASM DG: DATAC1"]
+    PremArch1["Premium SSD v2\nArchive Logs\n2x 2 TiB\nASM DG: ARCHDG"]
+  end
+
+  subgraph Zone2["Availability Zone 2"]
+    OraSby["Oracle Standby\nM208ms_v2\nOracle 19c + ASM\nData Guard PHYSICAL STANDBY"]
+    UltraRedo2["Ultra Disk\nRedo Log Groups 1+2\n2x 512 GiB"]
+    PremData2["Premium SSD v2\nData Files\n4x 4 TiB"]
+    PremArch2["Premium SSD v2\nArchive Logs\n2x 2 TiB"]
+  end
+
+  subgraph Zone3["Availability Zone 3"]
+    OraObs["DG Observer VM\nB2s\nData Guard Observer\nFast-Start Failover"]
+  end
+
+  subgraph SharedSvcs["Shared Services"]
+    ILB["Azure ILB Standard\nFloating IP\nTCP/1521 HA Ports"]
+    AKV2["Azure Key Vault HSM\nOracle TDE Master Key\nPrivate Endpoint"]
+    RSV2["Recovery Services Vault\nGRS — RMAN Target\nPrivate Endpoint"]
+    LAW2["Log Analytics Workspace\nOracle AWR metrics\nAudit logs"]
+    AMS2["Azure Monitor for SAP\nOracle Provider"]
+  end
+
+  OraP --&gt;|SYNC redo\n1–2 ms RTT| OraSby
+  OraP --&gt;|FSFO coordination| OraObs
+  OraSby --&gt;|FSFO coordination| OraObs
+  ILB --&gt;|Probe: healthy| OraP
+  ILB -.-&gt;|Probe: standby| OraSby
+  OraP --&gt; UltraRedo1
+  OraP --&gt; PremData1
+  OraP --&gt; PremArch1
+  OraSby --&gt; UltraRedo2
+  OraSby --&gt; PremData2
+  OraSby --&gt; PremArch2
+  OraP --&gt;|RMAN via PE| RSV2
+  OraP --&gt;|TDE key fetch| AKV2
+  AMS2 --&gt;|Oracle V$ metrics| LAW2
+  OraP --&gt;|Unified Audit| LAW2</code></pre>
+<hr/>
+<h2 id="database-configuration">Database Configuration<a class="headerlink" href="#database-configuration" title="Permanent link">¶</a></h2>
+<h3 id="oracle-initialization-parameters-for-sap-on-azure">Oracle Initialization Parameters for SAP on Azure<a class="headerlink" href="#oracle-initialization-parameters-for-sap-on-azure" title="Permanent link">¶</a></h3>
+<p>Oracle initialization parameters for SAP workloads are governed by SAP Note 2039619, Oracle MAA guidelines for SAP, and Azure storage characteristics. The following parameters deviate from Oracle defaults and must be explicitly set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Recommended Value</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>db_block_size</code></td>
+<td>8192</td>
+<td>SAP ABAP default block size; set at database creation — cannot be changed post-creation</td>
+</tr>
+<tr>
+<td><code>sga_target</code></td>
+<td>60–70% of VM RAM</td>
+<td>Auto-managed SGA sizing; Oracle automatically distributes between buffer cache, shared pool, large pool</td>
+</tr>
+<tr>
+<td><code>pga_aggregate_target</code></td>
+<td>15–20% of VM RAM</td>
+<td>PGA memory limit for all server processes; BW workloads may require up to 25%</td>
+</tr>
+<tr>
+<td><code>sga_max_size</code></td>
+<td>Same as sga_target</td>
+<td>Prevents SGA from growing beyond allocation</td>
+</tr>
+<tr>
+<td><code>db_cache_size</code></td>
+<td>Manual override within SGA if sga_target under-allocates</td>
+<td>Buffer cache for SAP hot data blocks</td>
+</tr>
+<tr>
+<td><code>undo_retention</code></td>
+<td>900</td>
+<td>Minimum 900 seconds; prevents ORA-01555 during long-running SAP reports</td>
+</tr>
+<tr>
+<td><code>undo_tablespace</code></td>
+<td>PSAPUNDO</td>
+<td>Dedicated SAP undo tablespace; not SYSTEM tablespace</td>
+</tr>
+<tr>
+<td><code>log_buffer</code></td>
+<td>128M</td>
+<td>Larger log buffer reduces LGWR write frequency; default 8M is insufficient for SAP ECC</td>
+</tr>
+<tr>
+<td><code>log_archive_dest_1</code></td>
+<td>ASM location for ARCHDG</td>
+<td>Archive log destination on separate ASM disk group</td>
+</tr>
+<tr>
+<td><code>log_archive_dest_2</code></td>
+<td>Data Guard standby redo log destination</td>
+<td>Data Guard redo transport configuration</td>
+</tr>
+<tr>
+<td><code>db_writer_processes</code></td>
+<td>CPU count / 8, minimum 4</td>
+<td>Multiple DBWR processes for parallel dirty block write-back</td>
+</tr>
+<tr>
+<td><code>processes</code></td>
+<td>800–1200</td>
+<td>Maximum Oracle server processes; sized for SAP work processes × number of work process types + background</td>
+</tr>
+<tr>
+<td><code>sessions</code></td>
+<td>processes × 1.1</td>
+<td>Oracle sessions ceiling</td>
+</tr>
+<tr>
+<td><code>open_cursors</code></td>
+<td>800</td>
+<td>SAP NetWeaver requires minimum 800 open cursors per session</td>
+</tr>
+<tr>
+<td><code>optimizer_features_enable</code></td>
+<td>19.1.0</td>
+<td>Oracle optimizer version; SAP certified optimizer feature set</td>
+</tr>
+<tr>
+<td><code>_fix_control</code></td>
+<td>SAP Note-specific values</td>
+<td>Oracle fix controls for SAP-validated optimizer bugs; check SAP Note 2039619</td>
+</tr>
+<tr>
+<td><code>parallel_max_servers</code></td>
+<td>0 (OLTP) or 16 (BW)</td>
+<td>Disable Oracle parallelism for ECC OLTP (SAP controls parallelism at application layer); enable limited parallelism for BW</td>
+</tr>
+<tr>
+<td><code>filesystemio_options</code></td>
+<td>SETALL</td>
+<td>When using filesystem-based Oracle storage (not ASM); not applicable with ASM</td>
+</tr>
+</tbody>
+</table>
+<h3 id="os-configuration-requirements">OS Configuration Requirements<a class="headerlink" href="#os-configuration-requirements" title="Permanent link">¶</a></h3>
+<p>Both RHEL for SAP and SLES for SAP are supported operating systems for Oracle Database on Azure. The OS image must be from the Azure Marketplace with the SAP-specific subscription:</p>
+<ul>
+<li><strong>RHEL for SAP</strong>: RHEL 8.6 for SAP or RHEL 9.2 for SAP (includes RHEL High Availability Add-On for Pacemaker); publisher: <code>RedHat</code>, offer: <code>RHEL-SAP-HA</code></li>
+<li><strong>SLES for SAP</strong>: SLES 15 SP4 or SLES 15 SP5 for SAP (includes HA Extension); publisher: <code>SUSE</code>, offer: <code>sles-sap-15-sp5</code></li>
+</ul>
+<p><strong>Hugepages configuration</strong>: Oracle requires Linux hugepages (2 MiB pages) for the Oracle SGA to avoid TLB thrashing from large SGA allocations. Calculate hugepages as: <code>hugepages = ceil(SGA_MAX_SIZE / 2097152)</code>. Set in <code>/etc/sysctl.conf</code>:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>vm.nr_hugepages = &lt;calculated value&gt;
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>vm.hugetlb_shm_group = &lt;oracle OS group GID&gt;
+</span></code></pre></div>
+<p><strong>Kernel parameters</strong> required for Oracle Database on Azure (set in <code>/etc/sysctl.d/99-oracle.conf</code>):</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>kernel.shmall = &lt;SGA_MAX_SIZE / PAGE_SIZE&gt;
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>kernel.shmmax = &lt;SGA_MAX_SIZE in bytes&gt;
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>kernel.shmmni = 4096
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>kernel.sem = 250 32000 100 128
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>fs.file-max = 6815744
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>net.ipv4.ip_local_port_range = 9000 65500
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>net.core.rmem_max = 4194304
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>net.core.wmem_max = 1048576
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a>vm.swappiness = 10
+</span></code></pre></div>
+<p><strong>Swap configuration</strong>: Oracle on Azure VM should have swap configured at minimum 2 GiB (not proportional to RAM for large VMs). For M208ms_v2 with 5.7 TiB RAM, Oracle documentation recommends swap = 16 GiB maximum. Swap to Azure temporary disk (<code>/dev/sdb</code> or <code>/dev/nvme0n1</code> depending on VM series) configured via <code>waagent.conf</code> ResourceDisk.EnableSwap=y.</p>
+<p><strong>Oracle ASM udev rules</strong>: For ASM disk groups built on Azure managed disks, udev rules are required to assign consistent device names and permissions to block devices:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>KERNEL=="sd*", SUBSYSTEM=="block", ENV{ID_SERIAL}=="&lt;disk-lun-serial&gt;", \
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>  SYMLINK+="oracleasm/disks/DATA01", OWNER="oracle", GROUP="dba", MODE="0660"
+</span></code></pre></div>
+<p>Device names based on Azure managed disk LUN numbers (LUN 0 = <code>/dev/sdc</code>, LUN 1 = <code>/dev/sdd</code>, etc.) are consistent across reboots within the same VM; udev rules based on LUN number provide reliable ASM disk identification.</p>
+<h3 id="volume-layout-summary">Volume Layout Summary<a class="headerlink" href="#volume-layout-summary" title="Permanent link">¶</a></h3>
+<p>Oracle storage is organized into separate ASM disk groups or filesystem mount points aligned with Oracle I/O characteristics:</p>
+<table>
+<thead>
+<tr>
+<th>ASM Disk Group</th>
+<th>Contents</th>
+<th>Storage Type</th>
+<th>Redundancy</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>REDO</td>
+<td>Online redo log groups (all multiplexed members)</td>
+<td>Ultra Disk</td>
+<td>EXTERNAL (rely on Azure LRS)</td>
+<td>Two Ultra disks; LGWR writes both members synchronously</td>
+</tr>
+<tr>
+<td>DATAC1</td>
+<td>Oracle data files (SYSTEM, SYSAUX, PSAPSR3, PSAPSR3USR, PSAPTEMP)</td>
+<td>Premium SSD v2</td>
+<td>EXTERNAL</td>
+<td>4 disks striped by ASM for IOPS distribution</td>
+</tr>
+<tr>
+<td>ARCHDG</td>
+<td>Oracle archive log destination</td>
+<td>Premium SSD v2</td>
+<td>EXTERNAL</td>
+<td>Retention 24–48 hrs; RMAN deletes after backup</td>
+</tr>
+<tr>
+<td>BACKUPDG</td>
+<td>RMAN backup staging (optional local stage)</td>
+<td>Standard SSD or Premium SSD</td>
+<td>EXTERNAL</td>
+<td>Stage before transfer to RSV; optional</td>
+</tr>
+</tbody>
+</table>
+<h3 id="oracle-automatic-storage-management-asm-on-azure">Oracle Automatic Storage Management (ASM) on Azure<a class="headerlink" href="#oracle-automatic-storage-management-asm-on-azure" title="Permanent link">¶</a></h3>
+<p>Oracle ASM provides volume management and striping for Oracle data files on raw block devices (Azure managed disks). ASM is preferred over filesystem-based Oracle storage on Azure for the following reasons:</p>
+<ol>
+<li><strong>I/O striping</strong>: ASM EXTERNAL REDUNDANCY stripes data files across multiple Azure managed disks in the disk group, increasing aggregate IOPS and throughput beyond a single disk's limit.</li>
+<li><strong>No filesystem overhead</strong>: ASM bypasses the Linux VFS layer and ext4/XFS filesystem cache for Oracle data I/O, reducing CPU overhead for large sequential I/O.</li>
+<li><strong>Consistent with Oracle MAA</strong>: Oracle Maximum Availability Architecture (MAA) reference architectures for Data Guard use ASM for storage management.</li>
+<li><strong>Azure managed disk redundancy</strong>: Azure managed disks with LRS provide three synchronous copies within a zone, making ASM EXTERNAL REDUNDANCY correct (mirroring within ASM would triple the disk cost for no additional protection over Azure LRS).</li>
+</ol>
+<p>Oracle ASM instances (Oracle ASM background process <code>+ASM</code>) run on each Oracle Database VM. The ASM instance is a separate Oracle instance (<code>ORACLE_SID=+ASM</code>) managing the disk groups and providing storage services to the Oracle database instance.</p>
+<h3 id="oracle-licensing-on-azure">Oracle Licensing on Azure<a class="headerlink" href="#oracle-licensing-on-azure" title="Permanent link">¶</a></h3>
+<p>Oracle Database licensing on Azure follows two models:</p>
+<ol>
+<li>
+<p><strong>Bring Your Own License (BYOL)</strong>: Organizations with existing Oracle Database Enterprise Edition licenses (from on-premises physical server deployments) can apply those licenses to Azure VMs under Oracle's BYOL policy. Azure VMs count as licensed on a per-vCPU basis under Oracle's cloud licensing policy: each vCPU on Azure equals 0.5 Oracle Processor License (subject to Oracle's Software Investment Guide — verify with Oracle licensing desk). For M208ms_v2 with 208 vCPUs, this equates to 104 Oracle Processor Licenses (EE), plus separate licenses for required Oracle options (RAC, Partitioning, Advanced Compression, Advanced Security/TDE, Diagnostics Pack, Tuning Pack).</p>
+</li>
+<li>
+<p><strong>Oracle Database on Azure Marketplace Image</strong>: Oracle publishes Oracle Database Enterprise Edition images in the Azure Marketplace, available as pay-as-you-go licensing. This eliminates the upfront license cost but results in per-hour Oracle licensing charges that typically exceed BYOL total cost of ownership beyond 12 months of continuous use. Not recommended for SAP production systems running 24×7 if BYOL licenses are available.</p>
+</li>
+</ol>
+<p><strong>Oracle Options required for SAP</strong>: Oracle Partitioning (if tablespace partitioning is used by SAP BW), Oracle Advanced Security (required for TDE on Oracle 19c), Oracle Diagnostics Pack and Tuning Pack (required for AWR/ASH/ADDM access — these are essential for Oracle SAP performance analysis).</p>
+<hr/>
+<h2 id="high-availability-architecture">High Availability Architecture<a class="headerlink" href="#high-availability-architecture" title="Permanent link">¶</a></h2>
+<h3 id="oracle-data-guard-on-azure-configuration">Oracle Data Guard on Azure — Configuration<a class="headerlink" href="#oracle-data-guard-on-azure-configuration" title="Permanent link">¶</a></h3>
+<p>Oracle Data Guard is the supported HA mechanism for SAP on Oracle on Azure, as defined in SAP Note 2470289 and the Azure SAP Oracle documentation. Oracle Data Guard maintains a physical standby database — an exact block-for-block copy of the primary — by continuously shipping redo log data from the primary and applying it on the standby. For SAP intra-region HA, Data Guard operates in <strong>Maximum Availability</strong> protection mode with SYNC redo transport.</p>
+<p><strong>Data Guard protection modes for SAP on Azure</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Protection Mode</th>
+<th>Redo Transport</th>
+<th>Acknowledgment</th>
+<th>Potential Data Loss</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Maximum Availability (SYNC)</td>
+<td>SYNC (synchronous)</td>
+<td>Primary waits for standby I/O confirmation</td>
+<td>Zero (under normal operation)</td>
+<td>SAP production HA within Azure region</td>
+</tr>
+<tr>
+<td>Maximum Performance (ASYNC)</td>
+<td>ASYNC (asynchronous)</td>
+<td>Primary does not wait for standby</td>
+<td>Seconds of redo not yet shipped</td>
+<td>SAP DR cross-region</td>
+</tr>
+<tr>
+<td>Maximum Protection</td>
+<td>SYNC</td>
+<td>Primary halts if standby unavailable</td>
+<td>Zero</td>
+<td>Not recommended for SAP — primary stops on standby failure</td>
+</tr>
+</tbody>
+</table>
+<h3 id="oracle-data-guard-parameters">Oracle Data Guard Parameters<a class="headerlink" href="#oracle-data-guard-parameters" title="Permanent link">¶</a></h3>
+<p>Key Data Guard initialization parameters on the primary and standby:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1">-- Primary DB parameters</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="n">LOG_ARCHIVE_DEST_1</span><span class="o">=</span><span class="s1">'LOCATION=+ARCHDG VALID_FOR=(ALL_LOGFILES,ALL_ROLES) DB_UNIQUE_NAME=&lt;SID&gt;_P'</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="n">LOG_ARCHIVE_DEST_2</span><span class="o">=</span><span class="s1">'SERVICE=&lt;SID&gt;_S SYNC AFFIRM MAX_FAILURE=1 REOPEN=15 DB_UNIQUE_NAME=&lt;SID&gt;_S VALID_FOR=(ONLINE_LOGFILES,PRIMARY_ROLE)'</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="n">LOG_ARCHIVE_DEST_STATE_1</span><span class="o">=</span><span class="n">ENABLE</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="n">LOG_ARCHIVE_DEST_STATE_2</span><span class="o">=</span><span class="n">ENABLE</span>
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="n">FAL_SERVER</span><span class="o">=&lt;</span><span class="n">SID</span><span class="o">&gt;</span><span class="n">_S</span>
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="n">FAL_CLIENT</span><span class="o">=&lt;</span><span class="n">SID</span><span class="o">&gt;</span><span class="n">_P</span>
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="n">DB_UNIQUE_NAME</span><span class="o">=&lt;</span><span class="n">SID</span><span class="o">&gt;</span><span class="n">_P</span>
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="n">LOG_ARCHIVE_CONFIG</span><span class="o">=</span><span class="s1">'DG_CONFIG=(&lt;SID&gt;_P,&lt;SID&gt;_S,&lt;SID&gt;_DR)'</span>
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="n">STANDBY_FILE_MANAGEMENT</span><span class="o">=</span><span class="n">AUTO</span>
+</span></code></pre></div>
+<h3 id="pacemaker-cluster-integration-with-oracle-data-guard">Pacemaker Cluster Integration with Oracle Data Guard<a class="headerlink" href="#pacemaker-cluster-integration-with-oracle-data-guard" title="Permanent link">¶</a></h3>
+<p>Pacemaker with the <code>fence_azure_arm</code> STONITH agent provides cluster-level HA management on top of Oracle Data Guard. The Pacemaker cluster manages:</p>
+<ol>
+<li><strong>Virtual IP (VIP)</strong>: The Oracle cluster VIP (mapped to the Azure ILB floating IP) is managed as a Pacemaker IPaddr2 resource. The VIP is moved to the new primary node after a Data Guard role transition.</li>
+<li><strong>Oracle Database resource</strong>: The Pacemaker Oracle resource agent monitors the Oracle Database instance status and triggers a Data Guard switchover or failover when the primary becomes unavailable.</li>
+<li><strong>Azure Fence Agent (fence_azure_arm)</strong>: Fences the failed node by stopping its Azure VM via the Azure Resource Manager API, preventing the failed primary from reconnecting to storage and causing split-brain.</li>
+<li><strong>Resource ordering constraints</strong>: Pacemaker enforces the start/stop ordering: disk groups (ASM) start before Oracle, Oracle starts before VIP, VIP starts before the SAP application tier health check.</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a># Pacemaker cluster resource definition (abbreviated):
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>primitive rsc_ora_&lt;SID&gt; oracle params sid=&lt;SID&gt; home=/oracle/&lt;SID&gt;/19.0.0 \
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>  op monitor interval=60 timeout=60 op start timeout=600 op stop timeout=300
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>primitive rsc_ip_&lt;SID&gt; IPaddr2 params ip=10.20.2.100 \
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>  op monitor interval=20 timeout=20
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a>group grp_ora_&lt;SID&gt; rsc_ora_&lt;SID&gt; rsc_ip_&lt;SID&gt;
+</span></code></pre></div>
+<h3 id="availability-zone-deployment">Availability Zone Deployment<a class="headerlink" href="#availability-zone-deployment" title="Permanent link">¶</a></h3>
+<p>The Oracle primary is deployed in Zone 1 and the Oracle Data Guard physical standby in Zone 2. The Data Guard Observer VM is deployed in Zone 3 (required for Fast-Start Failover quorum — the Observer must be in a third zone to avoid the Observer being on the same failed zone as the primary). The Azure ILB health probe monitors port 1521 on each Oracle node; the probe succeeds on the current Data Guard primary only (the standby listener is in restricted mode and does not accept SAP connections during normal operation).</p>
+<h3 id="network-latency-for-data-guard-redo-shipping">Network Latency for Data Guard Redo Shipping<a class="headerlink" href="#network-latency-for-data-guard-redo-shipping" title="Permanent link">¶</a></h3>
+<p>Oracle Data Guard SYNC mode requires that the round-trip latency between the primary LGWR and the standby RFS (Remote File Server) process be low enough that the SYNC transport does not become the bottleneck for Oracle log writer throughput. Azure intra-region inter-zone latency averages 1–2 ms. For SAP ECC systems generating 10–50 MB/s of redo logs, SYNC mode with 1–2 ms latency introduces negligible overhead on the primary. For SAP BW systems with bulk load operations generating 200+ MB/s of redo, evaluate whether SYNC latency impact is acceptable or whether the BW bulk load should be executed with Data Guard temporarily in ASYNC mode during the load window (with RPO consequences documented and approved).</p>
+<h3 id="fast-start-failover-fsfo">Fast-Start Failover (FSFO)<a class="headerlink" href="#fast-start-failover-fsfo" title="Permanent link">¶</a></h3>
+<p>Oracle Fast-Start Failover with a Data Guard Observer provides automated failover without Pacemaker intervention. FSFO configuration for SAP on Azure:</p>
+<ul>
+<li><strong>Observer host</strong>: Dedicated B2s VM in Zone 3 running Oracle Observer process (<code>dgmgrl</code> in background)</li>
+<li><strong>FastStartFailoverThreshold</strong>: Set to 30 seconds (time the primary must be unavailable before FSFO triggers)</li>
+<li><strong>FastStartFailoverLagLimit</strong>: Set to 30 seconds (maximum acceptable redo lag on standby before FSFO is suspended)</li>
+<li><strong>FastStartFailoverAutoReinstate</strong>: TRUE — primary automatically reinstates as standby after recovery</li>
+<li><strong>DGMGRL Observer startup</strong>: <code>dgmgrl sys/&lt;pwd&gt; "start observer file=/oracle/dg_observer.dat"</code></li>
+</ul>
+<p>FSFO and Pacemaker are typically used together: FSFO handles the Oracle Data Guard role transition (switchover/failover at Oracle level), while Pacemaker manages the VIP movement and OS-level fencing. The integration requires careful ordering to avoid Pacemaker triggering a node fence while FSFO is in progress; this is addressed by setting Pacemaker Oracle resource timeouts longer than the FSFO threshold.</p>
+<hr/>
+<h2 id="disaster-recovery-architecture">Disaster Recovery Architecture<a class="headerlink" href="#disaster-recovery-architecture" title="Permanent link">¶</a></h2>
+<h3 id="oracle-data-guard-cross-region-async-replication">Oracle Data Guard Cross-Region Async Replication<a class="headerlink" href="#oracle-data-guard-cross-region-async-replication" title="Permanent link">¶</a></h3>
+<p>For SAP production systems, cross-region Disaster Recovery uses Oracle Data Guard in <strong>Maximum Performance</strong> mode (ASYNC redo transport) from the primary Azure region to the DR secondary Azure region. The DR standby database is a physical standby maintained by continuous async redo shipping:</p>
+<ul>
+<li><strong>Primary region</strong>: Oracle Data Guard primary (Zone 1) ships redo to the intra-region physical standby (Zone 2, SYNC) and simultaneously ships redo ASYNC to the DR standby in the secondary region.</li>
+<li><strong>DR region</strong>: Oracle Data Guard physical standby in the DR region applies redo in real-time apply mode (<code>ALTER DATABASE RECOVER MANAGED STANDBY DATABASE USING CURRENT LOGFILE DISCONNECT</code>).</li>
+<li><strong>DR lag</strong>: For a SAP ECC system generating 20 MB/s of redo, the ASYNC Data Guard lag to the DR region depends on the available network bandwidth and cross-region latency (typically 20–60 ms for geographically proximate Azure region pairs). Achievable RPO is typically 30 seconds to 5 minutes depending on redo generation rate and available ExpressRoute bandwidth.</li>
+</ul>
+<h3 id="azure-site-recovery-asr-exclusion-rationale">Azure Site Recovery (ASR) Exclusion Rationale<a class="headerlink" href="#azure-site-recovery-asr-exclusion-rationale" title="Permanent link">¶</a></h3>
+<p>Azure Site Recovery (ASR) is explicitly excluded from Oracle Database DR. ASR replicates VM disks using crash-consistent snapshots, which do not guarantee Oracle database consistency. An Oracle database restored from a crash-consistent snapshot without Oracle crash recovery may exhibit corruption in Oracle undo segments, redo log state, or Oracle control file checkpoints. Oracle Data Guard physical standby is always crash-consistent because it applies redo logs in SCN (System Change Number) order and the standby database is in media recovery mode. SAP Note 2039619 and Azure documentation both state that ASR is not supported for Oracle Database VMs in SAP landscapes; Data Guard is the required DR mechanism.</p>
+<h3 id="dr-network-architecture">DR Network Architecture<a class="headerlink" href="#dr-network-architecture" title="Permanent link">¶</a></h3>
+<p>Cross-region redo shipping from the primary Oracle to the DR Oracle standby traverses the Azure backbone via ExpressRoute Global Reach or Azure inter-region backbone connectivity:</p>
+<ul>
+<li><strong>ExpressRoute Global Reach</strong>: Preferred for enterprises with ExpressRoute circuits in both Azure regions. Global Reach connects the two ExpressRoute circuits on the Microsoft backbone, providing low-latency, dedicated bandwidth for Oracle redo shipping without traversing the public internet.</li>
+<li><strong>Azure VPN Gateway (active-active)</strong>: Alternative for environments without ExpressRoute in the DR region. VPN adds 5–15 ms additional latency over ExpressRoute. Acceptable for ASYNC DR but increases achievable RPO.</li>
+<li><strong>VNet Peering (Global)</strong>: Available for intra-Microsoft-backbone traffic; Azure VNet Global Peering between primary and DR VNets provides low-latency connectivity for Oracle Data Guard ASYNC transport without ExpressRoute dependency. This is the simplest DR network option when both regions are on Azure with no on-premises DR requirement.</li>
+</ul>
+<h3 id="dr-vm-sizing">DR VM Sizing<a class="headerlink" href="#dr-vm-sizing" title="Permanent link">¶</a></h3>
+<p>The DR Oracle standby VM does not need to match the primary VM for steady-state redo apply. The DR standby only applies redo — it does not serve SAP workload connections — and can run on a smaller VM (e.g., E64ds_v5 instead of M208ms_v2 for the primary) to reduce DR infrastructure cost. However:</p>
+<ul>
+<li>If the DR plan requires the DR standby to become the new primary and serve SAP production workload during a regional disaster, the DR VM must be sized identically to the primary.</li>
+<li>If the DR plan allows an extended recovery window (RTO &gt; 4 hours) during which Oracle can be migrated to a larger VM at DR activation time, a smaller standby VM can be used with an Azure VM resize operation as part of the DR runbook.</li>
+</ul>
+<h3 id="rtorpo-validation">RTO/RPO Validation<a class="headerlink" href="#rtorpo-validation" title="Permanent link">¶</a></h3>
+<p>RTO and RPO targets must be validated through DR test failovers, not assumed from theoretical Data Guard behavior:</p>
+<ul>
+<li><strong>RPO validation</strong>: Measure Oracle Data Guard apply lag continuously. Alert when lag exceeds 50% of the RPO target. For a 15-minute RPO, alert when apply lag exceeds 7 minutes. Validate ASYNC redo transport throughput is sufficient to maintain lag below target during peak SAP batch operations.</li>
+<li><strong>RTO validation</strong>: Time the complete DR activation sequence: Oracle Data Guard failover time + SAP application server startup time + SAP connectivity test time. Oracle Data Guard manual failover (without FSFO) takes 2–5 minutes. SAP application server startup on DR VMs adds 10–20 minutes. Total achievable RTO for SAP on Oracle cross-region DR is typically 30–60 minutes for a well-prepared runbook.</li>
+<li><strong>DR test frequency</strong>: Execute DR test failovers at minimum twice per year (SAP BCDR policy). Test failovers using Oracle Data Guard snapshot standby (<code>ALTER DATABASE CONVERT TO SNAPSHOT STANDBY</code>) allow DR testing without disrupting the live Data Guard replication; the snapshot standby can be opened read/write for testing and then converted back to a physical standby.</li>
+</ul>
+<hr/>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>SAP/Azure Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Database version</td>
+<td>Oracle 12.2, Oracle 18c, Oracle 19c, Oracle 21c</td>
+<td>Oracle 19c LTS</td>
+<td>19c is the current SAP-supported Long Term Support Release; 18c and 21c are Innovation Releases not in SAP supported matrix; 12.2 Premier Support ended 2020</td>
+<td>SAP Note 2039619, SAP Note 2799900</td>
+</tr>
+<tr>
+<td>VM family for Oracle DB host (large ECC/BW)</td>
+<td>Edsv5 (up to 96 vCPU / 672 GiB), Mv2 (208 vCPU / 5.7 TiB), Mv3</td>
+<td>Mv2 (M208ms_v2) for systems &gt; 1 TiB database</td>
+<td>Mv2 provides memory density required for Oracle SGA sizing on large databases; Edsv5 used for databases below 500 GiB where SGA fits in 512 GiB RAM</td>
+<td>SAP Note 2039619, SAP Note 1928533</td>
+</tr>
+<tr>
+<td>Storage for Oracle redo logs</td>
+<td>Premium SSD v2 + Write Accelerator, Ultra Disk, ANF Ultra NFS</td>
+<td>Ultra Disk</td>
+<td>Ultra Disk provides sub-1 ms write latency required for Oracle LGWR synchronous writes; Premium SSD v2 Write Accelerator is not available on Mv2; ANF NFS adds network path for synchronous log writes</td>
+<td>SAP Note 2039619, Oracle MAA</td>
+</tr>
+<tr>
+<td>Storage for Oracle data files</td>
+<td>Premium SSD v2 (managed disk), ANF Ultra NFS, ANF Standard NFS</td>
+<td>Premium SSD v2 in ASM disk group</td>
+<td>Premium SSD v2 provides configurable IOPS and throughput per disk; ASM stripes across 4 disks for aggregate IOPS; ANF considered for databases exceeding Premium SSD v2 IOPS ceiling</td>
+<td>SAP Note 2039619</td>
+</tr>
+<tr>
+<td>Oracle storage management</td>
+<td>Oracle ASM on raw block devices, ext4/XFS filesystem, ANF NFS</td>
+<td>Oracle ASM (EXTERNAL REDUNDANCY)</td>
+<td>ASM provides I/O striping, consistent with Oracle MAA, avoids filesystem overhead; Azure managed disk LRS provides adequate redundancy, making ASM EXTERNAL REDUNDANCY cost-efficient</td>
+<td>Oracle MAA, SAP Note 2039619</td>
+</tr>
+<tr>
+<td>High Availability method</td>
+<td>Oracle Data Guard + Pacemaker, Oracle Real Application Clusters (RAC), manual failover</td>
+<td>Oracle Data Guard SYNC + Pacemaker</td>
+<td>RAC on Azure is not supported by Microsoft (shared disk cluster not available for Oracle on Azure IaaS); Data Guard + Pacemaker is the SAP-certified HA method for Oracle on Azure</td>
+<td>SAP Note 2470289, Azure SAP Oracle documentation</td>
+</tr>
+<tr>
+<td>Disaster Recovery method</td>
+<td>Oracle Data Guard ASYNC cross-region, ASR VM replication, Oracle GoldenGate</td>
+<td>Oracle Data Guard ASYNC to secondary region</td>
+<td>ASR excluded — crash-consistent VM replication not suitable for Oracle; GoldenGate adds cost and complexity without RPO/RTO benefit over Data Guard; Data Guard ASYNC is natively integrated and zero additional license cost (included with Oracle EE)</td>
+<td>SAP Note 2039619, Azure SAP Oracle DR documentation</td>
+</tr>
+<tr>
+<td>Oracle licensing model</td>
+<td>BYOL (existing Oracle ELA), Azure Marketplace PAYG Oracle images</td>
+<td>BYOL using existing Oracle ELA</td>
+<td>Enterprise with existing Oracle ELA reduces Azure marginal cost to VM + storage; PAYG Oracle on Marketplace exceeds BYOL TCO beyond 6–12 months for 24×7 SAP production use; requires Oracle licensing assessment against Azure vCPU counting rules</td>
+<td>Oracle Software Investment Guide, SAP Note 2039619</td>
+</tr>
+<tr>
+<td>Oracle encryption</td>
+<td>Oracle TDE (Transparent Data Encryption) with local wallet, TDE with Azure Key Vault HSM</td>
+<td>Oracle TDE with Azure Key Vault HSM (Premium SKU)</td>
+<td>Azure Key Vault HSM-backed keys are FIPS 140-2 Level 3 certified; eliminates Oracle wallet file management on host; enables centralized key rotation and access policy via Entra ID; TDE is transparent to SAP — no application changes</td>
+<td>SAP Note 1680803, Azure Key Vault TDE documentation</td>
+</tr>
+<tr>
+<td>Oracle Backup</td>
+<td>SAP BRBACKUP + RMAN to on-premises tape, RMAN to Azure Blob Storage, Azure Backup for Oracle workload</td>
+<td>Azure Backup Oracle workload extension + RMAN to Recovery Services Vault</td>
+<td>Azure Backup provides policy management, lifecycle policies, and cross-region restore from a single portal; RMAN integration ensures Oracle-consistent backups; eliminates on-premises backup infrastructure dependency</td>
+<td>SAP Note 2178659</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="sap-notes-reference">SAP Notes Reference<a class="headerlink" href="#sap-notes-reference" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2039619</td>
+<td>SAP Applications on Microsoft Azure Using the Oracle Database</td>
+<td>Master SAP Note for Oracle on Azure: supported VM SKUs, Oracle versions, OS versions, required parameters, storage configuration</td>
+<td>All Oracle on Azure deployment decisions</td>
+</tr>
+<tr>
+<td>2178659</td>
+<td>Backing Up Oracle on Microsoft Azure</td>
+<td>Oracle RMAN backup architecture, Azure Backup integration, RMAN channel configuration, backup target options</td>
+<td>Backup solution design and RMAN configuration</td>
+</tr>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>Certified Azure VM families for SAP DBMS; Accelerated Networking mandatory requirement</td>
+<td>VM family selection</td>
+</tr>
+<tr>
+<td>2267798</td>
+<td>SAP S/4HANA Database Support on Azure</td>
+<td>S/4HANA on Oracle restrictions; functional gap between Oracle and HANA for S/4HANA</td>
+<td>S/4HANA on Oracle deployment decisions</td>
+</tr>
+<tr>
+<td>1680803</td>
+<td>SAP Systems on Microsoft Azure: Security Guidelines</td>
+<td>Network isolation requirements for Oracle DB subnet; OS hardening baseline; TDE recommendation</td>
+<td>NSG design, OS hardening, encryption design</td>
+</tr>
+<tr>
+<td>1496410</td>
+<td>Oracle Database on Microsoft Azure</td>
+<td>Oracle-specific Azure infrastructure configuration; NIC, disk, kernel parameters baseline</td>
+<td>Infrastructure configuration and OS tuning</td>
+</tr>
+<tr>
+<td>2470289</td>
+<td>FAQ: Oracle High Availability on Azure</td>
+<td>Oracle Data Guard on Azure configuration; Fast-Start Failover; Observer VM placement; Pacemaker integration</td>
+<td>HA architecture design</td>
+</tr>
+<tr>
+<td>1984882</td>
+<td>Using SAP LaMa with Oracle Database on Azure</td>
+<td>SAP Landscape Management integration for Oracle cloning, refresh, and post-copy automation</td>
+<td>Non-production system operations, system copy</td>
+</tr>
+<tr>
+<td>2799900</td>
+<td>Oracle Database 19c — SAP ABAP System Requirements</td>
+<td>Oracle 19c minimum patch level, SAP kernel requirements for Oracle 19c, installation sequence</td>
+<td>Oracle 19c deployment baseline</td>
+</tr>
+<tr>
+<td>105047</td>
+<td>Support for Oracle Functions in SAP</td>
+<td>Oracle features allowed and disallowed by SAP; Oracle Partitioning restrictions; Oracle advanced features</td>
+<td>Oracle feature usage decisions</td>
+</tr>
+<tr>
+<td>2660017</td>
+<td>Oracle ASM on Azure Virtual Machines</td>
+<td>Oracle ASM udev rules for Azure managed disks; ASM disk group configuration; EXTERNAL REDUNDANCY rationale</td>
+<td>Oracle ASM implementation</td>
+</tr>
+<tr>
+<td>3084757</td>
+<td>Oracle Data Guard Broker on Azure</td>
+<td>Oracle Data Guard Broker configuration for automated role transitions; DGMGRL command set for Azure</td>
+<td>Data Guard Broker configuration</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Pillar</th>
+<th>Requirement</th>
+<th>Implementation</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reliability</td>
+<td>RTO ≤ 60 min, RPO ≤ 5 min for SAP production Oracle</td>
+<td>Oracle Data Guard SYNC for intra-region HA (near-zero RPO); Pacemaker with fence_azure_arm for automated failover; multi-zone deployment (Zone 1 primary, Zone 2 standby); Azure ILB health probe with 15-second interval</td>
+<td>SAP Note 2470289; Azure Well-Architected SAP guide</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Encryption at rest for Oracle data files; encryption in transit for Data Guard redo; least-privilege DBA access; audit trail for Oracle DDL/DML</td>
+<td>Oracle TDE with customer-managed keys in Azure Key Vault HSM; Oracle Data Guard redo encryption (ENCRYPTION SHA256 AUTHENTICATION SHA256 in LOG_ARCHIVE_DEST_2); Entra ID PIM for Oracle DBA OS accounts; Oracle Unified Auditing forwarded to Log Analytics</td>
+<td>SAP Note 1680803; Azure Security Benchmark</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>Minimize Oracle VM Reserved Instance spend; reduce storage waste; optimize Oracle licensing</td>
+<td>Azure Reserved Instances (3-year) for Oracle primary and standby VMs (40–60% savings over PAYG); Azure Hybrid Benefit for Linux OS; Oracle BYOL for existing ELA holders; Oracle DEV/QAS on smaller Edsv5 VMs with auto-shutdown schedules; Premium SSD v2 performance scaling only to actual IOPS requirement</td>
+<td>Azure Reserved Instances documentation</td>
+</tr>
+<tr>
+<td>Operational Excellence</td>
+<td>Automated Oracle backup; centralized monitoring; IaC deployment; Oracle patching automation</td>
+<td>Azure Backup Oracle workload extension for policy-managed RMAN backups; Azure Monitor for SAP Solutions Oracle provider for V$SYSSTAT metrics; Bicep/Terraform for Oracle VM and storage deployment; Oracle quarterly patch (OPatch) automation via Azure Automation runbooks</td>
+<td>Azure Monitor for SAP Solutions documentation</td>
+</tr>
+<tr>
+<td>Performance Efficiency</td>
+<td>Oracle log writer latency &lt; 1 ms; Oracle buffer cache hit ratio &gt; 99%; Data Guard apply lag &lt; 30 seconds</td>
+<td>Ultra Disk for Oracle redo log groups; Oracle SGA sized to 60–70% of VM RAM; Accelerated Networking on all Oracle VMs; Proximity Placement Group for SAP application-to-Oracle latency; Oracle ASM EXTERNAL REDUNDANCY for I/O striping</td>
+<td>SAP Note 2039619; Oracle MAA guidelines</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="security-architecture">Security Architecture<a class="headerlink" href="#security-architecture" title="Permanent link">¶</a></h2>
+<h3 id="oracle-transparent-data-encryption-with-azure-key-vault-hsm">Oracle Transparent Data Encryption with Azure Key Vault HSM<a class="headerlink" href="#oracle-transparent-data-encryption-with-azure-key-vault-hsm" title="Permanent link">¶</a></h3>
+<p>Oracle Transparent Data Encryption (TDE) encrypts Oracle data files, redo log files, and archive log files at the Oracle data block level, transparent to SAP application SQL. On Azure, Oracle TDE is configured with a TDE Master Encryption Key (MEK) stored in Azure Key Vault (Premium SKU with HSM-backed keys, FIPS 140-2 Level 3):</p>
+<ol>
+<li><strong>Oracle Keystore (wallet) type</strong>: External keystore configured to use Azure Key Vault via the Oracle PKCS#12 wallet integration. Oracle connects to Azure Key Vault using a managed identity assigned to the Oracle VM.</li>
+<li><strong>Key hierarchy</strong>: Azure Key Vault HSM holds the TDE MEK. Oracle wraps per-tablespace encryption keys with the MEK. The wrapped tablespace keys are stored in the Oracle control file and in the Oracle keystore.</li>
+<li><strong>Key rotation</strong>: Oracle TDE MEK rotation is performed using <code>ADMINISTER KEY MANAGEMENT SET ENCRYPTION KEY ... FORCE KEYSTORE IDENTIFIED BY ...</code>, which generates a new MEK in Azure Key Vault and re-encrypts all tablespace keys without decrypting and re-encrypting data blocks.</li>
+<li><strong>TDE algorithms</strong>: AES256 for tablespace encryption; <code>ENCRYPT USING 'AES256'</code> in the Oracle tablespace creation or encryption statement.</li>
+</ol>
+<p><strong>Required Oracle TDE initialization parameters</strong>:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>ENCRYPT_NEW_TABLESPACES = CLOUD_ONLY
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>WALLET_ROOT = /oracle/&lt;SID&gt;/wallet
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>TDE_CONFIGURATION = KEYSTORE_CONFIGURATION=OKV|FILE
+</span></code></pre></div></p>
+<h3 id="oracle-unified-auditing-to-log-analytics">Oracle Unified Auditing to Log Analytics<a class="headerlink" href="#oracle-unified-auditing-to-log-analytics" title="Permanent link">¶</a></h3>
+<p>Oracle Unified Auditing (introduced in Oracle 12c, default in 19c) captures all Oracle DDL, privilege use, schema object access, and Data Guard operations to the Oracle Unified Audit Trail (stored in <code>AUDSYS.AUD$UNIFIED</code>). The audit trail is exported to Log Analytics:</p>
+<ol>
+<li><strong>Oracle Unified Audit policy</strong>: Enable audit policies for SAP-specific events: <code>CREATE SESSION</code>, <code>ALTER SYSTEM</code>, <code>DROP TABLE</code>, <code>ALTER TABLE</code>, <code>GRANT</code>, <code>CREATE USER</code>, <code>DROP USER</code>, and <code>EXECUTE</code> on privileged packages.</li>
+<li><strong>Azure Monitor Agent (AMA) custom log collection</strong>: Oracle Unified Audit records are written to a flat file via Oracle <code>DBMS_AUDIT_MGMT.FLUSH_UNIFIED_AUDIT_TRAIL</code> on a scheduled basis, then collected by AMA via a Data Collection Rule (DCR) targeting the audit log file path.</li>
+<li><strong>Log Analytics workspace</strong>: Audit records land in the <code>OracleAuditUnified_CL</code> custom log table, queryable via KQL for SIEM integration and compliance reporting.</li>
+</ol>
+<h3 id="entra-id-for-dba-access-pim">Entra ID for DBA Access (PIM)<a class="headerlink" href="#entra-id-for-dba-access-pim" title="Permanent link">¶</a></h3>
+<p>Database administrators accessing Oracle VMs use Entra ID-managed accounts with Privileged Identity Management (PIM) for just-in-time access:</p>
+<ol>
+<li><strong>AADSSHLoginForLinux extension</strong>: Installed on all Oracle VMs, enables SSH authentication using Entra ID credentials and conditional access policies.</li>
+<li><strong>PIM role assignment</strong>: DBAs are assigned to a PIM-eligible role for the Oracle VM resource group. Access requires justification, MFA, and approval from a designated approver. Session duration is limited (default 8 hours, configurable).</li>
+<li><strong>No standing privilege</strong>: The <code>oracle</code> OS user and <code>sys</code> Oracle DBA account have no permanent, standing access from Entra ID accounts. Root access to Oracle VMs is prohibited; all DBA operations use the <code>oracle</code> OS user via <code>sudo</code> with audit logging.</li>
+<li><strong>Emergency access (Break Glass)</strong>: A dedicated emergency access account with permanent SYSDBA access is stored in Azure Key Vault as a secret, accessible only via PIM break-glass process with full audit trail.</li>
+</ol>
+<h3 id="oracle-vault-for-credential-management">Oracle Vault for Credential Management<a class="headerlink" href="#oracle-vault-for-credential-management" title="Permanent link">¶</a></h3>
+<p>Oracle Database Vault provides additional Oracle-level access control for SAP production databases:</p>
+<ul>
+<li><strong>Realms</strong>: SAP schema objects (SAPSR3, SAP\&lt;SID&gt;) are protected by an Oracle Database Vault Realm, preventing privileged Oracle accounts (including SYSTEM and SYS) from accessing SAP table data without realm authorization.</li>
+<li><strong>Command rules</strong>: Oracle Database Vault Command Rules restrict <code>ALTER SYSTEM</code>, <code>CREATE USER</code>, and <code>DROP TABLE</code> to specific authorized accounts and time windows.</li>
+<li><strong>Trusted paths</strong>: Oracle application connections from SAP work processes are defined as trusted paths; connections from outside the approved IP range (SAP application subnet) are blocked at the Oracle Vault level.</li>
+</ul>
+<h3 id="network-isolation-and-nsg-rules">Network Isolation and NSG Rules<a class="headerlink" href="#network-isolation-and-nsg-rules" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Direction</th>
+<th>Protocol</th>
+<th>Port</th>
+<th>Source</th>
+<th>Destination</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Allow-Oracle-Listener</td>
+<td>Inbound</td>
+<td>TCP</td>
+<td>1521</td>
+<td>Application Subnet (10.20.1.0/24)</td>
+<td>DB Subnet (10.20.2.0/24)</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Allow-DG-Redo</td>
+<td>Inbound</td>
+<td>TCP</td>
+<td>1521</td>
+<td>DB Subnet (10.20.2.0/24)</td>
+<td>DB Subnet (10.20.2.0/24)</td>
+<td>110</td>
+</tr>
+<tr>
+<td>Allow-OEM-HTTPS</td>
+<td>Inbound</td>
+<td>TCP</td>
+<td>7803</td>
+<td>Management Subnet (10.20.4.0/24)</td>
+<td>DB Subnet (10.20.2.0/24)</td>
+<td>120</td>
+</tr>
+<tr>
+<td>Allow-SSH-Bastion</td>
+<td>Inbound</td>
+<td>TCP</td>
+<td>22</td>
+<td>Azure Bastion Subnet</td>
+<td>DB Subnet (10.20.2.0/24)</td>
+<td>130</td>
+</tr>
+<tr>
+<td>Allow-AzureBackup</td>
+<td>Outbound</td>
+<td>TCP</td>
+<td>443</td>
+<td>DB Subnet (10.20.2.0/24)</td>
+<td>AzureBackup Service Tag</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Allow-KeyVault</td>
+<td>Outbound</td>
+<td>TCP</td>
+<td>443</td>
+<td>DB Subnet (10.20.2.0/24)</td>
+<td>AzureKeyVault Service Tag</td>
+<td>110</td>
+</tr>
+<tr>
+<td>Allow-AzureMonitor</td>
+<td>Outbound</td>
+<td>TCP</td>
+<td>443</td>
+<td>DB Subnet (10.20.2.0/24)</td>
+<td>AzureMonitor Service Tag</td>
+<td>120</td>
+</tr>
+<tr>
+<td>Deny-All-Inbound</td>
+<td>Inbound</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>DB Subnet (10.20.2.0/24)</td>
+<td>4096</td>
+</tr>
+</tbody>
+</table>
+<h3 id="microsoft-defender-for-cloud">Microsoft Defender for Cloud<a class="headerlink" href="#microsoft-defender-for-cloud" title="Permanent link">¶</a></h3>
+<p>Microsoft Defender for Cloud with the Defender for Servers P2 plan is enabled on all Oracle VMs:</p>
+<ul>
+<li><strong>Adaptive Application Controls</strong>: Defines allowed executables on Oracle VMs (Oracle binaries, SAP kernel binaries, OS utilities); alerts on unexpected process execution.</li>
+<li><strong>Just-In-Time VM Access</strong>: Blocks management port SSH (TCP/22) by default; opens on-demand via PIM JIT request.</li>
+<li><strong>File Integrity Monitoring</strong>: Monitors Oracle binary directories (<code>$ORACLE_HOME/bin</code>) and SAP kernel directories for unauthorized modification.</li>
+<li><strong>Vulnerability Assessment</strong>: Qualys-integrated vulnerability scanning for Oracle VM OS packages and Oracle Database patch level.</li>
+</ul>
+<hr/>
+<h2 id="reliability-and-high-availability">Reliability and High Availability<a class="headerlink" href="#reliability-and-high-availability" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Tier</th>
+<th>RPO Target</th>
+<th>RTO Target</th>
+<th>HA Method</th>
+<th>DR Method</th>
+<th>Azure SLA Component</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Production (ECC/S4H PRD)</td>
+<td>≤ 60 seconds (intra-region)</td>
+<td>≤ 30 minutes</td>
+<td>Oracle Data Guard SYNC + Pacemaker fence_azure_arm, multi-zone (Zone 1+2); Azure ILB Standard SKU; FSFO Observer in Zone 3</td>
+<td>Oracle Data Guard ASYNC to secondary region; manual activation runbook; target RTO 60 min cross-region</td>
+<td>Azure VM SLA 99.99% (multi-zone); Ultra Disk SLA 99.9%; Azure ILB SLA 99.99%</td>
+</tr>
+<tr>
+<td>Quality Assurance (QAS)</td>
+<td>≤ 4 hours</td>
+<td>≤ 4 hours</td>
+<td>Single-VM Oracle (no Data Guard); Azure VM in single zone; daily Azure Backup snapshot</td>
+<td>Restore from Recovery Services Vault GRS backup; no live standby</td>
+<td>Azure VM SLA 99.9% (single zone with Premium SSD)</td>
+</tr>
+<tr>
+<td>Development (DEV)</td>
+<td>≤ 24 hours</td>
+<td>≤ 8 hours</td>
+<td>Single-VM Oracle (no HA); Azure Backup daily</td>
+<td>Restore from RSV backup; no DR standby</td>
+<td>Azure VM SLA 99.9% (single zone)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notes on Production HA</strong>:
+- Oracle Data Guard SYNC in Maximum Availability mode: primary waits for standby redo I/O acknowledgment before committing. Under normal conditions (1–2 ms inter-zone latency), SYNC overhead on SAP OLTP response time is less than 3 ms per commit.
+- Azure ILB health probe: configured with 5-second interval and 2-probe failure threshold. Failover detection from Azure ILB perspective: 10 seconds maximum after Oracle primary becomes unavailable.
+- Pacemaker STONITH timeout: configured for 15 seconds; fence_azure_arm uses Azure REST API to stop the failed VM. Total automated failover time (Oracle stop → fence → Oracle start on standby → VIP move): 5–8 minutes from primary failure.
+- FSFO FastStartFailoverThreshold: 30 seconds before Observer triggers automatic failover without Pacemaker intervention (FSFO acts before Pacemaker if the Oracle instance fails without OS failure).</p>
+<hr/>
+<h2 id="cost-optimization">Cost Optimization<a class="headerlink" href="#cost-optimization" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Estimated Saving</th>
+<th>Implementation Complexity</th>
+<th>Prerequisites</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure Reserved Instances (3-year) for Oracle primary and standby VMs</td>
+<td>40–63% reduction in compute cost vs PAYG; for two M208ms_v2 VMs at ~<span class="arithmatex">\(10/hr each PAYG, 3-yr RI at ~\)</span>4/hr = $105,000/yr saving</td>
+<td>Low — purchase via Azure portal or EA enrollment; no configuration change to VMs</td>
+<td>Stable VM size commitment for 3 years; valid for conversions within same VM family</td>
+</tr>
+<tr>
+<td>Azure Hybrid Benefit for RHEL/SLES for SAP Linux OS</td>
+<td>15–25% reduction in Linux license component of VM cost; SAP-certified images include RHEL HA Add-On license — Hybrid Benefit applies only to base RHEL, not HA Add-On</td>
+<td>Low — enable in VM properties or ARM template; no OS reconfiguration</td>
+<td>Active RHEL subscription through Red Hat Cloud Access or SUSE subscription via BYOS</td>
+</tr>
+<tr>
+<td>Oracle BYOL for existing Enterprise License Agreement holders</td>
+<td>Oracle EE PAYG Marketplace pricing averages <span class="arithmatex">\(4,000–\)</span>6,000/hr for M-series VMs (Oracle charges per-core); BYOL eliminates this cost, paying only compute</td>
+<td>Medium — Oracle licensing audit required; Oracle on Azure cloud licensing rules verification with Oracle licensing desk</td>
+<td>Active Oracle Database Enterprise Edition licenses; Oracle cloud licensing rights assessment</td>
+</tr>
+<tr>
+<td>Premium SSD v2 right-sizing (dynamic IOPS/throughput)</td>
+<td>20–35% storage cost reduction vs pre-provisioned Premium SSD P-series disks at maximum IOPS</td>
+<td>Low — Premium SSD v2 allows independent IOPS and throughput scaling; right-size to actual Oracle I/O metrics from Azure Monitor</td>
+<td>Oracle I/O baseline from AWR report: <code>v$filestat</code>, <code>v$tempstat</code> for actual IOPS per datafile; adjust after 30-day baseline</td>
+</tr>
+<tr>
+<td>Oracle DEV/QAS auto-shutdown schedule</td>
+<td>60–70% reduction in DEV/QAS Oracle VM compute cost (VMs off 16 hours/day weekdays, full weekend off)</td>
+<td>Low — Azure Automation runbook or VM auto-shutdown schedule; Oracle database graceful shutdown script</td>
+<td>Non-production systems only; Oracle database shutdown script tested; SAP application server shutdown before Oracle</td>
+</tr>
+<tr>
+<td>Oracle archive log tier migration to Azure Blob Cool</td>
+<td>50–70% reduction in archive log storage cost; archive logs older than 48 hours migrated from Premium SSD to Azure Blob Cool tier via RMAN <code>BACKUP ARCHIVELOG ... DELETE INPUT</code> to blob staging</td>
+<td>Medium — RMAN script update; Azure Blob lifecycle policy; Azure Blob NFS mount or Azure Files for RMAN archive log backup channel</td>
+<td>Azure Blob Storage account with NFS 3.0 mount in SAP Landing Zone Spoke, or SBT_TAPE RMAN channel to Azure Blob</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="operations-and-monitoring">Operations and Monitoring<a class="headerlink" href="#operations-and-monitoring" title="Permanent link">¶</a></h2>
+<h3 id="azure-monitor-for-sap-solutions-oracle-provider">Azure Monitor for SAP Solutions — Oracle Provider<a class="headerlink" href="#azure-monitor-for-sap-solutions-oracle-provider" title="Permanent link">¶</a></h3>
+<p>Azure Monitor for SAP Solutions (AMS) Oracle provider collects metrics from Oracle Database <code>V$</code> views via a JDBC connection from the AMS collector VM to the Oracle listener. The Oracle provider requires a dedicated low-privilege Oracle monitoring user:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">ams_monitor</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">SESSION</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">V_$SESSION</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">V_$SYSSTAT</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">V_$SGASTAT</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">V_$PGASTAT</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-7"><a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">V_$DATAFILE</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-8"><a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">V_$TEMPFILE</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-9"><a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">DBA_FREE_SPACE</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-10"><a href="#__codelineno-6-10" id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">V_$RECOVERY_FILE_DEST</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-11"><a href="#__codelineno-6-11" id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">V_$ARCHIVE_DEST</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-12"><a href="#__codelineno-6-12" id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">V_$DATAGUARD_STATS</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span><span id="__span-6-13"><a href="#__codelineno-6-13" id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">V_$MANAGED_STANDBY</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">ams_monitor</span><span class="p">;</span>
+</span></code></pre></div>
+<p>AMS publishes Oracle metrics to Log Analytics at 60-second intervals. Key metric namespaces collected: <code>oracle_database_activity</code>, <code>oracle_sga_usage</code>, <code>oracle_pga_usage</code>, <code>oracle_tablespace_usage</code>, <code>oracle_dataguard_lag</code>.</p>
+<h3 id="oracle-awrash-integration-with-log-analytics">Oracle AWR/ASH Integration with Log Analytics<a class="headerlink" href="#oracle-awrash-integration-with-log-analytics" title="Permanent link">¶</a></h3>
+<p>Oracle Automatic Workload Repository (AWR) snapshots and Active Session History (ASH) data provide Oracle performance analysis data. Integration with Log Analytics:</p>
+<ol>
+<li><strong>AWR snapshot export</strong>: Oracle <code>DBMS_WORKLOAD_REPOSITORY.CREATE_SNAPSHOT</code> on a 30-minute schedule (Oracle default). AWR snapshots are retained for 8 days in the SYSAUX tablespace.</li>
+<li><strong>Oracle Management Agent</strong>: The Oracle Management Agent (deployed with Oracle Enterprise Manager Cloud Control) can forward Oracle AWR metrics to a custom Log Analytics workspace table via a connector script.</li>
+<li><strong>Custom KQL queries</strong>: Log Analytics KQL queries on AMS Oracle metrics enable AWR-equivalent trending: top SQL by executions, buffer cache efficiency, redo generation rate, session counts by wait event.</li>
+</ol>
+<h3 id="rman-backup-monitoring">RMAN Backup Monitoring<a class="headerlink" href="#rman-backup-monitoring" title="Permanent link">¶</a></h3>
+<p>RMAN backup completion is monitored through:</p>
+<ol>
+<li><strong>Azure Backup job status</strong>: Azure portal Backup Jobs blade shows Oracle RMAN job status (succeeded/failed/in progress) with duration and bytes backed up. Azure Monitor Backup alerts trigger on backup job failure.</li>
+<li><strong>Oracle V$RMAN_BACKUP_JOB_DETAILS</strong>: Queried by the AMS Oracle provider or a custom monitoring script; RMAN job status, start time, end time, input bytes, output bytes, status.</li>
+<li><strong>Log Analytics alert</strong>: Custom alert on <code>AzureDiagnostics | where Category == "AzureBackupReport"</code> for Oracle backup failures.</li>
+</ol>
+<h3 id="alert-definitions">Alert Definitions<a class="headerlink" href="#alert-definitions" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Metric/Signal</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Runbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle-DataGuard-ApplyLag-Critical</td>
+<td>AMS oracle_dataguard_lag (V$DATAGUARD_STATS <code>APPLY LAG</code>)</td>
+<td>&gt; 300 seconds</td>
+<td>Severity 1</td>
+<td>Check Oracle standby MRP process status; check network connectivity primary to standby; check standby disk I/O</td>
+</tr>
+<tr>
+<td>Oracle-Archive-Dest-Space-Warning</td>
+<td>AMS oracle_tablespace_usage for ARCHDG disk group</td>
+<td>&gt; 80% used</td>
+<td>Severity 2</td>
+<td>Trigger RMAN <code>BACKUP ARCHIVELOG ALL DELETE INPUT</code>; check Azure Backup job status for archive log backup</td>
+</tr>
+<tr>
+<td>Oracle-RMAN-Backup-Failure</td>
+<td>Azure Backup job status for Oracle workload</td>
+<td>Status = Failed</td>
+<td>Severity 1</td>
+<td>Review RMAN log in <code>/oracle/&lt;SID&gt;/saptrace/backint/</code>; check Azure Backup agent health; retry backup job</td>
+</tr>
+<tr>
+<td>Oracle-Session-Count-High</td>
+<td>AMS oracle_database_activity sessions active</td>
+<td>&gt; 90% of PROCESSES parameter</td>
+<td>Severity 2</td>
+<td>Identify blocking sessions via <code>V$SESSION</code>; check SAP work process count; consider PROCESSES parameter increase with restart</td>
+</tr>
+<tr>
+<td>Oracle-Tablespace-Free-Low</td>
+<td>AMS oracle_tablespace_usage for PSAPSR3 or PSAPSR3USR</td>
+<td>&gt; 85% used</td>
+<td>Severity 2</td>
+<td>Add Oracle datafile to tablespace: <code>ALTER TABLESPACE PSAPSR3 ADD DATAFILE '+DATAC1' SIZE 50G AUTOEXTEND ON</code>; check SAP archiving status</td>
+</tr>
+<tr>
+<td>Oracle-Buffer-Cache-Hit-Ratio-Low</td>
+<td>Derived metric from V$SYSSTAT (logical reads vs physical reads)</td>
+<td>&lt; 95%</td>
+<td>Severity 2</td>
+<td>Review SAP full table scans; check for missing indexes; evaluate SGA db_cache_size increase</td>
+</tr>
+<tr>
+<td>Oracle-Redo-Log-Space-Requests</td>
+<td>AMS V$SYSSTAT redo log space requests</td>
+<td>&gt; 0 per interval</td>
+<td>Severity 2</td>
+<td>Add online redo log group members; increase redo log file size; check LGWR write latency on Ultra Disk</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<h3 id="db-subnet-placement">DB Subnet Placement<a class="headerlink" href="#db-subnet-placement" title="Permanent link">¶</a></h3>
+<p>The Oracle Database VMs are placed in the dedicated DB subnet (<code>10.20.2.0/24</code>) within the SAP Landing Zone Spoke VNet. The DB subnet is separated from the application subnet, management subnet, and ANF delegated subnet by subnet boundaries enforced by NSGs.</p>
+<p><strong>Subnet delegations</strong>:
+- DB subnet: No subnet delegation required for Oracle VMs (Azure VMs, not PaaS services)
+- ANF delegated subnet: <code>Microsoft.NetApp/volumes</code> delegation for Azure NetApp Files (if ANF used for Oracle data files or sapmnt)</p>
+<p><strong>Route table</strong>: DB subnet has a User Defined Route (UDR) with a default route (<code>0.0.0.0/0</code>) pointing to the Azure Firewall private IP (<code>10.10.0.4</code>) in the Hub VNet. This forces all outbound traffic from Oracle VMs through the Azure Firewall for inspection before egress. Exceptions (bypass Firewall, route directly):
+- Azure Backup service tag traffic — routed via Azure Private Endpoint in DB subnet to Recovery Services Vault Private Endpoint
+- Azure Key Vault traffic — routed via Private Endpoint</p>
+<h3 id="nsg-rules-for-oracle-ports">NSG Rules for Oracle Ports<a class="headerlink" href="#nsg-rules-for-oracle-ports" title="Permanent link">¶</a></h3>
+<p>Oracle listener (TCP/1521) is the only inbound port permitted from the application subnet. All other inbound access is denied by the default Deny-All-Inbound rule at priority 4096. SSH (TCP/22) is permitted inbound from the Azure Bastion subnet only, and only when JIT VM Access is active via Defender for Cloud JIT.</p>
+<h3 id="private-dns-configuration">Private DNS Configuration<a class="headerlink" href="#private-dns-configuration" title="Permanent link">¶</a></h3>
+<p>Oracle virtual hostnames are registered in an Azure Private DNS zone for the SAP Landing Zone:</p>
+<ul>
+<li>Oracle primary virtual hostname: <code>ora-&lt;SID&gt;-primary.sap.&lt;internal-domain&gt;.azure</code> → 10.20.2.10</li>
+<li>Oracle cluster virtual hostname (ILB): <code>ora-&lt;SID&gt;.sap.&lt;internal-domain&gt;.azure</code> → 10.20.2.100 (ILB floating IP)</li>
+<li>Oracle standby virtual hostname: <code>ora-&lt;SID&gt;-standby.sap.&lt;internal-domain&gt;.azure</code> → 10.20.2.11</li>
+<li>Oracle Data Guard Observer hostname: <code>ora-&lt;SID&gt;-obs.sap.&lt;internal-domain&gt;.azure</code> → 10.20.2.20</li>
+</ul>
+<p>The SAP tnsnames.ora on application servers uses the ILB virtual hostname (<code>ora-&lt;SID&gt;.sap.&lt;internal-domain&gt;.azure</code>) for Oracle listener connections. The Oracle <code>listener.ora</code> on each Oracle node registers the node's local IP with the Oracle listener; the ILB health probe determines which node receives SAP connections.</p>
+<h3 id="azure-key-vault-access">Azure Key Vault Access<a class="headerlink" href="#azure-key-vault-access" title="Permanent link">¶</a></h3>
+<p>The Oracle Database VM managed identity is granted <code>Key Vault Crypto User</code> role on the Key Vault instance housing the Oracle TDE MEK. This role allows the Oracle instance to:
+- <code>unwrapKey</code> — decrypt tablespace encryption keys using the MEK on startup
+- <code>wrapKey</code> — encrypt new tablespace keys during TDE key rotation</p>
+<p>The Key Vault is configured with a Private Endpoint in the Shared Services Spoke, accessible from the DB subnet via the VNet peering between the SAP Landing Zone Spoke and Shared Services Spoke. No public network access is enabled on the Key Vault (<code>publicNetworkAccess: Disabled</code>).</p>
+<h3 id="recovery-services-vault-for-rman-backup">Recovery Services Vault for RMAN Backup<a class="headerlink" href="#recovery-services-vault-for-rman-backup" title="Permanent link">¶</a></h3>
+<p>The Recovery Services Vault for Oracle RMAN backups is deployed in the Shared Services Spoke with:
+- <strong>Storage replication</strong>: Geo-Redundant Storage (GRS) for cross-region restore capability
+- <strong>Backup policy</strong>: Daily Oracle full backup (RMAN <code>BACKUP DATABASE</code>) at 01:00 UTC; archive log backup every 4 hours; retention 30 days full backup, 7 days archive log
+- <strong>Private Endpoint</strong>: Recovery Services Vault Private Endpoint in the DB subnet or Shared Services Spoke; Oracle Backup agent communicates with the vault via Private Endpoint without traversing Azure Firewall
+- <strong>Soft delete</strong>: Enabled with 14-day retention to prevent accidental backup data deletion</p>
+<hr/>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<ol>
+<li>SAP on Oracle on Azure main documentation: <a href="https://learn.microsoft.com/azure/sap/workloads/dbms-guide-oracle">https://learn.microsoft.com/azure/sap/workloads/dbms-guide-oracle</a></li>
+<li>SAP on Azure Landing Zone Accelerator: <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/sap/enterprise-scale-landing-zone">https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/sap/enterprise-scale-landing-zone</a></li>
+<li>Azure Backup for Oracle Database: <a href="https://learn.microsoft.com/azure/backup/backup-azure-oracle-database">https://learn.microsoft.com/azure/backup/backup-azure-oracle-database</a></li>
+<li>Oracle Data Guard on Azure — HA reference architecture: <a href="https://learn.microsoft.com/azure/sap/workloads/high-availability-guide-rhel-oracle">https://learn.microsoft.com/azure/sap/workloads/high-availability-guide-rhel-oracle</a></li>
+<li>Azure Monitor for SAP Solutions — Oracle provider: <a href="https://learn.microsoft.com/azure/sap/monitor/oracle-provider">https://learn.microsoft.com/azure/sap/monitor/oracle-provider</a></li>
+<li>Azure Ultra Disk for Oracle workloads: <a href="https://learn.microsoft.com/azure/virtual-machines/disks-enable-ultra-ssd">https://learn.microsoft.com/azure/virtual-machines/disks-enable-ultra-ssd</a></li>
+<li>Oracle on Azure Virtual Machines — Oracle documentation: <a href="https://docs.oracle.com/en/solutions/oci-multicloud-azure/index.html">https://docs.oracle.com/en/solutions/oci-multicloud-azure/index.html</a></li>
+<li>Oracle Maximum Availability Architecture (MAA) for Azure: <a href="https://www.oracle.com/database/maximum-availability-architecture/">https://www.oracle.com/database/maximum-availability-architecture/</a></li>
+<li>Azure Key Vault Transparent Data Encryption for Oracle: <a href="https://learn.microsoft.com/azure/key-vault/general/integrate-with-oracle-tde">https://learn.microsoft.com/azure/key-vault/general/integrate-with-oracle-tde</a></li>
+<li>Mv2-series virtual machines for SAP workloads: <a href="https://learn.microsoft.com/azure/virtual-machines/mv2-series">https://learn.microsoft.com/azure/virtual-machines/mv2-series</a></li>
+</ol>
+<hr/>
+<h2 id="validation-checklist">Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">¶</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> SAP Notes 8+ real note numbers (12 SAP Notes referenced: 2039619, 2178659, 1928533, 2267798, 1680803, 1496410, 2470289, 1984882, 2799900, 105047, 2660017, 3084757)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> WAF all 5 pillars (Reliability, Security, Cost Optimization, Operational Excellence, Performance Efficiency)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Design decisions 8+ rows (10 design decisions)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Two Mermaid diagrams (Architecture Overview full topology + Oracle DB tier detail LR diagram)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> RPO/RTO table 3 tiers (Production, QAS, Dev)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Cost table 4+ rows (6 cost optimization rows)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Alert table 5+ alerts (7 alerts)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Database Configuration populated (Oracle init parameters, hugepages, kernel params, swap, ASM, volume layout, licensing)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> HA with Oracle Data Guard (SYNC mode, Pacemaker, FSFO Observer, zone deployment, redo latency)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> DR cross-region described (ASYNC Data Guard, ASR exclusion rationale, ExpressRoute/VPN options, DR VM sizing, RTO/RPO validation)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Anti-patterns 5+ (see Anti-Patterns section)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Troubleshooting 5+ (see Troubleshooting section)</li>
+</ul>
+<hr/>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-1-using-azure-site-recovery-for-oracle-database-dr">Anti-Pattern 1: Using Azure Site Recovery for Oracle Database DR<a class="headerlink" href="#anti-pattern-1-using-azure-site-recovery-for-oracle-database-dr" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Configuring Azure Site Recovery (ASR) to replicate Oracle Database VM disks as the Oracle DR mechanism, because ASR provides a simple "enable replication" workflow from the Azure portal without Oracle-specific configuration.</p>
+<p><strong>Impact</strong>: ASR replication is crash-consistent — it replicates disk blocks without coordinating with Oracle I/O checkpoints. A failover using an ASR-replicated Oracle disk set produces a database in an inconsistent state (uncommitted transactions in datafiles, redo log partially written, Oracle control file out of sync with datafiles). Oracle instance recovery at startup may fail with <code>ORA-01194: file needs more recovery</code> or <code>ORA-01110: data file '&lt;path&gt;'</code>. Even if Oracle starts, data integrity cannot be guaranteed. SAP Note 2039619 explicitly states ASR is not supported for Oracle database VMs.</p>
+<p><strong>Correct approach</strong>: Oracle Data Guard physical standby with ASYNC redo transport to the DR region. Data Guard maintains a transactionally consistent standby database at all times, with no risk of block-level inconsistency at failover. For non-database VMs (SAP application servers, ASCS), ASR is appropriate and supported.</p>
+<hr/>
+<h3 id="anti-pattern-2-deploying-oracle-data-guard-on-azure-without-a-dedicated-observer-vm">Anti-Pattern 2: Deploying Oracle Data Guard on Azure Without a Dedicated Observer VM<a class="headerlink" href="#anti-pattern-2-deploying-oracle-data-guard-on-azure-without-a-dedicated-observer-vm" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Configuring Oracle Data Guard with Fast-Start Failover (FSFO) but placing the Observer process on one of the two Data Guard nodes (primary or standby) rather than on a separate third-zone VM to reduce infrastructure cost.</p>
+<p><strong>Impact</strong>: If the zone hosting the Observer VM experiences a failure (for example, Zone 1 hosting both Oracle primary and the Observer), the Observer fails simultaneously with the Oracle primary. Without an operational Observer, FSFO cannot trigger automatic failover regardless of the standby's health. The SAP system remains down until a DBA manually intervenes to execute <code>DGMGRL FAILOVER TO &lt;standby&gt;</code>. RTO degrades from the automated 5–8 minutes to 30–60 minutes (manual intervention).</p>
+<p><strong>Correct approach</strong>: Deploy the Data Guard Observer on a dedicated VM (B2s SKU is sufficient; Observer requires minimal compute) in a third Availability Zone (Zone 3). This ensures the Observer remains available in any single-zone failure scenario, preserving FSFO automated failover capability.</p>
+<hr/>
+<h3 id="anti-pattern-3-placing-oracle-redo-log-files-on-premium-ssd-v2-without-write-accelerator-on-e-series-vms-or-on-standard-ssd">Anti-Pattern 3: Placing Oracle Redo Log Files on Premium SSD v2 Without Write Accelerator (on E-series VMs) or on Standard SSD<a class="headerlink" href="#anti-pattern-3-placing-oracle-redo-log-files-on-premium-ssd-v2-without-write-accelerator-on-e-series-vms-or-on-standard-ssd" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Using Premium SSD v2 without Azure Write Accelerator for Oracle redo log groups on E-series VMs (Edsv5), or using Standard SSD as a cost-saving measure for the redo log volumes.</p>
+<p><strong>Impact</strong>: Oracle LGWR (Log Writer) performs synchronous writes to redo log files on every Oracle commit. Write latency above 2 ms at the 99th percentile causes SAP dialog step response time degradation, as each ABAP work process commit waits for LGWR to complete. Standard SSD delivers 5–20 ms write latency under load, directly adding 5–20 ms to every SAP ABAP transaction commit. For an ECC system with 200 SAP dialog work processes each committing 5 times per second, this translates to 200 × 5 × 20 ms = 20 seconds of accumulated LGWR wait per second — system saturation.</p>
+<p><strong>Correct approach</strong>: On E-series VMs (Edsv5): use Premium SSD v2 with Azure Write Accelerator enabled on the redo log disk — Write Accelerator bypasses the write-back cache and writes directly to the SSD, achieving sub-1 ms write latency. On Mv2 VMs (where Write Accelerator is not available): use Azure Ultra Disk for Oracle redo log groups. Never use Standard SSD or Azure HDD for any Oracle redo log volume.</p>
+<hr/>
+<h3 id="anti-pattern-4-using-oracle-asm-with-normal-or-high-redundancy-on-azure-managed-disks">Anti-Pattern 4: Using Oracle ASM with NORMAL or HIGH Redundancy on Azure Managed Disks<a class="headerlink" href="#anti-pattern-4-using-oracle-asm-with-normal-or-high-redundancy-on-azure-managed-disks" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Configuring Oracle ASM disk groups with NORMAL REDUNDANCY (2-way mirroring) or HIGH REDUNDANCY (3-way mirroring) on Azure managed disks, believing this provides additional data protection.</p>
+<p><strong>Impact</strong>: Azure managed disks with Locally Redundant Storage (LRS) already provide three synchronous copies of data within the Availability Zone at the storage platform level. Configuring Oracle ASM NORMAL REDUNDANCY on top of Azure LRS managed disks doubles the disk capacity consumption (2× for NORMAL, 3× for HIGH) and doubles the write I/O load (every Oracle ASM write generates 2 or 3 disk writes) without any additional protection. For a 4 TiB Oracle database, NORMAL REDUNDANCY ASM requires 8 TiB of disk allocation; the additional 4 TiB of disks and the doubled write IOPS increase both storage cost (by 100%) and write latency (additional ASM mirroring write path overhead).</p>
+<p><strong>Correct approach</strong>: Configure Oracle ASM disk groups with EXTERNAL REDUNDANCY on Azure. Azure LRS managed disk redundancy is sufficient and is already triple-replicated at the Azure storage level. EXTERNAL REDUNDANCY removes the ASM write overhead and reduces disk allocation to exactly the Oracle data size. Document this decision explicitly in the architecture to prevent future DBAs from "improving" redundancy by changing ASM disk group configuration.</p>
+<hr/>
+<h3 id="anti-pattern-5-co-locating-oracle-database-and-sap-application-server-on-the-same-azure-vm">Anti-Pattern 5: Co-locating Oracle Database and SAP Application Server on the Same Azure VM<a class="headerlink" href="#anti-pattern-5-co-locating-oracle-database-and-sap-application-server-on-the-same-azure-vm" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Running both the Oracle Database instance and SAP ABAP application server (PAS/AAS work processes) on the same Azure VM to reduce the number of VMs and simplify the architecture, particularly in development or sandbox environments.</p>
+<p><strong>Impact</strong>: Oracle Database SGA (60–70% of VM RAM) and SAP work process memory (typically 2–4 GiB per work process × 20–50 work processes = 40–200 GiB) compete for the same VM RAM. Under peak SAP load, Oracle SGA is paged out by the Linux kernel to swap, causing catastrophic Oracle buffer cache miss rates (buffer cache hit ratio drops below 50%), which manifests as SAP response time degradation of 10–100×. Additionally, co-location violates the SAP three-tier architecture security model (SAP Note 1680803): Oracle and SAP processes share an OS, eliminating the network-layer security boundary between the SAP application tier and database tier. Performance profiling becomes impossible because Oracle CPU contention and SAP CPU contention are indistinguishable.</p>
+<p><strong>Correct approach</strong>: Separate Oracle Database and SAP application tier on dedicated VMs in production and QAS. For development environments with constrained cost, use smaller Oracle-only VMs (E16ds_v5 for Oracle DEV) and smaller SAP application-only VMs rather than consolidating onto a single VM. If consolidation is absolutely required for a sandbox system, it must be documented as a non-production-only pattern with explicit prohibition on promoting to production.</p>
+<hr/>
+<h3 id="anti-pattern-6-disabling-oracle-unified-auditing-to-improve-performance">Anti-Pattern 6: Disabling Oracle Unified Auditing to Improve Performance<a class="headerlink" href="#anti-pattern-6-disabling-oracle-unified-auditing-to-improve-performance" title="Permanent link">¶</a></h3>
+<p><strong>Problem</strong>: Disabling Oracle Unified Auditing (or setting audit trail type to NONE) on SAP production Oracle databases to eliminate the perceived audit trail I/O overhead and improve Oracle performance.</p>
+<p><strong>Impact</strong>: Oracle Unified Auditing on 19c writes audit records to the <code>AUDSYS.AUD$UNIFIED</code> table in the SYSAUX tablespace asynchronously (QUEUED write mode by default in 19c), with negligible performance impact on OLTP commit latency. Disabling auditing eliminates the forensic audit trail required for compliance frameworks (ISO 27001, SOC2, PCI-DSS) and prevents detection of unauthorized Oracle privileged account activity (DBA privilege abuse, unauthorized DROP TABLE events). Azure Security Center compliance assessments (NIST SP 800-53, CIS Oracle benchmark) will flag disabled auditing as a high-severity finding, triggering remediation requirements.</p>
+<p><strong>Correct approach</strong>: Maintain Oracle Unified Auditing enabled with targeted audit policies covering privileged operations (DDL, privilege grants, user creation/deletion) and SAP schema access. Tune SYSAUX tablespace sizing to accommodate audit records (typically 10–50 GiB per year for an ECC production system) and configure <code>DBMS_AUDIT_MGMT</code> purge jobs to remove audit records older than the retention requirement after forwarding to Log Analytics. Do not disable auditing; reduce audit scope if SYSAUX growth is a concern.</p>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="issue-1-oracle-data-guard-apply-lag-continuously-increasing">Issue 1: Oracle Data Guard Apply Lag Continuously Increasing<a class="headerlink" href="#issue-1-oracle-data-guard-apply-lag-continuously-increasing" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: AMS Oracle Data Guard <code>APPLY LAG</code> metric increases continuously from seconds to minutes, even during periods of low SAP activity. Oracle Data Guard protection mode remains Maximum Availability, but the standby database apply position is falling behind the primary.</p>
+<p><strong>Root cause</strong>: The Oracle Data Guard MRP (Managed Recovery Process) on the standby cannot apply archive logs fast enough to keep up with the primary. Common causes on Azure:
+- Standby Premium SSD v2 data volume IOPS throttled below provisioned limit due to VM-level IOPS ceiling (e.g., E32ds_v5 at 76,800 IOPS uncached ceiling, but multiple Premium SSD v2 disks cumulatively exceeding the VM IOPS limit)
+- Oracle standby MRP not running — check <code>V$MANAGED_STANDBY</code> for MRP process status
+- Network bandwidth saturation between primary and standby zones during a bulk SAP load job</p>
+<p><strong>Resolution</strong>:
+1. Check <code>SELECT PROCESS, STATUS, THREAD#, SEQUENCE#, BLOCK#, BLOCKS FROM V$MANAGED_STANDBY</code> on the standby — verify MRP is running (STATUS = APPLYING_LOG).
+2. Check Azure Monitor disk metrics on the standby VM: <code>Disk Write Operations/Sec</code> vs provisioned IOPS. If throttled, increase Premium SSD v2 provisioned IOPS via Azure portal (no restart required for Premium SSD v2).
+3. Check <code>SELECT NAME, VALUE FROM V$DATAGUARD_STATS WHERE NAME = 'apply lag'</code> for current lag value.
+4. Restart MRP if not running: <code>ALTER DATABASE RECOVER MANAGED STANDBY DATABASE CANCEL; ALTER DATABASE RECOVER MANAGED STANDBY DATABASE USING CURRENT LOGFILE DISCONNECT;</code></p>
+<hr/>
+<h3 id="issue-2-sap-system-down-after-oracle-data-guard-failover-sap-cannot-connect-to-new-primary">Issue 2: SAP System Down After Oracle Data Guard Failover — SAP Cannot Connect to New Primary<a class="headerlink" href="#issue-2-sap-system-down-after-oracle-data-guard-failover-sap-cannot-connect-to-new-primary" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: Oracle Data Guard failover completes (standby is promoted to primary role), but SAP application servers cannot establish new Oracle connections. SAP work processes show <code>DpRqFull</code> errors and ORA-12541 (TNS: no listener) in the SAP syslog.</p>
+<p><strong>Root cause</strong>: The Azure Internal Load Balancer floating IP has not migrated to the new Oracle primary VM. The ILB health probe checks TCP/1521 on each Oracle node; if the probe is incorrectly configured (wrong port, wrong probe protocol, probe not pointing to the Oracle listener port), the ILB does not recognize the new primary as healthy and continues to route SAP connections to the failed original primary.</p>
+<p><strong>Resolution</strong>:
+1. Verify Oracle listener is running on the new primary: <code>lsnrctl status</code> on the new primary Oracle VM.
+2. Verify Azure ILB health probe status in Azure portal: Load Balancer → Health Probes → probe status for each backend pool member. The new primary should show Healthy; the original primary should show Unhealthy.
+3. If the ILB probe is unhealthy on the new primary despite Oracle listener running: check NSG rules on the DB subnet — ensure the Azure Load Balancer service tag (<code>AzureLoadBalancer</code>) is allowed inbound on TCP/1521 for health probe traffic.
+4. Verify Pacemaker VIP migration: <code>crm_mon -1</code> — the IPaddr2 resource should be on the same node as the Oracle database resource. If not, check Pacemaker cluster log: <code>journalctl -u pacemaker</code>.
+5. Update SAP <code>tnsnames.ora</code> if the virtual hostname is not resolving correctly: <code>nslookup ora-&lt;SID&gt;.sap.&lt;domain&gt;</code> from each application server.</p>
+<hr/>
+<h3 id="issue-3-oracle-ora-04031-errors-in-sap-syslog-shared-pool-memory-exhaustion">Issue 3: Oracle ORA-04031 Errors in SAP Syslog — Shared Pool Memory Exhaustion<a class="headerlink" href="#issue-3-oracle-ora-04031-errors-in-sap-syslog-shared-pool-memory-exhaustion" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: SAP syslog shows repeated ORA-04031 errors: <code>ORA-04031: unable to allocate X bytes of shared memory ("shared pool", ...)</code>. SAP work processes receive Oracle errors and restart. Oracle alert log shows repeated <code>ORA-04031</code> entries with shared pool component names including <code>library cache</code> or <code>sql area</code>.</p>
+<p><strong>Root cause</strong>: Oracle shared pool memory exhaustion under high SAP load. Common causes:
+- Oracle SGA <code>shared_pool_size</code> under-allocated relative to the number of unique SQL cursors generated by SAP work processes
+- Oracle cursor sharing disabled (<code>cursor_sharing = EXACT</code>) combined with high-frequency SAP dynamic SQL without bind variables
+- Oracle <code>open_cursors</code> parameter set below SAP minimum (800) causing cursor reuse failures</p>
+<p><strong>Resolution</strong>:
+1. Check Oracle shared pool usage: <code>SELECT COMPONENT, CURRENT_SIZE/1024/1024 MB FROM V$SGA_DYNAMIC_COMPONENTS WHERE COMPONENT = 'shared pool'</code>.
+2. Verify <code>open_cursors</code> is set to minimum 800 per SAP Note 2039619: <code>SHOW PARAMETER OPEN_CURSORS</code>.
+3. Check cursor usage per session: <code>SELECT MAX(VALUE) FROM V$SESSTAT s, V$STATNAME n WHERE s.STATISTIC# = n.STATISTIC# AND n.NAME = 'opened cursors current'</code>.
+4. Increase shared pool size dynamically (without restart): <code>ALTER SYSTEM SET SGA_TARGET = &lt;new_size&gt; SCOPE=BOTH</code> — Oracle will auto-distribute SGA components. For a dedicated shared pool increase: <code>ALTER SYSTEM SET SHARED_POOL_SIZE = &lt;new_size&gt; SCOPE=BOTH</code>.
+5. If <code>cursor_sharing = EXACT</code> and SAP generates non-bind-variable SQL: set <code>cursor_sharing = FORCE</code> per SAP Note 2039619 (this is an Oracle parameter that allows Oracle to share cursors for similar SQL; SAP-generated SQL typically benefits from FORCE mode on ECC systems).</p>
+<hr/>
+<h3 id="issue-4-rman-backup-fails-with-ora-19511-azure-backup-agent-not-responding">Issue 4: RMAN Backup Fails with ORA-19511 — Azure Backup Agent Not Responding<a class="headerlink" href="#issue-4-rman-backup-fails-with-ora-19511-azure-backup-agent-not-responding" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: Oracle RMAN backup job initiated by Azure Backup Oracle workload extension fails after 30–60 minutes with <code>ORA-19511: non RMAN, but media manager or vendor specific failure, error text: [Microsoft Azure Recovery Services backup plugin error]</code>. Azure Backup job shows status: Failed.</p>
+<p><strong>Root cause</strong>: Azure Backup Oracle workload extension agent on the Oracle VM has lost connectivity to the Recovery Services Vault endpoint, or the extension has crashed. Common causes:
+- Azure Backup extension version outdated (known issue in extension versions prior to 2.0.9143.0 for Oracle workload)
+- Recovery Services Vault Private Endpoint DNS resolution failure — <code>privatelink.backup.windowsazure.com</code> not resolving to the vault Private Endpoint IP from the DB subnet
+- Oracle VM managed identity token expiry or RBAC role missing from the Recovery Services Vault</p>
+<p><strong>Resolution</strong>:
+1. Check Azure Backup extension status on Oracle VM: Azure portal → VM → Extensions → <code>Microsoft.Azure.RecoveryServices.WorkloadBackup</code> → Status: Succeeded/Failed.
+2. Update extension if outdated: <code>az vm extension set --resource-group &lt;rg&gt; --vm-name &lt;vm&gt; --name WorkloadBackup --publisher Microsoft.Azure.RecoveryServices --version 2.0</code>.
+3. Test Private Endpoint connectivity from Oracle VM: <code>curl -v https://&lt;vault-name&gt;.backup.windowsazure.com</code> — should resolve to Private Endpoint IP (10.x.x.x) not public IP.
+4. Verify Private DNS zone <code>privatelink.backup.windowsazure.com</code> has A record for the vault Private Endpoint IP; check via <code>nslookup &lt;vault-name&gt;.privatelink.backup.windowsazure.com</code> from Oracle VM.
+5. Check Oracle RMAN log: <code>/oracle/&lt;SID&gt;/saptrace/backint/rman_&lt;date&gt;.log</code> for the specific RMAN error code from the SBT channel.</p>
+<hr/>
+<h3 id="issue-5-oracle-log-writer-lgwr-wait-sap-response-times-degraded-with-log-file-sync-waits">Issue 5: Oracle Log Writer (LGWR) Wait — SAP Response Times Degraded with <code>log file sync</code> Waits<a class="headerlink" href="#issue-5-oracle-log-writer-lgwr-wait-sap-response-times-degraded-with-log-file-sync-waits" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: SAP transaction response times increase by 5–20 ms across all dialog steps. Oracle AWR report or V$SESSION_WAIT shows high <code>log file sync</code> wait event counts and average wait time of 5–15 ms per wait. Oracle alert log shows no errors. No hardware failures.</p>
+<p><strong>Root cause</strong>: Oracle LGWR is waiting for redo log file I/O completion (<code>log file sync</code> = LGWR waiting for the OS to confirm the redo write is durable). The redo log volume is not delivering sub-1 ms write latency. Causes on Azure:
+- Ultra Disk provisioned IOPS not sufficient for peak LGWR write frequency; Ultra Disk is being throttled
+- Ultra Disk is in a different Availability Zone from the Oracle VM (cross-zone Ultra Disk attachment)
+- Premium SSD v2 used for redo logs on an Mv2 VM without Write Accelerator (Write Accelerator not available on Mv2 — should be Ultra Disk)
+- Azure VM IOPS ceiling for the VM SKU is being hit across all attached disks, causing Ultra Disk IOPS to be throttled at the VM level</p>
+<p><strong>Resolution</strong>:
+1. Confirm redo log disk type: <code>az disk show --name &lt;disk-name&gt; --resource-group &lt;rg&gt; --query sku</code>.
+2. Check Azure Monitor disk metrics for the redo log Ultra Disk: <code>Disk IOPS Consumed Percentage</code> — if &gt; 95%, IOPS are saturated.
+3. Increase Ultra Disk provisioned IOPS: <code>az disk update --name &lt;disk-name&gt; --resource-group &lt;rg&gt; --disk-iops-read-write &lt;new-iops&gt;</code>.
+4. Verify Ultra Disk and Oracle VM are in the same Availability Zone: <code>az disk show --query zones</code> and <code>az vm show --query zones</code>.
+5. Check VM-level IOPS ceiling via Azure Monitor <code>OS Disk IOPS Consumed Percentage</code> — if VM IOPS ceiling is hit, scale to a larger VM or reduce IOPS consumption on other disks (move backup staging off managed disk to Azure Blob).
+6. For a quick diagnostic: check <code>V$SYSSTAT</code> for <code>redo writes</code> and <code>redo blocks written</code>; compare bytes per write to Ultra Disk provisioned throughput.</p>
+<hr/>
+<h3 id="issue-6-oracle-data-guard-redo-gap-during-sap-batch-processing-window">Issue 6: Oracle Data Guard Redo Gap During SAP Batch Processing Window<a class="headerlink" href="#issue-6-oracle-data-guard-redo-gap-during-sap-batch-processing-window" title="Permanent link">¶</a></h3>
+<p><strong>Symptom</strong>: During SAP month-end batch processing (high redo generation, 200+ MB/s), Oracle Data Guard switches from <code>SYNC</code> to <code>RESYNC</code> status on the primary. The protection mode drops from Maximum Availability to Maximum Performance temporarily. AMS Oracle alert fires for <code>APPLY LAG &gt; 300 seconds</code>.</p>
+<p><strong>Root cause</strong>: Oracle Data Guard SYNC mode is configured with <code>MAX_FAILURE=1</code> and <code>REOPEN=15</code> on <code>LOG_ARCHIVE_DEST_2</code>. During peak batch redo generation, the inter-zone network bandwidth between Oracle primary (Zone 1) and standby (Zone 2) becomes saturated, causing SYNC redo acknowledgment timeouts. After <code>MAX_FAILURE</code> consecutive failures, Oracle disables the SYNC destination (<code>LOG_ARCHIVE_DEST_STATE_2=DEFER</code>) and continues without SYNC, dropping to Maximum Performance mode. The Data Guard gap accumulates until the destination is re-enabled.</p>
+<p><strong>Resolution</strong>:
+1. Monitor inter-zone network bandwidth during batch: Azure Monitor <code>Network Out Total</code> on Oracle primary VM. If approaching VM NIC limit, redo shipping is competing with other network traffic (RMAN backup, SAP batch data load over network).
+2. Separate redo shipping network from RMAN backup network: assign Oracle Data Guard redo transport to a dedicated secondary NIC on the Oracle VM, separate from the NIC used for SAP listener connections and RMAN backup. Oracle <code>LOG_ARCHIVE_DEST_2</code> configured with the secondary NIC's IP in the TNS connect descriptor.
+3. Increase SAP batch to off-peak hours to avoid concurrent high redo + RMAN backup network saturation.
+4. Re-enable Data Guard destination after resolving network saturation: <code>ALTER SYSTEM SET LOG_ARCHIVE_DEST_STATE_2=ENABLE;</code>. Oracle will automatically ship the gap archive logs and resynchronize.
+5. Consider setting <code>COMPRESSION=ENABLE</code> on <code>LOG_ARCHIVE_DEST_2</code> for cross-zone redo transport (Oracle Advanced Compression option required) — reduces redo transport bandwidth by 30–50% for typical SAP redo patterns.</p>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

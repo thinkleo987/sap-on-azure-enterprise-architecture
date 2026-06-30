@@ -1,0 +1,2084 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/storage/" rel="canonical"/>
+<link href="../compute/" rel="prev"/>
+<link href="../security/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>Storage Architecture - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-on-azure-storage-architecture">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Storage Architecture
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+<nav aria-label="Architecture Overview" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-sap-storage-layout">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: SAP Storage Layout
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+<nav aria-label="SAP Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-hana-storage-requirements">
+<span class="md-ellipsis">
+      
+        SAP HANA Storage Requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-hana-volume-layout-on-azure-netapp-files">
+<span class="md-ellipsis">
+      
+        SAP HANA Volume Layout on Azure NetApp Files
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#nfs-v41-mount-options">
+<span class="md-ellipsis">
+      
+        NFS v4.1 Mount Options
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-application-server-storage-layout">
+<span class="md-ellipsis">
+      
+        SAP Application Server Storage Layout
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-hana-backup-architecture">
+<span class="md-ellipsis">
+      
+        SAP HANA Backup Architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference-table">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference Table
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+<nav aria-label="Azure Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-netapp-files-configuration">
+<span class="md-ellipsis">
+      
+        Azure NetApp Files Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#premium-ssd-v2-configuration">
+<span class="md-ellipsis">
+      
+        Premium SSD v2 Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-backup-for-sap-hana">
+<span class="md-ellipsis">
+      
+        Azure Backup for SAP HANA
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-storage-service-flow">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: Storage Service Flow
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rporto-table">
+<span class="md-ellipsis">
+      
+        RPO/RTO Table
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization">
+<span class="md-ellipsis">
+      
+        Cost Optimization
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#monitoring-and-alerts">
+<span class="md-ellipsis">
+      
+        Monitoring and Alerts
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-1-using-premium-ssd-v1-p-series-for-sap-hana-os-disks">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 1: Using Premium SSD v1 (P-series) for SAP HANA OS Disks
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-2-mounting-anf-volumes-with-soft-mount-option">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 2: Mounting ANF Volumes with Soft Mount Option
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-3-not-enabling-nconnect-on-anf-hana-data-volume-mounts">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 3: Not Enabling nconnect on ANF HANA Data Volume Mounts
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-4-running-azacsnap-without-hana-backup-mode-coordination">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 4: Running azacsnap Without HANA Backup Mode Coordination
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-5-disabling-recovery-services-vault-soft-delete-to-save-storage-cost">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 5: Disabling Recovery Services Vault Soft Delete to Save Storage Cost
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-6-using-a-single-anf-capacity-pool-for-all-sap-volumes-at-ultra-tier">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 6: Using a Single ANF Capacity Pool for All SAP Volumes at Ultra Tier
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-1-sap-hana-hcmt-storage-test-fails-data-volume-throughput-below-400-mbs">
+<span class="md-ellipsis">
+      
+        Issue 1: SAP HANA hcmt Storage Test Fails: Data Volume Throughput Below 400 MB/s
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-2-azure-backup-hana-log-backup-fails-with-error-cannot-connect-to-vault">
+<span class="md-ellipsis">
+      
+        Issue 2: Azure Backup HANA Log Backup Fails with Error: Cannot Connect to Vault
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-3-azacsnap-snapshots-succeed-but-hana-cannot-use-them-for-recovery">
+<span class="md-ellipsis">
+      
+        Issue 3: azacsnap Snapshots Succeed but HANA Cannot Use Them for Recovery
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-4-anf-data-volume-runs-out-of-space-during-hana-delta-merge">
+<span class="md-ellipsis">
+      
+        Issue 4: ANF Data Volume Runs Out of Space During HANA Delta Merge
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-5-hana-restart-volume-persistent-memory-not-reducing-hana-restart-time">
+<span class="md-ellipsis">
+      
+        Issue 5: HANA Restart Volume (Persistent Memory) Not Reducing HANA Restart Time
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-6-premium-ssd-v2-disk-cannot-be-attached-after-vm-sku-change">
+<span class="md-ellipsis">
+      
+        Issue 6: Premium SSD v2 Disk Cannot Be Attached After VM SKU Change
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+<nav aria-label="Landing Zone Mapping" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#management-group-policy-assignments-sap-management-group-scope">
+<span class="md-ellipsis">
+      
+        Management Group Policy Assignments (SAP Management Group Scope)
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../db2/">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../compute/">
+<span class="md-ellipsis">
+    Phase B — Compute and Storage
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="sap-on-azure-storage-architecture">SAP on Azure Storage Architecture<a class="headerlink" href="#sap-on-azure-storage-architecture" title="Permanent link">¶</a></h1>
+<hr/>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>This chapter defines the storage architecture for SAP workloads deployed on Microsoft Azure. The scope covers storage for SAP HANA data and log volumes, SAP application server OS disks and binary paths, the /sapmnt global file system, the SAP transport directory (/usr/sap/trans), SAP HANA backup and recovery, and Azure NetApp Files configuration for SAP-specific NFS v4.1 mounts. It addresses Premium SSD v2 configuration (independently configurable IOPS and throughput), Azure NetApp Files Ultra tier capacity pools, azacsnap (Azure Application-Consistent Snapshot Tool) for HANA snapshots, and Azure Backup with backint integration for HANA database backups.</p>
+<p>Key architecture decisions: Azure NetApp Files Ultra tier with NFS v4.1 for SAP HANA data and log volumes (not managed disks); Premium SSD v2 for OS disks and HANA restart/shared volumes; Azure Backup with backint for HANA full and log backups; azacsnap for hourly storage snapshots for fast HANA point-in-time recovery; Customer Managed Keys (CMK) for all data-at-rest encryption; and no local SSD (ephemeral disk) for any SAP HANA persistent data.</p>
+<hr/>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>SAP HANA data and log volumes are hosted on Azure NetApp Files (ANF) Ultra tier capacity pools using NFS v4.1 with nconnect=8 mount option for parallel TCP connections. ANF Ultra tier delivers up to 128 MiB/s per TiB provisioned, which satisfies SAP HANA's maximum storage throughput requirement of 400 MB/s for data volumes and 250 MB/s for log volumes on a 2 TiB HANA memory footprint (see SAP Note 1943937 storage KPI table).</p>
+<p>SAP application server OS disks use Premium SSD v2 with independently configured IOPS and throughput to match actual workload without overprovisioning to a larger disk size tier. The ASCS, ERS, and application server VMs all use Premium SSD v2 OS disks sized at 128 GiB with 3,000 IOPS and 125 MB/s throughput baseline, upgradeable without disk replacement.</p>
+<h3 id="architecture-diagram-sap-storage-layout">Architecture Diagram: SAP Storage Layout<a class="headerlink" href="#architecture-diagram-sap-storage-layout" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph TB
+  subgraph HANANode["HANA Primary VM M64s_v2 Zone 1"]
+    OSDisk["OS Disk Premium SSD v2 128 GiB 3,000 IOPS 125 MB/s"]
+    SharedVol["shared Volume Premium SSD v2 512 GiB 10,000 IOPS 400 MB/s"]
+    RestartVol["restart Volume Premium SSD v2 1,024 GiB 30,000 IOPS 500 MB/s"]
+  end
+  subgraph ANFCapPool["Azure NetApp Files Ultra Capacity Pool"]
+    DataVol["HANA Data Volume NFS v4.1 2,048 GiB Ultra 262,144 MiB/s"]
+    LogVol["HANA Log Volume NFS v4.1 512 GiB Ultra 65,536 MiB/s"]
+    SapmntVol["sapmnt Volume NFS v4.1 512 GiB Premium"]
+    TransVol["transport Volume NFS v4.1 1,024 GiB Standard"]
+  end
+  subgraph BackupTarget["Azure Backup"]
+    RSV["Recovery Services Vault GRS Cross-region restore enabled"]
+    BackintConn["HANA backint agent Backup to RSV via Private Endpoint"]
+  end
+  subgraph SnapshotTarget["ANF Snapshots"]
+    HourlySnap["Hourly snapshots retained 48h azacsnap tool"]
+    DailySnap["Daily snapshots retained 14d azacsnap tool"]
+  end
+  HANANode --&gt;|NFS v4.1 nconnect=8| DataVol
+  HANANode --&gt;|NFS v4.1 nconnect=8| LogVol
+  HANANode --&gt;|NFS v4.1 nconnect=8 Mount /hana/shared| SharedVol
+  DataVol --&gt; HourlySnap
+  DataVol --&gt; DailySnap
+  HANANode --&gt;|backint streaming backup| BackintConn
+  BackintConn --&gt; RSV</code></pre>
+<hr/>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<h3 id="sap-hana-storage-requirements">SAP HANA Storage Requirements<a class="headerlink" href="#sap-hana-storage-requirements" title="Permanent link">¶</a></h3>
+<p>SAP Note 1943937 (Hardware Configuration Check Tool) defines the minimum storage KPIs for SAP HANA. These are non-negotiable for production HANA certification:</p>
+<table>
+<thead>
+<tr>
+<th>Volume</th>
+<th>Mount Point</th>
+<th>Minimum Read Throughput</th>
+<th>Minimum Write Throughput</th>
+<th>Minimum IOPS</th>
+<th>Latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA data volume</td>
+<td>/hana/data</td>
+<td>400 MB/s</td>
+<td>250 MB/s</td>
+<td>7,000 (4 KiB random read)</td>
+<td>Below 1 ms (p99)</td>
+</tr>
+<tr>
+<td>HANA log volume</td>
+<td>/hana/log</td>
+<td>N/A</td>
+<td>250 MB/s sustained</td>
+<td>2,000 (write)</td>
+<td>Below 1 ms (p99)</td>
+</tr>
+<tr>
+<td>HANA shared</td>
+<td>/hana/shared</td>
+<td>250 MB/s</td>
+<td>N/A</td>
+<td>1,000</td>
+<td>Below 2 ms (p99)</td>
+</tr>
+<tr>
+<td>HANA backup</td>
+<td>/hana/backup</td>
+<td>100 MB/s</td>
+<td>100 MB/s</td>
+<td>N/A</td>
+<td>Not latency-sensitive</td>
+</tr>
+</tbody>
+</table>
+<p>The log volume latency requirement (below 1 ms p99) is the most critical: SAP HANA uses synchronous log writes (write-ahead log), and log write latency directly impacts HANA transaction commit latency. Azure NetApp Files Ultra tier delivers below 0.5 ms p99 for log writes in tested configurations, which provides margin below the 1 ms threshold.</p>
+<h3 id="sap-hana-volume-layout-on-azure-netapp-files">SAP HANA Volume Layout on Azure NetApp Files<a class="headerlink" href="#sap-hana-volume-layout-on-azure-netapp-files" title="Permanent link">¶</a></h3>
+<p>Each SAP HANA SID gets dedicated ANF volumes (not shared volumes across SIDs) per SAP Note 3114876 recommendations:</p>
+<table>
+<thead>
+<tr>
+<th>ANF Volume</th>
+<th>Mount Point</th>
+<th>Size</th>
+<th>ANF Service Level</th>
+<th>Throughput</th>
+<th>HANA System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SID-data-mnt00001</td>
+<td>/hana/data/SID/mnt00001</td>
+<td>2x HANA memory size</td>
+<td>Ultra</td>
+<td>128 MiB/s per TiB</td>
+<td>Primary + Secondary (separate volumes)</td>
+</tr>
+<tr>
+<td>SID-log-mnt00001</td>
+<td>/hana/log/SID/mnt00001</td>
+<td>0.5x HANA memory size</td>
+<td>Ultra</td>
+<td>128 MiB/s per TiB</td>
+<td>Primary + Secondary (separate volumes)</td>
+</tr>
+<tr>
+<td>SID-shared</td>
+<td>/hana/shared</td>
+<td>1x HANA memory size</td>
+<td>Premium</td>
+<td>64 MiB/s per TiB</td>
+<td>Shared between primary and secondary</td>
+</tr>
+<tr>
+<td>sapmnt-SID</td>
+<td>/sapmnt/SID</td>
+<td>512 GiB</td>
+<td>Premium</td>
+<td>64 MiB/s per TiB</td>
+<td>Shared between all app servers</td>
+</tr>
+<tr>
+<td>trans</td>
+<td>/usr/sap/trans</td>
+<td>1,024 GiB</td>
+<td>Standard</td>
+<td>16 MiB/s per TiB</td>
+<td>Shared between all SAP SIDs in landscape</td>
+</tr>
+</tbody>
+</table>
+<p>The data volume size = 2x HANA memory size ensures sufficient space for HANA delta store, column store compression overhead, HANA rowstore, and catalog files. The log volume size = 0.5x HANA memory size is the SAP recommendation based on typical HANA redo log write amplification ratios.</p>
+<h3 id="nfs-v41-mount-options">NFS v4.1 Mount Options<a class="headerlink" href="#nfs-v41-mount-options" title="Permanent link">¶</a></h3>
+<p>All ANF volumes for SAP HANA are mounted with the following options per SAP Note 3114876 and Azure ANF documentation:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>/etc/fstab entry format:
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>&lt;anf-volume-ip&gt;:/SID-data-mnt00001 /hana/data/SID/mnt00001 nfs4 \
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>  rw,hard,nointr,bg,timeo=600,retrans=2,proto=tcp, \
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>  nconnect=8,rsize=1048576,wsize=1048576,vers=4.1,minorversion=1 0 0
+</span></code></pre></div>
+<p>Key mount options:
+- <strong>nconnect=8</strong>: Opens 8 parallel TCP connections to the ANF NFS endpoint, multiplying effective throughput from ~1,250 MB/s (single connection) to ~10,000 MB/s aggregate. Required for HANA data volumes to sustain the 400 MB/s read throughput requirement.
+- <strong>hard</strong>: Mount retries indefinitely on NFS server unavailability. Required for HANA to prevent data corruption from partial write operations during ANF brief unavailability events.
+- <strong>rsize=1048576 wsize=1048576</strong>: Maximum NFS read/write buffer size (1 MiB). ANF performs best with large I/O sizes; default 65536 (64 KiB) under-utilizes ANF throughput capability.
+- <strong>vers=4.1,minorversion=1</strong>: NFS v4.1 with pNFS (parallel NFS) support. ANF requires NFS v4.1; NFS v3 is deprecated for new SAP HANA deployments on Azure.</p>
+<h3 id="sap-application-server-storage-layout">SAP Application Server Storage Layout<a class="headerlink" href="#sap-application-server-storage-layout" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Disk Type</th>
+<th>Size</th>
+<th>IOPS</th>
+<th>Throughput</th>
+<th>Mount Point</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OS disk (ASCS, ERS, PAS, AAS)</td>
+<td>Premium SSD v2</td>
+<td>128 GiB</td>
+<td>3,000</td>
+<td>125 MB/s</td>
+<td>/ (root)</td>
+</tr>
+<tr>
+<td>/usr/sap (SAP binaries, instance profiles)</td>
+<td>NFS v4.1 from ANF</td>
+<td>Shared SID-shared volume</td>
+<td>—</td>
+<td>—</td>
+<td>/usr/sap/SID</td>
+</tr>
+<tr>
+<td>/sapmnt (global SAP directory)</td>
+<td>NFS v4.1 from ANF</td>
+<td>sapmnt-SID volume</td>
+<td>—</td>
+<td>—</td>
+<td>/sapmnt/SID</td>
+</tr>
+<tr>
+<td>/usr/sap/trans (transport directory)</td>
+<td>NFS v4.1 from ANF</td>
+<td>trans volume</td>
+<td>—</td>
+<td>—</td>
+<td>/usr/sap/trans</td>
+</tr>
+</tbody>
+</table>
+<p>SAP application server VMs do not have separate data disks beyond the OS disk. All SAP application data (profiles, work directory, log files) resides either on the OS disk or on ANF NFS mounts. This simplifies VM management: new AAS VMs can be provisioned, mounted to the shared ANF volumes, and registered as SAP application servers without any local data initialization.</p>
+<h3 id="sap-hana-backup-architecture">SAP HANA Backup Architecture<a class="headerlink" href="#sap-hana-backup-architecture" title="Permanent link">¶</a></h3>
+<p><strong>Azure Backup with backint integration:</strong></p>
+<p>SAP HANA integrates with Azure Backup via the SAP backint interface. The Azure Backup HANA Plugin acts as a backint agent on the HANA VM and streams backup data to the Azure Recovery Services Vault (RSV) via the Private Endpoint. No data traverses the public internet.</p>
+<p>Backup schedule:
+- <strong>Full database backup</strong>: Daily at 01:00 UTC; retention 35 days
+- <strong>Differential backup</strong>: Not used (HANA backint supports full and log only; differential is available but not recommended for most SAP HANA landscapes due to full-to-differential restore complexity)
+- <strong>Log backup</strong>: Every 15 minutes; retention 7 days; stored in RSV</p>
+<p>Backup throughput sizing: For a 1 TiB HANA database with 60% compression ratio, the compressed full backup is approximately 400 GiB. At backint streaming throughput of 200 MB/s (limited by ANF data volume read throughput), the full backup completes in approximately 2,000 seconds (33 minutes). The backup must complete within the 4-hour maintenance window to avoid overlapping with the SAP production batch window.</p>
+<p><strong>azacsnap (Azure Application-Consistent Snapshot Tool):</strong></p>
+<p>azacsnap creates application-consistent ANF storage snapshots by:
+1. Suspending HANA data area writes (HANA backup mode: hdbsql "BACKUP DATA CLOSE SNAPSHOT BACKUP_ID COMMENT").
+2. Creating ANF volume snapshots via the Azure Resource Manager API.
+3. Resuming HANA data area writes.</p>
+<p>azacsnap schedule:
+- Every 15 minutes: Data volume snapshot only (not log volume; log volume is backed up by backint log backup)
+- Daily at 23:30 UTC: Data + log volume snapshots</p>
+<p>azacsnap snapshots provide fast point-in-time recovery within the ANF snapshot retention window (48 hours for 15-minute snapshots, 14 days for daily snapshots) without requiring a full restore from the Azure Backup RSV. Recovery from an ANF snapshot is complete within seconds (ANF snapshot reverts the volume to the snapshot point instantly), compared to 30-60 minutes for a full Azure Backup restore. After reverting to an ANF snapshot, HANA applies log replays from the backint log backup to reach the desired recovery point.</p>
+<h3 id="sap-notes-reference-table">SAP Notes Reference Table<a class="headerlink" href="#sap-notes-reference-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1943937</td>
+<td>Hardware Configuration Check Tool: Azure Support</td>
+<td>HANA storage KPIs: data volume 400 MB/s read, log volume 250 MB/s write, below 1 ms p99 latency; storage certification requirements</td>
+<td>ANF volume sizing and service level selection; mount option validation</td>
+</tr>
+<tr>
+<td>3114876</td>
+<td>Azure NetApp Files for SAP HANA Scale-Up Systems</td>
+<td>Recommended ANF volume sizes (data = 2x HANA memory, log = 0.5x); NFS v4.1 with nconnect=8; Ultra tier for data and log</td>
+<td>ANF volume design; mount option configuration</td>
+</tr>
+<tr>
+<td>2854226</td>
+<td>Azure NetApp Files for SAP Applications</td>
+<td>ANF configuration requirements; NFS v4.1 Kerberos; capacity pool service level selection</td>
+<td>ANF capacity pool configuration</td>
+</tr>
+<tr>
+<td>1999351</td>
+<td>Troubleshooting Enhanced Azure Monitoring for SAP</td>
+<td>Storage metric collection requirements for SAP Enhanced Monitoring; disk KPI thresholds</td>
+<td>Azure Monitor for SAP Solutions storage provider</td>
+</tr>
+<tr>
+<td>2667869</td>
+<td>SAP on Azure: HANA Large Instance Storage Layout</td>
+<td>Reference for HANA Large Instance storage layout (applicable as reference for Azure VM storage layout)</td>
+<td>HANA volume hierarchy design reference</td>
+</tr>
+<tr>
+<td>2965811</td>
+<td>Troubleshooting SAP HANA Backup Failures on Azure</td>
+<td>Azure Backup backint common failure modes; Recovery Services Vault configuration; Private Endpoint for backup</td>
+<td>Azure Backup HANA backint configuration</td>
+</tr>
+<tr>
+<td>2772999</td>
+<td>Configuring Azure Disk Encryption for Linux SAP VMs</td>
+<td>Azure Disk Encryption with dm-crypt on Linux SAP VMs; Key Vault CMK integration</td>
+<td>OS disk encryption on ASCS and application server VMs</td>
+</tr>
+<tr>
+<td>3025468</td>
+<td>SAP HANA: azacsnap Installation and Configuration</td>
+<td>azacsnap tool installation; snapshot schedule configuration; HANA backup mode commands</td>
+<td>azacsnap deployment and configuration</td>
+</tr>
+<tr>
+<td>2080991</td>
+<td>SAP HANA on Azure: Network Requirements</td>
+<td>Multi-NIC HANA VM design; management NIC for backup traffic to avoid bandwidth contention with HSR</td>
+<td>HANA VM NIC assignment for backup traffic</td>
+</tr>
+<tr>
+<td>2580633</td>
+<td>Best Practices: SAP HANA Backup on Azure with Azure NetApp Files</td>
+<td>ANF snapshot-based backup approach; integration with azacsnap; recovery procedures</td>
+<td>azacsnap + backint hybrid backup strategy</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<h3 id="azure-netapp-files-configuration">Azure NetApp Files Configuration<a class="headerlink" href="#azure-netapp-files-configuration" title="Permanent link">¶</a></h3>
+<p><strong>ANF Account and Capacity Pool:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>resource anfAccount 'Microsoft.NetApp/netAppAccounts@2023-05-01' = {
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>  name: 'anf-sap-prod'
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>  location: primaryRegion
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>  properties: {
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>    encryption: {
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>      keySource: 'Microsoft.KeyVault'
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a>      keyVaultProperties: {
+</span><span id="__span-1-8"><a href="#__codelineno-1-8" id="__codelineno-1-8" name="__codelineno-1-8"></a>        keyVaultId: keyVaultId
+</span><span id="__span-1-9"><a href="#__codelineno-1-9" id="__codelineno-1-9" name="__codelineno-1-9"></a>        keyName: 'cmk-anf-prod'
+</span><span id="__span-1-10"><a href="#__codelineno-1-10" id="__codelineno-1-10" name="__codelineno-1-10"></a>        keyVaultResourceId: keyVaultResourceId
+</span><span id="__span-1-11"><a href="#__codelineno-1-11" id="__codelineno-1-11" name="__codelineno-1-11"></a>      }
+</span><span id="__span-1-12"><a href="#__codelineno-1-12" id="__codelineno-1-12" name="__codelineno-1-12"></a>    }
+</span><span id="__span-1-13"><a href="#__codelineno-1-13" id="__codelineno-1-13" name="__codelineno-1-13"></a>  }
+</span><span id="__span-1-14"><a href="#__codelineno-1-14" id="__codelineno-1-14" name="__codelineno-1-14"></a>}
+</span><span id="__span-1-15"><a href="#__codelineno-1-15" id="__codelineno-1-15" name="__codelineno-1-15"></a>
+</span><span id="__span-1-16"><a href="#__codelineno-1-16" id="__codelineno-1-16" name="__codelineno-1-16"></a>resource anfUltraPool 'Microsoft.NetApp/netAppAccounts/capacityPools@2023-05-01' = {
+</span><span id="__span-1-17"><a href="#__codelineno-1-17" id="__codelineno-1-17" name="__codelineno-1-17"></a>  parent: anfAccount
+</span><span id="__span-1-18"><a href="#__codelineno-1-18" id="__codelineno-1-18" name="__codelineno-1-18"></a>  name: 'pool-hana-ultra'
+</span><span id="__span-1-19"><a href="#__codelineno-1-19" id="__codelineno-1-19" name="__codelineno-1-19"></a>  properties: {
+</span><span id="__span-1-20"><a href="#__codelineno-1-20" id="__codelineno-1-20" name="__codelineno-1-20"></a>    serviceLevel: 'Ultra'
+</span><span id="__span-1-21"><a href="#__codelineno-1-21" id="__codelineno-1-21" name="__codelineno-1-21"></a>    size: 8796093022208  // 8 TiB minimum capacity pool size
+</span><span id="__span-1-22"><a href="#__codelineno-1-22" id="__codelineno-1-22" name="__codelineno-1-22"></a>    qosType: 'Manual'    // Manual QoS allows per-volume throughput configuration
+</span><span id="__span-1-23"><a href="#__codelineno-1-23" id="__codelineno-1-23" name="__codelineno-1-23"></a>    encryptionType: 'Double'  // Double encryption at rest
+</span><span id="__span-1-24"><a href="#__codelineno-1-24" id="__codelineno-1-24" name="__codelineno-1-24"></a>  }
+</span><span id="__span-1-25"><a href="#__codelineno-1-25" id="__codelineno-1-25" name="__codelineno-1-25"></a>}
+</span></code></pre></div>
+<p><strong>ANF Volume for HANA Data (Manual QoS):</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>resource hanaDataVolume 'Microsoft.NetApp/netAppAccounts/capacityPools/volumes@2023-05-01' = {
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>  name: 'SID-data-mnt00001'
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>  properties: {
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>    subnetId: anfDelegatedSubnetId
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>    creationToken: 'SID-data-mnt00001'
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a>    usageThreshold: 2199023255552  // 2 TiB (2 * HANA memory size)
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a>    throughputMibps: 400            // Manually set to HANA requirement
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a>    protocolTypes: ['NFSv4.1']
+</span><span id="__span-2-9"><a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a>    exportPolicy: {
+</span><span id="__span-2-10"><a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a>      rules: [{
+</span><span id="__span-2-11"><a href="#__codelineno-2-11" id="__codelineno-2-11" name="__codelineno-2-11"></a>        ruleIndex: 1
+</span><span id="__span-2-12"><a href="#__codelineno-2-12" id="__codelineno-2-12" name="__codelineno-2-12"></a>        unixReadOnly: false
+</span><span id="__span-2-13"><a href="#__codelineno-2-13" id="__codelineno-2-13" name="__codelineno-2-13"></a>        unixReadWrite: true
+</span><span id="__span-2-14"><a href="#__codelineno-2-14" id="__codelineno-2-14" name="__codelineno-2-14"></a>        nfsv3: false
+</span><span id="__span-2-15"><a href="#__codelineno-2-15" id="__codelineno-2-15" name="__codelineno-2-15"></a>        nfsv41: true
+</span><span id="__span-2-16"><a href="#__codelineno-2-16" id="__codelineno-2-16" name="__codelineno-2-16"></a>        allowedClients: '10.10.3.0/27'  // HANA subnet only
+</span><span id="__span-2-17"><a href="#__codelineno-2-17" id="__codelineno-2-17" name="__codelineno-2-17"></a>        kerberos5ReadWrite: false
+</span><span id="__span-2-18"><a href="#__codelineno-2-18" id="__codelineno-2-18" name="__codelineno-2-18"></a>      }]
+</span><span id="__span-2-19"><a href="#__codelineno-2-19" id="__codelineno-2-19" name="__codelineno-2-19"></a>    }
+</span><span id="__span-2-20"><a href="#__codelineno-2-20" id="__codelineno-2-20" name="__codelineno-2-20"></a>    snapshotDirectoryVisible: true
+</span><span id="__span-2-21"><a href="#__codelineno-2-21" id="__codelineno-2-21" name="__codelineno-2-21"></a>    dataProtection: {
+</span><span id="__span-2-22"><a href="#__codelineno-2-22" id="__codelineno-2-22" name="__codelineno-2-22"></a>      snapshot: {
+</span><span id="__span-2-23"><a href="#__codelineno-2-23" id="__codelineno-2-23" name="__codelineno-2-23"></a>        snapshotPolicyId: anfSnapshotPolicyId
+</span><span id="__span-2-24"><a href="#__codelineno-2-24" id="__codelineno-2-24" name="__codelineno-2-24"></a>      }
+</span><span id="__span-2-25"><a href="#__codelineno-2-25" id="__codelineno-2-25" name="__codelineno-2-25"></a>    }
+</span><span id="__span-2-26"><a href="#__codelineno-2-26" id="__codelineno-2-26" name="__codelineno-2-26"></a>  }
+</span><span id="__span-2-27"><a href="#__codelineno-2-27" id="__codelineno-2-27" name="__codelineno-2-27"></a>}
+</span></code></pre></div>
+<p><strong>ANF Snapshot Policy:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>resource anfSnapshotPolicy 'Microsoft.NetApp/netAppAccounts/snapshotPolicies@2023-05-01' = {
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>  name: 'snap-policy-hana'
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>  properties: {
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>    hourlySchedule: {
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>      snapshotsToKeep: 48
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a>      minute: 0
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a>    }
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a>    dailySchedule: {
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a>      snapshotsToKeep: 14
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a>      hour: 23
+</span><span id="__span-3-11"><a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a>      minute: 30
+</span><span id="__span-3-12"><a href="#__codelineno-3-12" id="__codelineno-3-12" name="__codelineno-3-12"></a>    }
+</span><span id="__span-3-13"><a href="#__codelineno-3-13" id="__codelineno-3-13" name="__codelineno-3-13"></a>    weeklySchedule: {
+</span><span id="__span-3-14"><a href="#__codelineno-3-14" id="__codelineno-3-14" name="__codelineno-3-14"></a>      snapshotsToKeep: 4
+</span><span id="__span-3-15"><a href="#__codelineno-3-15" id="__codelineno-3-15" name="__codelineno-3-15"></a>      day: 'Sunday'
+</span><span id="__span-3-16"><a href="#__codelineno-3-16" id="__codelineno-3-16" name="__codelineno-3-16"></a>      hour: 0
+</span><span id="__span-3-17"><a href="#__codelineno-3-17" id="__codelineno-3-17" name="__codelineno-3-17"></a>      minute: 0
+</span><span id="__span-3-18"><a href="#__codelineno-3-18" id="__codelineno-3-18" name="__codelineno-3-18"></a>    }
+</span><span id="__span-3-19"><a href="#__codelineno-3-19" id="__codelineno-3-19" name="__codelineno-3-19"></a>    enabled: true
+</span><span id="__span-3-20"><a href="#__codelineno-3-20" id="__codelineno-3-20" name="__codelineno-3-20"></a>  }
+</span><span id="__span-3-21"><a href="#__codelineno-3-21" id="__codelineno-3-21" name="__codelineno-3-21"></a>}
+</span></code></pre></div>
+<p><strong>ANF Cross-Region Replication (for /sapmnt and transport volumes to DR region):</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>resource sapmntVolumeDR 'Microsoft.NetApp/netAppAccounts/capacityPools/volumes@2023-05-01' = {
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>  name: 'sapmnt-SID-dr'
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a>  properties: {
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a>    dataProtection: {
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>      replication: {
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a>        endpointType: 'dst'
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a>        remoteVolumeResourceId: sapmntVolumeIdPrimary
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a>        replicationSchedule: '_10minutely'
+</span><span id="__span-4-9"><a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a>      }
+</span><span id="__span-4-10"><a href="#__codelineno-4-10" id="__codelineno-4-10" name="__codelineno-4-10"></a>    }
+</span><span id="__span-4-11"><a href="#__codelineno-4-11" id="__codelineno-4-11" name="__codelineno-4-11"></a>  }
+</span><span id="__span-4-12"><a href="#__codelineno-4-12" id="__codelineno-4-12" name="__codelineno-4-12"></a>}
+</span></code></pre></div>
+<h3 id="premium-ssd-v2-configuration">Premium SSD v2 Configuration<a class="headerlink" href="#premium-ssd-v2-configuration" title="Permanent link">¶</a></h3>
+<p>Premium SSD v2 is used for HANA OS disks and the HANA restart/persistent memory volume. Unlike Premium SSD v1 (P-series), Premium SSD v2 allows IOPS and throughput to be set independently of disk size, eliminating the need to overprovision disk size to reach IOPS or throughput requirements.</p>
+<p><strong>Premium SSD v2 creation with custom IOPS/throughput:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>az<span class="w"> </span>disk<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">  </span>--resource-group<span class="w"> </span>rg-sap-prod<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span>--name<span class="w"> </span>disk-hana01-os<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">  </span>--size-gb<span class="w"> </span><span class="m">128</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-5"><a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">  </span>--sku<span class="w"> </span>PremiumV2_LRS<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-6"><a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">  </span>--disk-iops-read-write<span class="w"> </span><span class="m">3000</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-7"><a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">  </span>--disk-mbps-read-write<span class="w"> </span><span class="m">125</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-8"><a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">  </span>--zone<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-9"><a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">  </span>--location<span class="w"> </span>eastus2
+</span></code></pre></div>
+<p>Premium SSD v2 constraints:
+- Minimum size: 1 GiB; maximum: 65,536 GiB
+- IOPS: up to 80,000 IOPS per disk (maximum 160,000 IOPS per VM depending on SKU)
+- Throughput: up to 1,200 MB/s per disk
+- Cannot be used as OS disk for VMs in Availability Sets (Availability Zones only; not supported for Classic deployments)
+- Zone-pinned: Premium SSD v2 disk must be in the same zone as the VM it is attached to</p>
+<p><strong>Storage Encryption with Customer Managed Keys:</strong></p>
+<p>All SAP disks (Premium SSD v2 OS disks, HANA data disks) use Customer Managed Keys (CMK) stored in Azure Key Vault Premium. The Disk Encryption Set references the CMK in Key Vault and is assigned to all SAP disk resources:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a>resource sapDiskEncryptionSet 'Microsoft.Compute/diskEncryptionSets@2023-04-02' = {
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>  name: 'des-sap-prod'
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a>  identity: {
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>    type: 'SystemAssigned'
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a>  }
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a>  properties: {
+</span><span id="__span-6-7"><a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a>    encryptionType: 'EncryptionAtRestWithCustomerKey'
+</span><span id="__span-6-8"><a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a>    activeKey: {
+</span><span id="__span-6-9"><a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a>      sourceVault: { id: keyVaultId }
+</span><span id="__span-6-10"><a href="#__codelineno-6-10" id="__codelineno-6-10" name="__codelineno-6-10"></a>      keyUrl: cmkKeyUrl
+</span><span id="__span-6-11"><a href="#__codelineno-6-11" id="__codelineno-6-11" name="__codelineno-6-11"></a>    }
+</span><span id="__span-6-12"><a href="#__codelineno-6-12" id="__codelineno-6-12" name="__codelineno-6-12"></a>  }
+</span><span id="__span-6-13"><a href="#__codelineno-6-13" id="__codelineno-6-13" name="__codelineno-6-13"></a>}
+</span></code></pre></div>
+<p>The Disk Encryption Set's system-assigned managed identity must have the <code>Key Vault Crypto User</code> role on the Key Vault to read the CMK. Key Vault must have soft delete enabled (90-day retention) and purge protection enabled to prevent accidental CMK deletion that would render all encrypted disks inaccessible.</p>
+<h3 id="azure-backup-for-sap-hana">Azure Backup for SAP HANA<a class="headerlink" href="#azure-backup-for-sap-hana" title="Permanent link">¶</a></h3>
+<p>Azure Backup policy for SAP HANA backint:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="p">{</span>
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">  </span><span class="nt">"backupManagementType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AzureWorkload"</span><span class="p">,</span>
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="w">  </span><span class="nt">"workloadType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAPHanaDatabase"</span><span class="p">,</span>
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="w">  </span><span class="nt">"schedulePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="w">    </span><span class="nt">"schedulePolicyType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SimpleSchedulePolicy"</span><span class="p">,</span>
+</span><span id="__span-7-6"><a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="w">    </span><span class="nt">"scheduleRunFrequency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Daily"</span><span class="p">,</span>
+</span><span id="__span-7-7"><a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">    </span><span class="nt">"scheduleRunTimes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"2026-01-01T01:00:00Z"</span><span class="p">]</span>
+</span><span id="__span-7-8"><a href="#__codelineno-7-8" id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-7-9"><a href="#__codelineno-7-9" id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="w">  </span><span class="nt">"retentionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-10"><a href="#__codelineno-7-10" id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="w">    </span><span class="nt">"retentionPolicyType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LongTermRetentionPolicy"</span><span class="p">,</span>
+</span><span id="__span-7-11"><a href="#__codelineno-7-11" id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="w">    </span><span class="nt">"dailySchedule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-12"><a href="#__codelineno-7-12" id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="w">      </span><span class="nt">"retentionDuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w"> </span><span class="nt">"durationType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Days"</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-7-13"><a href="#__codelineno-7-13" id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-14"><a href="#__codelineno-7-14" id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-7-15"><a href="#__codelineno-7-15" id="__codelineno-7-15" name="__codelineno-7-15"></a><span class="w">  </span><span class="nt">"settings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-16"><a href="#__codelineno-7-16" id="__codelineno-7-16" name="__codelineno-7-16"></a><span class="w">    </span><span class="nt">"isCompression"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-7-17"><a href="#__codelineno-7-17" id="__codelineno-7-17" name="__codelineno-7-17"></a><span class="w">    </span><span class="nt">"isEncryption"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-7-18"><a href="#__codelineno-7-18" id="__codelineno-7-18" name="__codelineno-7-18"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-7-19"><a href="#__codelineno-7-19" id="__codelineno-7-19" name="__codelineno-7-19"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>HANA log backup policy:
+<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="p">{</span>
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="w">  </span><span class="nt">"workloadType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SAPHanaDatabase"</span><span class="p">,</span>
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">  </span><span class="nt">"logSchedulePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">    </span><span class="nt">"scheduleFrequencyInMins"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span>
+</span><span id="__span-8-5"><a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-8-6"><a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="w">  </span><span class="nt">"logRetentionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-7"><a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="w">    </span><span class="nt">"retentionDuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="nt">"durationType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Days"</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-8-8"><a href="#__codelineno-8-8" id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-8-9"><a href="#__codelineno-8-9" id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p>The Recovery Services Vault (RSV) is configured with:
+- <strong>Redundancy</strong>: GRS (Geo-redundant storage) to enable cross-region restore to the DR region.
+- <strong>Cross-region restore</strong>: Enabled on the RSV to allow HANA database restore in the secondary Azure region from primary region backups.
+- <strong>Soft delete</strong>: Enabled with 14-day retention period after backup item deletion to prevent accidental data loss.
+- <strong>Immutability</strong>: Unlocked immutability policy on the RSV with 35-day minimum retention to prevent backup data deletion (recommended for compliance requirements).</p>
+<h3 id="architecture-diagram-storage-service-flow">Architecture Diagram: Storage Service Flow<a class="headerlink" href="#architecture-diagram-storage-service-flow" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph LR
+  subgraph HANA["HANA VM M64s_v2"]
+    HDB["SAP HANA Process"]
+    BackintAgent["Azure Backup HANA Plugin backint agent"]
+    AzacSnapAgent["azacsnap agent"]
+  end
+  subgraph ANF["Azure NetApp Files"]
+    DataVol["Data Volume /hana/data Ultra 2 TiB 400 MB/s"]
+    LogVol["Log Volume /hana/log Ultra 512 GiB 64 MB/s"]
+    SharedVol["Shared Volume /hana/shared Premium 1 TiB"]
+    Snapshots["ANF Snapshots hourly+daily"]
+  end
+  subgraph Backup["Azure Backup"]
+    RSV["Recovery Services Vault GRS Soft-delete 14d"]
+    BackupMgmt["Backup Management Service"]
+  end
+  subgraph KV["Security"]
+    KeyVault["Azure Key Vault Premium CMK for ANF CMK for Disks"]
+    DES["Disk Encryption Set CMK-backed"]
+  end
+  HDB --&gt;|NFS v4.1 nconnect=8 write| DataVol
+  HDB --&gt;|NFS v4.1 nconnect=8 write| LogVol
+  HDB --&gt;|NFS v4.1 read/write| SharedVol
+  DataVol --&gt; Snapshots
+  AzacSnapAgent --&gt;|HANA backup mode + ANF snapshot API| DataVol
+  BackintAgent --&gt;|Streaming backup via Private Endpoint| RSV
+  RSV --&gt; BackupMgmt
+  DataVol -.-&gt;|CMK encryption| KeyVault
+  DES -.-&gt;|CMK reference| KeyVault</code></pre>
+<hr/>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA data and log volume storage</td>
+<td>(1) Azure Managed Disks (Premium SSD v2) local to VM; (2) Azure NetApp Files NFS v4.1; (3) Azure Shared Disk</td>
+<td>Azure NetApp Files Ultra tier with NFS v4.1</td>
+<td>ANF Ultra tier provides required HANA storage KPIs (400 MB/s data read, 250 MB/s log write, sub-1 ms p99 latency). ANF volumes are independent of VM lifecycle, enabling HANA data volume reuse across primary and secondary HANA VMs during HSR failover without data copy. Shared Disk is not supported for SAP HANA.</td>
+<td>SAP Note 1943937; SAP Note 3114876</td>
+</tr>
+<tr>
+<td>HANA backup method</td>
+<td>(1) Azure Backup backint only; (2) ANF snapshots only (azacsnap); (3) Hybrid: backint for full/log + azacsnap for fast recovery</td>
+<td>Hybrid approach: Azure Backup backint for full and log backups (long-term retention); azacsnap for frequent storage snapshots (fast recovery)</td>
+<td>Azure Backup backint provides long-term retention (35+ days), cross-region restore, and full RPO/RTO coverage for DR scenarios. ANF snapshots (azacsnap) provide near-instant recovery for point-in-time recovery within 48 hours without RSV restore overhead. The hybrid approach minimizes RTO for common recovery scenarios (operator error, data corruption within 48 hours) while providing full DR coverage.</td>
+<td>SAP Note 2580633; SAP Note 3025468</td>
+</tr>
+<tr>
+<td>Disk encryption approach</td>
+<td>(1) Platform Managed Keys (PMK); (2) Customer Managed Keys (CMK) in Azure Key Vault; (3) Azure Disk Encryption (ADE with BitLocker/dm-crypt)</td>
+<td>CMK via Disk Encryption Set for managed disks; CMK via ANF encryption key source for ANF volumes</td>
+<td>CMK provides customer control over encryption keys with Key Vault soft delete and purge protection preventing unauthorized key deletion. CMK satisfies ISO 27001, PCI-DSS, and SOC 2 requirements for encryption key ownership. ADE (BitLocker/dm-crypt) is used only for VMs in special compliance environments where HSM-backed keys are required at the volume level (not standard for SAP).</td>
+<td>Azure Disk Encryption documentation; PCI-DSS requirement 3.5</td>
+</tr>
+<tr>
+<td>ANF service level for HANA data/log</td>
+<td>(1) Standard tier (16 MiB/s per TiB); (2) Premium tier (64 MiB/s per TiB); (3) Ultra tier (128 MiB/s per TiB)</td>
+<td>Ultra tier for HANA data and log volumes; Premium tier for /hana/shared and sapmnt; Standard tier for transport directory</td>
+<td>HANA data volume requires 400 MB/s for a 2 TiB volume. At Ultra tier (128 MiB/s per TiB): 2 TiB * 128 MiB/s = 256 MiB/s minimum; enabling Manual QoS sets throughput to 400 MiB/s. Premium tier (64 MiB/s per TiB) cannot reach 400 MB/s without massively overprovisioning volume size. Standard tier is sufficient for transport directory which has no IOPS or throughput SLA requirement from SAP.</td>
+<td>SAP Note 3114876; Azure ANF service levels documentation</td>
+</tr>
+<tr>
+<td>ANF QoS type</td>
+<td>(1) Auto QoS (throughput proportional to volume size); (2) Manual QoS (throughput set independently)</td>
+<td>Manual QoS on Ultra capacity pool</td>
+<td>Manual QoS allows setting HANA data volume throughput to exactly 400 MiB/s without overprovisioning volume size. Auto QoS at Ultra tier: to achieve 400 MiB/s Auto QoS throughput, the volume must be 3.125 TiB (400/128=3.125), whereas the actual data requirement is 2 TiB. Manual QoS saves 1.125 TiB of unnecessary provisioned capacity.</td>
+<td>Azure ANF QoS documentation</td>
+</tr>
+<tr>
+<td>HANA OS disk type</td>
+<td>(1) Premium SSD v1 (P-series); (2) Premium SSD v2; (3) Ultra Disk</td>
+<td>Premium SSD v2 for all SAP VM OS disks</td>
+<td>Premium SSD v2 allows independently configuring IOPS (3,000 baseline) and throughput (125 MB/s baseline) without tying performance to disk size. Premium SSD v1 requires P30 (1,024 GiB) to reach 5,000 IOPS, wasting capacity for a 128 GiB OS disk. Ultra Disk has zonal restrictions and higher cost than needed for OS disks.</td>
+<td>Azure Premium SSD v2 documentation</td>
+</tr>
+<tr>
+<td>Backup retention for HANA full backups</td>
+<td>(1) 7 days; (2) 14 days; (3) 35 days</td>
+<td>35 days daily full backup retention</td>
+<td>SAP recommends minimum 35 days of backup retention to support month-end financial close recovery scenarios. 14-day retention may be insufficient if a data integrity issue is discovered during a monthly close period. 35-day retention satisfies most regulatory requirements for financial SAP systems.</td>
+<td>SAP HANA backup documentation; Azure Backup HANA policy</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Pillar</th>
+<th>Requirement</th>
+<th>Implementation</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reliability</td>
+<td>HANA storage must survive ANF zone failure</td>
+<td>ANF volumes are zone-resilient within the provisioned region; ANF cross-region replication set to every 10 minutes for /sapmnt and transport volumes; HANA data/log volumes replicated via HANA HSR (not ANF replication)</td>
+<td>Azure ANF reliability documentation</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>HANA backup must be verified monthly</td>
+<td>Azure Backup HANA backint restore test performed monthly to a separate sandbox HANA instance in the non-production subscription; restore completion time documented; backint log backup chain integrity verified with hdbsql "backup catalog"</td>
+<td>Azure Backup restore testing; SAP HANA backup documentation</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>All storage data must be encrypted at rest with customer-managed keys</td>
+<td>CMK via Disk Encryption Set for Premium SSD v2 disks; CMK via ANF encryption key source for ANF capacity pool; CMK stored in Azure Key Vault Premium with soft delete 90 days and purge protection enabled</td>
+<td>Azure CMK documentation; Key Vault best practices</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Backup data must be protected from deletion</td>
+<td>Recovery Services Vault with soft delete 14 days and unlocked immutability policy (35-day minimum retention); Azure Policy prevents RSV soft delete disabling</td>
+<td>Azure Backup security features</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Storage access must be restricted to SAP subnets</td>
+<td>ANF export policy restricts NFS mount access to HANA subnet CIDR (10.10.3.0/27); ANF delegated subnet uses Private Link; Azure Backup Private Endpoint in sap-pe-subnet; no public access to RSV</td>
+<td>ANF export policy; Azure Backup Private Endpoint</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>ANF capacity pool size must match actual usage</td>
+<td>Monthly review of ANF capacity pool utilization via Azure Monitor; capacity pool size adjustable online without service interruption; alert when utilization below 70% for 30 days triggers right-sizing review</td>
+<td>Azure Monitor ANF metrics; ANF capacity pool management</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>Backup storage cost must be minimized</td>
+<td>Azure Backup RSV with GRS redundancy (not RA-GRS) for backup storage; LRS acceptable for non-production RSV; HANA backup compression enabled (isCompression: true) in backup policy reduces backup size by 40-60% for typical SAP HANA data</td>
+<td>Azure Backup pricing; backup compression settings</td>
+</tr>
+<tr>
+<td>Operational Excellence</td>
+<td>Storage configuration must be in IaC</td>
+<td>All ANF accounts, capacity pools, volumes, snapshot policies, and Disk Encryption Sets defined in Bicep modules under /bicep/storage/; no manual ANF configuration</td>
+<td>Azure Bicep ANF resource documentation</td>
+</tr>
+<tr>
+<td>Performance Efficiency</td>
+<td>HANA storage throughput must be validated before go-live</td>
+<td>hcmt (HANA Configuration and Migration Tool) storage performance test run before production cutover; validates ANF volume throughput against SAP Note 1943937 KPI table; results stored in Architecture Decision Record</td>
+<td>SAP Note 1943937; SAP HANA hcmt tool</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="rporto-table">RPO/RTO Table<a class="headerlink" href="#rporto-table" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Recovery Scenario</th>
+<th>RPO</th>
+<th>RTO</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA AZ failover (primary to secondary HANA VM)</td>
+<td>0 seconds (SYNC HSR)</td>
+<td>5 minutes (Pacemaker takeover)</td>
+<td>HANA HSR SYNC; ANF data/log volumes remain mounted on secondary HANA VM (no data copy required)</td>
+</tr>
+<tr>
+<td>HANA point-in-time recovery within 48 hours (data corruption)</td>
+<td>15 minutes (azacsnap snapshot interval)</td>
+<td>10 minutes (ANF snapshot revert) + log replay time</td>
+<td>ANF snapshot revert via azacsnap; HANA log replay from backint log backups to reach desired recovery time</td>
+</tr>
+<tr>
+<td>HANA full restore from Azure Backup (RSV)</td>
+<td>4 hours (last full backup + log backups)</td>
+<td>60-90 minutes (full restore from RSV to HANA VM)</td>
+<td>Azure Backup backint full restore; HANA log replay from log backups to reach desired recovery time</td>
+</tr>
+<tr>
+<td>HANA DR region failover</td>
+<td>5-15 seconds (ASYNC HSR lag)</td>
+<td>2-4 hours (HANA takeover in DR region + app server failover)</td>
+<td>HANA HSR ASYNC takeover in DR region; app servers failed over via Azure Site Recovery</td>
+</tr>
+<tr>
+<td>sapmnt / transport volume recovery</td>
+<td>10 minutes (ANF cross-region replication schedule)</td>
+<td>30 minutes (break ANF replication, remount)</td>
+<td>ANF cross-region replication break + volume mount update on all app server VMs</td>
+</tr>
+<tr>
+<td>SAP application server OS disk recovery</td>
+<td>24 hours (daily Azure Backup VM backup)</td>
+<td>30 minutes (restore from RSV)</td>
+<td>Azure Backup VM restore from daily backup; HANA connection re-established automatically</td>
+</tr>
+<tr>
+<td>Accidental Azure Backup backup item deletion</td>
+<td>N/A (soft delete protects data for 14 days)</td>
+<td>Minutes (re-enable backup item)</td>
+<td>Azure Backup soft delete; undelete backup item in RSV portal or via CLI</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="cost-optimization">Cost Optimization<a class="headerlink" href="#cost-optimization" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Potential Saving</th>
+<th>Implementation</th>
+<th>Prerequisites</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ANF Manual QoS vs. Auto QoS</td>
+<td>15-30% ANF capacity saving; saves provisioned TiB that would otherwise be needed to reach throughput at Auto QoS</td>
+<td>Set Ultra capacity pool QoS to Manual; set HANA data volume throughput to 400 MiB/s on a 2 TiB volume instead of provisioning 3.125 TiB for Auto QoS</td>
+<td>ANF capacity pool must be Manual QoS type; cannot be changed after pool creation</td>
+</tr>
+<tr>
+<td>ANF capacity pool right-sizing</td>
+<td>15-25% saving; typical ANF Ultra capacity pool over-provisioned by 2-4 TiB; at ~<span class="arithmatex">\(0.42/GiB/month Ultra: 2 TiB over-provisioning = ~\)</span>860/month saving</td>
+<td>Monthly review of ANF capacity pool utilization; reduce pool size when average utilization below 70% for 30 days; minimum pool size is 4 TiB</td>
+<td>Azure Monitor alert on ANF pool utilization below 70%; ANF pool size reduction can be done online</td>
+</tr>
+<tr>
+<td>Azure Backup compression</td>
+<td>40-60% backup storage cost reduction; typical SAP HANA backup at 60% compression = 400 GiB compressed from 1 TiB uncompressed; saves ~$8/month per backup instance</td>
+<td>Enable isCompression: true in Azure Backup HANA policy (default off); compression uses HANA VM CPU during backup window; schedule backup during off-peak hours</td>
+<td>HANA VM CPU headroom during backup window (backup increases CPU by 10-15%); backup window must not overlap with SAP batch jobs</td>
+</tr>
+<tr>
+<td>Non-production RSV with LRS redundancy</td>
+<td>35% RSV storage cost reduction for non-production; GRS is $0.036/GB vs. LRS $0.024/GB</td>
+<td>Use LRS redundancy for non-production RSV; use GRS only for production RSV (required for cross-region restore)</td>
+<td>Non-production systems do not require cross-region restore (cross-region restore requires GRS RSV)</td>
+</tr>
+<tr>
+<td>ANF Standard tier for transport directory</td>
+<td>~60% cost saving vs. Premium tier; transport volume is read/write but not latency-sensitive; Standard tier (<span class="arithmatex">\(0.104/GiB/month) vs. Premium (\)</span>0.242/GiB/month)</td>
+<td>Assign transport directory ANF volume to Standard service level capacity pool; separate Standard capacity pool required as volumes cannot span service levels within a pool</td>
+<td>ANF capacity pool per service level (Ultra pool for HANA data/log, Premium pool for sapmnt/shared, Standard pool for transport)</td>
+</tr>
+<tr>
+<td>Snapshot-based restore reduces RSV restore frequency</td>
+<td>Reduces RSV egress cost (~$0.02/GB for restore from RSV); ANF snapshot reverts are free</td>
+<td>Use azacsnap hourly snapshots as primary recovery method for recent data corruption; escalate to RSV restore only when azacsnap retention window (48 hours) is exceeded</td>
+<td>azacsnap tool deployed and running on schedule; HANA backup mode commands working</td>
+</tr>
+<tr>
+<td>Premium SSD v2 right-sizing vs. v1</td>
+<td>Premium SSD v2 eliminates need to overprovision disk size for IOPS; saves 4-8 GiB per disk in typical OS disk scenarios; larger saving for data disks</td>
+<td>Use Premium SSD v2 for all new SAP disk deployments; existing Premium SSD v1 disks migrated to v2 during planned maintenance</td>
+<td>Premium SSD v2 requires Availability Zone deployment (not Availability Set); VM must support Premium SSD v2 attachment</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="monitoring-and-alerts">Monitoring and Alerts<a class="headerlink" href="#monitoring-and-alerts" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Metric/Signal</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Action Group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ANF-DataVolume-Throughput-Saturation</td>
+<td>ANF volume throughput consumed vs. provisioned</td>
+<td>Above 95% of provisioned throughput (MiB/s) for 5 minutes</td>
+<td>Sev 1</td>
+<td>sap-hana-dba-oncall</td>
+</tr>
+<tr>
+<td>ANF-LogVolume-Latency-High</td>
+<td>ANF volume average write latency</td>
+<td>Above 1 ms for 5 minutes</td>
+<td>Sev 1</td>
+<td>sap-hana-dba-oncall</td>
+</tr>
+<tr>
+<td>ANF-CapacityPool-Full</td>
+<td>ANF capacity pool consumed capacity %</td>
+<td>Above 85% for 10 minutes</td>
+<td>Sev 2</td>
+<td>sap-storage-ops</td>
+</tr>
+<tr>
+<td>ANF-DataVolume-Full</td>
+<td>ANF volume consumed capacity %</td>
+<td>Above 80% for 30 minutes</td>
+<td>Sev 2</td>
+<td>sap-storage-ops</td>
+</tr>
+<tr>
+<td>Backup-HANA-FullBackup-Failed</td>
+<td>Azure Backup job status</td>
+<td>Full backup job Failed</td>
+<td>Sev 1</td>
+<td>sap-hana-dba-oncall</td>
+</tr>
+<tr>
+<td>Backup-HANA-LogBackup-Missed</td>
+<td>Azure Backup HANA log backup gap</td>
+<td>No log backup for more than 30 minutes</td>
+<td>Sev 2</td>
+<td>sap-hana-dba-oncall</td>
+</tr>
+<tr>
+<td>HANA-Disk-IOPS-Throttled</td>
+<td>VM metric: Disk IOPS throttled count</td>
+<td>Above 0 for 5 minutes on HANA VM</td>
+<td>Sev 1</td>
+<td>sap-hana-dba-oncall</td>
+</tr>
+<tr>
+<td>ANF-SnapshotPolicy-Failed</td>
+<td>ANF snapshot policy execution failure</td>
+<td>Any snapshot policy failure in 1-hour window</td>
+<td>Sev 2</td>
+<td>sap-storage-ops</td>
+</tr>
+<tr>
+<td>CMK-KeyVault-AccessDenied</td>
+<td>Key Vault diagnostic logs: access denied to CMK key</td>
+<td>Any access denied event</td>
+<td>Sev 1</td>
+<td>sap-security-ops</td>
+</tr>
+<tr>
+<td>RSV-BackupStorage-GrowthRate</td>
+<td>RSV used backup storage growth rate</td>
+<td>Above 20% month-over-month growth</td>
+<td>Sev 3</td>
+<td>sap-storage-ops</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-1-using-premium-ssd-v1-p-series-for-sap-hana-os-disks">Anti-Pattern 1: Using Premium SSD v1 (P-series) for SAP HANA OS Disks<a class="headerlink" href="#anti-pattern-1-using-premium-ssd-v1-p-series-for-sap-hana-os-disks" title="Permanent link">¶</a></h3>
+<p>Premium SSD v1 (P-series managed disks) ties IOPS and throughput to disk size. To achieve 5,000 IOPS on a Premium SSD v1, the disk must be at least P30 (1,024 GiB). Using a P30 as the HANA VM OS disk (which only needs 128 GiB) wastes 896 GiB of provisioned disk capacity at $0.136/GiB/month, costing approximately $122/month in wasted capacity per HANA VM. For two HANA VMs (primary + secondary), this is $244/month wasted.</p>
+<p><strong>Correct approach:</strong> Use Premium SSD v2 for all SAP VM OS disks. Premium SSD v2 allows configuring 3,000 IOPS and 125 MB/s throughput on a 128 GiB disk, which is sufficient for SAP OS disk requirements. Premium SSD v2 requires Availability Zone deployment (not Classic or Availability Set), which is already the recommended deployment model for SAP on Azure.</p>
+<h3 id="anti-pattern-2-mounting-anf-volumes-with-soft-mount-option">Anti-Pattern 2: Mounting ANF Volumes with Soft Mount Option<a class="headerlink" href="#anti-pattern-2-mounting-anf-volumes-with-soft-mount-option" title="Permanent link">¶</a></h3>
+<p>Using soft NFS mount option on ANF volumes for SAP HANA data (/hana/data) and log (/hana/log) causes HANA to receive I/O errors and potentially panic if the ANF NFS endpoint is temporarily unavailable (for example, during Azure platform maintenance or ANF service brief interruption). Soft mounts return an I/O error to the application after timeo * retrans seconds without waiting for the NFS server to recover. A HANA panic triggered by NFS I/O errors requires HANA restart and can result in log replay time of 5-60 minutes.</p>
+<p><strong>Correct approach:</strong> Always use hard mount option for SAP HANA ANF volumes. Hard mounts retry NFS operations indefinitely until the NFS server responds. Add bg (background mount) to prevent the OS boot from hanging if ANF is not reachable at boot time. The complete recommended options are: rw,hard,nointr,bg,timeo=600,retrans=2,proto=tcp,nconnect=8,rsize=1048576,wsize=1048576,vers=4.1,minorversion=1.</p>
+<h3 id="anti-pattern-3-not-enabling-nconnect-on-anf-hana-data-volume-mounts">Anti-Pattern 3: Not Enabling nconnect on ANF HANA Data Volume Mounts<a class="headerlink" href="#anti-pattern-3-not-enabling-nconnect-on-anf-hana-data-volume-mounts" title="Permanent link">¶</a></h3>
+<p>Mounting the ANF HANA data volume without nconnect=8 limits the NFS mount to a single TCP connection to the ANF endpoint. A single TCP connection caps throughput at approximately 1,200-1,500 MB/s due to TCP window size and round-trip latency constraints, which is below the required 400 MB/s on its own but becomes a bottleneck when HANA runs large table scans (BW/4HANA aggregation queries) that require sustained 2,000-4,000 MB/s data volume read throughput. The hcmt storage performance test will fail the SAP HANA storage KPI checks without nconnect.</p>
+<p><strong>Correct approach:</strong> Mount all HANA ANF volumes with nconnect=8. This opens 8 parallel TCP connections to the ANF endpoint, enabling aggregate throughput of up to 10,000 MB/s per mount (limited by ANF volume throughput and VM network bandwidth). Verify nconnect is applied after mounting: cat /proc/mounts | grep hana should show nconnect=8 in the mount options.</p>
+<h3 id="anti-pattern-4-running-azacsnap-without-hana-backup-mode-coordination">Anti-Pattern 4: Running azacsnap Without HANA Backup Mode Coordination<a class="headerlink" href="#anti-pattern-4-running-azacsnap-without-hana-backup-mode-coordination" title="Permanent link">¶</a></h3>
+<p>Running ANF storage snapshots of the HANA data volume without first placing HANA in backup mode creates crash-consistent snapshots that may be unusable for HANA point-in-time recovery. HANA continuously writes to the data volume pages in a non-sequential, overlapping fashion. A storage snapshot taken mid-write captures a partially-written state that HANA cannot cleanly apply redo logs on top of during recovery. SAP support will reject incidents related to HANA recovery failures if the backup was created without proper HANA application quiescence.</p>
+<p><strong>Correct approach:</strong> Use azacsnap which coordinates with HANA via the HANA backup SQL API (BACKUP DATA CLOSE SNAPSHOT) before triggering the ANF snapshot. azacsnap ensures HANA flushes dirty pages to the data volume and enters a consistent state before the snapshot is taken. Verify azacsnap is logging successful HANA backup mode entry and exit in /var/log/azacsnap.</p>
+<h3 id="anti-pattern-5-disabling-recovery-services-vault-soft-delete-to-save-storage-cost">Anti-Pattern 5: Disabling Recovery Services Vault Soft Delete to Save Storage Cost<a class="headerlink" href="#anti-pattern-5-disabling-recovery-services-vault-soft-delete-to-save-storage-cost" title="Permanent link">¶</a></h3>
+<p>RSV soft delete retains deleted backup items for 14 days after deletion, consuming backup storage. Some operations teams disable soft delete to immediately reclaim storage when decommissioning a SAP system backup. Disabling soft delete removes the protection against accidental backup deletion, leaving no recovery path if a backup is accidentally deleted during a SAP system decommission or RSV cleanup operation.</p>
+<p><strong>Correct approach:</strong> Keep RSV soft delete enabled with 14-day retention. For decommissioned SAP systems, stop protection with retain data first, which stops new backups but retains existing backup data in the RSV for the retention period. After confirming the system is permanently decommissioned, stop protection with delete data to initiate the soft delete period. The 14-day cost of soft-deleted backup data is minimal compared to the risk of unrecoverable data loss.</p>
+<h3 id="anti-pattern-6-using-a-single-anf-capacity-pool-for-all-sap-volumes-at-ultra-tier">Anti-Pattern 6: Using a Single ANF Capacity Pool for All SAP Volumes at Ultra Tier<a class="headerlink" href="#anti-pattern-6-using-a-single-anf-capacity-pool-for-all-sap-volumes-at-ultra-tier" title="Permanent link">¶</a></h3>
+<p>Creating all ANF volumes (HANA data, HANA log, /hana/shared, /sapmnt, transport) in a single Ultra tier capacity pool overcharges for volumes that do not require Ultra tier performance. The transport directory volume (/usr/sap/trans) has no IOPS or latency requirement and is read/written only during SAP transport operations (STMS import queue). Placing the transport volume in an Ultra tier pool costs $0.42/GiB/month vs. $0.104/GiB/month in a Standard tier pool for the same 1 TiB volume — a $326/month premium with no performance benefit.</p>
+<p><strong>Correct approach:</strong> Create separate ANF capacity pools per service level tier: Ultra capacity pool for HANA data and log volumes; Premium capacity pool for /hana/shared and /sapmnt; Standard capacity pool for transport directory. Assign each volume to the appropriate capacity pool based on its actual performance requirement. ANF volumes cannot be moved between capacity pools after creation; this segregation must be designed before deployment.</p>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="issue-1-sap-hana-hcmt-storage-test-fails-data-volume-throughput-below-400-mbs">Issue 1: SAP HANA hcmt Storage Test Fails: Data Volume Throughput Below 400 MB/s<a class="headerlink" href="#issue-1-sap-hana-hcmt-storage-test-fails-data-volume-throughput-below-400-mbs" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> The SAP HANA hcmt (HANA Configuration and Migration Tool) storage performance test reports the HANA data volume read throughput at 280 MB/s, below the required 400 MB/s KPI from SAP Note 1943937. The hcmt test report flags the data volume as non-compliant.</p>
+<p><strong>Root cause:</strong> The ANF data volume is provisioned in Auto QoS mode at Ultra tier with a 2 TiB volume size. At Auto QoS, Ultra tier provides 128 MiB/s per TiB provisioned = 256 MiB/s maximum throughput for a 2 TiB volume. This is insufficient for the 400 MiB/s requirement.</p>
+<p><strong>Resolution:</strong> Convert the ANF capacity pool from Auto QoS to Manual QoS (this requires recreating the capacity pool — it cannot be changed on an existing pool; data must be migrated to a new Manual QoS pool). In the Manual QoS capacity pool, set the HANA data volume throughput explicitly to 400 MiB/s (or 512 MiB/s to provide 28% headroom). Verify after reconfiguration by re-running hcmt and checking that the volume throughput metric shows above 400 MiB/s. Reference: Azure ANF QoS documentation; SAP Note 3114876.</p>
+<h3 id="issue-2-azure-backup-hana-log-backup-fails-with-error-cannot-connect-to-vault">Issue 2: Azure Backup HANA Log Backup Fails with Error: Cannot Connect to Vault<a class="headerlink" href="#issue-2-azure-backup-hana-log-backup-fails-with-error-cannot-connect-to-vault" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> Azure Backup HANA log backup fails with error message: BackupOperationFailed. The Azure Backup job log shows: Unable to connect to Recovery Services Vault. Connection to privatelink.backup.windowsazure.com refused.</p>
+<p><strong>Root cause:</strong> The Private Endpoint for Azure Backup (pe-backup-sap-prod) in the sap-pe-subnet was created, but the Private DNS Zone (privatelink.backup.windowsazure.com) was not linked to the SAP production spoke virtual network. The HANA VM resolves the RSV FQDN to the public IP of Azure Backup instead of the private endpoint IP, and the NSG on the HANA subnet blocks outbound traffic to public IPs.</p>
+<p><strong>Resolution:</strong> Link the Private DNS Zone privatelink.backup.windowsazure.com to the SAP production spoke VNet: az network private-dns link vnet create. Verify DNS resolution from the HANA VM: nslookup <rsv-name>.backup.windowsazure.com — the result must show a private IP in the PE subnet range (10.10.5.x). After linking, retry the Azure Backup log backup job. Reference: Azure Backup Private Endpoint documentation.</rsv-name></p>
+<h3 id="issue-3-azacsnap-snapshots-succeed-but-hana-cannot-use-them-for-recovery">Issue 3: azacsnap Snapshots Succeed but HANA Cannot Use Them for Recovery<a class="headerlink" href="#issue-3-azacsnap-snapshots-succeed-but-hana-cannot-use-them-for-recovery" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> After a HANA data corruption event, the SAP basis team attempts to revert the HANA data volume to an ANF snapshot created by azacsnap. After reverting the snapshot and starting HANA, HANA reports: Snapshot has inconsistent state: snapshot was not created in HANA backup mode.</p>
+<p><strong>Root cause:</strong> azacsnap was configured with an incorrect HANA SYSTEMDB connection string and silently failed to execute the HANA BACKUP DATA CLOSE SNAPSHOT command before triggering the ANF snapshot. azacsnap proceeded to take the ANF snapshot without HANA backup mode coordination, resulting in crash-consistent (not application-consistent) snapshots.</p>
+<p><strong>Resolution:</strong> Check the azacsnap configuration file (/etc/opt/microsoft/azacsnap/azacsnap.json) for the correct HANA SYSTEMDB connection details (hostname, port 30013, backup user name and password). Test HANA connectivity: azacsnap --action testconnect. Review the azacsnap log (/var/log/azacsnap/azacsnap.log) for HANA backup mode coordination messages; a successful snapshot shows lines for "Set backup mode" and "Close snapshot". Fix the HANA connection configuration and re-enable azacsnap. For immediate recovery, fall back to Azure Backup backint restore. Reference: SAP Note 3025468.</p>
+<h3 id="issue-4-anf-data-volume-runs-out-of-space-during-hana-delta-merge">Issue 4: ANF Data Volume Runs Out of Space During HANA Delta Merge<a class="headerlink" href="#issue-4-anf-data-volume-runs-out-of-space-during-hana-delta-merge" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> SAP HANA reports: disk full: cannot write to data volume. The ANF data volume shows 98% utilization in Azure Monitor. The HANA alert log shows ongoing delta merge operations that are failing due to insufficient space.</p>
+<p><strong>Root cause:</strong> The ANF data volume was sized as 1.5x HANA memory size instead of the recommended 2x HANA memory size per SAP Note 3114876. HANA column store delta merges temporarily require up to 2x the size of the table being merged, and during period-end SAP batch processing (month-end close), multiple large tables merge simultaneously, requiring additional temporary space on the data volume that exceeds the 1.5x provisioned size.</p>
+<p><strong>Resolution:</strong> Increase the ANF data volume size immediately: az netappfiles volume update --size-gb <new-size>. ANF volume resizing is online and does not require HANA downtime. Resize to 2x HANA memory size per SAP Note 3114876. Create an Azure Monitor alert on ANF data volume utilization above 80% to trigger size review before reaching 98%. After the immediate crisis, review HANA data volume fragmentation using HANA Studio -&gt; Administration -&gt; Volumes to identify if HANA data volume reclaim (RECLAIM DATAVOLUME) is needed.</new-size></p>
+<h3 id="issue-5-hana-restart-volume-persistent-memory-not-reducing-hana-restart-time">Issue 5: HANA Restart Volume (Persistent Memory) Not Reducing HANA Restart Time<a class="headerlink" href="#issue-5-hana-restart-volume-persistent-memory-not-reducing-hana-restart-time" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> HANA restart time after a planned takeover remains 8-10 minutes despite configuring the HANA Fast Restart persistent memory volume (/hana/restart) on a Premium SSD v2 data disk.</p>
+<p><strong>Root cause:</strong> The /hana/restart volume is mounted with ext4 filesystem, but HANA Fast Restart requires the persistent memory volume to be mounted as a tmpfs (memory-backed filesystem) or as a direct mmap file for PMEM operation. Configuring /hana/restart as a block device with ext4 does not activate HANA Fast Restart; HANA only uses it if the path is configured as basepath_persistent_memory_volumes in global.ini AND the path is a tmpfs or PMEM device path.</p>
+<p><strong>Resolution:</strong> For VMs without NVMe SSD (non-Mdsv3 VMs), configure the HANA Fast Restart volume as a memory-mapped file (RAM-backed persistence) by creating a large file on a tmpfs mount: mount -t tmpfs -o size=1200g tmpfs /hana/restart; configure HANA global.ini [persistence] basepath_persistent_memory_volumes = /hana/restart. This stores the persistent memory data in the VM's RAM (which is why M-series VMs have large RAM: the HANA restart volume plus HANA active working set must fit within total VM RAM). For true PMEM benefit with NVMe, use Mdsv3 VMs. Reference: SAP HANA Fast Restart documentation; SAP Note on HANA persistent memory configuration.</p>
+<h3 id="issue-6-premium-ssd-v2-disk-cannot-be-attached-after-vm-sku-change">Issue 6: Premium SSD v2 Disk Cannot Be Attached After VM SKU Change<a class="headerlink" href="#issue-6-premium-ssd-v2-disk-cannot-be-attached-after-vm-sku-change" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> After migrating the ASCS cluster VM from E4ds_v5 to E8ds_v5 for additional capacity, the Premium SSD v2 OS disk cannot be reattached. Azure portal shows error: The disk cannot be attached to a VM in an availability zone while the VM's zone is None.</p>
+<p><strong>Root cause:</strong> The VM was originally deployed in Availability Zone 1, and the Premium SSD v2 OS disk is zone-pinned to Zone 1. During the VM SKU change operation, the VM was accidentally stopped and restarted as a non-zonal VM (zone: None) rather than as a zone-1 VM. Premium SSD v2 disks are zone-specific and cannot be attached to non-zonal VMs.</p>
+<p><strong>Resolution:</strong> The VM must be re-deployed in the correct Availability Zone (Zone 1) to match the Premium SSD v2 disk zone. This requires: snapshot the existing OS disk, create a new VM with E8ds_v5 SKU in Zone 1 referencing the existing OS disk snapshot as the OS image, and delete the accidentally non-zonal VM. Prevent recurrence by using Azure Policy to deny VM creation with zone = None in the SAP production subscription.</p>
+<hr/>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Subscription</th>
+<th>Management Group</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ANF Account, Ultra/Premium/Standard Capacity Pools, HANA data/log/shared volumes</td>
+<td>SAP Production Subscription</td>
+<td>Landing Zones &gt; SAP</td>
+<td>ANF volumes are VM-local services accessed via delegated subnet; must be in same subscription as HANA VMs to minimize network latency and avoid inter-subscription peering overhead</td>
+</tr>
+<tr>
+<td>Recovery Services Vault (GRS) for HANA backups</td>
+<td>SAP Production Subscription</td>
+<td>Landing Zones &gt; SAP</td>
+<td>RSV must be in same subscription as protected HANA VMs for Azure Backup to register the workload; GRS RSV enables cross-region restore to DR subscription</td>
+</tr>
+<tr>
+<td>Azure Key Vault Premium (CMK for disks and ANF)</td>
+<td>Connectivity Subscription or SAP Production Subscription</td>
+<td>Platform or Landing Zones &gt; SAP</td>
+<td>CMK Key Vault is typically in the same subscription as the resources using it to minimize cross-subscription Key Vault access latency; Key Vault Premium required for HSM-backed keys</td>
+</tr>
+<tr>
+<td>Disk Encryption Sets</td>
+<td>SAP Production Subscription</td>
+<td>Landing Zones &gt; SAP</td>
+<td>DES must be in same subscription as the managed disks it encrypts</td>
+</tr>
+<tr>
+<td>ANF Cross-Region Replication target volumes</td>
+<td>SAP DR Subscription</td>
+<td>Landing Zones &gt; SAP</td>
+<td>DR region ANF volumes in a dedicated DR subscription; ANF cross-region replication links source (production) to destination (DR) across subscription boundaries</td>
+</tr>
+</tbody>
+</table>
+<h3 id="management-group-policy-assignments-sap-management-group-scope">Management Group Policy Assignments (SAP Management Group Scope)<a class="headerlink" href="#management-group-policy-assignments-sap-management-group-scope" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th>Effect</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Require-Managed-Disks</td>
+<td>Deny</td>
+<td>Prevents use of unmanaged disks on SAP VMs</td>
+</tr>
+<tr>
+<td>Deny-Premium-SSD-Without-CMK</td>
+<td>Deny (custom)</td>
+<td>Ensures all Premium SSD v2 disks are created with a CMK-backed Disk Encryption Set</td>
+</tr>
+<tr>
+<td>Audit-HANA-VM-Backup-Enabled</td>
+<td>AuditIfNotExists</td>
+<td>Audits that all HANA VMs in the HANA subnet are covered by an Azure Backup HANA policy in a GRS RSV</td>
+</tr>
+<tr>
+<td>Require-RSV-SoftDelete</td>
+<td>DeployIfNotExists</td>
+<td>Ensures soft delete is enabled on all Recovery Services Vaults in SAP subscriptions</td>
+</tr>
+<tr>
+<td>Deploy-ANF-DiagnosticSettings</td>
+<td>DeployIfNotExists</td>
+<td>Ensures ANF volume diagnostic metrics are sent to the Log Analytics workspace for AMS and alerting</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/sap/workloads/hana-vm-operations-netapp">Azure NetApp Files for SAP HANA</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-service-levels">Azure NetApp Files service levels</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/backup/sap-hana-db-about">Azure Backup for SAP HANA</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/azure-netapp-files/azacsnap-introduction">azacsnap: Azure Application-Consistent Snapshot Tool</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/disks-types#premium-ssd-v2">Premium SSD v2 managed disks</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/linux/disk-encryption-overview">Azure Disk Encryption for Linux VMs</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption">Customer-managed keys for Azure managed disks</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/azure-netapp-files/cross-region-replication-introduction">Azure NetApp Files cross-region replication</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/backup/private-endpoints">Azure Backup Private Endpoint configuration</a></li>
+</ul>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

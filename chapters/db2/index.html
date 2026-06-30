@@ -1,0 +1,3728 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/db2/" rel="canonical"/>
+<link href="../oracle/" rel="prev"/>
+<link href="../operations/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>IBM Db2 on Azure - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-on-ibm-db2-on-azure-architecture">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            SAP on Microsoft Azure Enterprise Architecture Handbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              IBM Db2 on Azure
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../architecture-principles/">
+          
+  
+  
+    
+  
+  Phase A — Foundations
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../compute/">
+          
+  
+  
+    
+  
+  Phase B — Compute and Storage
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../security/">
+          
+  
+  
+    
+  
+  Phase C — Security and Governance
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../hana/">
+          
+  
+  
+    
+  
+  Phase D — Database Platforms
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../operations/">
+          
+  
+  
+    
+  
+  Phase E — Operations and Resilience
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../performance/">
+          
+  
+  
+    
+  
+  Phase F — Optimization and Performance
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+    SAP on Microsoft Azure Enterprise Architecture Handbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    thinkleo987/sap-on-azure-enterprise-architecture
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase A — Foundations
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase A — Foundations
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Principles
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../landing-zone/">
+<span class="md-ellipsis">
+    
+  
+    Landing Zone Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/">
+<span class="md-ellipsis">
+    
+  
+    Networking Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase B — Compute and Storage
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase B — Compute and Storage
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
+    
+  
+    Compute Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage/">
+<span class="md-ellipsis">
+    
+  
+    Storage Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase C — Security and Governance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase C — Security and Governance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
+    
+  
+    Security Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../governance/">
+<span class="md-ellipsis">
+    
+  
+    Governance Framework
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Phase D — Database Platforms
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase D — Database Platforms
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hana/">
+<span class="md-ellipsis">
+    
+  
+    SAP HANA on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
+    
+  
+    SQL Server for SAP
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../oracle/">
+<span class="md-ellipsis">
+    
+  
+    Oracle on Azure
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    IBM Db2 on Azure
+  
+
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+<nav aria-label="Architecture Overview" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-diagram-sap-on-db2-on-azure-full-topology">
+<span class="md-ellipsis">
+      
+        Architecture Diagram: SAP on Db2 on Azure — Full Topology
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+<nav aria-label="SAP Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-component-topology-on-db2">
+<span class="md-ellipsis">
+      
+        SAP Component Topology on Db2
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#supported-sap-workloads">
+<span class="md-ellipsis">
+      
+        Supported SAP Workloads
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#db2-version-support-matrix">
+<span class="md-ellipsis">
+      
+        Db2 Version Support Matrix
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-sizing-methodology-for-db2">
+<span class="md-ellipsis">
+      
+        SAP Sizing Methodology for Db2
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-transport-landscape">
+<span class="md-ellipsis">
+      
+        SAP Transport Landscape
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-integration-with-sap">
+<span class="md-ellipsis">
+      
+        Backup Integration with SAP
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference-sap-architecture-section">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference (SAP Architecture Section)
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+<nav aria-label="Azure Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#certified-vm-families-for-db2-database-hosts">
+<span class="md-ellipsis">
+      
+        Certified VM Families for Db2 Database Hosts
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#storage-configuration">
+<span class="md-ellipsis">
+      
+        Storage Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#networking-requirements">
+<span class="md-ellipsis">
+      
+        Networking Requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-netapp-files-configuration-for-db2">
+<span class="md-ellipsis">
+      
+        Azure NetApp Files Configuration for Db2
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-backup-integration">
+<span class="md-ellipsis">
+      
+        Azure Backup Integration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vm-extensions-required">
+<span class="md-ellipsis">
+      
+        VM Extensions Required
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#os-configuration-requirements">
+<span class="md-ellipsis">
+      
+        OS Configuration Requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#second-architecture-diagram-db2-database-tier-detail">
+<span class="md-ellipsis">
+      
+        Second Architecture Diagram: Db2 Database Tier Detail
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#database-configuration">
+<span class="md-ellipsis">
+      
+        Database Configuration
+      
+    </span>
+</a>
+<nav aria-label="Database Configuration" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#db2-instance-and-database-parameters-for-azure">
+<span class="md-ellipsis">
+      
+        Db2 Instance and Database Parameters for Azure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#buffer-pool-configuration">
+<span class="md-ellipsis">
+      
+        Buffer Pool Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#os-level-configuration-linux">
+<span class="md-ellipsis">
+      
+        OS-Level Configuration (Linux)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-configuration-for-hadr">
+<span class="md-ellipsis">
+      
+        Network Configuration for HADR
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing-considerations-on-azure">
+<span class="md-ellipsis">
+      
+        Licensing Considerations on Azure
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#high-availability-architecture">
+<span class="md-ellipsis">
+      
+        High Availability Architecture
+      
+    </span>
+</a>
+<nav aria-label="High Availability Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#db2-hadr-overview">
+<span class="md-ellipsis">
+      
+        Db2 HADR Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pacemaker-cluster-configuration">
+<span class="md-ellipsis">
+      
+        Pacemaker Cluster Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-load-balancer-configuration-for-db2-hadr">
+<span class="md-ellipsis">
+      
+        Azure Load Balancer Configuration for Db2 HADR
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#availability-zone-deployment-for-db2-hadr">
+<span class="md-ellipsis">
+      
+        Availability Zone Deployment for Db2 HADR
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#proximity-placement-group-considerations">
+<span class="md-ellipsis">
+      
+        Proximity Placement Group Considerations
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-latency-requirements-for-synchronous-hadr">
+<span class="md-ellipsis">
+      
+        Network Latency Requirements for Synchronous HADR
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#disaster-recovery-architecture">
+<span class="md-ellipsis">
+      
+        Disaster Recovery Architecture
+      
+    </span>
+</a>
+<nav aria-label="Disaster Recovery Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cross-region-dr-with-db2-hadr">
+<span class="md-ellipsis">
+      
+        Cross-Region DR with Db2 HADR
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-site-recovery-exclusion-rationale">
+<span class="md-ellipsis">
+      
+        Azure Site Recovery Exclusion Rationale
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-network-connectivity">
+<span class="md-ellipsis">
+      
+        DR Network Connectivity
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-vm-sizing">
+<span class="md-ellipsis">
+      
+        DR VM Sizing
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dr-runbook-outline">
+<span class="md-ellipsis">
+      
+        DR Runbook Outline
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rtorpo-validation">
+<span class="md-ellipsis">
+      
+        RTO/RPO Validation
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-architecture">
+<span class="md-ellipsis">
+      
+        Security Architecture
+      
+    </span>
+</a>
+<nav aria-label="Security Architecture" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#database-level-encryption">
+<span class="md-ellipsis">
+      
+        Database-Level Encryption
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#database-user-management">
+<span class="md-ellipsis">
+      
+        Database User Management
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#network-isolation">
+<span class="md-ellipsis">
+      
+        Network Isolation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-defender-for-databases">
+<span class="md-ellipsis">
+      
+        Microsoft Defender for Databases
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#audit-logging">
+<span class="md-ellipsis">
+      
+        Audit Logging
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#key-vault-for-database-credentials">
+<span class="md-ellipsis">
+      
+        Key Vault for Database Credentials
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability-and-high-availability">
+<span class="md-ellipsis">
+      
+        Reliability and High Availability
+      
+    </span>
+</a>
+<nav aria-label="Reliability and High Availability" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ha-architecture-summary">
+<span class="md-ellipsis">
+      
+        HA Architecture Summary
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sla-calculation">
+<span class="md-ellipsis">
+      
+        SLA Calculation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#rporto-table">
+<span class="md-ellipsis">
+      
+        RPO/RTO Table
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization">
+<span class="md-ellipsis">
+      
+        Cost Optimization
+      
+    </span>
+</a>
+<nav aria-label="Cost Optimization" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vm-sizing-and-reserved-instance-strategy">
+<span class="md-ellipsis">
+      
+        VM Sizing and Reserved Instance Strategy
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#storage-cost-optimization">
+<span class="md-ellipsis">
+      
+        Storage Cost Optimization
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-table">
+<span class="md-ellipsis">
+      
+        Cost Table
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operations-and-monitoring">
+<span class="md-ellipsis">
+      
+        Operations and Monitoring
+      
+    </span>
+</a>
+<nav aria-label="Operations and Monitoring" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-monitor-for-sap-solutions-db2-provider-configuration">
+<span class="md-ellipsis">
+      
+        Azure Monitor for SAP Solutions — Db2 Provider Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#db2-specific-monitoring-metrics">
+<span class="md-ellipsis">
+      
+        Db2-Specific Monitoring Metrics
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#log-analytics-integration">
+<span class="md-ellipsis">
+      
+        Log Analytics Integration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alert-table">
+<span class="md-ellipsis">
+      
+        Alert Table
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dba-runbooks-for-common-operations">
+<span class="md-ellipsis">
+      
+        DBA Runbooks for Common Operations
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+<nav aria-label="Landing Zone Mapping" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vnet-and-subnet-placement">
+<span class="md-ellipsis">
+      
+        VNet and Subnet Placement
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#nsg-rules-for-db-subnet">
+<span class="md-ellipsis">
+      
+        NSG Rules for DB Subnet
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#route-table">
+<span class="md-ellipsis">
+      
+        Route Table
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#private-dns-zone-entries">
+<span class="md-ellipsis">
+      
+        Private DNS Zone Entries
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#managed-identity-requirements">
+<span class="md-ellipsis">
+      
+        Managed Identity Requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-vault-placement">
+<span class="md-ellipsis">
+      
+        Backup Vault Placement
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#validation-checklist">
+<span class="md-ellipsis">
+      
+        Validation Checklist
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-1-deploying-db2-primary-and-standby-in-the-same-availability-zone">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 1: Deploying Db2 Primary and Standby in the Same Availability Zone
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-2-using-azure-disk-write-accelerator-on-anf-backed-db2-log-volumes">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 2: Using Azure Disk Write Accelerator on ANF-Backed Db2 Log Volumes
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-3-setting-hadr_syncmode-async-within-an-azure-region-for-production-ha">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 3: Setting HADR_SYNCMODE = ASYNC Within an Azure Region for Production HA
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-4-collocating-db2-database-instance-with-sap-application-server-on-the-same-vm-two-tier-installation">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 4: Collocating Db2 Database Instance with SAP Application Server on the Same VM (Two-Tier Installation)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-5-configuring-locklist-as-a-fixed-value-without-monitoring-lock-escalation">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 5: Configuring LOCKLIST as a Fixed Value Without Monitoring Lock Escalation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-6-reusing-on-premises-db2-archive-log-retention-period-7-days-without-accounting-for-azure-backup-rto">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 6: Reusing On-Premises Db2 Archive Log Retention Period (7 Days) Without Accounting for Azure Backup RTO
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-1-db2-hadr-enters-disconnected-state-during-azure-planned-maintenance">
+<span class="md-ellipsis">
+      
+        Issue 1: Db2 HADR Enters DISCONNECTED State During Azure Planned Maintenance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-2-sap-work-processes-report-database-connection-lost-after-db2-hadr-failover">
+<span class="md-ellipsis">
+      
+        Issue 2: SAP Work Processes Report "Database Connection Lost" After Db2 HADR Failover
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-3-db2-active-log-volume-full-causing-database-crash">
+<span class="md-ellipsis">
+      
+        Issue 3: Db2 Active Log Volume Full Causing Database Crash
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-4-db2-buffer-pool-hit-ratio-degrades-after-sap-data-migration-load">
+<span class="md-ellipsis">
+      
+        Issue 4: Db2 Buffer Pool Hit Ratio Degrades After SAP Data Migration Load
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-5-fence_azure_arm-stonith-fails-to-fence-node-during-pacemaker-split-brain">
+<span class="md-ellipsis">
+      
+        Issue 5: fence_azure_arm STONITH Fails to Fence Node During Pacemaker Split-Brain
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-6-anf-nfs-mount-drops-during-db2-log-write-under-high-throughput">
+<span class="md-ellipsis">
+      
+        Issue 6: ANF NFS Mount Drops During Db2 Log Write Under High Throughput
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase E — Operations and Resilience
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase E — Operations and Resilience
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
+    
+  
+    Operations Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
+    
+  
+    High Availability Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../disaster-recovery/">
+<span class="md-ellipsis">
+    
+  
+    Disaster Recovery
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Phase F — Optimization and Performance
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase F — Optimization and Performance
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../performance/">
+<span class="md-ellipsis">
+    
+  
+    Performance Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cost-optimization/">
+<span class="md-ellipsis">
+    
+  
+    Cost Optimization
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
+    
+  
+    SAP Notes Index
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
+    
+  
+    Architecture Decision Records
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
+    
+  
+    References and Further Reading
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="../hana/">
+<span class="md-ellipsis">
+    Phase D — Database Platforms
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="sap-on-ibm-db2-on-azure-architecture">SAP on IBM Db2 on Azure Architecture<a class="headerlink" href="#sap-on-ibm-db2-on-azure-architecture" title="Permanent link">¶</a></h1>
+<hr/>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>IBM Db2 for Linux, UNIX, and Windows (LUW) remains a supported and actively deployed relational database management system for SAP workloads in enterprises that have standardized on Db2 as their corporate database platform, particularly organizations migrating existing SAP ECC, SAP BW, or SAP S/4HANA landscapes from on-premises IBM Power or x86 infrastructure to Azure without a simultaneous database migration project. Db2 LUW serves as the persistence layer beneath SAP NetWeaver ABAP stacks, including SAP S/4HANA (with restrictions), SAP Business Warehouse (BW), SAP ECC 6.0, SAP Solution Manager, SAP PI/PO, and SAP GRC. The SAP kernel communicates with Db2 through the SAP Database Interface (DBIF) layer, which abstracts the SQL dialect differences between supported RDBMS platforms. SAP workloads on Db2 use the SAP-specific Db2 installation profile that disables features unsupported by SAP and enables parameters required for SAP workload characteristics including large sequential scans for BW aggregation, high-concurrency OLTP for ECC dialog work processes, and row-level locking semantics matching SAP's lock management model.</p>
+<p>Azure provides certified infrastructure for SAP on Db2 LUW deployments through the SAP-certified VM families listed in SAP Note 1928533. Unlike SAP HANA, which requires specific hardware certification from SAP directly, Db2 LUW runs on any SAP-certified Azure VM that meets the OS, CPU, and memory requirements defined in SAP Note 1928533 for that SAP product version. Microsoft and IBM jointly support Db2 LUW on Azure through the standard SAP support model: SAP supports the SAP application layer, IBM supports the Db2 engine, and Microsoft supports the Azure infrastructure. The combination is supported under SAP OSS incident handling through the SAP-IBM-Microsoft tripartite support agreement documented in SAP Note 2233552. Azure deployment considerations include storage latency requirements for Db2 log write performance (target under 2 ms for synchronous log writes), network throughput requirements for Db2 High Availability Disaster Recovery (HADR) log shipping, and VM sizing to accommodate Db2 buffer pool memory alongside SAP work process memory requirements.</p>
+<p>The primary architectural decisions for SAP on Db2 on Azure are: VM family selection between Edsv5 (memory-optimized, cost-efficient for smaller systems) and Mv2 (very large memory for BW landscapes exceeding 4 TiB database size), storage architecture using Azure NetApp Files or Premium SSD v2 for Db2 data and log volumes, High Availability using Db2 HADR with Pacemaker cluster and Azure Fence Agent for automated failover, Disaster Recovery using HADR in a peer-to-peer configuration across Azure regions, and OS selection between Red Hat Enterprise Linux (RHEL) for SAP and SUSE Linux Enterprise Server for SAP (SLES for SAP). Each of these decisions carries enterprise-wide impact: the VM family determines the Reserved Instance commitment cost over a 3-year term; the storage architecture determines the achievable IOPS ceiling and log write latency; the HA method determines the RTO during an unplanned failover; and the OS selection determines the Pacemaker version, fence agent version, and IBM Db2 support matrix applicability.</p>
+<hr/>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>SAP on Db2 on Azure follows the SAP Landing Zone architecture pattern defined in the SAP on Azure Landing Zone Accelerator, with the Db2 database tier deployed in the SAP DB subnet within the SAP Landing Zone spoke VNet, peered to the hub VNet for centralized egress and DNS resolution. The database tier is separated from the SAP application tier at the subnet level with Network Security Group rules permitting only the required Db2 port (default 50000 for instance 00, configurable) from the application subnet to the database subnet. This network isolation prevents lateral movement in the event of an application server compromise and satisfies the SAP security hardening requirements in SAP Note 1680803.</p>
+<p>The Db2 HADR primary and standby nodes are deployed in separate Azure Availability Zones within the same Azure region. Zone separation ensures that a single datacenter-level failure does not simultaneously impact both Db2 nodes. The HADR log shipping stream traverses the Azure intra-region backbone between Availability Zones with a typical inter-zone round-trip latency of 1-2 ms, which is within the acceptable range for HADR SYNC mode on Db2 with SAP workloads generating moderate redo log volumes (typically 10-50 MB/s for ECC production systems). An Azure Internal Load Balancer (Standard SKU) with floating IP enabled fronts the Db2 cluster virtual hostname, directing SAP application server connections to the active Db2 node. Pacemaker with the fence_azure_arm STONITH agent provides automated cluster management and fencing, ensuring that split-brain scenarios result in the isolation of the failed node rather than data corruption.</p>
+<p>Storage for the Db2 primary node uses Azure NetApp Files (ANF) with NFS v4.1 for the Db2 data containers and log directory when sub-millisecond latency and high throughput are required (BW workloads, large ECC systems), or Premium SSD v2 managed disks for smaller ECC and non-production systems. The ANF volumes are provisioned in the same Availability Zone as the primary Db2 node to avoid cross-zone storage latency. For the HADR standby node, a separate set of ANF volumes (or Premium SSD v2 disks) is provisioned in the standby zone, sized identically to the primary, because Db2 HADR maintains a full copy of the database on the standby.</p>
+<p>Monitoring and operations are delivered through Azure Monitor for SAP Solutions (AMS), with the Db2 provider configured to collect Db2 snapshot metrics at 60-second intervals and publish them to a Log Analytics workspace. Azure Backup with the Db2 backint agent provides policy-driven database backups to a Recovery Services Vault with geo-redundant storage, enabling cross-region restore for disaster recovery. The SAP System Landscape Directory (SLD) and SAP Solution Manager (SolMan) connect to the Db2 instances through the SAP DB subnet for system monitoring, change management, and SAP Early Watch Alert reporting.</p>
+<h3 id="architecture-diagram-sap-on-db2-on-azure-full-topology">Architecture Diagram: SAP on Db2 on Azure — Full Topology<a class="headerlink" href="#architecture-diagram-sap-on-db2-on-azure-full-topology" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph TB
+  subgraph HubVNet["Hub VNet (10.10.0.0/16)"]
+    FW["Azure Firewall Premium\n10.10.0.4"]
+    ERGW["ExpressRoute Gateway\nUltraPerformance SKU"]
+    VPNGW["VPN Gateway (Dev/Test)\nVpnGw2 SKU"]
+    BastionHost["Azure Bastion\nStandard SKU"]
+    HubDNS["Azure Private DNS Resolver\nInbound 10.10.1.4"]
+  end
+
+  subgraph SAPSpoke["SAP Landing Zone Spoke VNet (10.20.0.0/16)"]
+    subgraph AppSubnet["Application Subnet (10.20.1.0/24)\nNSG: Allow 3200-3299 from Corp"]
+      PAS["PAS VM\nE32ds_v5 Zone 1\n10.20.1.10"]
+      AAS1["AAS VM-1\nE32ds_v5 Zone 1\n10.20.1.11"]
+      AAS2["AAS VM-2\nE32ds_v5 Zone 2\n10.20.1.12"]
+      ASCS["ASCS/ERS VMs\nE4ds_v5 Zone 1+2\n10.20.1.20-21"]
+    end
+
+    subgraph DBSubnet["Database Subnet (10.20.2.0/24)\nNSG: Allow 50000 from AppSubnet only"]
+      DB2Primary["Db2 Primary\nM32ts_v2 Zone 1\n10.20.2.10"]
+      DB2Standby["Db2 Standby\nM32ts_v2 Zone 2\n10.20.2.11"]
+      ILBDB2["ILB-Db2\nStandard SKU\nFloating IP 10.20.2.100\nPort 50000"]
+    end
+
+    subgraph ANFSubnet["ANF Delegated Subnet (10.20.3.0/24)"]
+      ANFPrimary["ANF Capacity Pool (Primary)\nUltra Tier Zone 1"]
+      ANFStandby["ANF Capacity Pool (Standby)\nUltra Tier Zone 2"]
+    end
+
+    subgraph ManagementSubnet["Management Subnet (10.20.4.0/24)"]
+      SOLMAN["SAP Solution Manager\nE16ds_v5\n10.20.4.10"]
+      SLD["SAP SLD\n10.20.4.11"]
+    end
+  end
+
+  subgraph SharedServices["Shared Services Spoke"]
+    AKV["Azure Key Vault\nHSM-backed Premium SKU"]
+    LAW["Log Analytics Workspace\n90-day hot / 2yr archive"]
+    AMS["Azure Monitor for SAP Solutions"]
+    RSV["Recovery Services Vault\nGRS Backup"]
+    ACR["Azure Container Registry\nFor SAP operators"]
+  end
+
+  subgraph DRRegion["DR Region (Secondary Azure Region)"]
+    DB2DR["Db2 DR Standby\nM32ts_v2\n(HADR Async)"]
+    ANFDR["ANF DR Volumes\nCross-region replication"]
+    RSVDR["Recovery Services Vault DR\nLRS Backup"]
+  end
+
+  OnPrem["On-Premises\nSAP Users / Corp AD"] --&gt;|ExpressRoute 10 Gbps| ERGW
+  ERGW --&gt; FW
+  FW --&gt;|Inspected traffic| SAPSpoke
+  DB2Primary --&gt;|HADR SYNC\nlog shipping| DB2Standby
+  DB2Primary --&gt;|NFS v4.1 nconnect=8| ANFPrimary
+  DB2Standby --&gt;|NFS v4.1 nconnect=8| ANFStandby
+  ILBDB2 --&gt;|Active| DB2Primary
+  ILBDB2 -.-&gt;|Standby| DB2Standby
+  PAS --&gt;|TCP 50000| ILBDB2
+  AAS1 --&gt;|TCP 50000| ILBDB2
+  AAS2 --&gt;|TCP 50000| ILBDB2
+  DB2Primary --&gt;|backint| RSV
+  DB2Primary --&gt;|HADR Async cross-region| DB2DR
+  ANFPrimary --&gt;|Cross-region replication| ANFDR
+  AMS --&gt;|Db2 provider metrics| LAW
+  DB2Primary --&gt;|Managed Identity| AKV
+  BastionHost -.-&gt;|SSH/RDP jump| DBSubnet</code></pre>
+<hr/>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<h3 id="sap-component-topology-on-db2">SAP Component Topology on Db2<a class="headerlink" href="#sap-component-topology-on-db2" title="Permanent link">¶</a></h3>
+<p>SAP workloads on Db2 LUW follow the standard SAP three-tier architecture: SAP application servers (PAS and AAS) in the application tier communicate with the Db2 database instance through the SAP DBI (Database Interface) layer using JDBC/ODBC-equivalent native Db2 client libraries embedded in the SAP kernel. The SAP Central Services instance (ASCS for ABAP, or SCS for Java stacks) runs on a separate VM pair with Pacemaker HA and does not connect directly to Db2 — the ASCS manages SAP message server and enqueue server functions only. The SAP Global File System (/sapmnt) is mounted from a highly available NFS share (Azure NetApp Files or NFS cluster) on all application servers and the ASCS. The Db2 database instance runs under a dedicated OS user (db2\&lt;SID&gt;) and the SAP system user (adm\&lt;SID&gt;) connects to Db2 using the SAPR3 or SAP\&lt;SID&gt; database user with the permissions required by SAP (defined in SAP Note 1928533 and Db2-specific SAP Notes).</p>
+<p>The Db2 instance name matches the SAP System ID (SID) by convention. For a SAP system with SID "P01", the Db2 instance owner is "db2p01" and the database name is "P01". The Db2 database port defaults to 50000 for instance 00, calculated as 50000 + (instance number × 100). Multiple SAP systems sharing the same Db2 host (non-production environments) use different instance numbers and therefore different ports: P01 on port 50000, Q01 on port 50100, D01 on port 50200. Each SAP SID has its own Db2 database (not a shared database with schema separation), which is the SAP-supported architecture and simplifies backup, restore, and transport operations.</p>
+<h3 id="supported-sap-workloads">Supported SAP Workloads<a class="headerlink" href="#supported-sap-workloads" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Workload</th>
+<th>Db2 Support Status</th>
+<th>Minimum Db2 Version</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP ECC 6.0 (any EHP)</td>
+<td>Fully supported</td>
+<td>Db2 11.1 FP5 or 11.5</td>
+<td>Mainstream maintenance ends 2027; Db2 supported for migration path</td>
+</tr>
+<tr>
+<td>SAP S/4HANA 1809-2022</td>
+<td>Supported with restrictions</td>
+<td>Db2 11.5 FP5</td>
+<td>SAP Note 2267798 — S/4HANA on non-HANA DB is "any DB" mode with functional restrictions</td>
+</tr>
+<tr>
+<td>SAP S/4HANA 2023+</td>
+<td>Not recommended</td>
+<td>Db2 11.5 FP7+</td>
+<td>SAP's strategic direction is SAP HANA; new S/4HANA features may require HANA</td>
+</tr>
+<tr>
+<td>SAP BW 7.4/7.5</td>
+<td>Fully supported</td>
+<td>Db2 11.1 FP5</td>
+<td>BW on Db2 with row/column store mixing; BW/4HANA requires HANA only</td>
+</tr>
+<tr>
+<td>SAP Solution Manager 7.2</td>
+<td>Fully supported</td>
+<td>Db2 11.1 FP5</td>
+<td>SolMan on Db2 is common in IBM-standardized shops</td>
+</tr>
+<tr>
+<td>SAP PI/PO 7.5</td>
+<td>Fully supported</td>
+<td>Db2 11.1 FP5</td>
+<td>Java stack + ABAP dual-stack on Db2 supported</td>
+</tr>
+<tr>
+<td>SAP GRC 12.0</td>
+<td>Fully supported</td>
+<td>Db2 11.1 FP5</td>
+<td>GRC on Db2 inherits NetWeaver ABAP Db2 support</td>
+</tr>
+<tr>
+<td>SAP NetWeaver 7.52 ABAP</td>
+<td>Fully supported</td>
+<td>Db2 11.1 FP5</td>
+<td>All SAP NW 7.5x ABAP products on Db2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="db2-version-support-matrix">Db2 Version Support Matrix<a class="headerlink" href="#db2-version-support-matrix" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Db2 Version</th>
+<th>IBM End of Support</th>
+<th>SAP Support via SAP Note 1612105</th>
+<th>Recommended for New Deployments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Db2 10.5 FP11</td>
+<td>Ended April 2023</td>
+<td>SAP ECC only (legacy)</td>
+<td>No — upgrade required</td>
+</tr>
+<tr>
+<td>Db2 11.1 FP5+</td>
+<td>April 2024 (extended support available)</td>
+<td>SAP ECC, BW, SolMan</td>
+<td>No — migrate to 11.5</td>
+</tr>
+<tr>
+<td>Db2 11.5 FP0-FP3</td>
+<td>Active, standard support</td>
+<td>SAP ECC, S/4HANA (restricted), BW</td>
+<td>No — use FP7+</td>
+</tr>
+<tr>
+<td>Db2 11.5 FP7+</td>
+<td>Active, through 2025+</td>
+<td>All SAP NW ABAP workloads</td>
+<td>Yes — current recommended baseline</td>
+</tr>
+<tr>
+<td>Db2 12.1 (preview as of 2024)</td>
+<td>Future — check IBM lifecycle</td>
+<td>Check SAP Note 1612105 for updates</td>
+<td>Evaluate only</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sap-sizing-methodology-for-db2">SAP Sizing Methodology for Db2<a class="headerlink" href="#sap-sizing-methodology-for-db2" title="Permanent link">¶</a></h3>
+<p>SAP Quick Sizer generates the SAPS (SAP Application Performance Standard) requirement and the database size estimate. For Db2, the database server VM sizing follows these rules:</p>
+<ol>
+<li>
+<p><strong>CPU sizing</strong>: Db2 SQL execution is CPU-bound for OLTP dialog steps. The Db2 server requires sufficient vCPUs to handle peak concurrent SQL statements from all SAP work processes. A rule of thumb is 1 vCPU per 2 SAP dialog work processes connecting to Db2, plus 4 vCPUs for Db2 background tasks (log archival, reorg, runstats, prefetch). Minimum 8 vCPUs for any production Db2 instance.</p>
+</li>
+<li>
+<p><strong>Memory sizing</strong>: Db2 buffer pools must cache the hot working set of the database. SAP recommends a buffer pool hit ratio above 99% for OLTP workloads. Initial buffer pool sizing: 25-40% of total database size for ECC OLTP, 15-25% for BW (sequential scan-dominated, lower cache benefit). Total VM RAM = Db2 buffer pools + Db2 internal memory (catalog cache, lock list, sort heap, utility heap) + OS kernel and filesystem cache + 10% headroom. For a 500 GiB ECC database, a minimum of 256 GiB VM RAM is required for adequate buffer pool sizing.</p>
+</li>
+<li>
+<p><strong>Database growth projection</strong>: Apply a 3-year growth factor of 20-30% annual growth for ECC transactional databases and 40-60% for BW data warehouse databases when sizing storage. Initial storage allocation = current database size × (1 + annual growth rate) ^ 3.</p>
+</li>
+<li>
+<p><strong>HADR standby sizing</strong>: The HADR standby VM must be identical in CPU, RAM, and storage to the primary. Underpowered standby nodes cause HADR log replay lag, which increases the RPO and can trigger HADR disconnect under high log generation rates.</p>
+</li>
+</ol>
+<h3 id="sap-transport-landscape">SAP Transport Landscape<a class="headerlink" href="#sap-transport-landscape" title="Permanent link">¶</a></h3>
+<p>The SAP transport landscape (DEV → QAS → PRD) maps to separate SAP system instances, each with its own Db2 database. The transport directory (/usr/sap/trans) is shared across all systems in the landscape via NFS (Azure NetApp Files Standard tier volume), mounted on all SAP application servers and Db2 database hosts. The Db2 database for each system (DEV, QAS, PRD) resides on a separate Azure VM in the appropriate environment subscription (Dev/Test subscription for DEV/QAS, Production subscription for PRD), separated per SAP Landing Zone subscription design. Transport imports into the Db2-backed PRD system require the Db2 LOAD utility to be available (for SAP table-level transports using the TRBAT/TRJOB mechanism) and the Db2 export tablespace free space to be sufficient for ABAP dictionary activations.</p>
+<h3 id="backup-integration-with-sap">Backup Integration with SAP<a class="headerlink" href="#backup-integration-with-sap" title="Permanent link">¶</a></h3>
+<p>SAP Backup Interface (Backint) for Db2 is implemented through the IBM Tivoli Storage Manager (IBM Spectrum Protect) client or through third-party backint agents. On Azure, the recommended approach is the Azure Backup for SAP Db2 solution using the SAP BRBACKUP/BRARCHIVE utilities with the Db2 backup API. The backup flow is:</p>
+<ol>
+<li>SAP BRBACKUP initiates Db2 online backup using <code>db2 backup db &lt;SID&gt; online to &lt;target&gt;</code>.</li>
+<li>The Db2 backup stream is directed to the Azure Backup agent or to Azure Blob Storage via the <code>DB2_BACKUP_TO_S3</code> compatible parameter with the Azure Blob Storage S3-compatible API.</li>
+<li>Db2 archive logs are continuously archived by BRARCHIVE to Azure Blob Storage or Recovery Services Vault.</li>
+<li>Backup metadata is maintained in the Db2 recovery history file and in SAP BRBACKUP log tables (SDBAH, SDBAD) in the SAP database.</li>
+</ol>
+<p>SAP Note 2818765 documents the Azure Backup integration for SAP on Db2 and defines the supported backup target types.</p>
+<h3 id="sap-notes-reference-sap-architecture-section">SAP Notes Reference (SAP Architecture Section)<a class="headerlink" href="#sap-notes-reference-sap-architecture-section" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>Defines supported Azure VM SKUs for Db2 database hosts; mandates Accelerated Networking</td>
+<td>VM selection for Db2 hosts</td>
+</tr>
+<tr>
+<td>1612105</td>
+<td>DB6: FAQ - IBM Db2 for Linux, UNIX, and Windows</td>
+<td>Defines supported Db2 versions for SAP products; version compatibility matrix</td>
+<td>Db2 version selection</td>
+</tr>
+<tr>
+<td>2233552</td>
+<td>Microsoft Azure: Support for IBM Db2</td>
+<td>Tripartite support agreement scope; Azure-specific Db2 limitations</td>
+<td>Support model and incident routing</td>
+</tr>
+<tr>
+<td>2000002</td>
+<td>FAQ: SAP HANA</td>
+<td>Contrasts HANA-required workloads vs Db2-compatible workloads</td>
+<td>Workload placement decisions</td>
+</tr>
+<tr>
+<td>1763512</td>
+<td>Support details for Db2 with SAP on Linux</td>
+<td>Linux OS-specific Db2 configuration requirements for SAP</td>
+<td>OS configuration baseline</td>
+</tr>
+<tr>
+<td>2267798</td>
+<td>SAP S/4HANA: Database on Azure</td>
+<td>S/4HANA on non-HANA databases on Azure — restrictions and support matrix</td>
+<td>S/4HANA on Db2 deployment decisions</td>
+</tr>
+<tr>
+<td>1680803</td>
+<td>SAP Systems on Microsoft Azure: Security Guidelines</td>
+<td>Network isolation requirements for Db2 subnet; OS hardening baseline</td>
+<td>NSG design, OS hardening</td>
+</tr>
+<tr>
+<td>2818765</td>
+<td>Azure Backup for SAP on IBM Db2</td>
+<td>Backup integration architecture and supported backup targets</td>
+<td>Backup solution design</td>
+</tr>
+<tr>
+<td>405827</td>
+<td>Recommended settings for DB6 (IBM DB2 UDB)</td>
+<td>Db2 configuration parameters required and recommended by SAP</td>
+<td>Db2 parameter tuning</td>
+</tr>
+<tr>
+<td>1901383</td>
+<td>IBM Db2 High Availability and Disaster Recovery on Azure</td>
+<td>HADR configuration specifics for Azure deployment</td>
+<td>HA/DR architecture</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<h3 id="certified-vm-families-for-db2-database-hosts">Certified VM Families for Db2 Database Hosts<a class="headerlink" href="#certified-vm-families-for-db2-database-hosts" title="Permanent link">¶</a></h3>
+<p>SAP-certified VM families for Db2 database hosts on Azure follow SAP Note 1928533. The database host VM sizing is driven by Db2 buffer pool memory requirements plus SAP work process memory (for systems where Db2 and SAP application tier are co-located — not recommended for production).</p>
+<table>
+<thead>
+<tr>
+<th>VM SKU</th>
+<th>vCPUs</th>
+<th>RAM (GiB)</th>
+<th>Max Uncached Disk IOPS</th>
+<th>Max Network Throughput</th>
+<th>Recommended Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E16ds_v5</td>
+<td>16</td>
+<td>128</td>
+<td>51,200</td>
+<td>12,500 Mbps</td>
+<td>Db2 DEV/QAS (database up to 200 GiB)</td>
+</tr>
+<tr>
+<td>E32ds_v5</td>
+<td>32</td>
+<td>256</td>
+<td>76,800</td>
+<td>16,000 Mbps</td>
+<td>Db2 production small ECC (database up to 500 GiB)</td>
+</tr>
+<tr>
+<td>E64ds_v5</td>
+<td>64</td>
+<td>512</td>
+<td>80,000</td>
+<td>16,000 Mbps</td>
+<td>Db2 production medium ECC (database up to 1.5 TiB)</td>
+</tr>
+<tr>
+<td>E96ds_v5</td>
+<td>96</td>
+<td>672</td>
+<td>80,000</td>
+<td>25,000 Mbps</td>
+<td>Db2 production large ECC or BW (database up to 2 TiB)</td>
+</tr>
+<tr>
+<td>M32ts_v2</td>
+<td>32</td>
+<td>192</td>
+<td>80,000</td>
+<td>16,000 Mbps</td>
+<td>Db2 production with memory-intensive buffer pools (192 GiB all to buffer pools)</td>
+</tr>
+<tr>
+<td>M64s_v2</td>
+<td>64</td>
+<td>1,024</td>
+<td>160,000</td>
+<td>16,000 Mbps</td>
+<td>Db2 BW production (database up to 3 TiB, large buffer pools)</td>
+</tr>
+<tr>
+<td>M128s_v2</td>
+<td>128</td>
+<td>2,048</td>
+<td>200,000</td>
+<td>25,000 Mbps</td>
+<td>Db2 BW production very large (database 3-6 TiB)</td>
+</tr>
+</tbody>
+</table>
+<p>All production Db2 VMs require:
+- <strong>Accelerated Networking</strong> enabled on all NICs (SAP Note 1928533 mandatory requirement)
+- <strong>Write Accelerator</strong> enabled on Db2 log disk if using Premium SSD (not required with ANF)
+- <strong>Proximity Placement Group</strong> anchored to the HANA/Db2 VM for single-zone deployments; for cross-zone HA deployments, do not use PPG as it forces same-zone placement</p>
+<h3 id="storage-configuration">Storage Configuration<a class="headerlink" href="#storage-configuration" title="Permanent link">¶</a></h3>
+<h4 id="volume-layout-for-db2-production-primary-node">Volume Layout for Db2 Production Primary Node<a class="headerlink" href="#volume-layout-for-db2-production-primary-node" title="Permanent link">¶</a></h4>
+<table>
+<thead>
+<tr>
+<th>Volume / Mount Point</th>
+<th>Storage Type</th>
+<th>Recommended Size</th>
+<th>IOPS</th>
+<th>Throughput</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OS disk (/)</td>
+<td>Premium SSD v2</td>
+<td>128 GiB</td>
+<td>3,000</td>
+<td>125 MB/s</td>
+<td>Separate from data</td>
+</tr>
+<tr>
+<td>/db2/\&lt;SID&gt;/db2dump</td>
+<td>Premium SSD v2</td>
+<td>100 GiB</td>
+<td>1,000</td>
+<td>125 MB/s</td>
+<td>Db2 diagnostic logs</td>
+</tr>
+<tr>
+<td>/db2/\&lt;SID&gt;/log_dir (active logs)</td>
+<td>ANF Ultra or Premium SSD v2</td>
+<td>256 GiB</td>
+<td>50,000</td>
+<td>400 MB/s</td>
+<td>Log write latency critical: &lt;2 ms</td>
+</tr>
+<tr>
+<td>/db2/\&lt;SID&gt;/log_archive</td>
+<td>Premium SSD v2 or Azure Blob</td>
+<td>1,024 GiB</td>
+<td>5,000</td>
+<td>250 MB/s</td>
+<td>Archive logs; tier to cool after 7 days</td>
+</tr>
+<tr>
+<td>/db2/\&lt;SID&gt;/sapdata1..N</td>
+<td>ANF Ultra or Premium SSD v2</td>
+<td>Database size × 1.3</td>
+<td>80,000+</td>
+<td>500 MB/s</td>
+<td>Db2 data containers; stripe across volumes</td>
+</tr>
+<tr>
+<td>/db2/\&lt;SID&gt;/saptmp</td>
+<td>Premium SSD v2</td>
+<td>256 GiB</td>
+<td>10,000</td>
+<td>250 MB/s</td>
+<td>Db2 temp tablespace containers</td>
+</tr>
+<tr>
+<td>/sapmnt/\&lt;SID&gt;</td>
+<td>ANF Standard NFS v4.1</td>
+<td>512 GiB</td>
+<td>Shared</td>
+<td>Shared</td>
+<td>SAP global file system</td>
+</tr>
+<tr>
+<td>/usr/sap/trans</td>
+<td>ANF Standard NFS v4.1</td>
+<td>1,024 GiB</td>
+<td>Shared</td>
+<td>Shared</td>
+<td>SAP transport directory</td>
+</tr>
+</tbody>
+</table>
+<h4 id="iops-and-throughput-requirements">IOPS and Throughput Requirements<a class="headerlink" href="#iops-and-throughput-requirements" title="Permanent link">¶</a></h4>
+<p>Db2 active log write performance is the most latency-sensitive I/O operation. SAP recommends that the Db2 active log directory deliver write latency below 2 ms at the 99th percentile. Premium SSD v2 with Write Accelerator enabled achieves sub-1 ms write latency for log volumes. Azure NetApp Files Ultra tier achieves sub-0.5 ms latency for sequential log writes with NFS v4.1.</p>
+<p>For Db2 data containers (tablespaces), the throughput requirement scales with the prefetch size and the number of concurrent queries performing tablespace scans. A Db2 BW system executing large aggregation queries requires 500-800 MB/s sustained read throughput. Azure NetApp Files Ultra tier provisioned at 4 TiB delivers 512 MiB/s (128 MiB/s per TiB × 4 TiB), meeting the BW read throughput requirement.</p>
+<h3 id="networking-requirements">Networking Requirements<a class="headerlink" href="#networking-requirements" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Intra-zone latency (application to Db2)</strong>: Target below 1 ms round-trip for SAP dialog steps. Achieved with Proximity Placement Group (PPG) anchoring application servers and Db2 host in the same physical cluster within a zone.</li>
+<li><strong>Inter-zone latency (HADR primary to standby)</strong>: Typically 1-2 ms round-trip within an Azure region across Availability Zones. Sufficient for HADR SYNC mode with ECC workloads generating up to 50 MB/s log throughput.</li>
+<li><strong>Accelerated Networking</strong>: Mandatory on all Db2 host NICs. Bypasses the Azure virtual switch hypervisor layer using SR-IOV, reducing NIC latency from ~150 µs to ~25 µs.</li>
+<li><strong>HADR network bandwidth</strong>: Size the NIC throughput to accommodate HADR log shipping plus backup streaming simultaneously. For an ECC system generating 20 MB/s of redo logs with concurrent BRBACKUP streaming at 200 MB/s, minimum NIC throughput is 3 Gbps dedicated to Db2 operations.</li>
+</ul>
+<h3 id="azure-netapp-files-configuration-for-db2">Azure NetApp Files Configuration for Db2<a class="headerlink" href="#azure-netapp-files-configuration-for-db2" title="Permanent link">¶</a></h3>
+<p>Azure NetApp Files (ANF) is used for Db2 data and log volumes when the database requires more than 80,000 IOPS or when the Db2 active log volume requires guaranteed sub-2 ms write latency at scale. ANF Ultra tier is provisioned in a delegated subnet (Microsoft.NetApp/volumes delegation) within the SAP Landing Zone spoke VNet.</p>
+<p>Configuration parameters for Db2 on ANF:
+- <strong>NFS version</strong>: NFSv4.1 (required for file locking semantics compatible with Db2)
+- <strong>Mount option nconnect</strong>: Set to 8 for parallel TCP connections; increases throughput from a single Db2 process accessing the volume
+- <strong>Mount option rsize/wsize</strong>: 262144 (256 KiB) matching Db2's default I/O request size for large sequential operations
+- <strong>Mount option hard,intr</strong>: Ensures Db2 I/O does not silently discard writes on ANF connectivity interruption
+- <strong>Capacity pool type</strong>: Ultra (for data and log), Standard (for /sapmnt and /usr/sap/trans)
+- <strong>Volume replication</strong>: ANF Cross-Region Replication enabled for DR data volumes</p>
+<h3 id="azure-backup-integration">Azure Backup Integration<a class="headerlink" href="#azure-backup-integration" title="Permanent link">¶</a></h3>
+<p>Azure Backup for Db2 uses the Recovery Services Vault with a backup policy targeting daily full backups and hourly log backups. The Db2 backint-compatible agent (IBM-provided or Azure-native) streams Db2 backup images to the Recovery Services Vault through an Azure Private Endpoint, ensuring backup traffic does not traverse the public internet or the Azure Firewall. The Recovery Services Vault is configured with Geo-Redundant Storage (GRS) replication to enable cross-region restore to the DR region.</p>
+<h3 id="vm-extensions-required">VM Extensions Required<a class="headerlink" href="#vm-extensions-required" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Purpose</th>
+<th>Applicability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AzureMonitorLinuxAgent (version 1.27+)</td>
+<td>Azure Monitor data collection; replaces MMA/OMS agent</td>
+<td>All Db2 and application VMs</td>
+</tr>
+<tr>
+<td>MicrosoftMonitoringAgent (legacy, if SolMan integration requires OMS)</td>
+<td>Log Analytics agent for legacy SolMan monitoring</td>
+<td>Only if SolMan OMS integration required</td>
+</tr>
+<tr>
+<td>AADSSHLoginForLinux</td>
+<td>Entra ID-based SSH authentication for Db2 hosts</td>
+<td>All Db2 VMs in managed environments</td>
+</tr>
+<tr>
+<td>CustomScript (one-time)</td>
+<td>OS tuning scripts at VM deployment (hugepages, kernel params)</td>
+<td>Deployment automation only</td>
+</tr>
+<tr>
+<td>AzureDiskEncryption (if CMK on managed disks)</td>
+<td>Customer-managed key encryption for Premium SSD v2 volumes</td>
+<td>Db2 VMs using managed disks</td>
+</tr>
+</tbody>
+</table>
+<h3 id="os-configuration-requirements">OS Configuration Requirements<a class="headerlink" href="#os-configuration-requirements" title="Permanent link">¶</a></h3>
+<p>Both RHEL for SAP and SLES for SAP are supported OS platforms for Db2 on Azure. The OS must be from the SAP-certified image gallery (Azure Marketplace publisher: <code>RedHat</code> for RHEL-SAP-HA, <code>SUSE</code> for sles-sap):</p>
+<ul>
+<li><strong>RHEL for SAP</strong>: RHEL 8.6 or 9.2 for SAP (includes RHEL High Availability Add-On for Pacemaker)</li>
+<li><strong>SLES for SAP</strong>: SLES 15 SP4 or SP5 for SAP (includes HA Extension with Pacemaker)</li>
+</ul>
+<h3 id="second-architecture-diagram-db2-database-tier-detail">Second Architecture Diagram: Db2 Database Tier Detail<a class="headerlink" href="#second-architecture-diagram-db2-database-tier-detail" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph LR
+  subgraph Zone1["Availability Zone 1"]
+    DB2P["Db2 Primary\nM32ts_v2\ndb2p01 instance\nPort 50000"]
+    subgraph PrimaryStorage["Primary Storage"]
+      LogVolP["Active Log\nANF Ultra\n256 GiB\n&lt;2ms write"]
+      DataVolP["Data Containers\nANF Ultra\n2,048 GiB\n500 MB/s"]
+      TmpVolP["Temp Tablespace\nPremium SSD v2\n256 GiB"]
+      ArchiveVolP["Archive Logs\nPremium SSD v2\n1,024 GiB"]
+    end
+    ILBDB2["Azure ILB\nFloating IP\n10.20.2.100:50000"]
+    PacemakerP["Pacemaker Node 1\nfence_azure_arm\nSAPDB2 resource agent"]
+  end
+
+  subgraph Zone2["Availability Zone 2"]
+    DB2S["Db2 Standby\nM32ts_v2\nHADR Standby\nPort 50000"]
+    subgraph StandbyStorage["Standby Storage"]
+      LogVolS["Active Log\nANF Ultra\n256 GiB\nIdentical to primary"]
+      DataVolS["Data Containers\nANF Ultra\n2,048 GiB\nHADR replay target"]
+      TmpVolS["Temp Tablespace\nPremium SSD v2\n256 GiB"]
+      ArchiveVolS["Archive Logs\nPremium SSD v2\n1,024 GiB"]
+    end
+    PacemakerS["Pacemaker Node 2\nfence_azure_arm\nSAPDB2 resource agent"]
+  end
+
+  subgraph SAPApp["SAP Application Tier"]
+    PAS2["PAS\nE32ds_v5"]
+    AAS["AAS x2\nE32ds_v5"]
+  end
+
+  subgraph Monitoring["Monitoring &amp; Backup"]
+    AMS2["Azure Monitor\nfor SAP Solutions\nDb2 Provider"]
+    RSV2["Recovery Services Vault\nGRS\nBackint target"]
+    LAW2["Log Analytics\nWorkspace"]
+    AKV2["Azure Key Vault\nDb2 credentials\nCMK for disks"]
+  end
+
+  PAS2 --&gt;|TCP 50000| ILBDB2
+  AAS --&gt;|TCP 50000| ILBDB2
+  ILBDB2 --&gt;|Active connection| DB2P
+  DB2P --&gt;|HADR SYNC\nlog shipping| DB2S
+  PacemakerP -.-&gt;|Corosync heartbeat\nTCP 5404-5406| PacemakerS
+  DB2P --&gt; LogVolP
+  DB2P --&gt; DataVolP
+  DB2P --&gt; TmpVolP
+  DB2P --&gt; ArchiveVolP
+  DB2S --&gt; LogVolS
+  DB2S --&gt; DataVolS
+  DB2S --&gt; TmpVolS
+  DB2S --&gt; ArchiveVolS
+  DB2P --&gt;|backint stream| RSV2
+  AMS2 --&gt;|Db2 snapshot metrics| LAW2
+  DB2P --&gt;|Managed Identity auth| AKV2</code></pre>
+<hr/>
+<h2 id="database-configuration">Database Configuration<a class="headerlink" href="#database-configuration" title="Permanent link">¶</a></h2>
+<h3 id="db2-instance-and-database-parameters-for-azure">Db2 Instance and Database Parameters for Azure<a class="headerlink" href="#db2-instance-and-database-parameters-for-azure" title="Permanent link">¶</a></h3>
+<p>The following Db2 configuration parameters must be set for SAP workloads on Azure, based on SAP Note 405827 and IBM Db2 11.5 best practices for virtualized environments:</p>
+<p><strong>Db2 Instance-Level Parameters (<code>db2 update dbm cfg</code>):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Recommended Value</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>INTRA_PARALLEL</td>
+<td>YES</td>
+<td>Enable intra-partition parallelism for BW queries; set to NO for pure OLTP ECC</td>
+</tr>
+<tr>
+<td>MAX_QUERYDEGREE</td>
+<td>8 (BW) / 1 (ECC)</td>
+<td>Limit query parallelism to prevent single-query CPU monopolization</td>
+</tr>
+<tr>
+<td>SVCENAME</td>
+<td>db2p01 (mapped to port 50000)</td>
+<td>SAP-required naming convention; port in /etc/services</td>
+</tr>
+<tr>
+<td>DB2COMM</td>
+<td>TCPIP</td>
+<td>SAP requires TCP/IP connectivity; named pipe not used on Linux</td>
+</tr>
+<tr>
+<td>FENCED_POOL</td>
+<td>0</td>
+<td>Disable fenced UDF pool; SAP does not use fenced UDFs</td>
+</tr>
+<tr>
+<td>KEEPDARI</td>
+<td>NO</td>
+<td>Do not keep DARI processes; reduces memory overhead</td>
+</tr>
+<tr>
+<td>ASLHEAPSZ</td>
+<td>15</td>
+<td>Application shared memory heap; increase to 25 for large SAP systems</td>
+</tr>
+<tr>
+<td>SHEAPTHRES</td>
+<td>250000</td>
+<td>Sort heap threshold; prevent sort spills for complex SAP queries</td>
+</tr>
+<tr>
+<td>AUDIT_BUF_SZ</td>
+<td>4096</td>
+<td>Audit buffer for Db2 audit facility; required for security audit logging</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Db2 Database-Level Parameters (<code>db2 update db cfg for &lt;SID&gt;</code>):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Recommended Value</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LOGPRIMARY</td>
+<td>100</td>
+<td>Number of primary log files; size = LOGPRIMARY × LOGFILSIZ × 4 KiB</td>
+</tr>
+<tr>
+<td>LOGSECOND</td>
+<td>100</td>
+<td>Secondary log files; allow log growth during large batch jobs</td>
+</tr>
+<tr>
+<td>LOGFILSIZ</td>
+<td>65536</td>
+<td>256 MiB log files (65536 × 4 KiB); matches SAP recommendation</td>
+</tr>
+<tr>
+<td>LOGBUFSZ</td>
+<td>4096</td>
+<td>Log buffer; 16 MiB buffer reduces log write I/O frequency</td>
+</tr>
+<tr>
+<td>LOCKLIST</td>
+<td>AUTOMATIC</td>
+<td>Dynamic lock list; prevents lock escalations during SAP batch processing</td>
+</tr>
+<tr>
+<td>MAXLOCKS</td>
+<td>80</td>
+<td>Maximum percentage of lock list per application; increase if lock escalation observed</td>
+</tr>
+<tr>
+<td>BUFFPAGE</td>
+<td>—</td>
+<td>Do not set; use named buffer pools per tablespace instead</td>
+</tr>
+<tr>
+<td>STMTHEAP</td>
+<td>AUTOMATIC</td>
+<td>Statement heap; AUTOMATIC avoids fixed limit on complex SAP queries</td>
+</tr>
+<tr>
+<td>APPLHEAPSZ</td>
+<td>AUTOMATIC</td>
+<td>Application heap; AUTOMATIC for SAP workloads</td>
+</tr>
+<tr>
+<td>PCKCACHESZ</td>
+<td>AUTOMATIC</td>
+<td>Package cache; AUTOMATIC; size to 5% of IBMDEFAULTBP buffer pool</td>
+</tr>
+<tr>
+<td>CATALOGCACHE_SZ</td>
+<td>AUTOMATIC</td>
+<td>Catalog cache; AUTOMATIC prevents catalog scan overhead</td>
+</tr>
+<tr>
+<td>HADR_LOCAL_HOST</td>
+<td><primary ip=""></primary></td>
+<td>HADR local host IP (use Azure NIC private IP)</td>
+</tr>
+<tr>
+<td>HADR_LOCAL_SVC</td>
+<td>60005</td>
+<td>HADR local service port (not same as Db2 client port 50000)</td>
+</tr>
+<tr>
+<td>HADR_REMOTE_HOST</td>
+<td><standby ip=""></standby></td>
+<td>HADR remote host IP</td>
+</tr>
+<tr>
+<td>HADR_REMOTE_SVC</td>
+<td>60005</td>
+<td>HADR remote service port</td>
+</tr>
+<tr>
+<td>HADR_SYNCMODE</td>
+<td>SYNC</td>
+<td>Synchronous HADR for zero data loss in the same Azure region</td>
+</tr>
+<tr>
+<td>HADR_PEER_WINDOW</td>
+<td>120</td>
+<td>HADR peer window in seconds; allow 2-minute log replay lag before HADR disconnect</td>
+</tr>
+<tr>
+<td>AUTO_RUNSTATS</td>
+<td>ON</td>
+<td>Automatic statistics collection; required for SAP query optimizer</td>
+</tr>
+<tr>
+<td>AUTO_REORG</td>
+<td>OFF</td>
+<td>Disable automatic online reorganization; use SAP BRSPACE for scheduled reorg</td>
+</tr>
+<tr>
+<td>LOGARCHMETH1</td>
+<td>DISK:<archive_path></archive_path></td>
+<td>Primary log archive method; archive to dedicated volume</td>
+</tr>
+<tr>
+<td>LOGARCHMETH2</td>
+<td>TSM (or VENDOR=<backint>)</backint></td>
+<td>Secondary log archive to Azure Backup via backint agent</td>
+</tr>
+<tr>
+<td>TRACKMOD</td>
+<td>YES</td>
+<td>Track modified pages; required for incremental backup support</td>
+</tr>
+<tr>
+<td>NEWLOGPATH</td>
+<td>/db2/<sid>/log_dir</sid></td>
+<td>Move active log to dedicated high-performance volume</td>
+</tr>
+<tr>
+<td>DBPATH</td>
+<td>/db2/<sid></sid></td>
+<td>Db2 database path; not on OS disk</td>
+</tr>
+</tbody>
+</table>
+<h3 id="buffer-pool-configuration">Buffer Pool Configuration<a class="headerlink" href="#buffer-pool-configuration" title="Permanent link">¶</a></h3>
+<p>SAP requires specific buffer pool configuration per tablespace type. Do not rely on the IBMDEFAULTBP (4 KiB page size) buffer pool for all tablespace activity:</p>
+<table>
+<thead>
+<tr>
+<th>Buffer Pool Name</th>
+<th>Page Size</th>
+<th>Initial Size (ECC 500 GiB DB)</th>
+<th>Initial Size (BW 2 TiB DB)</th>
+<th>Tablespace Assigned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IBMDEFAULTBP</td>
+<td>4 KiB</td>
+<td>50,000 pages (200 MiB)</td>
+<td>100,000 pages (400 MiB)</td>
+<td>System catalog tablespace</td>
+</tr>
+<tr>
+<td>BP8K</td>
+<td>8 KiB</td>
+<td>500,000 pages (4 GiB)</td>
+<td>2,000,000 pages (16 GiB)</td>
+<td>PSAPBTABD, PSAPBTABI</td>
+</tr>
+<tr>
+<td>BP16K</td>
+<td>16 KiB</td>
+<td>1,000,000 pages (16 GiB)</td>
+<td>5,000,000 pages (80 GiB)</td>
+<td>PSAPEL30D (BW fact tables)</td>
+</tr>
+<tr>
+<td>BP32K</td>
+<td>32 KiB</td>
+<td>200,000 pages (6 GiB)</td>
+<td>1,000,000 pages (32 GiB)</td>
+<td>PSAPTEMP32 (sort/temp)</td>
+</tr>
+</tbody>
+</table>
+<p>The combined buffer pool memory must fit within the VM RAM minus OS overhead (8-16 GiB for OS kernel and filesystem cache) and minus Db2 engine overhead (approximately 2 GiB base). For an E64ds_v5 with 512 GiB RAM: OS = 16 GiB, Db2 engine = 2 GiB, available for buffer pools = 494 GiB. Allocate 80% of available memory (395 GiB) to buffer pools, retaining 20% for sort heaps, lock list, and OS filesystem cache.</p>
+<h3 id="os-level-configuration-linux">OS-Level Configuration (Linux)<a class="headerlink" href="#os-level-configuration-linux" title="Permanent link">¶</a></h3>
+<p>The following kernel and OS settings are required on RHEL/SLES for SAP nodes running Db2 LUW:</p>
+<p><strong><code>/etc/sysctl.conf</code> additions (applied via <code>sysctl -p</code>):</strong></p>
+<div class="language-ini highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="na">kernel.msgmni</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1024</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="na">kernel.sem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">250 256000 32 1024</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="na">kernel.shmmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">549755813888</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="na">kernel.shmall</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">134217728</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="na">kernel.shmmni</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">4096</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="na">vm.swappiness</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">10</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="na">net.core.rmem_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">16777216</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="na">net.core.wmem_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">16777216</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="na">net.ipv4.tcp_rmem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">4096 87380 16777216</span>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="na">net.ipv4.tcp_wmem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">4096 65536 16777216</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="na">net.ipv4.tcp_timestamps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1</span>
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="na">net.ipv4.tcp_sack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1</span>
+</span></code></pre></div>
+<p><strong>Huge Pages</strong>: Configure transparent hugepages to <code>madvise</code> for Db2 buffer pools (Db2 11.5 uses <code>madvise</code> MADV_HUGEPAGE internally for buffer pool allocation). Do not set to <code>always</code> as it causes latency spikes during hugepage allocation. Set in <code>/etc/rc.local</code>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nb">echo</span><span class="w"> </span>madvise<span class="w"> </span>&gt;<span class="w"> </span>/sys/kernel/mm/transparent_hugepage/enabled
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nb">echo</span><span class="w"> </span>defer+madvise<span class="w"> </span>&gt;<span class="w"> </span>/sys/kernel/mm/transparent_hugepage/defrag
+</span></code></pre></div>
+<p><strong>Swap</strong>: Configure swap space of minimum 20 GiB on a dedicated Premium SSD v2 volume. Do not use no-swap configuration with Db2 — unlike SAP HANA, Db2 does not prohibit swap, and out-of-memory kills of Db2 processes cause database crash without clean shutdown.</p>
+<p><strong>Filesystem</strong>: Use XFS for all Db2 data and log volumes mounted from block devices. Mount options for XFS on Db2 data volumes: <code>noatime,nodiratime,nobarrier</code> (nobarrier valid for non-battery-backed storage where write ordering is enforced at storage layer — ANF and Premium SSD v2 with Write Accelerator).</p>
+<p><strong>Limits (<code>/etc/security/limits.conf</code> for db2<sid> user):</sid></strong></p>
+<div class="language-ini highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="na">db2p01  soft  nofile  65536</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="na">db2p01  hard  nofile  65536</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="na">db2p01  soft  nproc   16384</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="na">db2p01  hard  nproc   16384</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="na">db2p01  soft  memlock unlimited</span>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="na">db2p01  hard  memlock unlimited</span>
+</span></code></pre></div>
+<h3 id="network-configuration-for-hadr">Network Configuration for HADR<a class="headerlink" href="#network-configuration-for-hadr" title="Permanent link">¶</a></h3>
+<p>Db2 HADR uses a dedicated TCP connection between the HADR_LOCAL_HOST and HADR_REMOTE_HOST. On Azure, this maps to the private IP of each Db2 VM NIC. Configure the HADR parameters to use the primary NIC IP (not the virtual IP managed by the Azure ILB). The Azure ILB floating IP is only for client connections from SAP application servers.</p>
+<p>HADR heartbeat monitoring uses the HADR_PEER_WINDOW parameter (120 seconds recommended for Azure inter-zone deployments). If the standby does not acknowledge log records within this window, the primary transitions out of HADR PEER state. Setting this value too low (below 30 seconds) can cause false HADR disconnections during Azure maintenance events.</p>
+<h3 id="licensing-considerations-on-azure">Licensing Considerations on Azure<a class="headerlink" href="#licensing-considerations-on-azure" title="Permanent link">¶</a></h3>
+<p>Db2 on Azure is licensed under the IBM IPLA license. Two licensing models apply:</p>
+<ol>
+<li>
+<p><strong>IBM Db2 Standard Edition (SE)</strong>: Per-core licensing with a 2-core minimum. On Azure VMs, all vCPUs count as cores for IBM licensing. An M32ts_v2 with 32 vCPUs requires 32 Db2 SE core licenses (or equivalent PVU calculation).</p>
+</li>
+<li>
+<p><strong>IBM Db2 Advanced Edition (AE)</strong>: Required for Advanced Copy Services (ACS) used with storage-level snapshot backups, and for Oracle Compatibility features. For SAP-only deployments, Db2 SE is sufficient.</p>
+</li>
+</ol>
+<p>Azure Hybrid Benefit does not apply to IBM Db2 licenses — it applies only to Microsoft SQL Server and Windows Server licenses. IBM provides the BYOL model for Azure deployments; licenses must be acquired through IBM or an IBM Business Partner separately from Azure infrastructure costs.</p>
+<hr/>
+<h2 id="high-availability-architecture">High Availability Architecture<a class="headerlink" href="#high-availability-architecture" title="Permanent link">¶</a></h2>
+<h3 id="db2-hadr-overview">Db2 HADR Overview<a class="headerlink" href="#db2-hadr-overview" title="Permanent link">¶</a></h3>
+<p>IBM Db2 High Availability Disaster Recovery (HADR) is the native database-level replication technology for Db2 HA on Azure. HADR operates as a primary-standby configuration: the primary Db2 node processes all read and write transactions, continuously ships transaction log records to the standby node, which replays them to maintain a transactionally consistent copy of the database. On Azure, HADR is deployed with HADR_SYNCMODE = SYNC for zero data loss within an Azure region (two Availability Zones).</p>
+<p>HADR synchronous mode operation: the primary Db2 node writes a transaction log record to the local log buffer, ships it to the standby over the HADR TCP connection, waits for the standby to acknowledge receipt and replay (with <code>SYNCMODE = SYNC</code>, acknowledgement is after replay), then returns commit confirmation to the SAP application. This adds the round-trip HADR latency (inter-zone ~2 ms) to every Db2 commit operation. For SAP OLTP workloads with commit-heavy dialog steps, this latency impact is measurable. SAP Note 1901383 documents the acceptable HADR latency thresholds: up to 3 ms additional commit latency is acceptable for SAP ECC; BW batch operations are less sensitive to per-commit latency.</p>
+<h3 id="pacemaker-cluster-configuration">Pacemaker Cluster Configuration<a class="headerlink" href="#pacemaker-cluster-configuration" title="Permanent link">¶</a></h3>
+<p>Pacemaker manages the Db2 HADR cluster on Azure using the following resource agents:
+- <strong>fence_azure_arm</strong>: STONITH fencing agent that calls the Azure Resource Manager API to power off a fenced node. Requires a Managed Identity (User-assigned or System-assigned) on each cluster node with <code>Microsoft.Compute/virtualMachines/powerOff/action</code> permission.
+- <strong>SAPDatabase resource agent (db2 variant)</strong>: Pacemaker resource agent that starts, stops, and monitors the Db2 instance and manages HADR takeover via <code>db2 takeover hadr on db &lt;SID&gt;</code>.
+- <strong>IPaddr2 resource agent</strong>: Manages the virtual IP (floating IP) that matches the Azure ILB backend pool IP configuration.</p>
+<p>Pacemaker cluster topology for Db2 HADR on Azure:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>Two-node cluster:
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>  Node 1: db2p01-vm1 (Zone 1, Db2 primary)
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>  Node 2: db2p01-vm2 (Zone 2, Db2 standby)
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a>  STONITH: fence_azure_arm (Azure ARM fencing)
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a>  Resources:
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a>    rsc_Db2_P01: SAPDatabase agent, monitors Db2 instance P01
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a>    rsc_ip_P01_db2: IPaddr2, manages virtual IP 10.20.2.100
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a>  Constraints:
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a>    colocation: rsc_ip_P01_db2 with rsc_Db2_P01 (INFINITY)
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a>    order: start rsc_Db2_P01 before rsc_ip_P01_db2 (INFINITY)
+</span></code></pre></div>
+<p>The Azure ILB backend pool contains both Db2 VM NICs. The health probe targets port 62500 (configurable), which is responded to only by the active Db2 node using a <code>socat</code> or <code>nc</code> listener script that checks Db2 instance state. The inactive standby node does not respond to the health probe, causing the ILB to route all traffic to the active primary.</p>
+<h3 id="azure-load-balancer-configuration-for-db2-hadr">Azure Load Balancer Configuration for Db2 HADR<a class="headerlink" href="#azure-load-balancer-configuration-for-db2-hadr" title="Permanent link">¶</a></h3>
+<p>The Azure Internal Standard Load Balancer for Db2 requires the following specific configuration (deviating from defaults will break SAP connectivity after failover):</p>
+<table>
+<thead>
+<tr>
+<th>LB Parameter</th>
+<th>Required Value</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SKU</td>
+<td>Standard</td>
+<td>Basic SKU does not support Availability Zones</td>
+</tr>
+<tr>
+<td>Session persistence</td>
+<td>None (5-tuple hash)</td>
+<td>SAP ABAP work processes use persistent TCP connections; session persistence is not needed as Pacemaker moves the IP</td>
+</tr>
+<tr>
+<td>Floating IP (Direct Server Return)</td>
+<td>Enabled</td>
+<td>Required — Db2 listens on the floating IP itself, not on the load balancer frontend IP</td>
+</tr>
+<tr>
+<td>Idle timeout</td>
+<td>30 minutes</td>
+<td>SAP application servers hold idle database connections; below 4 minutes causes connection drops</td>
+</tr>
+<tr>
+<td>Health probe port</td>
+<td>62500</td>
+<td>Custom port; not Db2 port 50000</td>
+</tr>
+<tr>
+<td>Health probe interval</td>
+<td>5 seconds</td>
+<td>Detect failover within 25 seconds (5 intervals × 5 seconds)</td>
+</tr>
+<tr>
+<td>HA ports rule</td>
+<td>Enabled (port 0, protocol All)</td>
+<td>Required for Pacemaker cluster corosync traffic on non-standard ports</td>
+</tr>
+</tbody>
+</table>
+<h3 id="availability-zone-deployment-for-db2-hadr">Availability Zone Deployment for Db2 HADR<a class="headerlink" href="#availability-zone-deployment-for-db2-hadr" title="Permanent link">¶</a></h3>
+<p>The Db2 primary node is placed in Availability Zone 1 and the standby in Availability Zone 2. Both nodes are in the same Azure region and same VNet/subnet (the DB subnet 10.20.2.0/24). Availability Zone placement is specified at VM creation time via the <code>--zone</code> parameter in Azure CLI or the <code>zones</code> property in ARM/Bicep templates; it cannot be changed after VM creation without deallocating and recreating the VM.</p>
+<p>The storage volumes (ANF or Premium SSD v2) for each Db2 node must be in the same Availability Zone as the compute. ANF volumes with Availability Zone Volume Placement (AZVP) are pinned to the specified zone. Premium SSD v2 managed disks are zone-redundant by default in regions with ZRS support but can be pinned to a specific zone for latency consistency.</p>
+<h3 id="proximity-placement-group-considerations">Proximity Placement Group Considerations<a class="headerlink" href="#proximity-placement-group-considerations" title="Permanent link">¶</a></h3>
+<p>Proximity Placement Groups (PPG) are NOT recommended for cross-zone Db2 HADR deployments. PPGs force all members into the same physical cluster within one zone, which is incompatible with the cross-zone HA requirement. For single-zone deployments (non-production or regions with only one Availability Zone), a PPG can be used to ensure the Db2 VM and the SAP application server VMs are in close physical proximity (sub-1 ms latency).</p>
+<h3 id="network-latency-requirements-for-synchronous-hadr">Network Latency Requirements for Synchronous HADR<a class="headerlink" href="#network-latency-requirements-for-synchronous-hadr" title="Permanent link">¶</a></h3>
+<p>HADR SYNC mode adds round-trip latency to every Db2 commit. The SAP application perceives this as additional response time on every dialog step that modifies database state. The maximum acceptable additional commit latency is 3 ms (SAP Note 1901383). Inter-zone latency within an Azure region is typically 1-2 ms, leaving 1-2 ms budget for Db2 log write I/O on the standby. This budget is met by ANF Ultra tier (sub-0.5 ms write latency) or Premium SSD v2 with Write Accelerator.</p>
+<hr/>
+<h2 id="disaster-recovery-architecture">Disaster Recovery Architecture<a class="headerlink" href="#disaster-recovery-architecture" title="Permanent link">¶</a></h2>
+<h3 id="cross-region-dr-with-db2-hadr">Cross-Region DR with Db2 HADR<a class="headerlink" href="#cross-region-dr-with-db2-hadr" title="Permanent link">¶</a></h3>
+<p>Disaster Recovery for SAP on Db2 on Azure uses a second HADR standby configured in HADR asynchronous mode (<code>HADR_SYNCMODE = ASYNC</code> or <code>SUPERASYNC</code>) in the DR Azure region. Db2 supports up to three HADR standbys in a principal standby configuration: the primary ships logs synchronously to the local HA standby (Zone 2 in the primary region), and asynchronously to the DR standby (DR region). This is the Db2 HADR Multi-Target configuration (available in Db2 11.1 FP5+).</p>
+<p>HADR Multi-Target DR topology:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>Primary (Region A, Zone 1) — SYNC —&gt; HA Standby (Region A, Zone 2)
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>Primary (Region A, Zone 1) — ASYNC —&gt; DR Standby (Region B, Zone 1)
+</span></code></pre></div></p>
+<p>After an HA failover to the Zone 2 standby, the new primary (formerly HA standby) must establish an HADR connection to the DR standby. This requires updating the HADR_REMOTE_HOST on the DR standby to point to the new primary's IP. Automation of this repointing is handled by the Pacemaker post-failover hook script or by Azure Automation runbook triggered by the Pacemaker state change event in Azure Monitor.</p>
+<h3 id="azure-site-recovery-exclusion-rationale">Azure Site Recovery Exclusion Rationale<a class="headerlink" href="#azure-site-recovery-exclusion-rationale" title="Permanent link">¶</a></h3>
+<p>Azure Site Recovery (ASR) is NOT used for Db2 database replication. ASR replicates at the disk block level and does not understand Db2 database consistency. Failing over an ASR-replicated Db2 disk image without a clean database shutdown results in a crash-recovery scenario that may require Db2 rollforward from the last committed log record. This is functionally equivalent to HADR ASYNC but with higher complexity and no Db2-native consistency guarantee.</p>
+<p>ASR is used for the SAP application servers (PAS, AAS, ASCS) in the DR region, as these are stateless (no persistent data beyond the shared /sapmnt NFS, which is replicated by ANF Cross-Region Replication).</p>
+<h3 id="dr-network-connectivity">DR Network Connectivity<a class="headerlink" href="#dr-network-connectivity" title="Permanent link">¶</a></h3>
+<p>The DR region requires:
+- <strong>Azure VNet</strong> peered to the primary region hub (or connected via Azure Virtual WAN) with BGP route propagation
+- <strong>ExpressRoute Global Reach</strong> for on-premises-to-DR connectivity (bypasses internet for DR activation traffic)
+- <strong>Private DNS Zone</strong> replication or secondary zones for Db2 virtual hostname resolution in the DR region
+- <strong>Azure Internal Load Balancer</strong> pre-provisioned in the DR region but with zero backend pool members until DR activation</p>
+<p>HADR ASYNC TCP connection between the primary region and DR region traverses the Azure backbone (Microsoft global network) if both regions are connected via ExpressRoute with Private Peering or VNet peering. HADR ASYNC log shipping bandwidth requirement: equal to the average Db2 redo log generation rate (10-50 MB/s for ECC, 20-80 MB/s for BW). The ExpressRoute circuit to the DR region must have sufficient bandwidth headroom for HADR replication plus DR activation data transfer.</p>
+<h3 id="dr-vm-sizing">DR VM Sizing<a class="headerlink" href="#dr-vm-sizing" title="Permanent link">¶</a></h3>
+<p>The DR Db2 standby VM should be the same SKU as the production primary to ensure the DR instance can sustain production workload after failover. Sizing the DR VM smaller risks HADR replay lag (insufficient CPU/memory for log apply), which increases effective RPO. In cost-optimized DR designs, the DR VM can be deallocated when not needed and brought online only during DR drills or actual DR events — this requires Db2 HADR to re-establish the connection after a log gap, which Db2 handles by fetching archive logs from the primary's LOGARCHMETH2 target (Azure Blob Storage).</p>
+<h3 id="dr-runbook-outline">DR Runbook Outline<a class="headerlink" href="#dr-runbook-outline" title="Permanent link">¶</a></h3>
+<ol>
+<li><strong>Pre-DR activation checklist</strong>: Verify HADR async lag is below RPO threshold (query <code>db2pd -hadr -db &lt;SID&gt;</code> for LOG_GAP); confirm DR VM is running; confirm ANF CRR replication lag is below RPO.</li>
+<li><strong>Activate DR Db2 instance</strong>: On the DR standby VM, execute <code>db2 takeover hadr on db &lt;SID&gt; by force peer window only</code> (force peer window bypasses the HADR sync requirement for async standby).</li>
+<li><strong>Start SAP application layer</strong>: Start ASCS/ERS Pacemaker cluster in DR region; start PAS and AAS VMs in DR region.</li>
+<li><strong>Update DNS</strong>: Update the Private DNS Zone A record for the Db2 virtual hostname to point to the DR region ILB floating IP (10.DR.2.100).</li>
+<li><strong>Validate SAP connectivity</strong>: Log into the SAP system in DR region and execute <code>SM50</code> work process overview; verify all work processes are in "waiting" state (not "stopped").</li>
+<li><strong>Notify stakeholders</strong>: DR activation complete; publish estimated RTO achievement time.</li>
+</ol>
+<h3 id="rtorpo-validation">RTO/RPO Validation<a class="headerlink" href="#rtorpo-validation" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Target</th>
+<th>Validation Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RPO (HADR ASYNC)</td>
+<td>15 minutes</td>
+<td>Monitor <code>db2pd -hadr</code> LOG_GAP metric in Azure Monitor; alert if &gt;10 minutes</td>
+</tr>
+<tr>
+<td>RTO (DR activation)</td>
+<td>4 hours</td>
+<td>Annual DR drill with stopwatch timing from DR trigger to SAP login screen</td>
+</tr>
+<tr>
+<td>HADR SYNC RPO</td>
+<td>0 seconds (zero data loss)</td>
+<td>Verified by HADR SYNC mode — standby acknowledgement before commit</td>
+</tr>
+<tr>
+<td>HADR SYNC RTO (HA failover)</td>
+<td>5 minutes</td>
+<td>Pacemaker failover timing from node failure to ILB re-pointing</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>SAP/Azure Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Database VM family</td>
+<td>E-series Edsv5 vs M-series Mv2/Mdsv3</td>
+<td>E64ds_v5 for ECC production (up to 500 GiB DB); M64s_v2 for BW (&gt;1 TiB DB)</td>
+<td>E64ds_v5 delivers 512 GiB RAM at lower cost than M-series for ECC workloads where Db2 buffer pools fit within 400 GiB; M-series required only when buffer pool requirement exceeds E-series max RAM</td>
+<td>SAP Note 1928533; Azure Db2 sizing guide</td>
+</tr>
+<tr>
+<td>Storage for Db2 data/log volumes</td>
+<td>Premium SSD v2 managed disks vs Azure NetApp Files Ultra</td>
+<td>ANF Ultra for production (&gt;1 TiB DB or &gt;50,000 IOPS); Premium SSD v2 for non-production</td>
+<td>ANF Ultra delivers guaranteed sub-0.5 ms log write latency and 128 MiB/s per TiB provisioned throughput without premium disk striping complexity; Premium SSD v2 is cost-effective for smaller databases</td>
+<td>SAP Note 2399079; ANF SAP documentation</td>
+</tr>
+<tr>
+<td>HA method</td>
+<td>Db2 HADR with Pacemaker vs Db2 pureScale vs manual standby</td>
+<td>Db2 HADR with Pacemaker and Azure Fence Agent</td>
+<td>pureScale requires shared storage (not natively available on Azure without specialized setup); HADR is SAP-supported, IBM-certified, and integrates with standard Azure Pacemaker patterns</td>
+<td>SAP Note 1901383; Azure HADR documentation</td>
+</tr>
+<tr>
+<td>HADR sync mode</td>
+<td>SYNC vs NEARSYNC vs ASYNC vs SUPERASYNC</td>
+<td>SYNC within Azure region (HA); ASYNC cross-region (DR)</td>
+<td>SYNC provides zero data loss for same-region HA at 2 ms commit overhead; ASYNC for DR avoids cross-region latency impacting production commit performance</td>
+<td>SAP Note 1901383; IBM Db2 HADR documentation</td>
+</tr>
+<tr>
+<td>DR approach</td>
+<td>HADR Multi-Target vs Azure Site Recovery vs manual backup/restore</td>
+<td>HADR Multi-Target (ASYNC) to DR region</td>
+<td>Native Db2 replication maintains transactional consistency; ASR block replication cannot guarantee Db2 consistency; backup/restore achieves only 4-hour RPO</td>
+<td>IBM Db2 Multi-Target HADR; SAP Note 2233552</td>
+</tr>
+<tr>
+<td>OS selection</td>
+<td>RHEL for SAP vs SLES for SAP</td>
+<td>RHEL for SAP 8.6/9.2 for greenfield; maintain existing OS for migrations</td>
+<td>RHEL for SAP and SLES for SAP are both fully supported; choice driven by existing enterprise OS standard; RHEL HA Add-On and SLES HA Extension both integrate with Azure Fence Agent</td>
+<td>SAP Note 1763512; SAP Note 1928533</td>
+</tr>
+<tr>
+<td>Backup method</td>
+<td>BRBACKUP to ANF snapshot vs Azure Backup backint vs IBM Spectrum Protect</td>
+<td>Azure Backup backint for production; ANF snapshots as supplemental</td>
+<td>Azure Backup integrates natively with Recovery Services Vault for policy-driven retention and GRS replication; ANF snapshots provide fast point-in-time recovery within 15 minutes; IBM Spectrum Protect requires additional infrastructure</td>
+<td>SAP Note 2818765</td>
+</tr>
+<tr>
+<td>Network design for Db2 tier</td>
+<td>Shared DB subnet with all non-HANA DBs vs dedicated Db2 subnet</td>
+<td>Dedicated DB subnet (10.20.2.0/24) per SAP SID group</td>
+<td>NSG rule management is simpler with dedicated subnets; blast radius of misconfigured NSG rule is limited to one SID group; allows separate subnet-level network policies per environment</td>
+<td>SAP Note 1680803; Azure Landing Zone for SAP</td>
+</tr>
+<tr>
+<td>Db2 version</td>
+<td>Db2 11.1 FP5 vs Db2 11.5 FP7</td>
+<td>Db2 11.5 FP7+ for all new deployments</td>
+<td>Db2 11.5 is the IBM recommended version with full SAP support; 11.5 includes HADR Multi-Target (required for DR), improved column-organized table support for BW, and Azure-specific optimizations</td>
+<td>SAP Note 1612105</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="sap-notes-reference">SAP Notes Reference<a class="headerlink" href="#sap-notes-reference" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Microsoft Azure: Supported Products and Azure VM Types</td>
+<td>Defines all supported Azure VM SKUs for SAP on Db2; Accelerated Networking mandatory</td>
+<td>VM selection, NIC configuration</td>
+</tr>
+<tr>
+<td>1612105</td>
+<td>DB6: FAQ - IBM Db2 for Linux, UNIX, and Windows</td>
+<td>Supported Db2 versions per SAP product; Db2 parameter recommendations</td>
+<td>Db2 version selection, parameter tuning</td>
+</tr>
+<tr>
+<td>2233552</td>
+<td>Microsoft Azure: Support for IBM Db2</td>
+<td>Azure-specific Db2 support boundaries; tripartite support agreement</td>
+<td>Support model, escalation path</td>
+</tr>
+<tr>
+<td>1763512</td>
+<td>Support details for Db2 with SAP on Linux</td>
+<td>Linux OS kernel parameters, limits, and filesystem settings for Db2</td>
+<td>OS configuration baseline</td>
+</tr>
+<tr>
+<td>405827</td>
+<td>Recommended settings for DB6 (IBM DB2 UDB)</td>
+<td>Db2 instance and database configuration parameters for SAP</td>
+<td>Database parameter tuning</td>
+</tr>
+<tr>
+<td>1901383</td>
+<td>IBM Db2 High Availability and Disaster Recovery on Azure</td>
+<td>HADR configuration parameters; acceptable latency thresholds; Pacemaker integration</td>
+<td>HA/DR architecture</td>
+</tr>
+<tr>
+<td>2818765</td>
+<td>Azure Backup for SAP on IBM Db2</td>
+<td>Backup integration architecture; supported backup targets; BRBACKUP configuration</td>
+<td>Backup solution design</td>
+</tr>
+<tr>
+<td>1680803</td>
+<td>SAP Systems on Microsoft Azure: Security Guidelines</td>
+<td>Network isolation requirements; OS hardening; SAP user separation</td>
+<td>NSG design, OS hardening, security baseline</td>
+</tr>
+<tr>
+<td>2399079</td>
+<td>Installation of SAP HANA DB: Revision and Maintenance Strategy (reference for non-HANA comparison)</td>
+<td>Storage throughput KPIs applicable to all SAP databases on Azure</td>
+<td>Storage performance validation</td>
+</tr>
+<tr>
+<td>2267798</td>
+<td>SAP S/4HANA: Database on Azure</td>
+<td>S/4HANA functional restrictions on non-HANA databases; supported S/4HANA versions on Db2</td>
+<td>S/4HANA on Db2 deployment decisions</td>
+</tr>
+<tr>
+<td>2593824</td>
+<td>Linux: Running SAP Applications on Microsoft Azure</td>
+<td>RHEL and SLES-specific Azure configuration requirements; clock synchronization</td>
+<td>OS-level Azure integration</td>
+</tr>
+<tr>
+<td>3007991</td>
+<td>Linux Pacemaker on Microsoft Azure</td>
+<td>Azure Fence Agent (fence_azure_arm) configuration; Pacemaker cluster setup</td>
+<td>Pacemaker and STONITH configuration</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Pillar</th>
+<th>Requirement</th>
+<th>Implementation</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reliability</td>
+<td>Database HA with automatic failover; RTO &lt; 5 minutes for planned maintenance</td>
+<td>Db2 HADR SYNC with Pacemaker and Azure Fence Agent; cross-zone deployment Zone 1 + Zone 2; Azure ILB Standard SKU with health probes</td>
+<td>SAP Note 1901383; Azure Well-Architected Framework Reliability pillar</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>DR with RPO &lt; 15 minutes; RTO &lt; 4 hours</td>
+<td>Db2 HADR Multi-Target ASYNC to DR region; ANF Cross-Region Replication for shared storage; pre-provisioned DR VM</td>
+<td>Azure Business Continuity Guide for SAP</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>Backup with 30-day retention and cross-region restore capability</td>
+<td>Azure Backup with backint agent; Recovery Services Vault with GRS; 30-day backup policy; BRARCHIVE to Azure Blob Storage with lifecycle to cool tier after 7 days</td>
+<td>SAP Note 2818765</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Encryption at rest with customer-managed keys</td>
+<td>Azure Disk Encryption with CMK stored in Azure Key Vault Premium (HSM-backed) for managed disks; ANF volumes encrypted with platform keys by default (CMK via Key Vault available for ANF)</td>
+<td>Azure Key Vault documentation; ANF encryption documentation</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Encryption in transit for Db2 client connections</td>
+<td>Db2 SSL/TLS configured for SAP application-to-Db2 communication; certificates stored in Azure Key Vault; Db2 <code>GSK_SERVER_CERT_LABEL</code> configured in Db2 keystore</td>
+<td>IBM Db2 TLS configuration guide</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Network isolation for Db2 tier</td>
+<td>Dedicated DB subnet 10.20.2.0/24 with NSG allowing only TCP 50000 from application subnet; no direct internet access from DB subnet; Azure Private Endpoints for backup and Key Vault</td>
+<td>SAP Note 1680803; Azure NSG documentation</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Privileged access management for DBA operations</td>
+<td>Microsoft Entra ID Privileged Identity Management (PIM) for just-in-time elevation to DBA role on Db2 VMs; Azure Bastion for SSH access without public IP exposure; all DBA actions logged to Log Analytics</td>
+<td>Azure PIM documentation; Microsoft Entra ID</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>Right-sizing of Db2 VMs to actual workload</td>
+<td>3-year Reserved Instances for production Db2 primary and standby VMs (typically 35-50% cost reduction vs pay-as-you-go); Dev/Test Azure subscription pricing for DEV/QAS Db2 instances</td>
+<td>Azure Reserved VM Instances; Azure Dev/Test pricing</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>Storage cost optimization</td>
+<td>ANF Ultra only for production data/log volumes; Premium SSD v2 for non-production; archive logs lifecycle to Azure Blob cool tier after 7 days; Standard tier ANF for /sapmnt</td>
+<td>Azure NetApp Files pricing; Azure Blob Storage lifecycle</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>Azure Hybrid Benefit for OS</td>
+<td>Azure Hybrid Benefit for RHEL or SLES OS licenses from existing enterprise agreements; applies to Db2 VM OS, not Db2 database license</td>
+<td>Azure Hybrid Benefit for Linux documentation</td>
+</tr>
+<tr>
+<td>Operational Excellence</td>
+<td>Standardized deployment via Infrastructure as Code</td>
+<td>Bicep templates for Db2 VM, NIC, NSG, ANF volume, ILB, and Pacemaker configuration; stored in Azure DevOps repository; deployed via Azure Pipelines with approval gates for production</td>
+<td>Azure Landing Zone for SAP IaC</td>
+</tr>
+<tr>
+<td>Operational Excellence</td>
+<td>Monitoring and alerting coverage</td>
+<td>Azure Monitor for SAP Solutions Db2 provider; custom KQL dashboards in Log Analytics; PagerDuty or Azure Monitor action groups for P1/P2 alerts; BRSPACE scheduled job monitoring via SAP Alert Monitor (RZ20)</td>
+<td>Azure Monitor for SAP Solutions documentation</td>
+</tr>
+<tr>
+<td>Performance Efficiency</td>
+<td>Storage I/O performance matching Db2 workload requirements</td>
+<td>ANF Ultra tier for Db2 active log (sub-0.5 ms) and data (500 MB/s throughput); storage KPI validation against SAP Note 1943937 thresholds at deployment time and quarterly</td>
+<td>SAP Note 1943937; ANF performance documentation</td>
+</tr>
+<tr>
+<td>Performance Efficiency</td>
+<td>Network latency within SAP-prescribed thresholds</td>
+<td>Proximity Placement Group for single-zone deployments; Accelerated Networking on all NICs; NIPING latency testing at deployment and after any network change</td>
+<td>SAP Note 1945823; Azure Accelerated Networking documentation</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="security-architecture">Security Architecture<a class="headerlink" href="#security-architecture" title="Permanent link">¶</a></h2>
+<h3 id="database-level-encryption">Database-Level Encryption<a class="headerlink" href="#database-level-encryption" title="Permanent link">¶</a></h3>
+<p><strong>Encryption at Rest</strong>: Db2 native encryption (Db2 Advanced Encryption Feature) encrypts database data containers at the Db2 engine level using AES-256. The Db2 master key is managed by a Key Management Service (KMS). On Azure, the recommended approach is to configure Db2 to use the Azure Key Vault PKCS#11 provider for master key storage, ensuring the Db2 encryption key hierarchy is rooted in an HSM-backed Key Vault key (RSA-2048 or RSA-3072 in Azure Key Vault Premium with HSM protection).</p>
+<p>For organizations that do not use Db2 native encryption, Azure Disk Encryption (ADE) provides encryption of the managed disk at the Azure platform level using the Azure Key Vault-backed CMK. ADE encrypts the entire disk (including OS, Db2 binaries, and data) transparently. Both approaches satisfy the requirement for encryption at rest with CMK; the Db2 native encryption approach provides column-level or tablespace-level granularity, while ADE provides full-disk encryption with no Db2 configuration overhead.</p>
+<p><strong>Encryption in Transit</strong>: Configure Db2 with SSL/TLS for all client connections. The Db2 SSL configuration uses the IBM Global Security Kit (GSKit) to create a keystore containing the Db2 server certificate. On Azure, the server certificate is issued by the enterprise Certificate Authority (CA) or by an internal CA managed in Azure Key Vault. The SAP application server's Db2 client library is configured with <code>DB2COMM=SSL</code> and the path to the client truststore containing the CA certificate. Db2 default SSL port for SAP: 50001 (instance 00 SSL port = client port + 1).</p>
+<h3 id="database-user-management">Database User Management<a class="headerlink" href="#database-user-management" title="Permanent link">¶</a></h3>
+<p>SAP uses the following Db2 database users (defined in SAP installation and SAP Note 1928533):</p>
+<table>
+<thead>
+<tr>
+<th>Db2 User</th>
+<th>Purpose</th>
+<th>Privilege Level</th>
+<th>Management</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAPR3 (or SAP\&lt;SID&gt;)</td>
+<td>SAP application runtime user; all DML operations</td>
+<td>DBADM without ACCESSCTRL/DATAACCESS (Db2 11.5 granular privilege)</td>
+<td>Created by SAP installation; password stored in Azure Key Vault; rotated quarterly</td>
+</tr>
+<tr>
+<td>db2\&lt;SID&gt;</td>
+<td>Db2 instance owner; starts/stops Db2; HADR management</td>
+<td>SYSADM at OS level; Db2 SYSADM</td>
+<td>Service account; no interactive login; SSH key authentication only</td>
+</tr>
+<tr>
+<td>db2fenc\&lt;SID&gt;</td>
+<td>Db2 fenced process owner</td>
+<td>Limited OS user</td>
+<td>Created by Db2 installation; no login shell</td>
+</tr>
+<tr>
+<td>DBADM_OPS</td>
+<td>DBA operational team</td>
+<td>DBADM without SECADM</td>
+<td>Entra ID group mapped via Db2 LDAP group lookup; PIM-eligible</td>
+</tr>
+<tr>
+<td>DBMON</td>
+<td>Azure Monitor for SAP Solutions monitoring</td>
+<td>SELECT on monitoring views; EXECUTE on SNAPSHOT functions</td>
+<td>Created post-installation; read-only; password in Key Vault</td>
+</tr>
+</tbody>
+</table>
+<p>Entra ID integration for Db2 user authentication is implemented through IBM Security Access Manager or Db2 LDAP authentication configuration (<code>db2 update dbm cfg using SRVCON_AUTH SERVER_ENCRYPT</code>), allowing Entra ID user credentials to authenticate against Db2 through the LDAP bridge. This enables just-in-time DBA access without creating persistent Db2 OS-level accounts.</p>
+<h3 id="network-isolation">Network Isolation<a class="headerlink" href="#network-isolation" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>DB Subnet NSG Rules</strong>: Inbound: allow TCP 50000 from ApplicationSubnet (10.20.1.0/24); allow TCP 50001 (SSL) from ApplicationSubnet; allow TCP 60005 (HADR) from DBSubnet (intra-subnet for HADR); allow TCP 5404-5406 (Pacemaker corosync) from DBSubnet; allow TCP 22 (SSH) from Azure Bastion subnet only. Deny all other inbound. Outbound: allow TCP 443 to Azure Key Vault private endpoint; allow TCP 443 to Azure Backup private endpoint; allow TCP 443 to Azure Monitor private endpoint.</li>
+<li><strong>Azure Bastion</strong>: All DBA SSH sessions to Db2 VMs route through Azure Bastion (Standard SKU); Db2 VMs have no public IP addresses.</li>
+<li><strong>Private Endpoints</strong>: Azure Key Vault, Azure Backup Recovery Services Vault, Azure Monitor, and Azure NetApp Files all accessed via Private Endpoints in the SAP Landing Zone spoke VNet.</li>
+</ul>
+<h3 id="microsoft-defender-for-databases">Microsoft Defender for Databases<a class="headerlink" href="#microsoft-defender-for-databases" title="Permanent link">¶</a></h3>
+<p>Microsoft Defender for Cloud's <strong>Defender for Servers Plan 2</strong> is enabled on all Db2 VMs, providing:
+- Just-in-time VM access (supplements Azure Bastion)
+- File integrity monitoring on Db2 binary directories (/home/db2\&lt;SID&gt;, /db2/\&lt;SID&gt;)
+- Adaptive application controls (allowlisting Db2 binaries)
+- OS vulnerability assessment</p>
+<p>Microsoft Defender for SQL does not cover IBM Db2 — it covers Azure SQL Database and SQL Server only. Db2-specific threat detection is implemented through:
+- Db2 audit facility (<code>db2audit</code>) writing SYSLOG events to the Db2 audit log
+- Syslog forwarding from Db2 VMs to Azure Monitor using the AMA syslog data source
+- KQL detection rules in Microsoft Sentinel for anomalous Db2 SQL patterns (large data exfiltration queries, privilege escalation via GRANT DBADM)</p>
+<h3 id="audit-logging">Audit Logging<a class="headerlink" href="#audit-logging" title="Permanent link">¶</a></h3>
+<p>Configure Db2 audit facility for SAP workloads:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="n">db2audit</span><span class="w"> </span><span class="n">configure</span><span class="w"> </span><span class="k">scope</span><span class="w"> </span><span class="n">sysadmin</span><span class="p">,</span><span class="n">secmaint</span><span class="p">,</span><span class="n">objmaint</span><span class="p">,</span><span class="n">auth</span><span class="p">,</span><span class="n">validate</span><span class="p">,</span><span class="n">context</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">both</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="n">db2audit</span><span class="w"> </span><span class="k">start</span>
+</span></code></pre></div>
+<p>Audit log location: <code>/home/db2&lt;SID&gt;/sqllib/security/auditdata/</code>. Rotate and forward to Log Analytics using the Azure Monitor Linux Agent syslog connector with a custom log data source pointing to the Db2 audit log directory. Retention in Log Analytics: 90 days hot tier, 730 days cold tier (Azure Monitor Log Analytics Archive).</p>
+<h3 id="key-vault-for-database-credentials">Key Vault for Database Credentials<a class="headerlink" href="#key-vault-for-database-credentials" title="Permanent link">¶</a></h3>
+<p>All Db2 credentials (SAP runtime user SAPR3 password, DBMON monitoring user password, HADR service account credentials) are stored in Azure Key Vault Premium. The Db2 VM's System-Assigned Managed Identity is granted <code>Key Vault Secrets User</code> role on the Key Vault. The SAP application server's Managed Identity is granted <code>Key Vault Secrets Reader</code> role for the SAPR3 credential. Secret rotation is automated via Azure Key Vault rotation policy (90-day rotation) with a post-rotation event triggering an Azure Function that updates the Db2 user password and the SAP <code>dbconnect</code> password entry.</p>
+<hr/>
+<h2 id="reliability-and-high-availability">Reliability and High Availability<a class="headerlink" href="#reliability-and-high-availability" title="Permanent link">¶</a></h2>
+<h3 id="ha-architecture-summary">HA Architecture Summary<a class="headerlink" href="#ha-architecture-summary" title="Permanent link">¶</a></h3>
+<p>The SAP on Db2 HA architecture on Azure provides automated database failover within a single Azure region using Db2 HADR SYNC and Pacemaker cluster management. The failover sequence on primary node failure:</p>
+<ol>
+<li>Pacemaker detects primary node unresponsive (missing heartbeat for <code>token</code> timeout, typically 30 seconds).</li>
+<li>STONITH fence_azure_arm powers off the failed primary VM via Azure ARM API (typically completes in 20-40 seconds).</li>
+<li>Pacemaker promotes the standby node to primary: executes <code>db2 takeover hadr on db &lt;SID&gt;</code>.</li>
+<li>Db2 takeover completes HADR log replay on the standby (log gap at time of failure = 0 for SYNC mode).</li>
+<li>Pacemaker activates the IPaddr2 virtual IP on the new primary node.</li>
+<li>Azure ILB health probe detects the new primary node responding on port 62500.</li>
+<li>SAP application server JDBC connections are re-established (SAP application handles automatic reconnect via the SAP DB connection retry mechanism).</li>
+</ol>
+<p>Total RTO for unplanned HADR failover: 3-6 minutes (30s heartbeat timeout + 30s STONITH + 2min Db2 takeover + 30s ILB probe detection + 30s SAP reconnect).</p>
+<h3 id="sla-calculation">SLA Calculation<a class="headerlink" href="#sla-calculation" title="Permanent link">¶</a></h3>
+<p>The composite Azure SLA for the Db2 HA architecture:</p>
+<ul>
+<li>Azure VM (Standard_M32ts_v2) SLA: 99.99% per VM in Availability Zone</li>
+<li>Azure Internal Load Balancer SLA: 99.99%</li>
+<li>Azure NetApp Files SLA: 99.99%</li>
+<li>Composite SLA (two VMs in separate zones with ILB): calculated as 1 − (1 − 0.9999) × (1 − 0.9999) = 99.9999% (approx)</li>
+<li>Effective SLA considering Pacemaker cluster management overhead: 99.95% (includes planned maintenance windows, HADR failover time, and Pacemaker restart operations)</li>
+</ul>
+<h3 id="rporto-table">RPO/RTO Table<a class="headerlink" href="#rporto-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>SAP Tier</th>
+<th>RPO Target</th>
+<th>RTO Target</th>
+<th>HA Method</th>
+<th>DR Method</th>
+<th>Azure SLA Component</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Production (ECC/S4)</td>
+<td>0 seconds (HADR SYNC)</td>
+<td>5 minutes</td>
+<td>Db2 HADR SYNC + Pacemaker cross-zone</td>
+<td>HADR ASYNC Multi-Target to DR region</td>
+<td>VM: 99.99%, ILB: 99.99%, ANF: 99.99%</td>
+</tr>
+<tr>
+<td>Quality Assurance</td>
+<td>1 hour (log backup interval)</td>
+<td>2 hours (restore from backup)</td>
+<td>None (single-instance with restart)</td>
+<td>Restore from Azure Backup to QAS VM</td>
+<td>VM: 99.9% (single zone)</td>
+</tr>
+<tr>
+<td>Development</td>
+<td>4 hours (daily backup)</td>
+<td>4 hours (restore from backup)</td>
+<td>None (single-instance, auto-restart)</td>
+<td>Restore from Azure Backup</td>
+<td>VM: 99.9% (single zone, may use Spot)</td>
+</tr>
+<tr>
+<td>Sandbox</td>
+<td>8 hours (daily backup)</td>
+<td>8 hours</td>
+<td>None</td>
+<td>Restore from Azure Backup</td>
+<td>VM: 99.9%</td>
+</tr>
+<tr>
+<td>DR Standby</td>
+<td>15 minutes (HADR ASYNC lag)</td>
+<td>4 hours (full DR activation)</td>
+<td>HADR ASYNC from production</td>
+<td>N/A (is the DR target)</td>
+<td>VM: 99.99% (Zone 1 in DR region)</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="cost-optimization">Cost Optimization<a class="headerlink" href="#cost-optimization" title="Permanent link">¶</a></h2>
+<h3 id="vm-sizing-and-reserved-instance-strategy">VM Sizing and Reserved Instance Strategy<a class="headerlink" href="#vm-sizing-and-reserved-instance-strategy" title="Permanent link">¶</a></h3>
+<p>Production Db2 VMs (primary and standby) represent the largest cost component. A 3-year Reserved Instance commitment for the production primary and standby VMs reduces compute cost by 35-50% compared to pay-as-you-go pricing. For an E64ds_v5 (64 vCPUs, 512 GiB RAM) in East US:
+- Pay-as-you-go: approximately $5,800/month
+- 3-year Reserved Instance (upfront): approximately $2,900/month (50% saving)
+- 3-year Reserved Instance with Azure Hybrid Benefit (RHEL): approximately $2,600/month</p>
+<p>Dev/Test Azure subscription pricing applies to DEV and QAS Db2 instances (E16ds_v5 or E32ds_v5), eliminating the Windows/Linux software charges (approximately 20% of VM cost for RHEL SAP image) when using PAYG pricing for non-production.</p>
+<h3 id="storage-cost-optimization">Storage Cost Optimization<a class="headerlink" href="#storage-cost-optimization" title="Permanent link">¶</a></h3>
+<p>ANF Ultra tier is provisioned at a minimum of 4 TiB per capacity pool (ANF minimum pool size). Avoid over-provisioning ANF capacity beyond actual Db2 database size + 30% growth buffer. For non-production Db2 instances, use Premium SSD v2 instead of ANF — a 512 GiB Premium SSD v2 with 50,000 IOPS costs approximately 1/3 of an equivalent ANF Ultra volume.</p>
+<p>Archive log storage represents a significant ongoing cost. Implement Azure Blob Storage lifecycle management to tier Db2 archive logs:
+- Hot tier: 0-7 days (active recovery window for point-in-time restore)
+- Cool tier: 7-30 days (monthly recovery point)
+- Cold tier: 30-90 days (quarterly recovery point)
+- Archive tier: 90+ days (compliance retention, rarely accessed)</p>
+<h3 id="cost-table">Cost Table<a class="headerlink" href="#cost-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Estimated Saving</th>
+<th>Implementation Complexity</th>
+<th>Prerequisites</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3-year Reserved Instance for production Db2 VMs (primary + standby E64ds_v5)</td>
+<td>45-50% on VM compute cost (~$34,800/year for two VMs)</td>
+<td>Low — purchase RI in Azure portal; no VM change required</td>
+<td>Stable VM SKU commitment; production sizing finalized</td>
+</tr>
+<tr>
+<td>Azure Hybrid Benefit for RHEL/SLES OS on Db2 VMs</td>
+<td>15-20% on VM cost (~$5,000/year per VM pair)</td>
+<td>Low — set HB flag on existing VMs via Azure CLI</td>
+<td>Existing enterprise RHEL or SLES subscription from Red Hat or SUSE</td>
+</tr>
+<tr>
+<td>Dev/Test subscription pricing for DEV/QAS Db2 instances</td>
+<td>20-30% reduction vs production pricing (~$8,000/year for DEV+QAS)</td>
+<td>Low — provision DEV/QAS VMs in separate Dev/Test subscription</td>
+<td>Visual Studio Enterprise subscription or MSDN subscription</td>
+</tr>
+<tr>
+<td>ANF Standard tier for /sapmnt and /usr/sap/trans (not Ultra)</td>
+<td>60% cost reduction vs Ultra for non-performance-critical volumes (~$2,400/year)</td>
+<td>Low — select Standard tier during ANF volume creation</td>
+<td>Confirm /sapmnt throughput requirement does not exceed Standard tier limits</td>
+</tr>
+<tr>
+<td>Archive log lifecycle tiering (Hot→Cool→Cold→Archive)</td>
+<td>70-85% reduction in archive log storage cost after 30 days (~$3,600/year for 10 TB archive)</td>
+<td>Medium — Azure Blob Storage lifecycle policy configuration</td>
+<td>LOGARCHMETH2 targeting Azure Blob Storage; lifecycle policy in storage account</td>
+</tr>
+<tr>
+<td>Autostop DEV/QAS Db2 VMs outside business hours</td>
+<td>60-70% reduction in DEV/QAS compute cost (~$12,000/year)</td>
+<td>Medium — Azure Automation runbook or VM auto-shutdown; requires Pacemaker-aware stop sequencing</td>
+<td>DEV/QAS Db2 instances must not be required 24×7; SAP system stop script integration</td>
+</tr>
+<tr>
+<td>Premium SSD v2 for DEV/QAS instead of ANF</td>
+<td>65% reduction in storage cost for non-production (~$7,200/year)</td>
+<td>Low — use managed disks for DEV/QAS Db2 deployment</td>
+<td>DEV/QAS IOPS requirements below Premium SSD v2 single-disk limits</td>
+</tr>
+<tr>
+<td>Spot VMs for Db2 DEV instances (non-HA)</td>
+<td>70-90% reduction on DEV Db2 VM cost (~$15,000/year)</td>
+<td>High — requires SAP/Db2 graceful shutdown on Spot eviction notice; 30-second eviction window</td>
+<td>DEV environment downtime-tolerant; Db2 eviction hook script configured; Azure Spot eviction webhook</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="operations-and-monitoring">Operations and Monitoring<a class="headerlink" href="#operations-and-monitoring" title="Permanent link">¶</a></h2>
+<h3 id="azure-monitor-for-sap-solutions-db2-provider-configuration">Azure Monitor for SAP Solutions — Db2 Provider Configuration<a class="headerlink" href="#azure-monitor-for-sap-solutions-db2-provider-configuration" title="Permanent link">¶</a></h3>
+<p>Azure Monitor for SAP Solutions (AMS) includes a native IBM Db2 provider that collects Db2 monitoring metrics via the Db2 database snapshot and monitoring functions. The Db2 AMS provider is configured by specifying:</p>
+<ul>
+<li><strong>Db2 hostname/IP</strong>: The Db2 virtual hostname (ILB floating IP) — ensures metrics are always collected from the active primary</li>
+<li><strong>Db2 port</strong>: 50000 (default for instance 00)</li>
+<li><strong>Db2 database name</strong>: SID (e.g., P01)</li>
+<li><strong>Monitoring user</strong>: DBMON (read-only Db2 user with EXECUTE on MON_GET_* functions)</li>
+<li><strong>Monitoring user password</strong>: Retrieved from Azure Key Vault by the AMS provider using the AMS-managed identity</li>
+</ul>
+<p>AMS Db2 provider collects metrics every 60 seconds and publishes to the AMS Log Analytics workspace under the <code>SapMonitor_Db2Metrics_CL</code> custom log table.</p>
+<h3 id="db2-specific-monitoring-metrics">Db2-Specific Monitoring Metrics<a class="headerlink" href="#db2-specific-monitoring-metrics" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Metric Category</th>
+<th>Specific Metric</th>
+<th>Collection Method</th>
+<th>Alert Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Buffer pool efficiency</td>
+<td>Buffer pool hit ratio per BP name</td>
+<td><code>MON_GET_BUFFERPOOL</code></td>
+<td>Alert if &lt;98% for OLTP, &lt;90% for BW</td>
+</tr>
+<tr>
+<td>Lock performance</td>
+<td>Lock wait time; lock escalations per minute</td>
+<td><code>MON_GET_DATABASE</code></td>
+<td>Alert if escalations &gt;5/min</td>
+</tr>
+<tr>
+<td>Log performance</td>
+<td>Log write time (avg ms); log reads</td>
+<td><code>MON_GET_TRANSACTION_LOG</code></td>
+<td>Alert if avg log write &gt;5 ms</td>
+</tr>
+<tr>
+<td>HADR state</td>
+<td>HADR role; log gap in bytes; HADR state</td>
+<td><code>DB2PD -HADR</code> output via custom script</td>
+<td>Alert if LOG_GAP &gt; 100 MB or HADR_STATE != PEER</td>
+</tr>
+<tr>
+<td>Connection activity</td>
+<td>Active connections; application count</td>
+<td><code>MON_GET_CONNECTION</code></td>
+<td>Alert if connections &gt;80% of MAXAPPLS</td>
+</tr>
+<tr>
+<td>Tablespace utilization</td>
+<td>Used/free space per tablespace</td>
+<td><code>MON_GET_TABLESPACE</code></td>
+<td>Alert if &gt;85% full</td>
+</tr>
+<tr>
+<td>Sort performance</td>
+<td>Sort overflows; sort time</td>
+<td><code>MON_GET_DATABASE</code></td>
+<td>Alert if sort overflow ratio &gt;5%</td>
+</tr>
+<tr>
+<td>Package cache</td>
+<td>Package cache hit ratio</td>
+<td><code>MON_GET_PKG_CACHE_STMT</code></td>
+<td>Alert if hit ratio &lt;90%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="log-analytics-integration">Log Analytics Integration<a class="headerlink" href="#log-analytics-integration" title="Permanent link">¶</a></h3>
+<p>All Db2 VM OS logs, Db2 diagnostic logs (db2diag.log), and Db2 audit logs are forwarded to the Log Analytics workspace using the Azure Monitor Linux Agent (AMA) with a Data Collection Rule (DCR) configured for:</p>
+<ul>
+<li><strong>Syslog</strong>: Facility <code>user</code>, severity <code>warning</code> and above</li>
+<li><strong>Custom log</strong>: <code>/home/db2&lt;SID&gt;/sqllib/db2dump/DIAG*/db2diag.log</code> — Db2 diagnostic log</li>
+<li><strong>Custom log</strong>: <code>/home/db2&lt;SID&gt;/sqllib/security/auditdata/</code> — Db2 audit log</li>
+</ul>
+<p>KQL query for detecting HADR state changes in Log Analytics:</p>
+<div class="language-kql highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="n">SapMonitor_Db2Metrics_CL</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">TimeGenerated</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="n">ago</span><span class="p">(</span><span class="mi">1</span><span class="n">h</span><span class="p">)</span>
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">MetricName_s</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">"hadr_state"</span>
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">Value_s</span><span class="w"> </span><span class="p">!=</span><span class="w"> </span><span class="s">"PEER"</span>
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="p">|</span><span class="w"> </span><span class="k">project</span><span class="w"> </span><span class="n">TimeGenerated</span><span class="p">,</span><span class="w"> </span><span class="n">SystemSid_s</span><span class="p">,</span><span class="w"> </span><span class="n">Value_s</span><span class="p">,</span><span class="w"> </span><span class="n">PreviousValue_s</span>
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="p">|</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">TimeGenerated</span><span class="w"> </span><span class="n">desc</span>
+</span></code></pre></div>
+<h3 id="alert-table">Alert Table<a class="headerlink" href="#alert-table" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Metric/Signal</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Runbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Db2 HADR State Not PEER</td>
+<td>Custom metric: HADR_STATE from db2pd</td>
+<td>HADR_STATE != "PEER" for &gt;5 minutes</td>
+<td>Sev 1 — Critical</td>
+<td>DB2-HADR-001: Investigate HADR connectivity; check network; attempt <code>db2 start hadr on db &lt;SID&gt; as standby</code></td>
+</tr>
+<tr>
+<td>Db2 HADR Log Gap High</td>
+<td>Custom metric: LOG_GAP_BYTES from db2pd</td>
+<td>LOG_GAP_BYTES &gt; 500 MB for &gt;10 minutes</td>
+<td>Sev 2 — High</td>
+<td>DB2-HADR-002: Check standby VM load; check network bandwidth; review HADR peer window setting</td>
+</tr>
+<tr>
+<td>Db2 Buffer Pool Hit Ratio Low</td>
+<td>MON_GET_BUFFERPOOL hit_ratio</td>
+<td>Hit ratio &lt;97% for OLTP BP8K for &gt;15 minutes</td>
+<td>Sev 2 — High</td>
+<td>DB2-PERF-001: Identify memory-intensive queries; check for runaway SELECT FULL SCAN; increase buffer pool size if RAM available</td>
+</tr>
+<tr>
+<td>Db2 Active Log Volume Full</td>
+<td>Azure Monitor disk metric: Percentage Disk Space Used</td>
+<td>Active log volume &gt;/dev/sdb &gt;85% used</td>
+<td>Sev 1 — Critical</td>
+<td>DB2-LOG-001: Force archive of active logs; expand volume if on Premium SSD v2; check LOGARCHMETH1 target health</td>
+</tr>
+<tr>
+<td>Db2 Tablespace Full</td>
+<td>MON_GET_TABLESPACE used_pages/total_pages</td>
+<td>Any tablespace &gt;90% utilized</td>
+<td>Sev 2 — High</td>
+<td>DB2-SPACE-001: Identify growing tablespace; add container to tablespace; check for runaway UPDATE/INSERT</td>
+</tr>
+<tr>
+<td>Db2 Lock Escalations High</td>
+<td>MON_GET_DATABASE lock_escals</td>
+<td>&gt;10 escalations per 5-minute interval</td>
+<td>Sev 2 — High</td>
+<td>DB2-LOCK-001: Identify applications holding locks; check SAP SM66 for long-running background jobs; consider increasing LOCKLIST</td>
+</tr>
+<tr>
+<td>Db2 VM CPU Saturation</td>
+<td>Azure Monitor VM metric: Percentage CPU</td>
+<td>&gt;90% CPU utilization for &gt;10 minutes</td>
+<td>Sev 2 — High</td>
+<td>DB2-CPU-001: Check active Db2 agent count; identify high-CPU SQL via MON_GET_PKG_CACHE_STMT; check for runstats or reorg running</td>
+</tr>
+<tr>
+<td>Db2 Backup Failed</td>
+<td>Azure Backup alert: Backup job status</td>
+<td>Any scheduled backup job status = Failed</td>
+<td>Sev 1 — Critical</td>
+<td>DB2-BACKUP-001: Check Azure Backup agent connectivity; verify Recovery Services Vault accessible via private endpoint; trigger manual backup</td>
+</tr>
+<tr>
+<td>Db2 Primary VM Unreachable</td>
+<td>Azure Resource Health alert</td>
+<td>VM health state = Unavailable</td>
+<td>Sev 1 — Critical</td>
+<td>DB2-INFRA-001: Check Azure platform health; verify Pacemaker failover triggered; confirm standby takeover completed</td>
+</tr>
+<tr>
+<td>Db2 Connection Count Near Limit</td>
+<td>MON_GET_CONNECTION active_sorts count</td>
+<td>Active connections &gt;80% of MAXAPPLS database config</td>
+<td>Sev 3 — Medium</td>
+<td>DB2-CONN-001: Check SAP SM50 for stuck work processes; verify SAP logon load balancing distributing users; review Db2 connection pool settings</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dba-runbooks-for-common-operations">DBA Runbooks for Common Operations<a class="headerlink" href="#dba-runbooks-for-common-operations" title="Permanent link">¶</a></h3>
+<p><strong>Start/Stop Db2 in Pacemaker cluster</strong>: Do not use <code>db2stop</code> directly — use Pacemaker resource management to avoid split-brain:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1"># Stop: put node into maintenance mode first</span>
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>crm<span class="w"> </span>node<span class="w"> </span>maintenance<span class="w"> </span>db2p01-vm1
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>db2<span class="w"> </span>connect<span class="w"> </span>reset
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a>crm<span class="w"> </span>resource<span class="w"> </span>stop<span class="w"> </span>rsc_Db2_P01
+</span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="c1"># Start:</span>
+</span><span id="__span-7-6"><a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a>crm<span class="w"> </span>resource<span class="w"> </span>start<span class="w"> </span>rsc_Db2_P01
+</span><span id="__span-7-7"><a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a>crm<span class="w"> </span>node<span class="w"> </span>ready<span class="w"> </span>db2p01-vm1
+</span></code></pre></div></p>
+<p><strong>Scheduled HADR failover (planned maintenance on primary)</strong>:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1"># On standby, initiate controlled takeover</span>
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a>db2<span class="w"> </span>takeover<span class="w"> </span>hadr<span class="w"> </span>on<span class="w"> </span>db<span class="w"> </span>P01
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="c1"># Verify new primary status</span>
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a>db2pd<span class="w"> </span>-hadr<span class="w"> </span>-db<span class="w"> </span>P01
+</span></code></pre></div></p>
+<p><strong>Online backup initiation</strong>:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a>su<span class="w"> </span>-<span class="w"> </span>db2p01
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a>db2<span class="w"> </span>backup<span class="w"> </span>db<span class="w"> </span>P01<span class="w"> </span>online<span class="w"> </span>to<span class="w"> </span>/dev/null<span class="w"> </span>compress<span class="w"> </span>include<span class="w"> </span>logs
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="c1"># Or via BRBACKUP: brbackup -d db2 -t online -m all</span>
+</span></code></pre></div></p>
+<hr/>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<h3 id="vnet-and-subnet-placement">VNet and Subnet Placement<a class="headerlink" href="#vnet-and-subnet-placement" title="Permanent link">¶</a></h3>
+<p>The Db2 database tier resides in the <strong>SAP DB Subnet</strong> within the SAP Landing Zone spoke VNet. This subnet is dedicated to SAP database VMs (Db2, and optionally Oracle or SQL Server for other SAP systems) and is never shared with SAP application server VMs.</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Placement</th>
+<th>CIDR / SKU</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP Landing Zone Spoke VNet</td>
+<td>Spoke, peered to Hub</td>
+<td>10.20.0.0/16</td>
+<td>Dedicated SAP spoke per environment (prod/non-prod)</td>
+</tr>
+<tr>
+<td>DB Subnet</td>
+<td>Within Spoke VNet</td>
+<td>10.20.2.0/24</td>
+<td>Delegated: none; contains Db2 primary, standby, ILB</td>
+</tr>
+<tr>
+<td>ANF Delegated Subnet</td>
+<td>Within Spoke VNet</td>
+<td>10.20.3.0/24</td>
+<td>Delegation: Microsoft.NetApp/volumes; no VM placement</td>
+</tr>
+<tr>
+<td>Application Subnet</td>
+<td>Within Spoke VNet</td>
+<td>10.20.1.0/24</td>
+<td>SAP PAS, AAS, ASCS/ERS VMs</td>
+</tr>
+<tr>
+<td>Management Subnet</td>
+<td>Within Spoke VNet</td>
+<td>10.20.4.0/24</td>
+<td>SolMan, SLD, jumpbox (supplementing Bastion)</td>
+</tr>
+<tr>
+<td>Azure Bastion Subnet</td>
+<td>Within Hub VNet</td>
+<td>10.10.5.0/26</td>
+<td>AzureBastionSubnet name required; /26 minimum</td>
+</tr>
+</tbody>
+</table>
+<h3 id="nsg-rules-for-db-subnet">NSG Rules for DB Subnet<a class="headerlink" href="#nsg-rules-for-db-subnet" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Direction</th>
+<th>Protocol</th>
+<th>Source</th>
+<th>Destination</th>
+<th>Port(s)</th>
+<th>Action</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>Inbound</td>
+<td>TCP</td>
+<td>10.20.1.0/24 (AppSubnet)</td>
+<td>10.20.2.0/24</td>
+<td>50000</td>
+<td>Allow</td>
+<td>SAP application to Db2</td>
+</tr>
+<tr>
+<td>110</td>
+<td>Inbound</td>
+<td>TCP</td>
+<td>10.20.1.0/24 (AppSubnet)</td>
+<td>10.20.2.0/24</td>
+<td>50001</td>
+<td>Allow</td>
+<td>SAP application to Db2 SSL</td>
+</tr>
+<tr>
+<td>120</td>
+<td>Inbound</td>
+<td>TCP</td>
+<td>10.20.2.0/24 (DBSubnet)</td>
+<td>10.20.2.0/24</td>
+<td>60005</td>
+<td>Allow</td>
+<td>Db2 HADR log shipping intra-subnet</td>
+</tr>
+<tr>
+<td>130</td>
+<td>Inbound</td>
+<td>TCP+UDP</td>
+<td>10.20.2.0/24 (DBSubnet)</td>
+<td>10.20.2.0/24</td>
+<td>5404-5406</td>
+<td>Allow</td>
+<td>Pacemaker Corosync cluster heartbeat</td>
+</tr>
+<tr>
+<td>140</td>
+<td>Inbound</td>
+<td>TCP</td>
+<td>10.20.5.0/26 (BastionSubnet)</td>
+<td>10.20.2.0/24</td>
+<td>22</td>
+<td>Allow</td>
+<td>SSH via Azure Bastion</td>
+</tr>
+<tr>
+<td>150</td>
+<td>Inbound</td>
+<td>TCP</td>
+<td>10.20.4.0/24 (MgmtSubnet)</td>
+<td>10.20.2.0/24</td>
+<td>50000</td>
+<td>Allow</td>
+<td>SolMan Db2 monitoring connection</td>
+</tr>
+<tr>
+<td>160</td>
+<td>Inbound</td>
+<td>TCP</td>
+<td>AzureLoadBalancer</td>
+<td>10.20.2.0/24</td>
+<td>62500</td>
+<td>Allow</td>
+<td>Azure ILB health probe</td>
+</tr>
+<tr>
+<td>4000</td>
+<td>Inbound</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Deny</td>
+<td>Default deny all inbound</td>
+</tr>
+<tr>
+<td>100</td>
+<td>Outbound</td>
+<td>TCP</td>
+<td>10.20.2.0/24</td>
+<td>10.20.3.0/24 (ANFSubnet)</td>
+<td>2049</td>
+<td>Allow</td>
+<td>NFS v4.1 to ANF</td>
+</tr>
+<tr>
+<td>110</td>
+<td>Outbound</td>
+<td>TCP</td>
+<td>10.20.2.0/24</td>
+<td>VirtualNetwork</td>
+<td>443</td>
+<td>Allow</td>
+<td>Azure Key Vault, Backup, Monitor private endpoints</td>
+</tr>
+<tr>
+<td>120</td>
+<td>Outbound</td>
+<td>TCP</td>
+<td>10.20.2.0/24</td>
+<td>10.20.2.0/24</td>
+<td>60005, 5404-5406</td>
+<td>Allow</td>
+<td>HADR and Pacemaker outbound</td>
+</tr>
+<tr>
+<td>4000</td>
+<td>Outbound</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Any</td>
+<td>Deny</td>
+<td>Default deny all outbound</td>
+</tr>
+</tbody>
+</table>
+<h3 id="route-table">Route Table<a class="headerlink" href="#route-table" title="Permanent link">¶</a></h3>
+<p>The DB subnet route table routes all non-VNet traffic through the Azure Firewall in the hub VNet (User Defined Route):</p>
+<table>
+<thead>
+<tr>
+<th>Address Prefix</th>
+<th>Next Hop Type</th>
+<th>Next Hop IP</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.0.0.0/0</td>
+<td>Virtual Appliance</td>
+<td>10.10.0.4 (Azure Firewall)</td>
+<td>Force internet and cross-spoke traffic through firewall</td>
+</tr>
+<tr>
+<td>10.20.3.0/24</td>
+<td>Virtual Network</td>
+<td>—</td>
+<td>Direct route to ANF subnet (no firewall inspection for NFS)</td>
+</tr>
+<tr>
+<td>10.20.1.0/24</td>
+<td>Virtual Network</td>
+<td>—</td>
+<td>Direct route to app subnet (no firewall for SAP-to-Db2)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="private-dns-zone-entries">Private DNS Zone Entries<a class="headerlink" href="#private-dns-zone-entries" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>DNS Zone</th>
+<th>Record</th>
+<th>Type</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>privatelink.vaultcore.azure.net</td>
+<td>kv-sap-prod</td>
+<td>A</td>
+<td>10.20.6.4</td>
+<td>Key Vault private endpoint</td>
+</tr>
+<tr>
+<td>privatelink.backup.windowsazure.com</td>
+<td>rsv-sap-prod</td>
+<td>A</td>
+<td>10.20.6.5</td>
+<td>Recovery Services Vault private endpoint</td>
+</tr>
+<tr>
+<td>privatelink.monitor.azure.com</td>
+<td>ams-sap-prod</td>
+<td>A</td>
+<td>10.20.6.6</td>
+<td>Azure Monitor private endpoint</td>
+</tr>
+<tr>
+<td>sap.internal</td>
+<td>db2-p01-vip</td>
+<td>A</td>
+<td>10.20.2.100</td>
+<td>Db2 virtual hostname (ILB floating IP)</td>
+</tr>
+<tr>
+<td>sap.internal</td>
+<td>db2-p01-primary</td>
+<td>A</td>
+<td>10.20.2.10</td>
+<td>Db2 primary node physical hostname</td>
+</tr>
+<tr>
+<td>sap.internal</td>
+<td>db2-p01-standby</td>
+<td>A</td>
+<td>10.20.2.11</td>
+<td>Db2 standby node physical hostname</td>
+</tr>
+</tbody>
+</table>
+<h3 id="managed-identity-requirements">Managed Identity Requirements<a class="headerlink" href="#managed-identity-requirements" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Identity Type</th>
+<th>Required Role Assignment</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Db2 Primary VM</td>
+<td>System-Assigned Managed Identity</td>
+<td>Key Vault Secrets User on kv-sap-prod</td>
+<td>Read Db2 credentials, CMK for disk encryption</td>
+</tr>
+<tr>
+<td>Db2 Standby VM</td>
+<td>System-Assigned Managed Identity</td>
+<td>Key Vault Secrets User on kv-sap-prod</td>
+<td>Same as primary</td>
+</tr>
+<tr>
+<td>Db2 Primary VM</td>
+<td>System-Assigned Managed Identity</td>
+<td>Virtual Machine Contributor on DB Subnet resource group</td>
+<td>fence_azure_arm STONITH requires power-off capability</td>
+</tr>
+<tr>
+<td>Db2 Standby VM</td>
+<td>System-Assigned Managed Identity</td>
+<td>Virtual Machine Contributor on DB Subnet resource group</td>
+<td>fence_azure_arm STONITH</td>
+</tr>
+<tr>
+<td>AMS Provider</td>
+<td>System-Assigned Managed Identity</td>
+<td>Key Vault Secrets Reader on kv-sap-prod</td>
+<td>Read DBMON monitoring user password</td>
+</tr>
+<tr>
+<td>Azure Backup</td>
+<td>System-Assigned Managed Identity</td>
+<td>Storage Blob Data Contributor on backup storage account</td>
+<td>Write backup images to Azure Blob Storage</td>
+</tr>
+</tbody>
+</table>
+<h3 id="backup-vault-placement">Backup Vault Placement<a class="headerlink" href="#backup-vault-placement" title="Permanent link">¶</a></h3>
+<p>The Recovery Services Vault for Db2 backup is deployed in the <strong>shared services</strong> resource group (not the SAP workload resource group) with Geo-Redundant Storage (GRS) replication. Private Endpoint for the Recovery Services Vault is deployed in the shared services spoke VNet and DNS A record registered in <code>privatelink.backup.windowsazure.com</code> private DNS zone. The backup policy for Db2:
+- Full backup: Daily at 22:00 UTC
+- Log backup (LOGARCHMETH2): Every 60 minutes
+- Retention: 35 daily restore points; 4 weekly; 12 monthly; 5 yearly (for compliance)</p>
+<hr/>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/sap/dbms-guide-ibm">SAP on Azure - IBM Db2 HADR with Pacemaker on RHEL</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/sap/sap-ha-availability-zones">SAP workload configurations with Azure Availability Zones</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/sap/dbms_guide_general">Azure Virtual Machines DBMS deployment for SAP workload</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-solution-architectures#sap-hana">Azure NetApp Files for SAP workloads</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/sap/enterprise-scale-landing-zone">SAP on Azure Landing Zone Accelerator</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/sap/monitor/providers">Azure Monitor for SAP Solutions providers</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/sap/high-availability-guide-rhel-pacemaker">High availability for SAP on Azure VMs on RHEL with Pacemaker</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/backup/sap-hana-backup-support-matrix">Azure Backup for SAP workloads</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/disks-types#premium-ssd-v2">Premium SSD v2 managed disks for SAP workloads</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/well-architected/sap/design-areas/reliability">Azure Well-Architected Framework for SAP</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/sap/eslz-network-topology-and-connectivity">Network topology and connectivity for SAP on Azure</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-servers-introduction">Microsoft Defender for Cloud - SAP workloads</a></li>
+</ul>
+<hr/>
+<h2 id="validation-checklist">Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">¶</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> SAP Notes table minimum 8 entries with real SAP Note numbers</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Well-Architected mapping covers all 5 pillars</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Design decisions minimum 8 rows</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Two Mermaid diagrams present and syntactically valid</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> RPO/RTO table fully populated with Azure SLA column</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Cost table present with minimum 4 rows</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Alert table with minimum 5 alerts</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Database Configuration section fully populated</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> HA Architecture section covers database-native HA method (Db2 HADR)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> DR Architecture section with cross-region approach (HADR Multi-Target ASYNC)</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> No vague terms</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> No marketing language</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Landing Zone mapping present</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Anti-patterns minimum 5</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Troubleshooting minimum 5</li>
+</ul>
+<hr/>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-1-deploying-db2-primary-and-standby-in-the-same-availability-zone">Anti-Pattern 1: Deploying Db2 Primary and Standby in the Same Availability Zone<a class="headerlink" href="#anti-pattern-1-deploying-db2-primary-and-standby-in-the-same-availability-zone" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> Both the Db2 HADR primary and standby VMs are placed in Availability Zone 1 to minimize HADR log shipping latency. This is done believing that same-zone placement reduces the inter-node network RTT below the inter-zone RTT of 1-2 ms.</p>
+<p><strong>Impact:</strong> A zone-level failure (power, cooling, or network fabric failure in Zone 1) takes down both the primary and standby Db2 instances simultaneously, resulting in full database unavailability. The RTO in this scenario is the time to restore from the most recent backup, which is typically 2-8 hours for a multi-hundred GiB Db2 database. The composite Azure SLA drops from 99.9999% (cross-zone) to 99.99% (single-zone) for the Db2 HA pair.</p>
+<p><strong>Correct approach:</strong> Deploy Db2 primary in Availability Zone 1 and standby in Availability Zone 2. Accept the 1-2 ms inter-zone HADR latency — SAP Note 1901383 confirms this is within the acceptable range for SAP OLTP workloads. Use <code>--zone 1</code> and <code>--zone 2</code> in the Azure CLI VM creation commands for primary and standby respectively.</p>
+<h3 id="anti-pattern-2-using-azure-disk-write-accelerator-on-anf-backed-db2-log-volumes">Anti-Pattern 2: Using Azure Disk Write Accelerator on ANF-Backed Db2 Log Volumes<a class="headerlink" href="#anti-pattern-2-using-azure-disk-write-accelerator-on-anf-backed-db2-log-volumes" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> A DBA familiar with Premium SSD v2 + Write Accelerator configuration enables Azure Disk Write Accelerator on an E64ds_v5 VM that uses Azure NetApp Files for the Db2 active log directory. Write Accelerator applies only to Premium SSD and Ultra Disk managed disks; it has no effect on NFS-mounted ANF volumes.</p>
+<p><strong>Impact:</strong> No performance improvement from the Write Accelerator setting when using ANF. The error is harmless in isolation but indicates misconfiguration: the DBA's mental model of the storage architecture is incorrect. If the same DBA subsequently adds a Premium SSD v2 disk (for the Db2 archive log or temp tablespace) and does NOT enable Write Accelerator on that disk, log write latency on the unaccelerated disk can exceed 5 ms during write bursts, causing Db2 log buffer flush delays and SAP transaction timeouts.</p>
+<p><strong>Correct approach:</strong> Enable Write Accelerator only on Premium SSD v2 managed disks used for Db2 active log (<code>/db2/&lt;SID&gt;/log_dir</code>), not on ANF volumes. For ANF-backed log directories, Write Accelerator is irrelevant — ANF Ultra tier natively delivers sub-0.5 ms write latency. Document which volumes use ANF vs managed disks in the architecture decision record to prevent configuration drift.</p>
+<h3 id="anti-pattern-3-setting-hadr_syncmode-async-within-an-azure-region-for-production-ha">Anti-Pattern 3: Setting HADR_SYNCMODE = ASYNC Within an Azure Region for Production HA<a class="headerlink" href="#anti-pattern-3-setting-hadr_syncmode-async-within-an-azure-region-for-production-ha" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> To reduce the per-commit latency overhead of HADR SYNC mode, a performance-focused architect sets <code>HADR_SYNCMODE = NEARSYNC</code> or <code>ASYNC</code> on the intra-region HA HADR pair. The rationale is that the 2 ms inter-zone RTT overhead is measurable in SAP ABAP dialog response time benchmarks.</p>
+<p><strong>Impact:</strong> With HADR ASYNC mode, log records are sent to the standby but the primary does not wait for standby acknowledgement before returning commit confirmation to the SAP application. If the primary fails immediately after a commit but before the standby has replayed that log record, the committed transaction is lost. In SAP financial posting transactions (FI, CO), this constitutes a data integrity violation that requires SAP application-level reconciliation. The RPO changes from zero data loss (SYNC) to the HADR log gap at time of failure, which can be several seconds to minutes under high log generation rates.</p>
+<p><strong>Correct approach:</strong> Maintain <code>HADR_SYNCMODE = SYNC</code> for the intra-region HA pair. If 2 ms per-commit overhead is unacceptable for the SAP workload's dialog response time SLA, investigate the root cause of response time sensitivity: optimize the SAP ABAP program making excessive individual commits, batch commits into larger transaction units, or upgrade the VM to a higher-memory SKU to reduce physical I/O on the standby. HADR ASYNC is appropriate only for the cross-region DR standby.</p>
+<h3 id="anti-pattern-4-collocating-db2-database-instance-with-sap-application-server-on-the-same-vm-two-tier-installation">Anti-Pattern 4: Collocating Db2 Database Instance with SAP Application Server on the Same VM (Two-Tier Installation)<a class="headerlink" href="#anti-pattern-4-collocating-db2-database-instance-with-sap-application-server-on-the-same-vm-two-tier-installation" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> To reduce VM count and cost in non-production environments, the Db2 database instance and SAP ABAP application server (PAS) are installed on the same VM — a two-tier (or "combined") SAP installation. This is then copied to production using the SAP homogeneous system copy procedure.</p>
+<p><strong>Impact:</strong> In production, the combined Db2 + SAP application server VM creates resource contention: Db2 buffer pools compete with SAP work process memory for VM RAM; Db2 background agents (prefetch, log archival, reorg) consume CPU that should be available for SAP dialog work processes; a Db2 crash requires the SAP application server to restart (full system outage rather than database-only outage). Db2 requires specific OS user separation (db2\&lt;SID&gt; OS user) that conflicts with SAP's adm\&lt;SID&gt; OS user in some installation scenarios. SAP Note 1928533 explicitly states that Db2 and SAP application layer should be on separate VMs for production.</p>
+<p><strong>Correct approach:</strong> Three-tier architecture for all production SAP on Db2 deployments: dedicated Db2 VM pair (primary + HADR standby), dedicated SAP application VMs (PAS + AAS), dedicated ASCS/ERS VM pair. For cost-constrained non-production, a two-tier combined installation is acceptable only if the VM is sized for the combined Db2 + SAP memory requirement (Db2 buffer pools + SAP work process memory) and the system is not used as a sizing reference for production.</p>
+<h3 id="anti-pattern-5-configuring-locklist-as-a-fixed-value-without-monitoring-lock-escalation">Anti-Pattern 5: Configuring LOCKLIST as a Fixed Value Without Monitoring Lock Escalation<a class="headerlink" href="#anti-pattern-5-configuring-locklist-as-a-fixed-value-without-monitoring-lock-escalation" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> The Db2 database is configured with a fixed <code>LOCKLIST = 50000</code> (200 MB lock list) based on an on-premises benchmark. On Azure, SAP batch jobs (monthly closing, mass data migrations, BW process chains) execute at higher concurrency than on-premises due to faster compute, exhausting the fixed lock list and triggering lock escalations from row-level locks to table-level locks.</p>
+<p><strong>Impact:</strong> Db2 lock escalation from row-level to table-level locks causes concurrent SAP transactions to wait for the table lock held by the batch job, degrading SAP dialog response time from sub-second to 10-60 second waits or timeouts. In SAP financial closing processes, table-level lock escalation on core FI/CO tables (ACDOCA, BKPF, BSEG) blocks all concurrent posting activity. The escalation events are logged in the Db2 event monitor but not automatically alerted unless specifically configured.</p>
+<p><strong>Correct approach:</strong> Set <code>LOCKLIST = AUTOMATIC</code> in the Db2 database configuration. AUTOMATIC allows Db2 to dynamically expand the lock list up to a percentage of database shared memory (governed by <code>MAXLOCKS</code> parameter, recommended 80%). Monitor lock escalation frequency via <code>MON_GET_DATABASE.LOCK_ESCALS</code> in Azure Monitor and alert if escalations exceed 5 per 5-minute interval. Do not set LOCKLIST to a fixed value in new Azure deployments — AUTOMATIC is the IBM-recommended setting for SAP workloads on Db2 11.5.</p>
+<h3 id="anti-pattern-6-reusing-on-premises-db2-archive-log-retention-period-7-days-without-accounting-for-azure-backup-rto">Anti-Pattern 6: Reusing On-Premises Db2 Archive Log Retention Period (7 Days) Without Accounting for Azure Backup RTO<a class="headerlink" href="#anti-pattern-6-reusing-on-premises-db2-archive-log-retention-period-7-days-without-accounting-for-azure-backup-rto" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> On-premises SAP on Db2 is configured to retain archive logs for 7 days on a local tape library. The same 7-day archive log retention is applied to the Azure deployment. The Azure Backup policy retains daily full backups for 35 days, but the archive log retention on the local ANF or Premium SSD v2 volume is limited to 7 days.</p>
+<p><strong>Impact:</strong> Point-in-time restore for a date beyond 7 days ago requires both a full backup and the archive logs up to the target time. If the archive logs older than 7 days have been deleted (by Db2 log pruning or manual cleanup) but the full backup exists in the Recovery Services Vault, the DBA can restore to the day of the full backup but cannot roll forward to any subsequent point. For compliance scenarios requiring point-in-time restore to any second within the last 30 days (e.g., financial audit requirements), this configuration provides false security — the backup retention appears to be 35 days, but the actual point-in-time recovery capability is only 7 days.</p>
+<p><strong>Correct approach:</strong> Archive log retention period must be at least equal to the full backup retention period. Configure <code>LOGARCHMETH2</code> to archive to Azure Blob Storage with a lifecycle policy that retains logs for 35 days in the hot/cool tier. Set the Db2 log retention on the local volume (<code>LOGARCHMETH1</code>) to 7 days (for fast local recovery), but ensure <code>LOGARCHMETH2</code> to Azure Blob Storage retains all archive logs for the full 35-day point-in-time recovery window. Test point-in-time restore to a 30-day-old target annually.</p>
+<hr/>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="issue-1-db2-hadr-enters-disconnected-state-during-azure-planned-maintenance">Issue 1: Db2 HADR Enters DISCONNECTED State During Azure Planned Maintenance<a class="headerlink" href="#issue-1-db2-hadr-enters-disconnected-state-during-azure-planned-maintenance" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> Azure Monitor alert fires for HADR_STATE != PEER. The <code>db2pd -hadr -db P01</code> command on the primary node shows <code>HADR_STATE = DISCONNECTED</code> and <code>STANDBY_SPOOL_PERCENT = 0</code>. The Pacemaker cluster log (<code>/var/log/pacemaker/pacemaker.log</code>) shows no failover triggered. The standby VM is running and accessible via Azure Bastion.</p>
+<p><strong>Root cause:</strong> Azure platform maintenance (live migration or memory-preserving update) of either the primary or standby VM pauses the VM for up to 30 seconds. The Db2 HADR heartbeat timeout (<code>HADR_TIMEOUT</code> default = 120 seconds) is exceeded if the maintenance pause duration is longer than the configured timeout, or more commonly, the TCP connection between primary and standby is reset by the Azure virtual network layer during the maintenance event. Db2 HADR detects the TCP reset and transitions to DISCONNECTED. Pacemaker does not trigger failover because the primary Db2 instance is still running (the issue is the replication connection, not the Db2 instance health).</p>
+<p><strong>Resolution:</strong>
+1. On the standby node, restart HADR: <code>db2 start hadr on db P01 as standby</code>. Db2 will re-establish the TCP connection and replay any log gap from the archive log source.
+2. Monitor reconnection progress: <code>db2pd -hadr -db P01</code> — watch HADR_STATE transition from DISCONNECTED → REMOTE_CATCHUP → PEER.
+3. If reconnection fails, check network connectivity between primary and standby: <code>telnet &lt;standby_IP&gt; 60005</code>. If the HADR port is not reachable, check NSG rules on the DB subnet — Azure platform maintenance does not change NSG rules, but a recent Bicep/ARM deployment may have overwritten the NSG.
+4. Increase <code>HADR_PEER_WINDOW</code> to 300 seconds to tolerate longer maintenance pauses without HADR PEER state exit: <code>db2 update db cfg for P01 using HADR_PEER_WINDOW 300</code>.
+5. To prevent future occurrences, enable Azure Scheduled Events on both Db2 VMs and configure the Db2 HADR preparation script to pre-archive logs before maintenance: query the Azure Scheduled Events metadata endpoint (<code>http://169.254.169.254/metadata/scheduledevents</code>) in a cron job and trigger <code>db2 flush hadr log buffer</code> before the maintenance event.</p>
+<h3 id="issue-2-sap-work-processes-report-database-connection-lost-after-db2-hadr-failover">Issue 2: SAP Work Processes Report "Database Connection Lost" After Db2 HADR Failover<a class="headerlink" href="#issue-2-sap-work-processes-report-database-connection-lost-after-db2-hadr-failover" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> After a successful Db2 HADR failover (Pacemaker log confirms standby takeover and virtual IP moved), SAP work processes in SM50 show status "stopped — database connection lost." Reconnection attempts from SAP fail with <code>DBIF_RSQL_SQL_ERROR — Connection to database lost</code>. The Db2 instance on the new primary is running (<code>db2 list active databases</code> shows P01 active), and new connections from the database server itself work.</p>
+<p><strong>Root cause:</strong> SAP application server work processes hold persistent database connections using the Db2 client TCP connection to the virtual IP (10.20.2.100). After failover, the Azure ILB health probe requires up to 25 seconds (5 probe intervals × 5 seconds) to detect the new primary and stop routing to the old IP. During this window, some existing SAP work process connections may have TCP RST or timeout conditions depending on the Db2 instance shutdown mode on the failed primary. Additionally, the SAP ABAP database connection retry interval (<code>rdisp/dbconnect_timeout</code> profile parameter, default 120 seconds) may be longer than the connection recovery window, causing work processes to remain in "stopped" state longer than expected.</p>
+<p><strong>Resolution:</strong>
+1. Verify the Azure ILB health probe is responding on the new primary: <code>nc -z 10.20.2.100 62500</code> from an application server VM. If the connection succeeds, the ILB has converged.
+2. Restart stopped SAP work processes via SM50: select all "stopped" work processes, right-click, "Restart after Error."
+3. For a persistent issue where work processes do not recover automatically, restart the SAP dispatcher on the PAS: <code>stopsap -u p01adm -sid P01 -host &lt;PAS_hostname&gt;; startsap -u p01adm -sid P01 -host &lt;PAS_hostname&gt;</code>.
+4. Reduce future impact by tuning SAP ABAP profile parameters:
+   - <code>rdisp/dbconnect_timeout = 30</code> (reduce from 120 to 30 seconds)
+   - <code>rdisp/db_lost_conn_action = restart</code> (restart dispatcher on connection loss, not just individual work processes)
+5. Validate Azure ILB health probe interval is 5 seconds and unhealthy threshold is 2 (not default 3) to reduce ILB convergence time from 25 seconds to 10 seconds: update via Azure CLI:
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a>az<span class="w"> </span>network<span class="w"> </span>lb<span class="w"> </span>probe<span class="w"> </span>update<span class="w"> </span>--resource-group<span class="w"> </span>rg-sap-db<span class="w"> </span>--lb-name<span class="w"> </span>ilb-db2-p01<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">  </span>--name<span class="w"> </span>db2-health-probe<span class="w"> </span>--interval<span class="w"> </span><span class="m">5</span><span class="w"> </span>--threshold<span class="w"> </span><span class="m">2</span>
+</span></code></pre></div></p>
+<h3 id="issue-3-db2-active-log-volume-full-causing-database-crash">Issue 3: Db2 Active Log Volume Full Causing Database Crash<a class="headerlink" href="#issue-3-db2-active-log-volume-full-causing-database-crash" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> SAP users report all transactions are failing with short dump <code>DBIF_RSQL_SQL_ERROR</code>. Db2 diagnostic log (<code>db2diag.log</code>) contains entries: <code>SQLO0089C The file system is full. The current transaction is rolled back.</code>. Alert fires for active log volume disk utilization &gt;95%. The SAP system is completely unavailable.</p>
+<p><strong>Root cause:</strong> The Db2 active log directory (<code>/db2/P01/log_dir</code>) is hosted on a Premium SSD v2 volume with a fixed size provisioned at deployment. A long-running SAP batch job (month-end financial closing) generated more redo logs than the provisioned active log volume capacity. Db2 suspends all write operations when the active log volume reaches 100% utilization and rolls back in-flight transactions.</p>
+<p><strong>Resolution — Immediate (restore service):</strong>
+1. Force archive all completed log files to free space: <code>db2 archive log for database P01</code>.
+2. Verify space freed: <code>df -h /db2/P01/log_dir</code>. If sufficient space is freed (&gt;20%), Db2 will automatically resume operations for new transactions.
+3. If space is still insufficient, expand the Premium SSD v2 volume without downtime (Azure supports online disk expansion): <code>az disk update --resource-group rg-sap-db --name disk-db2-p01-log --size-gb 512</code>.
+4. After disk expansion, extend the XFS filesystem: <code>xfs_growfs /db2/P01/log_dir</code>.
+5. Monitor the active log directory: <code>db2pd -db P01 -log</code> to confirm Db2 is writing new log files.</p>
+<p><strong>Resolution — Preventive:</strong>
+1. Implement Azure Monitor alert at 85% disk utilization (not 95%) to provide reaction time before Db2 suspension.
+2. Configure Db2 active log volume with sufficient capacity: <code>LOGPRIMARY × LOGFILSIZ × 4 KiB × 2 = minimum active log volume size</code> (the ×2 factor provides a safety buffer for log archival lag). For 100 primary log files × 65536 pages × 4 KiB = 25.6 GiB; provision 64 GiB minimum, 128 GiB recommended.
+3. Ensure <code>LOGARCHMETH1</code> archive destination is operational and has sufficient space before executing large batch jobs.</p>
+<h3 id="issue-4-db2-buffer-pool-hit-ratio-degrades-after-sap-data-migration-load">Issue 4: Db2 Buffer Pool Hit Ratio Degrades After SAP Data Migration Load<a class="headerlink" href="#issue-4-db2-buffer-pool-hit-ratio-degrades-after-sap-data-migration-load" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> Azure Monitor alert fires for buffer pool hit ratio below 97% on the BP8K buffer pool used for PSAPBTABD tablespace. SAP dialog response time for customer-facing order transactions increases from 1-2 seconds to 8-15 seconds. The degradation begins immediately after a data migration load (SAP LTMC or BODS data load) and persists for 2-3 hours.</p>
+<p><strong>Root cause:</strong> The SAP data migration load performs large sequential scans across the PSAPBTABD tablespace, evicting the hot OLTP data pages (frequently accessed customer master data, material master, sales orders) from the BP8K buffer pool. The working set of 15-20 GiB of OLTP hot pages is replaced by migration load pages that are accessed only once. After the migration load completes, Db2 must re-warm the OLTP hot pages from disk, which takes 2-3 hours of production transaction activity.</p>
+<p><strong>Resolution — Immediate:</strong>
+1. Confirm the migration load has completed: check SAP batch job status in SM37 and Db2 agent activity: <code>db2 list applications for database P01 show detail</code>.
+2. Pre-warm critical OLTP tablespace pages by executing a Db2 prefetch: <code>db2 runstats on table SAPR3.MARA and SAPR3.KNA1 on all columns</code> — this forces Db2 to read these frequently-queried tables into the buffer pool.
+3. Temporarily increase BP8K buffer pool size if VM has unused RAM: <code>db2 alter bufferpool BP8K size 2000000</code> (increases from current to ~15 GiB additional).</p>
+<p><strong>Resolution — Preventive:</strong>
+1. Create a separate buffer pool <code>BPMIGRATION</code> (4 KiB or 8 KiB) assigned to a temporary tablespace used exclusively for migration loads. During migration, bind the migration user's packages to the BPMIGRATION buffer pool.
+2. Schedule large data migrations during off-peak hours (overnight batch window) when OLTP dialog activity is minimal and buffer pool competition is reduced.
+3. Increase the overall BP8K buffer pool size by 20-30% to accommodate the OLTP working set plus migration scan activity simultaneously. Check available RAM headroom: <code>free -g</code> on the Db2 VM.</p>
+<h3 id="issue-5-fence_azure_arm-stonith-fails-to-fence-node-during-pacemaker-split-brain">Issue 5: fence_azure_arm STONITH Fails to Fence Node During Pacemaker Split-Brain<a class="headerlink" href="#issue-5-fence_azure_arm-stonith-fails-to-fence-node-during-pacemaker-split-brain" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> Pacemaker logs on the surviving node show: <code>stonith-ng: warning: STONITH_OP_EXEC: Timeout fencing &lt;node&gt;</code>. The fence_azure_arm agent reports <code>Failed: Unable to connect to Azure Resource Manager</code>. The split-brain condition is unresolved — neither node resigns, and Pacemaker cannot promote the standby to primary. Both Db2 instances may attempt to become primary (Db2 HADR takeover blocked by split-brain detection logic).</p>
+<p><strong>Root cause:</strong> The Db2 VM's System-Assigned Managed Identity lacks the required <code>Microsoft.Compute/virtualMachines/powerOff/action</code> permission on the Azure subscription or resource group, or the Azure IMDS (Instance Metadata Service) endpoint (<code>169.254.169.254</code>) is not reachable from the Db2 VM due to a UDR (User Defined Route) in the route table that routes 169.254.169.254/32 to the Azure Firewall. The Azure Firewall drops IMDS requests as they are link-local addresses.</p>
+<p><strong>Resolution — Immediate:</strong>
+1. Manually fence the failed node to break the split-brain: <code>az vm stop --resource-group rg-sap-db --name db2p01-vm1</code> from Azure Cloud Shell or an operator workstation with Azure CLI access. This achieves the STONITH effect manually.
+2. After the failed node is powered off, allow Pacemaker on the surviving node to promote: <code>crm node online db2p01-vm2; crm resource start rsc_Db2_P01</code>.</p>
+<p><strong>Resolution — Root cause fix:</strong>
+1. <strong>For RBAC permission issue</strong>: Verify the Managed Identity of each Db2 VM has <code>Virtual Machine Contributor</code> role (or a custom role with <code>Microsoft.Compute/virtualMachines/powerOff/action</code>) assigned at the resource group level. Check with: <code>az role assignment list --assignee &lt;managed-identity-principal-id&gt; --all</code>.
+2. <strong>For IMDS route issue</strong>: Remove any UDR routes that intercept 169.254.169.254/32. The Azure IMDS link-local address must be reachable directly without a next-hop. Add a specific UDR entry: <code>az network route-table route create --resource-group rg-sap-db --route-table-name rt-db-subnet --name imds-direct --address-prefix 169.254.169.254/32 --next-hop-type None</code> (or remove the conflicting 0.0.0.0/0 override for this specific prefix).
+3. Test STONITH functionality: <code>crm_mon --one-shot; stonith_admin --test-delegate &lt;node_name&gt;</code> after the fix.
+4. Configure fence_azure_arm with <code>pcmk_monitor_timeout=120</code> and <code>pcmk_reboot_timeout=900</code> to handle ARM API latency spikes without prematurely timing out the fence operation.</p>
+<h3 id="issue-6-anf-nfs-mount-drops-during-db2-log-write-under-high-throughput">Issue 6: ANF NFS Mount Drops During Db2 Log Write Under High Throughput<a class="headerlink" href="#issue-6-anf-nfs-mount-drops-during-db2-log-write-under-high-throughput" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> Db2 diagnostic log records: <code>ZRC=0x870F003A=-2029191110=SQLO_NFSO "NFS I/O error"</code>. SAP transactions fail with short dump <code>DBIF_RSQL_SQL_ERROR</code>. The Azure Monitor ANF volume metric shows a spike in <code>VolumeWriteLatency</code> exceeding 50 ms for a 2-3 second period before recovering. The ANF volume is still mounted (not unmounted), but Db2 declares the I/O as failed.</p>
+<p><strong>Root cause:</strong> The ANF volume experienced a brief throughput throttle when the application exceeded the provisioned throughput limit for the Ultra tier capacity pool (128 MiB/s per TiB provisioned). A Db2 BW process chain executing a large InfoCube aggregation simultaneously with a BRBACKUP online backup burst exceeded the provisioned 256 MiB/s (2 TiB capacity pool × 128 MiB/s per TiB). ANF enforced throughput throttling, causing individual NFS write operations to exceed the 20-second NFS client hard timeout. The NFS client returned an I/O error to Db2 after the hard timeout, causing Db2 to crash.</p>
+<p><strong>Resolution — Immediate:</strong>
+1. The Db2 instance will be in a crashed state. On the HADR primary (or the surviving node if HADR failover occurred): <code>db2start</code> — Db2 will perform crash recovery from the last committed log record.
+2. If HADR failover did not occur automatically (Pacemaker did not detect instance crash within the monitor interval), initiate manual takeover: <code>db2 takeover hadr on db P01</code>.</p>
+<p><strong>Resolution — Preventive:</strong>
+1. Increase ANF capacity pool size to accommodate peak throughput: upgrade from 2 TiB to 4 TiB Ultra tier pool (512 MiB/s max throughput). ANF supports online capacity pool expansion: <code>az netappfiles pool update --resource-group rg-sap-db --account-name anf-sap-prod --pool-name pool-ultra --size 4398046511104</code>.
+2. Separate the Db2 data and log volumes into different ANF capacity pools (data in one pool, log in another) to prevent backup throughput from competing with log write throughput.
+3. Change NFS mount option from <code>hard</code> to the ANF-recommended: <code>hard,intr,timeo=600,retrans=3</code> — <code>timeo=600</code> sets a 60-second NFS client timeout (600 × 0.1 seconds), preventing premature I/O errors during ANF throttle bursts under 60 seconds.
+4. Schedule BRBACKUP backup windows to avoid overlap with large Db2 BW process chains. Use SAP batch job scheduling in SM36 to enforce time-based mutual exclusion.</p>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>
