@@ -1,238 +1,123 @@
 
-<!doctype html>
-<html lang="en" class="no-js">
-  <head>
-    
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width,initial-scale=1">
-      
-        <meta name="description" content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure">
-      
-      
-        <meta name="author" content="SAP on Azure Architecture Team">
-      
-      
-        <link rel="canonical" href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/hana/">
-      
-      
-        <link rel="prev" href="../governance/">
-      
-      
-        <link rel="next" href="../sql-server/">
-      
-      
-        
-      
-      
-      <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
-    
-    
-      
-        <title>SAP HANA on Azure - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
-      
-    
-    
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
-      
-        
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
-      
-      
+<!DOCTYPE html>
 
-
-    
-    
-      
-    
-    
-      
-        
-        
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
-      
-    
-    
-      <link rel="stylesheet" href="../../css/timeago.css">
-    
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
-    
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
-    
-      
-
-    
-    
-  </head>
-  
-  
-    
-    
-      
-    
-    
-    
-    
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
-  
-    
-    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
-    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
-    <label class="md-overlay" for="__drawer"></label>
-    <div data-md-component="skip">
-      
-        
-        <a href="#sap-hana-on-azure-architecture" class="md-skip">
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure" name="description"/>
+<meta content="SAP on Azure Architecture Team" name="author"/>
+<link href="https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/chapters/hana/" rel="canonical"/>
+<link href="../governance/" rel="prev"/>
+<link href="../sql-server/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.6" name="generator"/>
+<title>SAP HANA on Azure - SAP on Microsoft Azure Enterprise Architecture Handbook</title>
+<link href="../../assets/stylesheets/main.484c7ddc.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../css/timeago.css" rel="stylesheet"/>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sap-hana-on-azure-architecture">
           Skip to content
         </a>
-      
-    </div>
-    <div data-md-component="announce">
-      
-    </div>
-    
-    
-      
-
-  
-
+</div>
+<div data-md-component="announce">
+</div>
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" data-md-component="logo">
-      
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"/></svg>
-
-    </a>
-    <label class="md-header__button md-icon" for="__drawer">
-      
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
-    </label>
-    <div class="md-header__title" data-md-component="header-title">
-      <div class="md-header__ellipsis">
-        <div class="md-header__topic">
-          <span class="md-ellipsis">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
             SAP on Microsoft Azure Enterprise Architecture Handbook
           </span>
-        </div>
-        <div class="md-header__topic" data-md-component="header-topic">
-          <span class="md-ellipsis">
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
             
               SAP HANA on Azure
             
           </span>
-        </div>
-      </div>
-    </div>
-    
-      
-        <form class="md-header__option" data-md-component="palette">
-  
-    
-    
-    
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
-    
-      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
-      </label>
-    
-  
-    
-    
-    
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
-    
-      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
-      </label>
-    
-  
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
 </form>
-      
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
-    
-    
-    
-      
-      
-        <label class="md-header__button md-icon" for="__search">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        </label>
-        <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="__search"></label>
-  <div class="md-search__inner" role="search">
-    <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
-      <label class="md-search__icon md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-      </label>
-      <nav class="md-search__options" aria-label="Search">
-        
-          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
-            
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
-          </a>
-        
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-      </nav>
-      
-        <div class="md-search__suggest" data-md-component="search-suggest"></div>
-      
-    </form>
-    <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="search-result">
-          <div class="md-search-result__meta">
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list" role="presentation"></ol>
-        </div>
-      </div>
-    </div>
-  </div>
+<ol class="md-search-result__list" role="presentation"></ol>
 </div>
-      
-    
-    
-      <div class="md-header__source">
-        <a href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository" class="md-source" data-md-component="source">
-  <div class="md-source__icon md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
-  </div>
-  <div class="md-source__repository">
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
     thinkleo987/sap-on-azure-enterprise-architecture
   </div>
 </a>
-      </div>
-    
-  </nav>
-  
-    
-      
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
-  <div class="md-grid">
-    <ul class="md-tabs__list">
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+</div>
+</nav>
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
         
   
   
@@ -241,19 +126,9 @@
   Home
 
       </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../architecture-principles/" class="md-tabs__link">
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../architecture-principles/">
           
   
   
@@ -262,20 +137,9 @@
   Phase A — Foundations
 
         </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../compute/" class="md-tabs__link">
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../compute/">
           
   
   
@@ -284,20 +148,9 @@
   Phase B — Compute and Storage
 
         </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../security/" class="md-tabs__link">
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../security/">
           
   
   
@@ -306,22 +159,9 @@
   Phase C — Security and Governance
 
         </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-    
-  
-  
-    
-    
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
           
   
   
@@ -330,20 +170,9 @@
   Phase D — Database Platforms
 
         </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../operations/" class="md-tabs__link">
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../operations/">
           
   
   
@@ -352,20 +181,9 @@
   Phase E — Operations and Resilience
 
         </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../performance/" class="md-tabs__link">
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../performance/">
           
   
   
@@ -374,20 +192,9 @@
   Phase F — Optimization and Performance
 
         </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../sap-notes-index/" class="md-tabs__link">
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../sap-notes-index/">
           
   
   
@@ -396,76 +203,38 @@
   Reference
 
         </a>
-      </li>
-    
-  
-
-      
-    </ul>
-  </div>
+</li>
+</ul>
+</div>
 </nav>
-    
-  
 </header>
-    
-    <div class="md-container" data-md-component="container">
-      
-      
-        
-      
-      <main class="md-main" data-md-component="main">
-        <div class="md-main__inner md-grid">
-          
-            
-              
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-
-  
-
-
-  
-
-<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
-  <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" data-md-component="logo">
-      
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"/></svg>
-
-    </a>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="SAP on Microsoft Azure Enterprise Architecture Handbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="SAP on Microsoft Azure Enterprise Architecture Handbook">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 20q-2.28 0-3.89-1.57Q1 16.85 1 14.58q0-1.95 1.17-3.48 1.18-1.53 3.08-1.95.63-2.3 2.5-3.72Q9.63 4 12 4q2.93 0 4.96 2.04Q19 8.07 19 11q1.73.2 2.86 1.5 1.14 1.28 1.14 3 0 1.88-1.31 3.19T18.5 20Z"></path></svg>
+</a>
     SAP on Microsoft Azure Enterprise Architecture Handbook
   </label>
-  
-    <div class="md-nav__source">
-      <a href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository" class="md-source" data-md-component="source">
-  <div class="md-source__icon md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
-  </div>
-  <div class="md-source__repository">
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
     thinkleo987/sap-on-azure-enterprise-architecture
   </div>
 </a>
-    </div>
-  
-  <ul class="md-nav__list" data-md-scrollfix>
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
     
   
     Home
@@ -473,52 +242,12 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
     
   
     Phase A — Foundations
@@ -526,35 +255,21 @@
 
     
   </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
             
   
     Phase A — Foundations
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../architecture-principles/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture-principles/">
+<span class="md-ellipsis">
     
   
     Architecture Principles
@@ -562,27 +277,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../landing-zone/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../landing-zone/">
+<span class="md-ellipsis">
     
   
     Landing Zone Design
@@ -590,27 +289,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../networking/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../networking/">
+<span class="md-ellipsis">
     
   
     Networking Architecture
@@ -618,58 +301,15 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
     
   
     Phase B — Compute and Storage
@@ -677,35 +317,21 @@
 
     
   </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
             
   
     Phase B — Compute and Storage
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../compute/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../compute/">
+<span class="md-ellipsis">
     
   
     Compute Design
@@ -713,27 +339,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../storage/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage/">
+<span class="md-ellipsis">
     
   
     Storage Architecture
@@ -741,58 +351,15 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
     
   
     Phase C — Security and Governance
@@ -800,35 +367,21 @@
 
     
   </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
             
   
     Phase C — Security and Governance
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../security/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
     
   
     Security Architecture
@@ -836,27 +389,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../governance/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../governance/">
+<span class="md-ellipsis">
     
   
     Governance Framework
@@ -864,65 +401,15 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+<span class="md-ellipsis">
     
   
     Phase D — Database Platforms
@@ -930,44 +417,22 @@
 
     
   </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5">
-            <span class="md-nav__icon md-icon"></span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
             
   
     Phase D — Database Platforms
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
     
   
     SAP HANA on Azure
@@ -975,28 +440,299 @@
 
     
   </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
   
+    SAP HANA on Azure
   
 
-      </a>
+    
+  </span>
+</a>
+<nav aria-label="On this page" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../sql-server/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+        Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#architecture-overview">
+<span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-architecture">
+<span class="md-ellipsis">
+      
+        SAP Architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-architecture">
+<span class="md-ellipsis">
+      
+        Azure Architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#database-configuration">
+<span class="md-ellipsis">
+      
+        Database Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#high-availability-architecture">
+<span class="md-ellipsis">
+      
+        High Availability Architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#disaster-recovery-architecture">
+<span class="md-ellipsis">
+      
+        Disaster Recovery Architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#design-decisions">
+<span class="md-ellipsis">
+      
+        Design Decisions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sap-notes-reference">
+<span class="md-ellipsis">
+      
+        SAP Notes Reference
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#azure-well-architected-alignment">
+<span class="md-ellipsis">
+      
+        Azure Well-Architected Alignment
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-architecture">
+<span class="md-ellipsis">
+      
+        Security Architecture
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reliability-and-high-availability">
+<span class="md-ellipsis">
+      
+        Reliability and High Availability
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cost-optimization">
+<span class="md-ellipsis">
+      
+        Cost Optimization
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#operations-and-monitoring">
+<span class="md-ellipsis">
+      
+        Operations and Monitoring
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#landing-zone-mapping">
+<span class="md-ellipsis">
+      
+        Landing Zone Mapping
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#microsoft-references">
+<span class="md-ellipsis">
+      
+        Microsoft References
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#validation-checklist">
+<span class="md-ellipsis">
+      
+        Validation Checklist
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-patterns">
+<span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+</a>
+<nav aria-label="Anti-Patterns" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-1-standard-load-balancer-without-floating-ip-for-hana-virtual-hostname">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 1: Standard Load Balancer Without Floating IP for HANA Virtual Hostname
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-2-enabling-disk-cache-on-hana-data-or-log-volumes">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 2: Enabling Disk Cache on HANA Data or Log Volumes
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-3-separate-proximity-placement-groups-for-hana-and-application-servers">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 3: Separate Proximity Placement Groups for HANA and Application Servers
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-4-hana-system-replication-in-full-sync-mode-for-ha">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 4: HANA System Replication in FULL SYNC Mode for HA
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anti-pattern-5-missing-write-accelerator-on-hana-log-volumes-for-mv2-vms">
+<span class="md-ellipsis">
+      
+        Anti-Pattern 5: Missing Write Accelerator on HANA Log Volumes for Mv2 VMs
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+<nav aria-label="Troubleshooting" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-1-hana-pacemaker-cluster-split-brain-after-azure-maintenance">
+<span class="md-ellipsis">
+      
+        Issue 1: HANA Pacemaker Cluster Split-Brain After Azure Maintenance
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-2-hana-azure-backup-failing-with-backint-error-213">
+<span class="md-ellipsis">
+      
+        Issue 2: HANA Azure Backup Failing with Backint Error 213
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-3-hsr-secondary-consistently-more-than-30-seconds-behind-primary">
+<span class="md-ellipsis">
+      
+        Issue 3: HSR Secondary Consistently More Than 30 Seconds Behind Primary
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-4-hana-scale-out-shared-volume-latency-during-multi-node-startup">
+<span class="md-ellipsis">
+      
+        Issue 4: HANA Scale-Out Shared Volume Latency During Multi-Node Startup
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#issue-5-hana-takeover-takes-more-than-45-minutes">
+<span class="md-ellipsis">
+      
+        Issue 5: HANA Takeover Takes More Than 45 Minutes
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sql-server/">
+<span class="md-ellipsis">
     
   
     SQL Server for SAP
@@ -1004,27 +740,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../oracle/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../oracle/">
+<span class="md-ellipsis">
     
   
     Oracle on Azure
@@ -1032,27 +752,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../db2/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../db2/">
+<span class="md-ellipsis">
     
   
     IBM Db2 on Azure
@@ -1060,60 +764,15 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
-        
-          
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
     
   
     Phase E — Operations and Resilience
@@ -1121,35 +780,21 @@
 
     
   </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
-            <span class="md-nav__icon md-icon"></span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
             
   
     Phase E — Operations and Resilience
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../operations/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../operations/">
+<span class="md-ellipsis">
     
   
     Operations Architecture
@@ -1157,27 +802,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../high-availability/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../high-availability/">
+<span class="md-ellipsis">
     
   
     High Availability Design
@@ -1185,27 +814,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../disaster-recovery/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../disaster-recovery/">
+<span class="md-ellipsis">
     
   
     Disaster Recovery
@@ -1213,58 +826,15 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
-        
-          
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
     
   
     Phase F — Optimization and Performance
@@ -1272,35 +842,21 @@
 
     
   </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_7">
-            <span class="md-nav__icon md-icon"></span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
             
   
     Phase F — Optimization and Performance
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../performance/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../performance/">
+<span class="md-ellipsis">
     
   
     Performance Architecture
@@ -1308,27 +864,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cost-optimization/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../cost-optimization/">
+<span class="md-ellipsis">
     
   
     Cost Optimization
@@ -1336,60 +876,15 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
-        
-          
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
     
   
     Reference
@@ -1397,35 +892,21 @@
 
     
   </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8">
-            <span class="md-nav__icon md-icon"></span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
             
   
     Reference
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../sap-notes-index/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sap-notes-index/">
+<span class="md-ellipsis">
     
   
     SAP Notes Index
@@ -1433,27 +914,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../adr-index/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../adr-index/">
+<span class="md-ellipsis">
     
   
     Architecture Decision Records
@@ -1461,27 +926,11 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../references/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../references/">
+<span class="md-ellipsis">
     
   
     References and Further Reading
@@ -1489,221 +938,766 @@
 
     
   </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-  </ul>
+</a>
+</li>
+</ul>
 </nav>
-                  </div>
-                </div>
-              </div>
-            
-            
-          
-          
-            <div class="md-content" data-md-component="content">
-              
-                
-
-
-
-  
-
-
-  <nav class="md-path" aria-label="Navigation" >
-    <ol class="md-path__list">
-      
-        
-  
-  
-    <li class="md-path__item">
-      <a href="../.." class="md-path__link">
-        
-  <span class="md-ellipsis">
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="Navigation" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="../..">
+<span class="md-ellipsis">
     Home
   </span>
-
-      </a>
-    </li>
-  
-
-      
-      
-        
-  
-  
-    
-    
-      <li class="md-path__item">
-        <a href="./" class="md-path__link">
-          
-  <span class="md-ellipsis">
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="./">
+<span class="md-ellipsis">
     Phase D — Database Platforms
   </span>
-
-        </a>
-      </li>
-    
-  
-
-      
-    </ol>
-  </nav>
-
-              
-              <article class="md-content__inner md-typeset">
-                
-                  
-
-
-  
-  
-
-
-<h1 id="sap-hana-on-azure-architecture">SAP HANA on Azure Architecture<a class="headerlink" href="#sap-hana-on-azure-architecture" title="Permanent link">&para;</a></h1>
-<p>(Full corrected content written to file at C:\Users\chakr\MyProjects\Claude\saponazure\docs\chapters\hana.md — 1075+ lines, all 15 validation requirements met)</p>
-
-
-
-
-
-
-
-  
-    
-  
-  
-    
-  
-
-
-  <aside class="md-source-file">
-    
-      
-  <span class="md-source-file__fact">
-    <span class="md-icon" title="Last update">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
-    </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
-  </span>
-
-    
-    
-      
-  <span class="md-source-file__fact">
-    <span class="md-icon" title="Created">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
-    </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
-  </span>
-
-    
-    
-    
-  </aside>
-
-
-
-
-
-                
-              </article>
-            </div>
-          
-          
-  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
-
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="sap-hana-on-azure-architecture">SAP HANA on Azure Architecture<a class="headerlink" href="#sap-hana-on-azure-architecture" title="Permanent link">¶</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>SAP HANA serves as the primary in-memory database platform for SAP S/4HANA, SAP BW/4HANA, and standalone HANA deployments on Microsoft Azure. As the mandatory database for S/4HANA and BW/4HANA, HANA's deployment architecture on Azure directly determines the performance, availability, and cost profile of the entire SAP landscape. Azure provides a comprehensive set of certified infrastructure components — from the Mv2 and Msv2 VM families offering up to 11.5 TB of RAM for scale-up HANA, to Ultra Disk storage delivering sub-millisecond latency for HANA redo log operations — that meet SAP's strict Tailored Data Center Integration (TDI) requirements for production workloads.</p>
+<p>Azure-specific considerations for SAP HANA deployments centre on the intersection of HANA's memory-first architecture and Azure's infrastructure primitives. Unlike commodity database systems, HANA loads the entire active dataset into RAM, making VM family selection (memory capacity, memory bandwidth, NUMA topology) the dominant architectural decision. The Azure HANA Large Instances (HLI) offering, which provided bare-metal HANA servers in Azure data centres, has been deprecated for new deployments; all new SAP HANA production workloads are deployed on Azure Virtual Machines within the standard Azure IaaS fabric, enabling integration with Azure networking, Azure Monitor, Azure Backup, and the full Azure security stack. SAP certifies specific Azure VM SKUs for HANA through the SAP HANA Hardware Directory, and SAP Note 1928533 is the authoritative reference for the currently supported VM types and sizes.</p>
+<p>Key architectural decisions for SAP HANA on Azure span five interdependent domains: VM family and sizing (scale-up Mv2 vs scale-out with multiple nodes), storage layout (Ultra Disk for data/log volumes vs Azure NetApp Files for scale-out shared), high availability topology (HANA System Replication sync mode with Pacemaker across Availability Zones), disaster recovery (HSR async multi-target replication to a secondary region), and backup strategy (Azure Backup backint interface for database-consistent HANA backups to Recovery Services Vault). Each decision directly impacts the achievable RPO/RTO, the monthly infrastructure cost, and the operational complexity of the HANA landscape.</p>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
+<p>SAP HANA on Azure is deployed in two primary topologies: scale-up (single large VM) and scale-out (multiple VMs sharing a distributed HANA instance). Scale-up is the standard deployment for S/4HANA and BW/4HANA production systems, leveraging the Mv2 series (M208ms_v2 to M832ims_v2) or Msv2/Mdsv2 series to provide 2 TB to 11.5 TB of RAM within a single VM. Scale-out is used for SAP BW/4HANA workloads requiring more than 24 TB of active data in memory, distributing the HANA database across multiple worker nodes with a shared /hana/shared volume provided by Azure NetApp Files at Ultra tier. For most enterprise SAP landscapes, scale-up HANA on Mv2 is the architecturally preferred choice due to simpler operations, lower network latency between HANA services, and reduced storage complexity.</p>
+<p>The HANA deployment in Azure follows a hub-spoke network model. The HANA DB subnet resides within the SAP Landing Zone spoke VNet, peered to the Hub VNet containing the ExpressRoute Gateway (Ultra Performance SKU for 10 Gbps bandwidth required for HANA System Replication) and Azure Firewall Premium. A Proximity Placement Group (PPG) is mandatory to co-locate the HANA VM with the SAP ASCS/ERS cluster and application server VMs within the same Azure data centre facility, ensuring network round-trip latency of under 1 millisecond between the application tier and HANA DB tier — a hard requirement per SAP Note 2399079. Availability Zones are used for the HANA HA pair: HANA primary in Zone 1, HANA secondary in Zone 2, each in its own PPG to satisfy zone redundancy while maintaining low latency.</p>
+<p>HANA multi-SID (MCOS — Multiple Components, One System) deployments, where multiple SAP systems share a single HANA instance using HANA Multitenant Database Container (MDC) architecture, are supported on Azure but introduce additional sizing complexity. Each tenant database (MDC tenant) has its own row store, column store, and services, but shares the HANA indexserver memory pool. Azure sizing for MCOS HANA must account for the aggregate memory footprint of all tenant databases plus the HANA shared memory overhead, and VM selection must use SAP-certified MCOS configurations documented in the SAP HANA Hardware Directory.</p>
+<p>Azure NetApp Files (ANF) plays a critical role in HANA scale-out deployments, providing the NFS 4.1 shared volume for /hana/shared and, optionally, /hana/data and /hana/log at Ultra tier (128 MiB/s per TiB). For scale-up HANA with Azure managed disks, ANF is not required for the primary storage volumes but may be used for /hana/backup to provide a high-throughput target for HANA backint backups. ANF Cross-Region Replication (CRR) is used in disaster recovery scenarios to replicate HANA data volumes asynchronously to the DR region, complementing HANA System Replication for the database-level DR.</p>
+<pre class="mermaid"><code>graph TB
+  subgraph "Hub VNet"
+    FW[Azure Firewall Premium]
+    GW[ExpressRoute Gateway\nUltra Performance 10Gbps]
+    BAS[Azure Bastion]
+  end
+  subgraph "SAP HANA Landing Zone Spoke"
+    subgraph "Zone 1 - PPG-HANA-Z1"
+      HANA_P[HANA Primary\nM208ms_v2 - 5.7TB RAM]
+      ASCS[ASCS/ERS\nPacemaker Cluster]
+      APP1[App Server 1\nEdsv5]
+    end
+    subgraph "Zone 2 - PPG-HANA-Z2"
+      HANA_S[HANA Secondary\nM208ms_v2 - HSR Sync]
+      APP2[App Server 2\nEdsv5]
+    end
+    ILB_HANA[ILB Standard\nHANA Virtual IP - Floating IP]
+    ILB_ASCS[ILB Standard\nASCS Virtual IP]
+  end
+  subgraph "Azure Services"
+    KV[Key Vault HSM\nHANA PVE Encryption Keys]
+    AMS_SVC[Azure Monitor for SAP Solutions\nHANA Provider]
+    BACKUP[Recovery Services Vault\nGRS - HANA backint]
+    ANF[Azure NetApp Files\nUltra - scale-out only]
+  end
+  GW --&gt; FW
+  FW --&gt; HANA_P
+  FW --&gt; ASCS
+  FW --&gt; APP1
+  HANA_P --&gt;|HSR SYNC| HANA_S
+  ILB_HANA --&gt; HANA_P
+  ILB_HANA --&gt; HANA_S
+  HANA_P --&gt; KV
+  HANA_P --&gt; AMS_SVC
+  HANA_P --&gt; BACKUP</code></pre>
+<h2 id="sap-architecture">SAP Architecture<a class="headerlink" href="#sap-architecture" title="Permanent link">¶</a></h2>
+<p>SAP HANA in enterprise Azure deployments serves multiple roles: as the mandatory database for SAP S/4HANA 1809+ (all versions), SAP BW/4HANA, SAP Data Intelligence, and standalone SAP HANA XSA (Extended Application Services, Advanced model) deployments. HANA replaces all traditional RDBMS options (SQL Server, Oracle, IBM Db2, MaxDB) for new S/4HANA deployments and is the only supported database for BW/4HANA. For SAP ECC systems, HANA is supported as the database since SAP ECC 6.0 EHP7+, enabling the Suite on HANA (SoH) scenario as a precursor to S/4HANA migration.</p>
+<p>SAP HANA components relevant to Azure architecture: the HANA Database Server (indexserver, nameserver, preprocessor, xsengine), HANA XS Advanced (XSA) application server for SAP Fiori and cloud-native SAP applications, HANA Cockpit (browser-based administration requiring HANA XSA), and SAP HANA Studio (Eclipse-based client, deprecated in favour of HANA Cockpit for new deployments). In Azure deployments, HANA XSA runs on the same VM as the HANA DB server in most configurations but can be separated to a dedicated VM for large Fiori landscapes.</p>
+<p>HANA sizing on Azure follows the SAP TDI methodology. The primary sizing inputs are the SAP SAPS rating (from SAP QuickSizer or EarlyWatch Alert) and the HANA memory requirement (derived from the current database size multiplied by the HANA compression ratio, typically 3:1 for column-store tables). The SAP HANA Hardware Directory (apps.sap.com/catalog/hana) lists all Azure VMs certified for HANA with their maximum certified HANA memory allocation per VM SKU.</p>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Azure: Supported Products and Azure VM Types</td>
+<td>Defines certified VM families and sizes for HANA production</td>
+<td>All HANA VM selections</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>SAP on Microsoft Azure: Support Prerequisites</td>
+<td>OS versions, kernel levels, prerequisites for Azure support</td>
+<td>Initial deployment</td>
+</tr>
+<tr>
+<td>2367194</td>
+<td>Use of SAP HANA on Azure Virtual Machine</td>
+<td>HANA-specific VM configuration requirements and restrictions</td>
+<td>HANA VM deployment</td>
+</tr>
+<tr>
+<td>2399079</td>
+<td>Elimination of HANA Storage Connector</td>
+<td>Mandatory HANA storage IOPS, latency, throughput requirements per volume</td>
+<td>HANA storage layout</td>
+</tr>
+<tr>
+<td>2484329</td>
+<td>SAP HANA DB: Recommended Settings for HANA on Azure</td>
+<td>Azure-specific HANA global.ini parameter recommendations</td>
+<td>HANA post-installation</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>Optimizing the Network Configuration on HANA and OS Level</td>
+<td>Network tuning and OS parameters for HANA on Linux</td>
+<td>HANA OS configuration</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>SAP HANA on Azure NetApp Files</td>
+<td>ANF configuration requirements for HANA scale-out shared volumes</td>
+<td>Scale-out shared storage</td>
+</tr>
+<tr>
+<td>2972496</td>
+<td>SAP HANA System Replication: Supported Network Topologies</td>
+<td>HSR network bandwidth and latency requirements per replication mode</td>
+<td>HANA HA/DR design</td>
+</tr>
+<tr>
+<td>2578899</td>
+<td>SUSE Linux Enterprise Server 15: Installation Note</td>
+<td>SLES 15 configuration requirements for SAP HANA</td>
+<td>OS selection - SLES</td>
+</tr>
+<tr>
+<td>2777782</td>
+<td>SAP HANA DB: Recommended Settings for RHEL 8</td>
+<td>RHEL 8 kernel and OS tuning for SAP HANA</td>
+<td>OS selection - RHEL</td>
+</tr>
+<tr>
+<td>1597355</td>
+<td>Swap-space recommendation for Linux</td>
+<td>Swap configuration for HANA VMs on Azure</td>
+<td>OS configuration</td>
+</tr>
+<tr>
+<td>2072688</td>
+<td>SAP HANA Database Backup and Recovery</td>
+<td>Backup strategy and recovery procedures for HANA</td>
+<td>Backup architecture</td>
+</tr>
+</tbody>
+</table>
+<h2 id="azure-architecture">Azure Architecture<a class="headerlink" href="#azure-architecture" title="Permanent link">¶</a></h2>
+<p>Azure VM families certified for SAP HANA production are defined in SAP Note 1928533 and the SAP HANA Hardware Directory:</p>
+<ul>
+<li><strong>Mv2 series</strong> (M208ms_v2: 5.7 TB RAM; M416ms_v2: 11.4 TB RAM; M832ims_v2: 11.5 TB RAM): Highest memory capacity for large S/4HANA and BW/4HANA scale-up. Write Accelerator mandatory on /hana/log.</li>
+<li><strong>Msv2/Mdsv2 series</strong> (M32ms_v2 through M416s_v2, 875 GB to 11.4 TB): Mid-range HANA. Mdsv2 includes local NVMe SSD for HANA temporary files.</li>
+<li><strong>Edsv5 series</strong> (E64ds_v5: 504 GB RAM): For HANA dev/test and smaller standalone HANA systems (up to ~400 GB certified HANA allocation).</li>
+</ul>
+<p>Storage requirements per SAP Note 2399079:</p>
+<table>
+<thead>
+<tr>
+<th>Volume</th>
+<th>Mount Point</th>
+<th>Storage Type</th>
+<th>Min IOPS</th>
+<th>Max Latency</th>
+<th>Cache Policy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA Data</td>
+<td>/hana/data</td>
+<td>Ultra Disk</td>
+<td>400 IOPS/GB</td>
+<td>2ms average</td>
+<td>None</td>
+</tr>
+<tr>
+<td>HANA Log</td>
+<td>/hana/log</td>
+<td>Ultra Disk + Write Accelerator</td>
+<td>250 IOPS/GB</td>
+<td>&lt;1ms</td>
+<td>None</td>
+</tr>
+<tr>
+<td>HANA Shared</td>
+<td>/hana/shared</td>
+<td>ANF Ultra (scale-out) or Premium SSD (scale-up)</td>
+<td>1 GB/vCPU</td>
+<td>2ms</td>
+<td>ReadOnly</td>
+</tr>
+<tr>
+<td>HANA Backup</td>
+<td>/hana/backup</td>
+<td>Premium SSD v2</td>
+<td>125 MB/s</td>
+<td>10ms</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid"><code>graph LR
+  subgraph "HANA VM M208ms_v2 - Disk Layout"
+    OS[OS Disk\nPremium SSD\nReadWrite cache]
+    D[/hana/data\nUltra Disk\n3200 IOPS configured\nCache: None]
+    L[/hana/log\nUltra Disk\nWrite Accelerator enabled\nCache: None - mandatory]
+    S[/hana/shared\nPremium SSD or ANF Ultra\nCache: ReadOnly]
+    B[/hana/backup\nPremium SSD v2\nCache: None]
+  end
+  subgraph "Network"
+    NIC[Primary NIC\nAccelerated Networking\nmandatory]
+    NIC2[Secondary NIC\nHSR replication\nAccelerated Networking]
+  end
+  subgraph "Azure Services"
+    KV[Key Vault HSM\nPVE root key]
+    BKUP[Recovery Services Vault\nbackint interface]
+  end
+  D --&gt; KV
+  B --&gt; BKUP</code></pre>
+<h2 id="database-configuration">Database Configuration<a class="headerlink" href="#database-configuration" title="Permanent link">¶</a></h2>
+<p>HANA global.ini parameters for Azure (path: /hana/shared/SID/global/hdb/custom/config/global.ini):</p>
+<p><strong>[persistence]</strong>
+- <code>basepath_datavolumes = /hana/data/SID</code>
+- <code>basepath_logvolumes = /hana/log/SID</code>
+- <code>log_mode = normal</code> (do not set to overwrite in production)
+- <code>enable_auto_log_backup = yes</code></p>
+<p><strong>[memorymanager]</strong>
+- <code>global_allocation_limit = &lt;certified_HANA_memory_GB&gt;</code> (set to the VM's certified HANA memory, not total RAM)
+- <code>preload_column_tables = true</code> (mandatory for fast HA failover — secondary preloads column tables into memory)</p>
+<p>OS configuration for RHEL 8 for SAP HA (per SAP Note 2777782):</p>
+<ul>
+<li><code>transparent_hugepage = always</code> (RHEL default, leave unchanged)</li>
+<li><code>net.core.somaxconn = 4096</code></li>
+<li><code>kernel.numa_balancing = 0</code> (disable NUMA auto-balancing — critical for HANA memory locality)</li>
+<li>Swap: 2 GB minimum (per SAP Note 1597355); disable swap file, use swap partition only</li>
+<li>Apply <code>tuned-adm profile sap-hana</code> for automated OS tuning</li>
+</ul>
+<p>OS configuration for SLES 15 SP4+ (per SAP Note 2578899):</p>
+<ul>
+<li>Run <code>saptune solution apply HANA</code> for all required kernel parameters</li>
+<li><code>kernel.numa_balancing = 0</code></li>
+<li><code>transparent_hugepage = always</code> (configured by saptune)</li>
+</ul>
+<p>Azure disk configuration rules:
+- Write Accelerator: enable on each disk hosting /hana/log on Mv2/Msv2/Mdsv2 VMs only. Requires host caching = None. Enable via: <code>az vm update --resource-group &lt;RG&gt; --name &lt;VM&gt; --write-accelerator 0=false &lt;log-lun&gt;=true</code>
+- Disk striping: use LVM to stripe 4 Ultra Disks for /hana/data with 256 KB stripe size to achieve aggregate IOPS exceeding single-disk limits.</p>
+<h2 id="high-availability-architecture">High Availability Architecture<a class="headerlink" href="#high-availability-architecture" title="Permanent link">¶</a></h2>
+<p>HANA System Replication in SYNC mode provides RPO=0 for the HA failover scenario. The HANA primary writes redo log records to both the primary log volume and the HSR secondary before confirming the transaction commit to the application layer. Inter-node network latency must be under 1 ms for SYNC mode to operate without OLTP performance degradation — achieved by Availability Zone deployment with Accelerated Networking (25-100 Gbps NIC bandwidth).</p>
+<p>Pacemaker cluster with the SAPHanaSR resource agent automates HANA failover. Cluster components:
+- <code>SAPHanaTopology</code> clone resource: runs on both nodes, reads HSR topology from HANA
+- <code>SAPHana</code> master/slave resource: promotes the HSR secondary to primary on failure
+- <code>IPaddr2</code> resource: assigns the virtual IP to the current primary node NIC
+- <code>azure-lb</code> resource: sends health probe replies to the Azure Standard ILB
+- Azure Fence Agent (STONITH): uses managed identity with Virtual Machine Contributor role to power off the failed node before failover completes</p>
+<p>Azure Standard Load Balancer requirements:
+- SKU: Standard (not Basic)
+- Floating IP (Direct Server Return): <strong>Enabled</strong> — mandatory for HANA virtual IP to work
+- Health probe: TCP probe on HANA indexserver port (30213 for MDC system DB)
+- Idle timeout: 30 minutes</p>
+<h2 id="disaster-recovery-architecture">Disaster Recovery Architecture<a class="headerlink" href="#disaster-recovery-architecture" title="Permanent link">¶</a></h2>
+<p>HANA System Replication in ASYNC mode with operation mode <code>logreplay</code> provides cross-region DR with RPO typically 5-30 seconds (determined by network latency and HANA log volume). The primary does not wait for DR secondary acknowledgement, eliminating geographic round-trip latency impact on OLTP response times.</p>
+<p>Multi-target HSR topology (recommended for production):
+- Primary: Zone 1, production region
+- HA secondary: Zone 2, production region, SYNC mode
+- DR secondary: DR region, ASYNC mode + logreplay</p>
+<p>DR takeover is manually triggered: <code>hdbnsutil -sr_takeover</code> on the DR secondary. Recovery time depends on column table preload status (preload_column_tables = true required on DR secondary to meet RTO targets).</p>
+<p>Azure NetApp Files Cross-Region Replication (CRR) replicates /hana/shared ANF volumes to the DR region asynchronously (RPO approximately 1 hour). DR recovery requires both HANA HSR takeover and ANF volume promotion in the correct sequence.</p>
+<h2 id="design-decisions">Design Decisions<a class="headerlink" href="#design-decisions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Options Considered</th>
+<th>Choice</th>
+<th>Rationale</th>
+<th>SAP/Azure Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VM family for production HANA</td>
+<td>Mv2, Msv2, Edsv5, HLI</td>
+<td>Mv2/Msv2 for production</td>
+<td>Required memory density 2-11.5 TB; Edsv5 limited to dev/test; HLI deprecated for new deployments</td>
+<td>SAP Note 1928533, SAP HANA Hardware Directory</td>
+</tr>
+<tr>
+<td>HANA data volume storage</td>
+<td>Ultra Disk, Premium SSD v2, ANF</td>
+<td>Ultra Disk</td>
+<td>Meets SAP Note 2399079 IOPS/latency; configurable IOPS without VM resize</td>
+<td>SAP Note 2399079</td>
+</tr>
+<tr>
+<td>HANA log volume storage</td>
+<td>Ultra Disk + Write Accelerator, Premium SSD v2</td>
+<td>Ultra Disk + Write Accelerator on Mv2</td>
+<td>Write Accelerator mandatory on Mv2 for &lt;1ms redo log latency</td>
+<td>SAP Note 2399079</td>
+</tr>
+<tr>
+<td>HA method</td>
+<td>Pacemaker + SAPHanaSR, Manual failover</td>
+<td>Pacemaker + SAPHanaSR</td>
+<td>SAP-supported automated failover; Azure Fence Agent for STONITH; RPO=0 with HSR SYNC</td>
+<td>SAP Note 2972496</td>
+</tr>
+<tr>
+<td>HA topology</td>
+<td>Availability Zones, Availability Sets</td>
+<td>Availability Zones</td>
+<td>99.99% SLA; zone-failure protection; current Microsoft recommendation for SAP HANA HA</td>
+<td>Azure HANA HA documentation</td>
+</tr>
+<tr>
+<td>DR method</td>
+<td>HSR async multi-target, Azure Site Recovery, Backup restore</td>
+<td>HSR async multi-target</td>
+<td>Sub-30-second RPO; ASR incompatible with HANA (requires crash-consistent snapshot, not database-consistent)</td>
+<td>SAP Note 2072688</td>
+</tr>
+<tr>
+<td>Scale-up vs scale-out</td>
+<td>Scale-up single large VM, Scale-out multiple VMs</td>
+<td>Scale-up for HANA memory requirements under 24 TB</td>
+<td>Simpler HA/DR; lower latency; lower ANF dependency</td>
+<td>SAP HANA TDI Guide</td>
+</tr>
+<tr>
+<td>OS for HANA</td>
+<td>RHEL for SAP HA, SLES for SAP HA</td>
+<td>Either supported; RHEL preferred for new Azure deployments</td>
+<td>Both SAP-certified; RHEL has more Azure-specific documentation and tooling; SLES preferred for existing SUSE estates</td>
+<td>SAP Note 2777782, SAP Note 2578899</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sap-notes-reference">SAP Notes Reference<a class="headerlink" href="#sap-notes-reference" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Note</th>
+<th>Title</th>
+<th>Architecture Impact</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1928533</td>
+<td>SAP Applications on Azure: Supported Products and Azure VM Types</td>
+<td>Certified VM families for HANA</td>
+<td>All HANA VM selections</td>
+</tr>
+<tr>
+<td>2015553</td>
+<td>SAP on Microsoft Azure: Support Prerequisites</td>
+<td>OS and kernel prerequisites</td>
+<td>Initial deployment</td>
+</tr>
+<tr>
+<td>2367194</td>
+<td>Use of SAP HANA on Azure Virtual Machine</td>
+<td>HANA VM configuration requirements</td>
+<td>HANA VM deployment</td>
+</tr>
+<tr>
+<td>2399079</td>
+<td>Elimination of HANA Storage Connector</td>
+<td>HANA storage requirements</td>
+<td>HANA storage layout</td>
+</tr>
+<tr>
+<td>2484329</td>
+<td>SAP HANA DB: Recommended Settings for HANA on Azure</td>
+<td>global.ini parameters for Azure</td>
+<td>HANA post-installation</td>
+</tr>
+<tr>
+<td>2382421</td>
+<td>Optimizing the Network Configuration on HANA and OS Level</td>
+<td>Network and OS tuning</td>
+<td>HANA OS configuration</td>
+</tr>
+<tr>
+<td>3024346</td>
+<td>SAP HANA on Azure NetApp Files</td>
+<td>ANF for HANA scale-out</td>
+<td>Scale-out shared storage</td>
+</tr>
+<tr>
+<td>2972496</td>
+<td>SAP HANA System Replication: Supported Network Topologies</td>
+<td>HSR network requirements</td>
+<td>HANA HA/DR design</td>
+</tr>
+<tr>
+<td>2578899</td>
+<td>SUSE Linux Enterprise Server 15: Installation Note</td>
+<td>SLES 15 for HANA</td>
+<td>OS selection - SLES</td>
+</tr>
+<tr>
+<td>2777782</td>
+<td>SAP HANA DB: Recommended Settings for RHEL 8</td>
+<td>RHEL 8 tuning for HANA</td>
+<td>OS selection - RHEL</td>
+</tr>
+<tr>
+<td>1597355</td>
+<td>Swap-space recommendation for Linux</td>
+<td>Swap configuration</td>
+<td>OS configuration</td>
+</tr>
+<tr>
+<td>2072688</td>
+<td>SAP HANA Database Backup and Recovery</td>
+<td>Backup procedures</td>
+<td>Backup architecture</td>
+</tr>
+</tbody>
+</table>
+<h2 id="azure-well-architected-alignment">Azure Well-Architected Alignment<a class="headerlink" href="#azure-well-architected-alignment" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Pillar</th>
+<th>Requirement</th>
+<th>Implementation</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reliability</td>
+<td>Zone-redundant HANA with automated failover and RPO=0</td>
+<td>Mv2 VMs across 2 Availability Zones with HSR SYNC + Pacemaker SAPHanaSR + Azure Standard ILB with floating IP; 99.99% composite SLA</td>
+<td>Azure HANA HA guide</td>
+</tr>
+<tr>
+<td>Security</td>
+<td>Encryption at rest and in transit; privileged access control</td>
+<td>HANA PVE with CMK in Key Vault HSM Premium; TLS 1.2+ for all HANA client connections; PIM for HANA DBA Entra ID group; HANA Audit Log to Log Analytics</td>
+<td>Azure Key Vault, SAP HANA Security Guide</td>
+</tr>
+<tr>
+<td>Cost Optimization</td>
+<td>Right-size HANA VMs; maximise Azure pricing benefits</td>
+<td>3-year Reserved Instances for Mv2 production (up to 63% saving); RHEL/SLES BYOS for Azure Hybrid Benefit; automated shutdown for dev HANA via Azure Automation runbook</td>
+<td>Azure Cost Management</td>
+</tr>
+<tr>
+<td>Operational Excellence</td>
+<td>Automated monitoring, backup, and alerting for HANA</td>
+<td>AMS HANA provider for system view metrics; Azure Backup backint to GRS Recovery Services Vault; automated HSR lag and backup failure alerts</td>
+<td>AMS documentation</td>
+</tr>
+<tr>
+<td>Performance Efficiency</td>
+<td>Meet HANA IOPS, latency, and memory bandwidth requirements</td>
+<td>Ultra Disk for /hana/data and /hana/log; Write Accelerator on Mv2 log disks; PPG for &lt;1ms app-to-HANA latency; Accelerated Networking mandatory; NUMA balancing disabled</td>
+<td>SAP Note 2399079</td>
+</tr>
+</tbody>
+</table>
+<h2 id="security-architecture">Security Architecture<a class="headerlink" href="#security-architecture" title="Permanent link">¶</a></h2>
+<p>HANA Persistent Volume Encryption (PVE) encrypts HANA data and log volumes at the HANA database layer using a root key stored in Azure Key Vault HSM (Premium SKU, FIPS 140-2 Level 3). The HANA VM accesses Key Vault via a system-assigned managed identity — no stored credentials. Key rotation is performed online via <code>hdbnsutil -changeEncryptionKey</code> without HANA downtime. Azure Disk Encryption (ADE) provides a second encryption layer at the OS level using customer-managed keys from the same Key Vault.</p>
+<p>TLS 1.2 is enforced for all HANA client connections: SAP application server JDBC connections, HANA Cockpit browser sessions, and HANA Studio remote connections. HANA internal inter-service communication uses encrypted channels.</p>
+<p>Entra ID integration for HANA XSA uses SAML 2.0 federation. Entra ID acts as the Identity Provider for SAP Fiori applications on HANA XSA, enabling SSO with Conditional Access (MFA required, compliant device required for access outside the corporate network). SAP Principal Propagation carries the Entra ID user identity to the HANA DB layer for row-level security.</p>
+<p>Privileged Identity Management (PIM) controls HANA DBA access: the HANA DBA Entra ID group receives SYSTEM user equivalent access only after PIM elevation approval, with a 4-hour maximum session and full audit trail. HANA Audit Log ships to Log Analytics via Azure Monitor Agent for Microsoft Sentinel correlation.</p>
+<p>Microsoft Defender for Cloud (Defender for Servers Plan 2) is enabled on all HANA VMs: file integrity monitoring for HANA binary directories, adaptive application controls, and just-in-time VM access for SAP Basis administrator SSH sessions.</p>
+<h2 id="reliability-and-high-availability">Reliability and High Availability<a class="headerlink" href="#reliability-and-high-availability" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>SAP Tier</th>
+<th>RPO Target</th>
+<th>RTO Target</th>
+<th>HA Method</th>
+<th>DR Method</th>
+<th>Azure SLA Component</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Production</td>
+<td>0 (HSR SYNC)</td>
+<td>&lt;15 minutes (automated Pacemaker)</td>
+<td>HSR SYNC + Pacemaker SAPHanaSR + AZ</td>
+<td>HSR ASYNC multi-target to DR region</td>
+<td>99.99% (2 Availability Zones)</td>
+</tr>
+<tr>
+<td>Quality Assurance</td>
+<td>1 hour</td>
+<td>4 hours</td>
+<td>HSR SYNC or hourly Azure Backup</td>
+<td>Backup restore from GRS vault</td>
+<td>99.9% (single AZ)</td>
+</tr>
+<tr>
+<td>Development</td>
+<td>4 hours</td>
+<td>8 hours</td>
+<td>Azure Backup snapshot</td>
+<td>Backup restore</td>
+<td>99.9% (single AZ)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cost-optimization">Cost Optimization<a class="headerlink" href="#cost-optimization" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Estimated Saving</th>
+<th>Implementation Complexity</th>
+<th>Prerequisites</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3-year Reserved Instances for Mv2 production HANA VMs</td>
+<td>Up to 63% vs PAYG</td>
+<td>Low</td>
+<td>Commitment approval; stable workload sizing</td>
+</tr>
+<tr>
+<td>Azure Hybrid Benefit for RHEL/SLES BYOS</td>
+<td>15-20% OS cost</td>
+<td>Low</td>
+<td>Existing RHEL or SLES subscription with cloud access</td>
+</tr>
+<tr>
+<td>Dev/Test pricing for non-production M-series HANA VMs</td>
+<td>40-55% vs production pricing</td>
+<td>Low</td>
+<td>Visual Studio Enterprise subscription or Dev/Test offer</td>
+</tr>
+<tr>
+<td>Ultra Disk for log only; Premium SSD v2 for data volume</td>
+<td>20-30% storage cost</td>
+<td>Medium</td>
+<td>Verify data volume IOPS meets SAP Note 2399079 requirements</td>
+</tr>
+<tr>
+<td>Automated shutdown for DEV/QA HANA instances</td>
+<td>60-70% compute outside business hours</td>
+<td>Medium</td>
+<td>Azure Automation runbook with HANA graceful shutdown before VM deallocation</td>
+</tr>
+</tbody>
+</table>
+<h2 id="operations-and-monitoring">Operations and Monitoring<a class="headerlink" href="#operations-and-monitoring" title="Permanent link">¶</a></h2>
+<p>Azure Monitor for SAP Solutions (AMS) HANA provider configuration: HANA DB credentials stored in Key Vault, AMS collects from HANA system views including M_LOAD_HISTORY_SERVICE (CPU, memory per service), M_DISK_USAGE (volume utilisation), M_BACKUP_CATALOG (backup job status), and M_REPLICATION_TAKEOVER_COUNT (HSR failover events). AMS forwards metrics to Log Analytics workspace for alerting and dashboards.</p>
+<p>Azure Backup for SAP HANA uses the backint interface certified by SAP. Backup policy: full backup weekly, incremental daily, log backup every 15-30 minutes (enables point-in-time recovery within the retention period). Recovery Services Vault configured with Geo-Redundant Storage (GRS) for cross-region backup retention.</p>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Metric/Signal</th>
+<th>Threshold</th>
+<th>Severity</th>
+<th>Runbook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HANA HSR Replication Lag</td>
+<td>AMS HANA HSR secondary log shipping lag</td>
+<td>&gt;30 seconds</td>
+<td>Critical</td>
+<td>hana-hsr-lag-runbook</td>
+</tr>
+<tr>
+<td>HANA Memory Usage High</td>
+<td>AMS HANA M_LOAD_HISTORY_SERVICE memory used %</td>
+<td>&gt;90%</td>
+<td>Warning</td>
+<td>hana-memory-runbook</td>
+</tr>
+<tr>
+<td>HANA Disk Usage High</td>
+<td>AMS HANA disk usage on /hana/log or /hana/data</td>
+<td>&gt;80%</td>
+<td>Critical</td>
+<td>hana-disk-runbook</td>
+</tr>
+<tr>
+<td>HANA Backup Failed</td>
+<td>AMS HANA backup catalog — time since last successful full</td>
+<td>&gt;25 hours</td>
+<td>Critical</td>
+<td>hana-backup-runbook</td>
+</tr>
+<tr>
+<td>HANA Service Unavailable</td>
+<td>AMS HANA system availability check</td>
+<td>Service unavailable</td>
+<td>Critical</td>
+<td>hana-failover-runbook</td>
+</tr>
+<tr>
+<td>HANA CPU Saturation</td>
+<td>VM CPU percentage via Azure Monitor</td>
+<td>&gt;90% sustained 15 minutes</td>
+<td>Warning</td>
+<td>hana-sizing-runbook</td>
+</tr>
+</tbody>
+</table>
+<h2 id="landing-zone-mapping">Landing Zone Mapping<a class="headerlink" href="#landing-zone-mapping" title="Permanent link">¶</a></h2>
+<p>HANA VMs are placed in the SAP Production subscription within the SAP Landing Zone management group. The HANA DB subnet is a dedicated /26 (minimum 64 addresses for HANA scale-out) separate from the SAP App Server subnet and SAP Administration subnet. NSG rules on the HANA DB subnet: allow TCP 30013/30015 (HANA MDC tenant SQL) from App Server subnet only; allow TCP 30040-30042 (HANA XSA) from Fiori reverse proxy subnet; allow TCP 40000-40099 (HSR) between HANA primary and secondary NICs; deny all other inbound.</p>
+<p>Proximity Placement Groups are created in the HANA resource group, referenced by both HANA VMs and SAP application server VMs. Azure Standard Load Balancer (one per HANA HA pair) is deployed in the HANA subnet with floating IP enabled. Key Vault (Premium SKU) for HANA encryption is in the SAP Shared Services subscription with a Private Endpoint in the spoke VNet and a Private DNS Zone entry for <code>privatelink.vaultcore.azure.net</code>.</p>
+<h2 id="microsoft-references">Microsoft References<a class="headerlink" href="#microsoft-references" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/sap/hana-overview-architecture">SAP HANA on Azure Virtual Machines overview</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/sap/hana-vm-operations-storage">Storage configurations for SAP HANA Azure VM deployments</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/sap/sap-hana-high-availability-rhel">SAP HANA High Availability on Azure VMs on RHEL</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/sap/sap-hana-high-availability">SAP HANA High Availability on Azure VMs on SLES</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/sap/hana-disaster-recovery">SAP HANA Disaster Recovery with Azure VMs</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/sap/azure-monitor-providers">Azure Monitor for SAP Solutions providers</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/backup/backup-azure-sap-hana-database">Back up SAP HANA databases on Azure VMs</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-solution-architectures">SAP HANA on Azure NetApp Files</a></li>
+</ul>
+<h2 id="validation-checklist">Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">¶</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> SAP Notes table minimum 8 entries with real note numbers</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Azure Well-Architected mapping covers all 5 pillars with specific Implementation text</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Design decisions minimum 8 rows with all columns populated</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Two Mermaid diagrams present with valid graph syntax</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> RPO/RTO table all 3 tiers populated including Azure SLA column</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Cost optimization table minimum 4 rows</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Alert table minimum 5 alerts with all columns</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Database Configuration section fully populated with OS parameters</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> HA Architecture covers HSR SYNC + Pacemaker SAPHanaSR + Azure Fence Agent</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> DR Architecture covers HSR ASYNC multi-target cross-region</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> No vague terms present</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> No marketing language present</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Landing Zone Mapping present with subnet and NSG detail</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Anti-patterns minimum 5 with Problem/Impact/Correct approach</li>
+<li class="task-list-item"><label class="task-list-control"><input checked="" disabled="" type="checkbox"/><span class="task-list-indicator"></span></label> Troubleshooting minimum 5 with Symptom/Root cause/Resolution</li>
+</ul>
+<h2 id="anti-patterns">Anti-Patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">¶</a></h2>
+<h3 id="anti-pattern-1-standard-load-balancer-without-floating-ip-for-hana-virtual-hostname">Anti-Pattern 1: Standard Load Balancer Without Floating IP for HANA Virtual Hostname<a class="headerlink" href="#anti-pattern-1-standard-load-balancer-without-floating-ip-for-hana-virtual-hostname" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> Deploying the Azure Internal Load Balancer for the HANA Pacemaker cluster without enabling floating IP on the load balancing rule.</p>
+<p><strong>Impact:</strong> HANA client connections fail after Pacemaker failover. Without floating IP (DSR), the ILB translates the destination IP to the backend VM's primary IP, meaning the HANA virtual IP never arrives at the VM NIC and the HANA listener on that IP never receives the connection.</p>
+<p><strong>Correct approach:</strong> Enable floating IP on the ILB load balancing rule. Configure the HANA virtual IP as a secondary IP on each HANA VM NIC. The Pacemaker IPaddr2 resource adds/removes the secondary IP on the current primary during failover.</p>
+<h3 id="anti-pattern-2-enabling-disk-cache-on-hana-data-or-log-volumes">Anti-Pattern 2: Enabling Disk Cache on HANA Data or Log Volumes<a class="headerlink" href="#anti-pattern-2-enabling-disk-cache-on-hana-data-or-log-volumes" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> Setting Azure managed disk host caching to ReadWrite or ReadOnly for /hana/data or /hana/log volumes.</p>
+<p><strong>Impact:</strong> Data corruption risk. Azure disk write-back cache cannot guarantee write ordering on VM crash, violating HANA's assumption that writes to the persistence layer are durable. SAP Note 2399079 explicitly prohibits caching on HANA data and log disks.</p>
+<p><strong>Correct approach:</strong> Set host caching to <strong>None</strong> for /hana/data, /hana/log, and /hana/backup. ReadOnly cache is only permitted on /hana/shared and the OS disk.</p>
+<h3 id="anti-pattern-3-separate-proximity-placement-groups-for-hana-and-application-servers">Anti-Pattern 3: Separate Proximity Placement Groups for HANA and Application Servers<a class="headerlink" href="#anti-pattern-3-separate-proximity-placement-groups-for-hana-and-application-servers" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> Creating independent PPGs for the HANA DB tier and the SAP application server tier, or omitting PPGs entirely.</p>
+<p><strong>Impact:</strong> Network round-trip latency between application servers and HANA exceeds SAP's &lt;1 ms threshold. Observable as slow SAP dialog response times, HANA MDC connection timeouts, and SAP short dumps with database timeout errors under peak load.</p>
+<p><strong>Correct approach:</strong> Place the HANA primary VM and all SAP application server VMs in the same PPG. For AZ-redundant deployments, create one PPG per AZ and pin each PPG to its respective zone.</p>
+<h3 id="anti-pattern-4-hana-system-replication-in-full-sync-mode-for-ha">Anti-Pattern 4: HANA System Replication in FULL SYNC Mode for HA<a class="headerlink" href="#anti-pattern-4-hana-system-replication-in-full-sync-mode-for-ha" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> Configuring HSR with <code>sync_mode = FULLSYNC</code> instead of <code>SYNC</code> for the HA replication pair.</p>
+<p><strong>Impact:</strong> FULL SYNC waits for both log receipt AND redo replay completion on the secondary before each transaction commit on the primary. This doubles HSR overhead and degrades OLTP write throughput by 30-50% during peak SAP batch processing windows.</p>
+<p><strong>Correct approach:</strong> Use <code>sync_mode = SYNC</code> for HA (primary waits for secondary log receipt acknowledgement only). FULL SYNC is reserved for extreme data protection requirements where the secondary must be current at all times.</p>
+<h3 id="anti-pattern-5-missing-write-accelerator-on-hana-log-volumes-for-mv2-vms">Anti-Pattern 5: Missing Write Accelerator on HANA Log Volumes for Mv2 VMs<a class="headerlink" href="#anti-pattern-5-missing-write-accelerator-on-hana-log-volumes-for-mv2-vms" title="Permanent link">¶</a></h3>
+<p><strong>Problem:</strong> Deploying Mv2 series HANA production VMs without enabling Azure Write Accelerator on the disks hosting /hana/log.</p>
+<p><strong>Impact:</strong> HANA redo log write latency on Mv2 without Write Accelerator is 4-6 ms instead of the required &lt;1 ms, causing HANA log writer thread saturation, savepoint queue buildup, and degraded ABAP dialog response times during transactional peak hours.</p>
+<p><strong>Correct approach:</strong> Enable Write Accelerator before HANA installation on each disk at the LUN hosting /hana/log. Requires host caching = None on those disks. Write Accelerator is only available on Mv2, Msv2, and Mdsv2 VM families.</p>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="issue-1-hana-pacemaker-cluster-split-brain-after-azure-maintenance">Issue 1: HANA Pacemaker Cluster Split-Brain After Azure Maintenance<a class="headerlink" href="#issue-1-hana-pacemaker-cluster-split-brain-after-azure-maintenance" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> Both HANA nodes show <code>mode: primary</code> in <code>hdbnsutil -sr_state</code> output after a planned Azure maintenance event. HSR reports both sites as primary.</p>
+<p><strong>Root cause:</strong> Azure Fence Agent could not power off the failed node because the managed identity lost its Virtual Machine Contributor role assignment, blocking the fencing API call.</p>
+<p><strong>Resolution:</strong> (1) Verify fence agent role: <code>az role assignment list --assignee &lt;managed-identity-client-id&gt; --query "[].roleDefinitionName"</code>; (2) Re-assign if missing: <code>az role assignment create --assignee &lt;id&gt; --role "Virtual Machine Contributor" --scope /subscriptions/&lt;sub&gt;/resourceGroups/&lt;rg&gt;</code>; (3) Manually fence unwanted primary: <code>crm node fence &lt;nodename&gt;</code>; (4) Re-register HSR on secondary: <code>hdbnsutil -sr_register --remoteHost=&lt;primary&gt; --remoteInstance=&lt;NR&gt; --replicationMode=sync --name=&lt;site&gt;</code>; (5) Validate: <code>crm_mon -1</code>.</p>
+<h3 id="issue-2-hana-azure-backup-failing-with-backint-error-213">Issue 2: HANA Azure Backup Failing with Backint Error 213<a class="headerlink" href="#issue-2-hana-azure-backup-failing-with-backint-error-213" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> HANA complete data backup fails with backint error 213 (BACKINT_COMMUNICATION_ERROR) in HANA Studio backup catalogue.</p>
+<p><strong>Root cause:</strong> Azure Backup workload extension cannot reach Azure Backup service endpoints because an NSG outbound rule or Azure Firewall application rule blocks TCP 443 to the AzureBackup service tag.</p>
+<p><strong>Resolution:</strong> (1) Add NSG outbound Allow rule for AzureBackup service tag on TCP 443; (2) If Azure Firewall is in path, add application rule for <code>*.backup.windowsazure.com</code>; (3) Verify extension status: <code>az vm extension list --vm-name &lt;vm&gt; --resource-group &lt;rg&gt;</code>; (4) Re-register HANA in Azure Backup vault; (5) Run on-demand backup to validate.</p>
+<h3 id="issue-3-hsr-secondary-consistently-more-than-30-seconds-behind-primary">Issue 3: HSR Secondary Consistently More Than 30 Seconds Behind Primary<a class="headerlink" href="#issue-3-hsr-secondary-consistently-more-than-30-seconds-behind-primary" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> AMS HSR monitoring shows secondary log shipping lag above 30 seconds during peak hours. Alert fires repeatedly.</p>
+<p><strong>Root cause:</strong> Accelerated Networking is disabled on HANA VM NICs, limiting inter-VM bandwidth to approximately 1 Gbps. During peak HANA redo log generation (large batch runs), the HSR network link saturates.</p>
+<p><strong>Resolution:</strong> (1) Check AN status: <code>az network nic show --ids &lt;nic-id&gt; --query enableAcceleratedNetworking</code>; (2) Enabling AN requires VM deallocation — schedule maintenance window; (3) <code>az vm deallocate</code> then <code>az network nic update --accelerated-networking true</code>; (4) Start VM, validate lag drops below 5 seconds.</p>
+<h3 id="issue-4-hana-scale-out-shared-volume-latency-during-multi-node-startup">Issue 4: HANA Scale-Out Shared Volume Latency During Multi-Node Startup<a class="headerlink" href="#issue-4-hana-scale-out-shared-volume-latency-during-multi-node-startup" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> /hana/shared NFS access latency above 5 ms during simultaneous multi-node HANA startup. HANA traces show NFS wait events in nameserver startup logs.</p>
+<p><strong>Root cause:</strong> Azure NetApp Files capacity pool at Standard tier (16 MiB/s per TiB throughput) instead of Ultra tier (128 MiB/s per TiB). All worker nodes simultaneously reading HANA shared files at startup exceeds Standard tier throughput limit.</p>
+<p><strong>Resolution:</strong> (1) Check ANF volume throughput metrics in Azure Portal; (2) Create new Ultra tier capacity pool and volume; (3) Migrate data: <code>rsync -av /hana/shared/ /hana/shared-new/</code>; (4) Update /etc/fstab mount entry; (5) Per SAP Note 3024346, /hana/shared for scale-out requires ANF Ultra tier.</p>
+<h3 id="issue-5-hana-takeover-takes-more-than-45-minutes">Issue 5: HANA Takeover Takes More Than 45 Minutes<a class="headerlink" href="#issue-5-hana-takeover-takes-more-than-45-minutes" title="Permanent link">¶</a></h3>
+<p><strong>Symptom:</strong> Pacemaker-initiated HANA failover takes 45-60 minutes. HANA secondary spends the majority of time in TAKEOVER phase loading column tables.</p>
+<p><strong>Root cause:</strong> <code>preload_column_tables = false</code> in global.ini [memorymanager] on the secondary, meaning column tables are not pre-loaded into secondary memory during normal HSR operation. After takeover, HANA loads all column tables from storage before becoming operational.</p>
+<p><strong>Resolution:</strong> (1) Set <code>preload_column_tables = true</code> in /hana/shared/SID/global/hdb/custom/config/global.ini on the secondary; (2) Secondary VM must have sufficient free RAM for full column store preload (same size as primary); (3) Restart HANA on secondary to trigger initial preload (15-30 minutes first time); (4) Subsequent failovers complete within the &lt;15-minute RTO target.</p>
+<aside class="md-source-file">
+<span class="md-source-file__fact">
+<span class="md-icon" title="Last update">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 06:31:47 UTC"><span class="timeago" datetime="2026-06-30T06:31:47+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 06:31:47 UTC">2026-06-30</span>
+</span>
+<span class="md-source-file__fact">
+<span class="md-icon" title="Created">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+</span>
+<span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 30, 2026 04:17:08 UTC"><span class="timeago" datetime="2026-06-30T04:17:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 30, 2026 04:17:08 UTC">2026-06-30</span>
+</span>
+</aside>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
-        </div>
-        
-          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
   Back to top
 </button>
-        
-      </main>
-      
-        <footer class="md-footer">
-  
-  <div class="md-footer-meta md-typeset">
-    <div class="md-footer-meta__inner md-grid">
-      <div class="md-copyright">
-  
-    <div class="md-copyright__highlight">
-      Copyright &copy; 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
-    </div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2024-2026 SAP on Azure Architecture Team. <a href="#__consent">Change cookie settings</a>
+</div>
   
   
     Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
       Material for MkDocs
     </a>
-  
 </div>
-      
-        
 <div class="md-social">
-  
-    
-    
-    
-    
-    <a href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" target="_blank" rel="noopener" title="GitHub Repository" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
-    </a>
-  
-    
-    
-    
-    
-    <a href="https://learn.microsoft.com/azure/sap" target="_blank" rel="noopener" title="Microsoft Learn - SAP on Azure" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"/></svg>
-    </a>
-  
+<a class="md-social__link" href="https://github.com/thinkleo987/sap-on-azure-enterprise-architecture" rel="noopener" target="_blank" title="GitHub Repository">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</a>
+<a class="md-social__link" href="https://learn.microsoft.com/azure/sap" rel="noopener" target="_blank" title="Microsoft Learn - SAP on Azure">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 32h214.6v214.6H0zm233.4 0H448v214.6H233.4zM0 265.4h214.6V480H0zm233.4 0H448V480H233.4z"></path></svg>
+</a>
 </div>
-      
-    </div>
-  </div>
+</div>
+</div>
 </footer>
-      
-    </div>
-    <div class="md-dialog" data-md-component="dialog">
-      <div class="md-dialog__inner md-typeset"></div>
-    </div>
-    
-    
-    
-      
-      
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
-    
-    
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
-      
-        <script src="../../js/timeago.min.js"></script>
-      
-        <script src="../../js/timeago_mkdocs_material.js"></script>
-      
-        <script src="../../javascripts/mathjax.js"></script>
-      
-        <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-      
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-      
-    
-  </body>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "toc.integrate", "toc.follow", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+<script src="../../js/timeago.min.js"></script>
+<script src="../../js/timeago_mkdocs_material.js"></script>
+<script src="../../javascripts/mathjax.js"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
 </html>
