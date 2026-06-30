@@ -1,0 +1,174 @@
+site_name: SAP on Microsoft Azure Enterprise Architecture Handbook
+site_description: Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure
+site_author: SAP on Azure Architecture Team
+site_url: https://your-org.github.io/sap-on-azure-handbook
+
+repo_name: your-org/sap-on-azure-handbook
+repo_url: https://github.com/your-org/sap-on-azure-handbook
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/cloud
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+    - toc.integrate
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+    - header.autohide
+
+plugins:
+  - search:
+      lang: en
+      separator: '[\s\-\.]+'
+  - mermaid2:
+      arguments:
+        theme: |
+          ^(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+      fallback_to_build_date: true
+
+markdown_extensions:
+  - admonition
+  - abbr
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      title: On this page
+      toc_depth: 3
+  - tables
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      auto_append:
+        - includes/abbreviations.md
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.arithmatex:
+      generic: true
+
+nav:
+  - Home: index.md
+
+  - Phase A — Foundations:
+    - Architecture Principles: chapters/architecture-principles.md
+    - Landing Zone Design: chapters/landing-zone.md
+    - Networking Architecture: chapters/networking.md
+
+  - Phase B — Compute and Storage:
+    - Compute Design: chapters/compute.md
+    - Storage Architecture: chapters/storage.md
+
+  - Phase C — Security and Governance:
+    - Security Architecture: chapters/security.md
+    - Governance Framework: chapters/governance.md
+
+  - Phase D — Database Platforms:
+    - SAP HANA on Azure: chapters/hana.md
+    - SQL Server for SAP: chapters/sql-server.md
+    - Oracle on Azure: chapters/oracle.md
+    - IBM Db2 on Azure: chapters/db2.md
+
+  - Phase E — Operations and Resilience:
+    - Operations Architecture: chapters/operations.md
+    - High Availability Design: chapters/high-availability.md
+    - Disaster Recovery: chapters/disaster-recovery.md
+
+  - Phase F — Optimization and Performance:
+    - Performance Architecture: chapters/performance.md
+    - Cost Optimization: chapters/cost-optimization.md
+
+  - Reference:
+    - SAP Notes Index: chapters/sap-notes-index.md
+    - Architecture Decision Records: chapters/adr-index.md
+    - References and Further Reading: chapters/references.md
+
+extra:
+  version:
+    provider: mike
+    default: stable
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/your-org/sap-on-azure-handbook
+      name: GitHub Repository
+    - icon: fontawesome/brands/microsoft
+      link: https://learn.microsoft.com/azure/sap
+      name: Microsoft Learn - SAP on Azure
+  analytics:
+    provider: google
+    property: G-XXXXXXXXXX
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation.
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+copyright: >-
+  Copyright &copy; 2024-2026 SAP on Azure Architecture Team.
+  <a href="#__consent">Change cookie settings</a>
