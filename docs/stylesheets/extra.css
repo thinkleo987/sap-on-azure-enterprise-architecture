@@ -1,0 +1,36 @@
+/* SAP on Azure Handbook — custom styles */
+
+/* Wider content area for large architecture tables */
+.md-content {
+  max-width: 1200px;
+}
+
+/* Decision table column widths */
+.md-typeset table:not([class]) th:first-child,
+.md-typeset table:not([class]) td:first-child {
+  min-width: 160px;
+}
+
+/* SAP Note ID styling */
+.md-typeset table code {
+  font-size: 0.85em;
+  background: var(--md-code-bg-color);
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+}
+
+/* Mermaid diagram centering */
+.mermaid {
+  text-align: center;
+  margin: 1.5em 0;
+}
+
+/* Validation checklist styling */
+.md-typeset .task-list-item input[type="checkbox"] {
+  accent-color: var(--md-primary-fg-color);
+}
+
+/* Anti-pattern callout */
+.md-typeset .admonition.danger > .admonition-title {
+  background-color: rgba(255, 82, 82, 0.15);
+}

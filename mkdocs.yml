@@ -1,10 +1,10 @@
 site_name: SAP on Microsoft Azure Enterprise Architecture Handbook
 site_description: Enterprise-grade architecture guidance for running SAP workloads on Microsoft Azure
 site_author: SAP on Azure Architecture Team
-site_url: https://your-org.github.io/sap-on-azure-handbook
+site_url: https://thinkleo987.github.io/sap-on-azure-enterprise-architecture/
 
-repo_name: your-org/sap-on-azure-handbook
-repo_url: https://github.com/your-org/sap-on-azure-handbook
+repo_name: thinkleo987/sap-on-azure-enterprise-architecture
+repo_url: https://github.com/thinkleo987/sap-on-azure-enterprise-architecture
 edit_uri: edit/main/docs/
 
 docs_dir: docs
@@ -142,24 +142,13 @@ nav:
     - References and Further Reading: chapters/references.md
 
 extra:
-  version:
-    provider: mike
-    default: stable
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/your-org/sap-on-azure-handbook
+      link: https://github.com/thinkleo987/sap-on-azure-enterprise-architecture
       name: GitHub Repository
     - icon: fontawesome/brands/microsoft
       link: https://learn.microsoft.com/azure/sap
       name: Microsoft Learn - SAP on Azure
-  analytics:
-    provider: google
-    property: G-XXXXXXXXXX
-  consent:
-    title: Cookie consent
-    description: >-
-      We use cookies to recognize your repeated visits and preferences, as well
-      as to measure the effectiveness of our documentation.
 
 extra_css:
   - stylesheets/extra.css
